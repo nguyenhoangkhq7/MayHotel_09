@@ -1,4 +1,4 @@
-package gui;
+package view;
 
 import java.awt.EventQueue;
 
@@ -27,6 +27,9 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class MainFramever2 extends JFrame {
 
@@ -74,6 +77,7 @@ public class MainFramever2 extends JFrame {
 	public MainFramever2() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1537, 931);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -261,165 +265,202 @@ public class MainFramever2 extends JFrame {
 		
 		JPanel panel_4 = new JPanel();
 		dich_vu.add(panel_4, BorderLayout.WEST);
-		
-		JLabel lblNewLabel_9_7 = new JLabel("Mã dịch vụ");
-		lblNewLabel_9_7.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagLayout gbl_panel_4 = new GridBagLayout();
+		gbl_panel_4.columnWidths = new int[]{147, 62, 52, 41, 37, 39, 54, 166, 0};
+		gbl_panel_4.rowHeights = new int[]{30, 42, 27, 42, 27, 42, 27, 42, 35, 39, 39, 0};
+		gbl_panel_4.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_4.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_4.setLayout(gbl_panel_4);
 		
 		JLabel lblNewLabel_9_1_1 = new JLabel("Tên dịch vụ");
 		lblNewLabel_9_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblNewLabel_9_1_1 = new GridBagConstraints();
+		gbc_lblNewLabel_9_1_1.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblNewLabel_9_1_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_9_1_1.gridx = 0;
+		gbc_lblNewLabel_9_1_1.gridy = 0;
+		panel_4.add(lblNewLabel_9_1_1, gbc_lblNewLabel_9_1_1);
+		
+		JLabel lblNewLabel_9_7 = new JLabel("Mã dịch vụ");
+		lblNewLabel_9_7.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblNewLabel_9_7 = new GridBagConstraints();
+		gbc_lblNewLabel_9_7.anchor = GridBagConstraints.SOUTHWEST;
+		gbc_lblNewLabel_9_7.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel_9_7.gridwidth = 2;
+		gbc_lblNewLabel_9_7.gridx = 6;
+		gbc_lblNewLabel_9_7.gridy = 0;
+		panel_4.add(lblNewLabel_9_7, gbc_lblNewLabel_9_7);
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.fill = GridBagConstraints.BOTH;
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.gridwidth = 2;
+		gbc_textField_2.gridx = 0;
+		gbc_textField_2.gridy = 1;
+		panel_4.add(textField_2, gbc_textField_2);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.fill = GridBagConstraints.BOTH;
+		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_1.gridwidth = 2;
+		gbc_textField_1.gridx = 6;
+		gbc_textField_1.gridy = 1;
+		panel_4.add(textField_1, gbc_textField_1);
 		
 		JLabel lblNewLabel_9_1_1_1 = new JLabel("Đơn giá");
 		lblNewLabel_9_1_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblNewLabel_9_1_1_1 = new GridBagConstraints();
+		gbc_lblNewLabel_9_1_1_1.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblNewLabel_9_1_1_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_9_1_1_1.gridx = 0;
+		gbc_lblNewLabel_9_1_1_1.gridy = 2;
+		panel_4.add(lblNewLabel_9_1_1_1, gbc_lblNewLabel_9_1_1_1);
 		
 		JLabel lblNewLabel_9_1_1_1_1 = new JLabel("Số lượng tồn");
 		lblNewLabel_9_1_1_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblNewLabel_9_1_1_1_1 = new GridBagConstraints();
+		gbc_lblNewLabel_9_1_1_1_1.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblNewLabel_9_1_1_1_1.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel_9_1_1_1_1.gridwidth = 2;
+		gbc_lblNewLabel_9_1_1_1_1.gridx = 6;
+		gbc_lblNewLabel_9_1_1_1_1.gridy = 2;
+		panel_4.add(lblNewLabel_9_1_1_1_1, gbc_lblNewLabel_9_1_1_1_1);
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
+		gbc_textField_4.fill = GridBagConstraints.BOTH;
+		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_4.gridwidth = 2;
+		gbc_textField_4.gridx = 0;
+		gbc_textField_4.gridy = 3;
+		panel_4.add(textField_4, gbc_textField_4);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
+		gbc_textField_3.fill = GridBagConstraints.BOTH;
+		gbc_textField_3.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_3.gridwidth = 2;
+		gbc_textField_3.gridx = 6;
+		gbc_textField_3.gridy = 3;
+		panel_4.add(textField_3, gbc_textField_3);
 		
 		JLabel lblNewLabel_9_1_1_1_2 = new JLabel("Mô tả");
 		lblNewLabel_9_1_1_1_2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblNewLabel_9_1_1_1_2 = new GridBagConstraints();
+		gbc_lblNewLabel_9_1_1_1_2.anchor = GridBagConstraints.NORTH;
+		gbc_lblNewLabel_9_1_1_1_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblNewLabel_9_1_1_1_2.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_9_1_1_1_2.gridx = 0;
+		gbc_lblNewLabel_9_1_1_1_2.gridy = 4;
+		panel_4.add(lblNewLabel_9_1_1_1_2, gbc_lblNewLabel_9_1_1_1_2);
 		
 		JLabel lblNewLabel_9_1_1_1_3 = new JLabel("Ngày tạo");
 		lblNewLabel_9_1_1_1_3.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblNewLabel_9_1_1_1_3 = new GridBagConstraints();
+		gbc_lblNewLabel_9_1_1_1_3.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblNewLabel_9_1_1_1_3.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel_9_1_1_1_3.gridwidth = 2;
+		gbc_lblNewLabel_9_1_1_1_3.gridx = 6;
+		gbc_lblNewLabel_9_1_1_1_3.gridy = 4;
+		panel_4.add(lblNewLabel_9_1_1_1_3, gbc_lblNewLabel_9_1_1_1_3);
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
+		gbc_textField_5.fill = GridBagConstraints.BOTH;
+		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_5.gridwidth = 2;
+		gbc_textField_5.gridx = 0;
+		gbc_textField_5.gridy = 5;
+		panel_4.add(textField_5, gbc_textField_5);
+		
+		textField_6 = new JTextField();
+		textField_6.setColumns(10);
+		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
+		gbc_textField_6.fill = GridBagConstraints.BOTH;
+		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_6.gridwidth = 2;
+		gbc_textField_6.gridx = 6;
+		gbc_textField_6.gridy = 5;
+		panel_4.add(textField_6, gbc_textField_6);
 		
 		JLabel lblNewLabel_9_1_1_1_2_1 = new JLabel("Còn hoạt động");
 		lblNewLabel_9_1_1_1_2_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		GridBagConstraints gbc_lblNewLabel_9_1_1_1_2_1 = new GridBagConstraints();
+		gbc_lblNewLabel_9_1_1_1_2_1.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblNewLabel_9_1_1_1_2_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_9_1_1_1_2_1.gridx = 0;
+		gbc_lblNewLabel_9_1_1_1_2_1.gridy = 6;
+		panel_4.add(lblNewLabel_9_1_1_1_2_1, gbc_lblNewLabel_9_1_1_1_2_1);
+		
+		textField_7 = new JTextField();
+		textField_7.setColumns(10);
+		GridBagConstraints gbc_textField_7 = new GridBagConstraints();
+		gbc_textField_7.fill = GridBagConstraints.BOTH;
+		gbc_textField_7.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_7.gridwidth = 2;
+		gbc_textField_7.gridx = 0;
+		gbc_textField_7.gridy = 7;
+		panel_4.add(textField_7, gbc_textField_7);
 		
 		JButton btnNewButton_1_5 = new JButton("Thêm");
 		btnNewButton_1_5.setForeground(Color.WHITE);
 		btnNewButton_1_5.setBackground(new Color(255, 128, 0));
+		GridBagConstraints gbc_btnNewButton_1_5 = new GridBagConstraints();
+		gbc_btnNewButton_1_5.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_1_5.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_1_5.gridx = 0;
+		gbc_btnNewButton_1_5.gridy = 9;
+		panel_4.add(btnNewButton_1_5, gbc_btnNewButton_1_5);
 		
 		JButton btnNewButton_1_5_1 = new JButton("Sửa");
 		btnNewButton_1_5_1.setForeground(Color.WHITE);
 		btnNewButton_1_5_1.setBackground(new Color(255, 128, 0));
+		GridBagConstraints gbc_btnNewButton_1_5_1 = new GridBagConstraints();
+		gbc_btnNewButton_1_5_1.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_1_5_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_1_5_1.gridwidth = 3;
+		gbc_btnNewButton_1_5_1.gridx = 2;
+		gbc_btnNewButton_1_5_1.gridy = 9;
+		panel_4.add(btnNewButton_1_5_1, gbc_btnNewButton_1_5_1);
 		
 		JButton btnNewButton_1_5_2 = new JButton("Xóa");
 		btnNewButton_1_5_2.setForeground(Color.WHITE);
 		btnNewButton_1_5_2.setBackground(new Color(255, 128, 0));
+		GridBagConstraints gbc_btnNewButton_1_5_2 = new GridBagConstraints();
+		gbc_btnNewButton_1_5_2.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_1_5_2.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton_1_5_2.gridx = 7;
+		gbc_btnNewButton_1_5_2.gridy = 9;
+		panel_4.add(btnNewButton_1_5_2, gbc_btnNewButton_1_5_2);
 		
 		JButton btnNewButton_1_5_3 = new JButton("Lưu");
 		btnNewButton_1_5_3.setForeground(Color.WHITE);
 		btnNewButton_1_5_3.setBackground(new Color(255, 128, 0));
+		GridBagConstraints gbc_btnNewButton_1_5_3 = new GridBagConstraints();
+		gbc_btnNewButton_1_5_3.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_1_5_3.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton_1_5_3.gridwidth = 2;
+		gbc_btnNewButton_1_5_3.gridx = 1;
+		gbc_btnNewButton_1_5_3.gridy = 10;
+		panel_4.add(btnNewButton_1_5_3, gbc_btnNewButton_1_5_3);
 		
 		JButton btnNewButton_1_5_4 = new JButton("Hủy");
 		btnNewButton_1_5_4.setForeground(Color.WHITE);
 		btnNewButton_1_5_4.setBackground(new Color(255, 128, 0));
-		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		
-		textField_7 = new JTextField();
-		textField_7.setColumns(10);
-		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
-		gl_panel_4.setHorizontalGroup(
-			gl_panel_4.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(lblNewLabel_9_1_1)
-					.addGap(309)
-					.addComponent(lblNewLabel_9_7))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
-					.addGap(185)
-					.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(lblNewLabel_9_1_1_1, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
-					.addGap(309)
-					.addComponent(lblNewLabel_9_1_1_1_1, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
-					.addGap(185)
-					.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(lblNewLabel_9_1_1_1_2, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
-					.addGap(309)
-					.addComponent(lblNewLabel_9_1_1_1_3, GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
-					.addGap(185)
-					.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(lblNewLabel_9_1_1_1_2_1))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(24)
-					.addComponent(textField_7, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
-					.addGap(221))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(41)
-					.addComponent(btnNewButton_1_5, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-					.addGap(94)
-					.addComponent(btnNewButton_1_5_1, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-					.addGap(98)
-					.addComponent(btnNewButton_1_5_2, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(187)
-					.addComponent(btnNewButton_1_5_3, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
-					.addGap(41)
-					.addComponent(btnNewButton_1_5_4, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_panel_4.setVerticalGroup(
-			gl_panel_4.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_4.createSequentialGroup()
-					.addGap(8)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel_9_1_1)
-						.addGroup(gl_panel_4.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblNewLabel_9_7)))
-					.addGap(3)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
-					.addGap(11)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel_9_1_1_1)
-						.addComponent(lblNewLabel_9_1_1_1_1))
-					.addGap(6)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
-					.addGap(11)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNewLabel_9_1_1_1_2)
-						.addComponent(lblNewLabel_9_1_1_1_3))
-					.addGap(6)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addComponent(lblNewLabel_9_1_1_1_2_1)
-					.addGap(11)
-					.addComponent(textField_7, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-					.addGap(35)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton_1_5, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewButton_1_5_1, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewButton_1_5_2, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton_1_5_3, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewButton_1_5_4, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)))
-		);
-		panel_4.setLayout(gl_panel_4);
+		GridBagConstraints gbc_btnNewButton_1_5_4 = new GridBagConstraints();
+		gbc_btnNewButton_1_5_4.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton_1_5_4.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton_1_5_4.gridwidth = 3;
+		gbc_btnNewButton_1_5_4.gridx = 4;
+		gbc_btnNewButton_1_5_4.gridy = 10;
+		panel_4.add(btnNewButton_1_5_4, gbc_btnNewButton_1_5_4);
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBorder(null);
