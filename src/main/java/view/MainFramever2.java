@@ -76,7 +76,7 @@ public class MainFramever2 extends JFrame {
 	 */
 	public MainFramever2() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1537, 931);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -506,7 +506,6 @@ public class MainFramever2 extends JFrame {
 		
 		textField_8 = new JTextField();
 		textField_8.setColumns(10);
-		
 		btnNewButton_1_4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
