@@ -21,7 +21,7 @@ public class Phong {
     private String moTa;
 
 //    constructor
-    public Phong(String maPhong, String tenPhong,String tang, LoaiPhong loaiPhong, boolean trangThaiPhong, String moTa) {
+    public Phong(String maPhong, String tenPhong, LoaiPhong loaiPhong, boolean trangThaiPhong, String moTa,String tang) {
         setMaPhong(maPhong);
         this.tenPhong = tenPhong;
         this.tang = tang;

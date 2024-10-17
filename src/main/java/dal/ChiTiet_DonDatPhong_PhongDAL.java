@@ -33,33 +33,33 @@ public class ChiTiet_DonDatPhong_PhongDAL {
     }
 
     // Lấy danh sách tất cả ChiTiet_DonDatPhong_Phong
-    public ArrayList<ChiTiet_DonDatPhong_Phong> getAllChiTiet() {
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                String maCT_DDP_P = rs.getString(1);
-                LocalDate ngayTra = rs.getDate(2).toLocalDate();
-                String maDonDatPhong = rs.getString(3);
-                String maPhong = rs.getString(4);
-                LocalDate ngayNhanPhong = rs.getDate(5).toLocalDate();
-
-                // Tạo các đối tượng DonDatPhong và Phong từ mã
-                DonDatPhong donDatPhong = new DonDatPhong(maDonDatPhong);
-                Phong phong = new Phong(maPhong);
-
-                // Tạo đối tượng ChiTiet_DonDatPhong_Phong từ dữ liệu truy vấn
-                ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong(maCT_DDP_P, ngayTra, donDatPhong, phong, ngayNhanPhong);
-                dsChiTiet.add(chiTiet);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dsChiTiet;
-    }
+//    public ArrayList<ChiTiet_DonDatPhong_Phong> getAllChiTiet() {
+//        try {
+//            ConnectDB.getInstance().connect();
+//            con = ConnectDB.getConnection();
+//            String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong";
+//            Statement stmt = con.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//            while (rs.next()) {
+//                String maCT_DDP_P = rs.getString(1);
+//                LocalDate ngayTra = rs.getDate(2).toLocalDate();
+//                String maDonDatPhong = rs.getString(3);
+//                String maPhong = rs.getString(4);
+//                LocalDate ngayNhanPhong = rs.getDate(5).toLocalDate();
+//
+//                // Tạo các đối tượng DonDatPhong và Phong từ mã
+//                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(maDonDatPhong);
+//                Phong phong = new PhongDAL().getPhongTheoMa(maPhong);
+//
+//                // Tạo đối tượng ChiTiet_DonDatPhong_Phong từ dữ liệu truy vấn
+//                ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong(maCT_DDP_P, ngayTra, donDatPhong, phong, ngayNhanPhong);
+//                dsChiTiet.add(chiTiet);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return dsChiTiet;
+//    }
 
     // Thêm mới ChiTiet_DonDatPhong_Phong
     public boolean themChiTiet(ChiTiet_DonDatPhong_Phong chiTiet) {

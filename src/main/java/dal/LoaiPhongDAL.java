@@ -52,6 +52,32 @@ public class LoaiPhongDAL {
         }
         return dsLoaiPhong;
     }
+    // get LoaiPhong theo mã
+    public LoaiPhong getLoaiPhongTheoMa(String maLoaiPhong) {
+        LoaiPhong loaiPhong = null; // Khởi tạo biến LoaiPhong
+        try {
+            ConnectDB.getInstance().connect(); // Kết nối đến cơ sở dữ liệu
+            con = ConnectDB.getConnection(); // Lấy kết nối
+            String sql = "SELECT * FROM LoaiPhong WHERE maLoaiPhong = ?"; // Câu lệnh SQL với tham số
+            PreparedStatement pstmt = con.prepareStatement(sql); // Tạo PreparedStatement
+            pstmt.setString(1, maLoaiPhong); // Gán giá trị cho tham số
+
+            ResultSet rs = pstmt.executeQuery(); // Thực hiện truy vấn
+            if (rs.next()) { // Kiểm tra kết quả
+                // Lấy dữ liệu từ ResultSet
+                String tenLoaiPhong = rs.getString(2);
+                int sucChua = rs.getInt(3);
+                double donGia = rs.getDouble(4);
+                String mota = rs.getString(5);
+                double chietKhau = rs.getDouble(6);
+                // Tạo một đối tượng LoaiPhong mới từ dữ liệu truy vấn
+                loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, sucChua, donGia, mota, chietKhau);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý lỗi
+        }
+        return loaiPhong; // Trả về đối tượng LoaiPhong
+    }
 
     // Thêm mới LoaiPhong
     public boolean themLoaiPhong(LoaiPhong loaiPhong) {

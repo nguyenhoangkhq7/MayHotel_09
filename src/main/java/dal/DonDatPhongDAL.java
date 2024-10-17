@@ -8,11 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import database.ConnectDB;
 import entity.DonDatPhong;
-// thêm sửa xóa lấy dữ liệu entity 
+import entity.KhachHang;
+import entity.NhanVien;
+
+// thêm sửa xóa lấy dữ liệu entity
 public class DonDatPhongDAL {
 	public ArrayList<DonDatPhong> dsDonDatPhong;
 	Connection con;
@@ -21,31 +23,68 @@ public class DonDatPhongDAL {
 		dsDonDatPhong = new ArrayList<>();
 	}
 // 
-	public ArrayList<DonDatPhong> getAllDonDatPhong() { // lấy danh sách tất cả đơn đặt phòng
-		try {
-			ConnectDB.getInstance().connect();
-			con = ConnectDB.getConnection();
-			String sql = "select * from DonDatPhong";
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				String maDon = rs.getString(1);
-				LocalDate ngayTao = rs.getDate(2)!= null ? rs.getDate(2).toLocalDate() : null;
-				String phuongThucThanhToan = rs.getString(3);
-				String trangThaiDDP = rs.getString(4);
-				double tienDatCoc = rs.getDouble(5);
-				LocalDate ngayThanhToan = rs.getDate(6)!= null ? rs.getDate(6).toLocalDate() : null;
-				String maNV = rs.getString(7);
-				String maKH = rs.getString(8);
-				// từ dữ liệu đã có tạo đơn đặt phòng tạm
-				DonDatPhong tmp = new DonDatPhong(maDon,ngayTao,phuongThucThanhToan,trangThaiDDP,tienDatCoc,ngayThanhToan,maNV,maKH);
-				dsDonDatPhong.add(tmp);
-			} 
-		} catch (SQLException e){
-			e.printStackTrace();
-		}
-		return dsDonDatPhong;
-	}
+//public ArrayList<DonDatPhong> getAllDonDatPhong() {
+//	ArrayList<DonDatPhong> dsDonDatPhong = new ArrayList<>(); // Khởi tạo danh sách DonDatPhong
+//	try {
+//		ConnectDB.getInstance().connect(); // Kết nối đến cơ sở dữ liệu
+//		con = ConnectDB.getConnection(); // Lấy kết nối
+//		String sql = "SELECT * FROM DonDatPhong"; // Câu lệnh SQL
+//		Statement stmt = con.createStatement(); // Tạo Statement
+//		ResultSet rs = stmt.executeQuery(sql); // Thực hiện truy vấn
+//
+//		while (rs.next()) { // Duyệt qua từng kết quả trong ResultSet
+//			String maDonDatPhong = rs.getString(1); // Lấy mã đơn đặt phòng
+//			LocalDate ngayTao = rs.getDate(2).toLocalDate(); // Lấy ngày tạo
+//			String phuongThucThanhToan = rs.getString(3); // Lấy phương thức thanh toán
+//			String trangThaiDonDatPhong = rs.getString(4); // Lấy trạng thái đơn đặt phòng
+//			double tienDatCoc = rs.getDouble(5); // Lấy tiền đặt cọc
+//			LocalDate ngayThanhToan = rs.getDate(6) != null ? rs.getDate(6).toLocalDate() : null; // Lấy ngày thanh toán (có thể null)
+//
+//			// Lấy thông tin nhân viên và khách hàng (giả định có phương thức tương tự)
+//			NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(7)); // Lấy nhân viên theo mã
+//			KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(rs.getString(8)); // Lấy khách hàng theo mã
+//
+//			// Tạo một đối tượng DonDatPhong mới từ dữ liệu truy vấn
+//			DonDatPhong donDatPhong = new DonDatPhong(maDonDatPhong, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong, tienDatCoc, ngayThanhToan, nhanVien, khachHang);
+//			dsDonDatPhong.add(donDatPhong); // Thêm đơn đặt phòng vào danh sách
+//		}
+//	} catch (SQLException e) {
+//		e.printStackTrace(); // Xử lý lỗi
+//	}
+//	return dsDonDatPhong; // Trả về danh sách các đơn đặt phòng
+//}
+
+//get don dat phòng theo mã
+//public DonDatPhong getDonDatPhongTheoMa(String maDonDatPhong) {
+//	DonDatPhong donDatPhong = null; // Khởi tạo biến để lưu đối tượng DonDatPhong
+//	try {
+//		ConnectDB.getInstance().connect(); // Kết nối đến cơ sở dữ liệu
+//		con = ConnectDB.getConnection(); // Lấy kết nối
+//		String sql = "SELECT * FROM DonDatPhong WHERE maDonDatPhong = ?"; // Câu lệnh SQL với điều kiện
+//		PreparedStatement pstmt = con.prepareStatement(sql); // Sử dụng PreparedStatement
+//		pstmt.setString(1, maDonDatPhong); // Thiết lập tham số
+//
+//		ResultSet rs = pstmt.executeQuery(); // Thực hiện truy vấn
+//
+//		if (rs.next()) { // Nếu có kết quả
+//			LocalDate ngayTao = rs.getDate(2).toLocalDate(); // Lấy ngày tạo
+//			String phuongThucThanhToan = rs.getString(3); // Lấy phương thức thanh toán
+//			String trangThaiDonDatPhong = rs.getString(4); // Lấy trạng thái đơn đặt phòng
+//			double tienDatCoc = rs.getDouble(5); // Lấy tiền đặt cọc
+//			LocalDate ngayThanhToan = rs.getDate(6) != null ? rs.getDate(6).toLocalDate() : null; // Lấy ngày thanh toán (có thể null)
+//
+//			// Lấy thông tin nhân viên và khách hàng (giả định có phương thức tương tự)
+//			NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(7)); // Lấy nhân viên theo mã
+//			KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(rs.getString(8)); // Lấy khách hàng theo mã
+//
+//			// Tạo đối tượng DonDatPhong từ dữ liệu truy vấn
+//			donDatPhong = new DonDatPhong(maDonDatPhong, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong, tienDatCoc, ngayThanhToan, nhanVien, khachHang);
+//		}
+//	} catch (SQLException e) {
+//		e.printStackTrace(); // Xử lý lỗi
+//	}
+//	return donDatPhong; // Trả về đối tượng DonDatPhong hoặc null nếu không tìm thấy
+//}
 
 	public boolean themDonDatPhong(DonDatPhong ddp) {
 		int n = 0;
@@ -60,8 +99,8 @@ public class DonDatPhongDAL {
 			stmt.setString(4, ddp.getTrangThaiDonDatPhong());
 			stmt.setDouble(5, ddp.getTienDatCoc());
 			stmt.setDate(6, Date.valueOf(ddp.getNgayThanhToan()));
-			stmt.setString(7, ddp.getMaNhanVien());
-			stmt.setString(8, ddp.getMaKhachHang());
+			stmt.setString(7, ddp.getNhanVien().getMaNV());
+			stmt.setString(8, ddp.getKhachHang().getMaKH());
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

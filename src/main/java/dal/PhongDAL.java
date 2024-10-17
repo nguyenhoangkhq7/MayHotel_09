@@ -30,27 +30,30 @@ public class PhongDAL {
 
     // Lấy tất cả các phòng từ cơ sở dữ liệu
     public ArrayList<Phong> getAllPhong() {
+        ArrayList<Phong> dsPhong = new ArrayList<>(); // Khởi tạo danh sách Phong
         try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM Phong";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                String maPhong = rs.getString(1);
-                String tenPhong = rs.getString(2);
-                String loaiPhongStr = rs.getString(3);
-                LoaiPhong loaiPhong = new LoaiPhong(rs.getString(4)); // chuyển đổi từ chuỗi sang enum
-                boolean trangThaiPhong = rs.getBoolean(5);
-                String moTa = rs.getString(6);
+            ConnectDB.getInstance().connect(); // Kết nối đến cơ sở dữ liệu
+            con = ConnectDB.getConnection(); // Lấy kết nối
+            String sql = "SELECT * FROM Phong"; // Câu lệnh SQL
+            Statement stmt = con.createStatement(); // Tạo Statement
+            ResultSet rs = stmt.executeQuery(sql); // Thực hiện truy vấn
 
-                Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa);
-                dsPhong.add(phong);
+            while (rs.next()) { // Duyệt qua từng kết quả trong ResultSet
+                String maPhong = rs.getString(1); // Lấy mã phòng
+                String tenPhong = rs.getString(2); // Lấy tên phòng
+                String tang = rs.getString(3); // Lấy tầng
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(4)); // Lấy loại phòng theo mã
+                boolean trangThaiPhong = rs.getBoolean(5); // Lấy trạng thái phòng
+                String moTa = rs.getString(6); // Lấy mô tả
+
+                // Tạo một đối tượng Phong mới từ dữ liệu truy vấn
+                Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
+                dsPhong.add(phong); // Thêm phòng vào danh sách
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Xử lý lỗi
         }
-        return dsPhong;
+        return dsPhong; // Trả về danh sách các phòng
     }
 
     // Thêm một phòng mới vào cơ sở dữ liệu
@@ -63,7 +66,7 @@ public class PhongDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, phong.getMaPhong());
             stmt.setString(2, phong.getTenPhong());
-            stmt.setString(3, phong.getLoaiPhong().getMaLoaiPhong()); // chuyển đổi enum sang chuỗi
+            stmt.setString(3, phong.getLoaiPhong().getMaLoaiPhong());
             stmt.setBoolean(4, phong.isTrangThaiPhong());
             stmt.setString(5, phong.getMoTa());
 
@@ -72,6 +75,31 @@ public class PhongDAL {
             e.printStackTrace();
         }
         return n > 0;
+    }
+    // lấy phòng từ mã phòng
+    public Phong getPhongTheoMa(String maPhong) {
+        Phong phong = null; // Khởi tạo biến Phong
+        try {
+            ConnectDB.getInstance().connect(); // Kết nối đến cơ sở dữ liệu
+            con = ConnectDB.getConnection(); // Lấy kết nối
+            String sql = "SELECT * FROM Phong WHERE maPhong = ?"; // Câu lệnh SQL với tham số
+            PreparedStatement stmt = con.prepareStatement(sql); // Tạo PreparedStatement
+            stmt.setString(1, maPhong); // Gán giá trị cho tham số
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String tenPhong = rs.getString(2);
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(3)); // Lấy loại phòng theo mã
+                boolean trangThaiPhong = rs.getBoolean(4);
+                String moTa = rs.getString(5);
+                String tang = rs.getString(6);
+                // Tạo một đối tượng Phong mới từ dữ liệu truy vấn
+                phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý lỗi
+        }
+        return phong; // Trả về đối tượng Phong
     }
 
     // Sửa thông tin phòng trong cơ sở dữ liệu
