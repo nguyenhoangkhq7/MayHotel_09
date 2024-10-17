@@ -18,27 +18,31 @@ public class KhuyenMai {
     }
 
     // Constructor đầy đủ
-    public KhuyenMai(String tenKhuyenMai, double giaTri, Boolean conHoatDong, int soLuong, LocalDate ngayHetHan) {
-        setTenKhuyenMai(tenKhuyenMai);
-        setGiaTri(giaTri);
-        setConHoatDong(conHoatDong);
-        setSoLuong(soLuong);
-        setNgayHetHan(ngayHetHan);
-        this.ngayTao = LocalDate.now();  // Ngày hiện tại
-        this.maKhuyenMai = generateMaKhuyenMai();  // Tạo mã khuyến mãi
-    }
+   
     // Constructor 1 tham so maKhuyenMai
     public KhuyenMai(String maKhuyenMai)
     {
     	this.maKhuyenMai= maKhuyenMai;
     }
 
-    // Phương thức tạo mã khuyến mãi
-    private String generateMaKhuyenMai() {
-        String maKhuyenMai = "KM" + String.format("%04d", maKhuyenMaiCounter);
-        maKhuyenMaiCounter++;  // Tăng bộ đếm để đảm bảo mã duy nhất
-        return maKhuyenMai;
-    }
+    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayTao, Boolean conHoatDong,
+			int soLuong, LocalDate ngayHetHan) {
+		super();
+		this.maKhuyenMai = maKhuyenMai;
+		this.tenKhuyenMai = tenKhuyenMai;
+		this.giaTri = giaTri;
+		this.ngayTao = ngayTao;
+		this.conHoatDong = conHoatDong;
+		this.soLuong = soLuong;
+		this.ngayHetHan = ngayHetHan;
+	}
+
+	// Phương thức tạo mã khuyến mãi
+//    private String generateMaKhuyenMai() {
+//        String maKhuyenMai = "KM" + String.format("%04d", maKhuyenMaiCounter);
+//        maKhuyenMaiCounter++;  // Tăng bộ đếm để đảm bảo mã duy nhất
+//        return maKhuyenMai;
+//    }
 
     // Getters and Setters
     public String getMaKhuyenMai() {

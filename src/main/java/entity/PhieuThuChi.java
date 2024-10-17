@@ -14,24 +14,27 @@ public class PhieuThuChi {
 	// Constructor không tham số
 	public PhieuThuChi(){};
 	// Constructor đầy đủ
-	public PhieuThuChi(String loaiPhieu, String moTa, double soTien, String phuongThuc) {
-        setLoaiPhieu(loaiPhieu);  // Đặt loại phiếu và tạo mã phiếu
-        setMoTa(moTa);  // Kiểm tra không rỗng
-        setSoTien(soTien);  // Kiểm tra soTien > 0
-        setPhuongThuc(phuongThuc);  // Kiểm tra không rỗng
-        this.ngayTao = LocalDate.now();  // Tự động lấy ngày hiện tại
-        this.maPhieu = generateMaPhieu();  // Tạo mã phiếu
-    }
+
     // Constructor 1 tham so maPhieuThuChi
 	public PhieuThuChi(String maPhieu){
 		this.maPhieu= maPhieu;
 	};
-	 private String generateMaPhieu() {
-	        String prefix = loaiPhieu.equalsIgnoreCase("PT") ? "PT" : "PC";
-	        String maPhieu = prefix + String.format("%04d", maPhieuCounter);
-	        maPhieuCounter++; 
-	        return maPhieu;
-	    }
+	 public PhieuThuChi(String maPhieu, String loaiPhieu, String moTa, LocalDate ngayTao, double soTien,
+			String phuongThuc) {
+		super();
+		this.maPhieu = maPhieu;
+		this.loaiPhieu = loaiPhieu;
+		this.moTa = moTa;
+		this.ngayTao = ngayTao;
+		this.soTien = soTien;
+		this.phuongThuc = phuongThuc;
+	}
+//	private String generateMaPhieu() {
+//	        String prefix = loaiPhieu.equalsIgnoreCase("PT") ? "PT" : "PC";
+//	        String maPhieu = prefix + String.format("%04d", maPhieuCounter);
+//	        maPhieuCounter++; 
+//	        return maPhieu;
+//	    }
 	public String getMaPhieu() {
 		return maPhieu;
 	}

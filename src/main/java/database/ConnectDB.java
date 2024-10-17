@@ -15,8 +15,15 @@ public class ConnectDB {
 	public void connect() throws SQLException {
 		String url = "jdbc:sqlserver://localhost:1433;databasename=QuanLyDatPhongKS;encrypt=false";
 		String user = "sa";
-		String password = "password"; // đổi thành pass word của mọi ng vào
+<<<<<<< HEAD
+		String password = "123456"; // đổi thành pass word của mọi ng vào
+=======
+		String password = "Thaibao123"; // đổi thành pass word của mọi ng vào
+>>>>>>> ccf4c304ca4601214b3d5571ab2cf7e2deb09b2f
 		con = DriverManager.getConnection(url, user, password);
+		
+//		con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=QuanLyDatPhongKS;encrypt=false", "sa", "sapassword");
+
 	}
 	public void disconnect() {
 		if (con!=null) {
