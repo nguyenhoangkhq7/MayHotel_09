@@ -120,6 +120,29 @@ public class NhanVienDAL {
         }
         return dsNhanVien;
     }
+    public NhanVien getNhanVienByMa(String maNV) {
+        NhanVien nhanVien = null;
+        String sql = "SELECT * FROM NhanVien WHERE maNV = ?";
+        try {
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maNV);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String hoten = rs.getString("hoten");
+                String soDienThoai = rs.getString("soDienThoai");
+                String cancuoc = rs.getString("cancuoc");
+                boolean conHoatDong = rs.getBoolean("conHoatDong");
+                String email = rs.getString("email");
+                String diaChi = rs.getString("diaChi");
+                Integer vaiTro = rs.getInt("vaiTro");
+
+                nhanVien = new NhanVien(maNV, hoten, soDienThoai, cancuoc, conHoatDong, email, diaChi, vaiTro);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nhanVien;
+    }
 
     // Test main
     public static void main(String[] args) {
