@@ -15,14 +15,16 @@ import java.util.Objects;
 public class Phong {
     private String maPhong;
     private String tenPhong;
+    private String tang;
     private LoaiPhong loaiPhong;
     private boolean trangThaiPhong;
     private String moTa;
 
 //    constructor
-    public Phong(String maPhong, String tenPhong, LoaiPhong loaiPhong, boolean trangThaiPhong, String moTa) {
+    public Phong(String maPhong, String tenPhong,String tang, LoaiPhong loaiPhong, boolean trangThaiPhong, String moTa) {
         setMaPhong(maPhong);
         this.tenPhong = tenPhong;
+        this.tang = tang;
         setLoaiPhong(loaiPhong);
         this.trangThaiPhong = trangThaiPhong;
         this.moTa = moTa;
@@ -41,6 +43,14 @@ public class Phong {
         if(maPhong.equals(""))
             throw new IllegalArgumentException("Mã phòng không được rỗng");
         this.maPhong = maPhong;
+    }
+
+    public String getTang() {
+        return tang;
+    }
+
+    public void setTang(String tang) {
+        this.tang = tang;
     }
 
     public String getTenPhong() {
@@ -92,12 +102,12 @@ public class Phong {
     }
 
 //    toString
-
     @Override
     public String toString() {
         return "Phong{" +
                 "maPhong='" + maPhong + '\'' +
                 ", tenPhong='" + tenPhong + '\'' +
+                ", tang='" + tang + '\'' +
                 ", loaiPhong=" + loaiPhong +
                 ", trangThaiPhong=" + trangThaiPhong +
                 ", moTa='" + moTa + '\'' +

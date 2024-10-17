@@ -20,22 +20,22 @@ public class DonDatPhong {
     private String trangThaiDonDatPhong;
     private double tienDatCoc;
     private LocalDate ngayThanhToan;
-    private String maNhanVien;
-    private String maKhachHang;
+    private NhanVien nhanVien;
+    private KhachHang khachHang;
 
     public DonDatPhong(String maDonDatPhong) {
         this.maDonDatPhong = maDonDatPhong;
     }
 
-    public DonDatPhong(String maDonDatPhong, LocalDate ngayTao, String phuongThucThanhToan, String trangThaiDonDatPhong, double tienDatCoc, LocalDate ngayThanhToan, String maNhanVien, String maKhachHang) {
+    public DonDatPhong(String maDonDatPhong, LocalDate ngayTao, String phuongThucThanhToan, String trangThaiDonDatPhong, double tienDatCoc, LocalDate ngayThanhToan, NhanVien nhanVien, KhachHang khachHang) {
         this.maDonDatPhong = maDonDatPhong;
         this.ngayTao = ngayTao;
         this.phuongThucThanhToan = phuongThucThanhToan;
         this.trangThaiDonDatPhong = trangThaiDonDatPhong;
         this.tienDatCoc = tienDatCoc;
         this.ngayThanhToan = ngayThanhToan;
-        this.maNhanVien = maNhanVien;
-        this.maKhachHang = maKhachHang;
+        this.nhanVien = nhanVien;
+        this.khachHang = khachHang;
     }
 
     public String getMaDonDatPhong() {
@@ -86,20 +86,20 @@ public class DonDatPhong {
         this.ngayThanhToan = ngayThanhToan;
     }
 
-    public String getMaNhanVien() {
-        return maNhanVien;
+    public NhanVien getNhanVien() {
+        return nhanVien;
     }
 
-    public void setMaNhanVien(String maNhanVien) {
-        this.maNhanVien = maNhanVien;
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
     }
 
-    public String getMaKhachHang() {
-        return maKhachHang;
+    public KhachHang getKhachHang() {
+        return khachHang;
     }
 
-    public void setMaKhachHang(String maKhachHang) {
-        this.maKhachHang = maKhachHang;
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
     }
 
     @Override
@@ -123,9 +123,8 @@ public class DonDatPhong {
                 ", trangThaiDonDatPhong='" + trangThaiDonDatPhong + '\'' +
                 ", tienDatCoc=" + tienDatCoc +
                 ", ngayThanhToan=" + ngayThanhToan +
-                ", maNhanVien='" + maNhanVien + '\'' +
-                ", maKhachHang='" + maKhachHang + '\'' +
+                ", nhanVien=" + nhanVien +
+                ", khachHang=" + khachHang +
                 '}';
     }
-
 }
