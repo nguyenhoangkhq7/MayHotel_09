@@ -1,5 +1,5 @@
 /*
-    *MayHotel  day creative: 9/26/2024
+    *MayHotel  day creative: 10/21/2024
     version: 2023.2  IntelliJ IDEA
     author: Nguyễn Hoàng Khang  */
     /*
@@ -10,7 +10,11 @@
 
 package view;
 
-public class Main {
-    public static void main(String[] args) {
+import javax.swing.*;
+
+// nơi chứa các giao diện khác
+public class MainGUI extends JFrame {
+    public MainGUI() {
+    //
     }
 }
