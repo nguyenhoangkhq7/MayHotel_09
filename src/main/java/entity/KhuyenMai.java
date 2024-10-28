@@ -10,39 +10,31 @@ public class KhuyenMai {
     private Boolean conHoatDong;
     private int soLuong;
     private LocalDate ngayHetHan;
-
-    private static int maKhuyenMaiCounter = 1;  // Đếm số khuyến mãi để tạo mã
+    private String dieuKienApDung;
 
     // Constructor không tham số
     public KhuyenMai() {
     }
 
-    // Constructor đầy đủ
-   
     // Constructor 1 tham so maKhuyenMai
     public KhuyenMai(String maKhuyenMai)
     {
     	this.maKhuyenMai= maKhuyenMai;
     }
 
+    // Constructor đầy đủ
     public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayTao, Boolean conHoatDong,
-			int soLuong, LocalDate ngayHetHan) {
-		super();
-		this.maKhuyenMai = maKhuyenMai;
-		this.tenKhuyenMai = tenKhuyenMai;
-		this.giaTri = giaTri;
-		this.ngayTao = ngayTao;
-		this.conHoatDong = conHoatDong;
-		this.soLuong = soLuong;
-		this.ngayHetHan = ngayHetHan;
-	}
-
-	// Phương thức tạo mã khuyến mãi
-//    private String generateMaKhuyenMai() {
-//        String maKhuyenMai = "KM" + String.format("%04d", maKhuyenMaiCounter);
-//        maKhuyenMaiCounter++;  // Tăng bộ đếm để đảm bảo mã duy nhất
-//        return maKhuyenMai;
-//    }
+			int soLuong, LocalDate ngayHetHan, String dieuKienApDung) {
+        super();
+        this.maKhuyenMai = maKhuyenMai;
+        this.tenKhuyenMai = tenKhuyenMai;
+        this.giaTri = giaTri;
+        this.ngayTao = ngayTao;
+        this.conHoatDong = conHoatDong;
+        this.soLuong = soLuong;
+        this.ngayHetHan = ngayHetHan;
+        this.dieuKienApDung = dieuKienApDung;
+    }
 
     // Getters and Setters
     public String getMaKhuyenMai() {
@@ -116,6 +108,14 @@ public class KhuyenMai {
         this.ngayHetHan = ngayHetHan;
     }
 
+    public String getDieuKienApDung() {
+        return dieuKienApDung;
+    }
+
+    public void setDieuKienApDung(String dieuKienApDung) {
+        this.dieuKienApDung = dieuKienApDung;
+    }
+
     // Override equals and hashCode
     @Override
     public boolean equals(Object o) {
@@ -131,6 +131,7 @@ public class KhuyenMai {
     }
 
     // toString method
+
     @Override
     public String toString() {
         return "KhuyenMai{" +
@@ -141,6 +142,7 @@ public class KhuyenMai {
                 ", conHoatDong=" + conHoatDong +
                 ", soLuong=" + soLuong +
                 ", ngayHetHan=" + ngayHetHan +
+                ", dieuKienApDung='" + dieuKienApDung + '\'' +
                 '}';
     }
 }

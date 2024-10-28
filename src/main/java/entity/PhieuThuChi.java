@@ -10,17 +10,20 @@ public class PhieuThuChi {
 	private LocalDate ngayTao;
 	private double soTien;
 	private String phuongThuc;
-	 private static int maPhieuCounter = 1;  // Đếm số phiếu để tạo mã
-	// Constructor không tham số
-	public PhieuThuChi(){};
-	// Constructor đầy đủ
+	private boolean conHoatDong;
+	private NhanVien nhanVien;
 
     // Constructor 1 tham so maPhieuThuChi
-	public PhieuThuChi(String maPhieu){
-		this.maPhieu= maPhieu;
-	};
+	public PhieuThuChi(String maPhieu) {
+		this.maPhieu = maPhieu;
+	}
+
+	// Constructor không tham số
+	public PhieuThuChi(){};
+
+	// Constructor đầy đủ
 	 public PhieuThuChi(String maPhieu, String loaiPhieu, String moTa, LocalDate ngayTao, double soTien,
-			String phuongThuc) {
+			String phuongThuc, Boolean conHoatDong, NhanVien nhanVien) {
 		super();
 		this.maPhieu = maPhieu;
 		this.loaiPhieu = loaiPhieu;
@@ -28,13 +31,10 @@ public class PhieuThuChi {
 		this.ngayTao = ngayTao;
 		this.soTien = soTien;
 		this.phuongThuc = phuongThuc;
+		this.conHoatDong = conHoatDong;
+		this.nhanVien = nhanVien;
 	}
-//	private String generateMaPhieu() {
-//	        String prefix = loaiPhieu.equalsIgnoreCase("PT") ? "PT" : "PC";
-//	        String maPhieu = prefix + String.format("%04d", maPhieuCounter);
-//	        maPhieuCounter++; 
-//	        return maPhieu;
-//	    }
+
 	public String getMaPhieu() {
 		return maPhieu;
 	}
@@ -83,6 +83,23 @@ public class PhieuThuChi {
         }
         this.phuongThuc = phuongThuc;
 	}
+
+	public boolean isConHoatDong() {
+		return conHoatDong;
+	}
+
+	public void setConHoatDong(boolean conHoatDong) {
+		this.conHoatDong = conHoatDong;
+	}
+
+	public NhanVien getNhanVien() {
+		return nhanVien;
+	}
+
+	public void setNhanVien(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(maPhieu);
@@ -94,16 +111,18 @@ public class PhieuThuChi {
         PhieuThuChi that = (PhieuThuChi) o;
         return Objects.equals(maPhieu, that.maPhieu);	}
 	//toString
-    @Override
-    public String toString() {
-        return "PhieuThuChi{" +
-                "maPhieu='" + maPhieu + '\'' +
-                ", loaiPhieu='" + loaiPhieu + '\'' +
-                ", moTa='" + moTa + '\'' +
-                ", ngayTao=" + ngayTao +
-                ", soTien=" + soTien +
-                ", phuongThuc='" + phuongThuc + '\'' +
-                '}';
-    }
-	
+
+	@Override
+	public String toString() {
+		return "PhieuThuChi{" +
+				"maPhieu='" + maPhieu + '\'' +
+				", loaiPhieu='" + loaiPhieu + '\'' +
+				", moTa='" + moTa + '\'' +
+				", ngayTao=" + ngayTao +
+				", soTien=" + soTien +
+				", phuongThuc='" + phuongThuc + '\'' +
+				", conHoatDong=" + conHoatDong +
+				", nhanVien=" + nhanVien +
+				'}';
+	}
 }

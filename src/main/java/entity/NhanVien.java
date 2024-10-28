@@ -18,23 +18,25 @@ public class NhanVien {
     private String maNV;
     private String hoten;
     private String soDienThoai;
-    private String cancuoc;
+    private String soCanCuoc;
     private boolean conHoatDong;
     private String email;
     private String diaChi;
     private Integer vaiTro;
+    private TaiKhoan taiKhoan;
 
     // Constructor với đầy đủ tham số
-    public NhanVien(String maNV, String hoten, String soDienThoai, String cancuoc, boolean conHoatDong,
-                    String email, String diaChi, Integer vaiTro) {
+    public NhanVien(String maNV, String hoten, String soDienThoai, String soCanCuoc, boolean conHoatDong,
+                    String email, String diaChi, Integer vaiTro, TaiKhoan taiKhoan) {
         setMaNV(maNV); // Sử dụng setter để đảm bảo tính hợp lệ
         setHoten(hoten);
         setSoDienThoai(soDienThoai);
-        setCancuoc(cancuoc);
+        setSoCanCuoc(soCanCuoc);
         this.conHoatDong = conHoatDong;
         setEmail(email);
         setDiaChi(diaChi);
         setVaiTro(vaiTro);
+        this.taiKhoan = taiKhoan;
     }
 
     // Constructor mặc định
@@ -74,15 +76,15 @@ public class NhanVien {
     }
 
     // Getter và Setter cho căn cước công dân
-    public String getCancuoc() {
-        return cancuoc;
+    public String getSoCanCuoc() {
+        return soCanCuoc;
     }
 
-    public void setCancuoc(String cancuoc) {
-        if (!cancuoc.matches("\\d{12}")) {
+    public void setSoCanCuoc(String soCanCuoc) {
+        if (!soCanCuoc.matches("\\d{12}")) {
             throw new IllegalArgumentException("Căn cước công dân không hợp lệ");
         }
-        this.cancuoc = cancuoc;
+        this.soCanCuoc = soCanCuoc;
     }
 
     // Getter cho trạng thái hoạt động
@@ -133,6 +135,14 @@ public class NhanVien {
         this.vaiTro = vaiTro;
     }
 
+    public TaiKhoan getTaiKhoan() {
+        return taiKhoan;
+    }
+
+    public void setTaiKhoan(TaiKhoan taiKhoan) {
+        this.taiKhoan = taiKhoan;
+    }
+
     // Phương thức hashCode() chỉ sử dụng maNV
     @Override
     public int hashCode() {
@@ -149,17 +159,19 @@ public class NhanVien {
     }
 
     // Phương thức toString() để trả về thông tin nhân viên
+
     @Override
     public String toString() {
         return "NhanVien{" +
                 "maNV='" + maNV + '\'' +
                 ", hoten='" + hoten + '\'' +
                 ", soDienThoai='" + soDienThoai + '\'' +
-                ", cancuoc='" + cancuoc + '\'' +
+                ", soCanCuoc='" + soCanCuoc + '\'' +
                 ", conHoatDong=" + conHoatDong +
                 ", email='" + email + '\'' +
                 ", diaChi='" + diaChi + '\'' +
                 ", vaiTro=" + vaiTro +
+                ", taiKhoan=" + taiKhoan +
                 '}';
     }
 }

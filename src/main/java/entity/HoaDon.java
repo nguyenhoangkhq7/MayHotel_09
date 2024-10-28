@@ -9,29 +9,26 @@ public class HoaDon {
 	private LocalDate ngayTao;
 	private Boolean trangThai;
 	private double thanhTien;
-	private String maNhanVien;
-	private String maKhachHang;
-	private String maDichVu;
-	private String maKhuyenMai;
+	private NhanVien nhanVien;
+	private KhachHang khachHang;
+	private DichVu dichVu;
+	private KhuyenMai khuyenMai;
 
 //	    private static int maHoaDonCounter = 1;  // Đếm số hóa đơn để tạo mã
 
 	// Constructor không tham số
 	public HoaDon() {
 	}
-
 	// Constructor đầy đủ
-	public HoaDon(String maHoaDon, LocalDate ngayTao, Boolean trangThai, double thanhTien, String maKhachHang,
-			String maNhanVien, String maDichVu, String maKhuyenMai) {
-		super();
+	public HoaDon(String maHoaDon, LocalDate ngayTao, Boolean trangThai, double thanhTien, NhanVien nhanVien, KhachHang khachHang, DichVu dichVu, KhuyenMai khuyenMai) {
 		this.maHoaDon = maHoaDon;
 		this.ngayTao = ngayTao;
 		this.trangThai = trangThai;
 		this.thanhTien = thanhTien;
-		this.maNhanVien = maNhanVien;
-		this.maKhachHang = maKhachHang;
-		this.maDichVu = maDichVu;
-		this.maKhuyenMai = maKhuyenMai;
+		this.nhanVien = nhanVien;
+		this.khachHang = khachHang;
+		this.dichVu = dichVu;
+		this.khuyenMai = khuyenMai;
 	}
 
 	// Constructor 1 tham so maHoaDon
@@ -39,14 +36,6 @@ public class HoaDon {
 		this.maHoaDon = maHoaDon;
 	}
 
-	// Phương thức tạo mã hóa đơn theo định dạng yêu cầu
-//	    private String generateMaHoaDon() {
-//	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyy");
-//	        String datePart = this.ngayTao.format(formatter);  // DDMMYY
-//	        String maHoaDon = "HD" + String.format("%04d", maHoaDonCounter) + nhanVien.getMaNhanVien() + datePart;
-//	        maHoaDonCounter++;  // Tăng bộ đếm để đảm bảo mã duy nhất
-//	        return maHoaDon;
-//	    }
 
 	// Getters and Setters with validation
 	public String getMaHoaDon() {
@@ -70,13 +59,9 @@ public class HoaDon {
 	}
 
 	public void setTrangThai(Boolean trangThai) {
-		if (trangThai == null) {
-			throw new IllegalArgumentException("Trạng thái không được để trống");
-		}
 		this.trangThai = trangThai;
 	}
 
-	
 	public double getThanhTien() {
 		return thanhTien;
 	}
@@ -85,36 +70,36 @@ public class HoaDon {
 		this.thanhTien = thanhTien;
 	}
 
-	public String getMaNhanVien() {
-		return maNhanVien;
+	public NhanVien getNhanVien() {
+		return nhanVien;
 	}
 
-	public void setMaNhanVien(String maNhanVien) {
-		this.maNhanVien = maNhanVien;
+	public void setNhanVien(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
 	}
 
-	public String getMaKhachHang() {
-		return maKhachHang;
+	public KhachHang getKhachHang() {
+		return khachHang;
 	}
 
-	public void setMaKhachHang(String maKhachHang) {
-		this.maKhachHang = maKhachHang;
+	public void setKhachHang(KhachHang khachHang) {
+		this.khachHang = khachHang;
 	}
 
-	public String getMaDichVu() {
-		return maDichVu;
+	public DichVu getDichVu() {
+		return dichVu;
 	}
 
-	public void setMaDichVu(String maDichVu) {
-		this.maDichVu = maDichVu;
+	public void setDichVu(DichVu dichVu) {
+		this.dichVu = dichVu;
 	}
 
-	public String getMaKhuyenMai() {
-		return maKhuyenMai;
+	public KhuyenMai getKhuyenMai() {
+		return khuyenMai;
 	}
 
-	public void setMaKhuyenMai(String maKhuyenMai) {
-		this.maKhuyenMai = maKhuyenMai;
+	public void setKhuyenMai(KhuyenMai khuyenMai) {
+		this.khuyenMai = khuyenMai;
 	}
 
 	// Override equals and hashCode
@@ -134,11 +119,19 @@ public class HoaDon {
 	}
 
 	// toString method
+
+
 	@Override
 	public String toString() {
-		return "HoaDon [maHoaDon=" + maHoaDon + ", ngayTao=" + ngayTao + ", trangThai=" + trangThai + ", thanhTien="
-				+ thanhTien + ", maNhanVien=" + maNhanVien + ", maKhachHang=" + maKhachHang + ", maDichVu=" + maDichVu
-				+ ", maKhuyenMai=" + maKhuyenMai + "]";
+		return "HoaDon{" +
+				"maHoaDon='" + maHoaDon + '\'' +
+				", ngayTao=" + ngayTao +
+				", trangThai=" + trangThai +
+				", thanhTien=" + thanhTien +
+				", nhanVien=" + nhanVien +
+				", khachHang=" + khachHang +
+				", dichVu=" + dichVu +
+				", khuyenMai=" + khuyenMai +
+				'}';
 	}
-
 }

@@ -14,36 +14,42 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class DonDatPhong {
-    private String maDonDatPhong;
+    private String maDon;
     private LocalDate ngayTao;
     private String phuongThucThanhToan;
     private String trangThaiDonDatPhong;
+    private boolean trangThaiDatCoc;
     private double tienDatCoc;
     private LocalDate ngayThanhToan;
     private NhanVien nhanVien;
     private KhachHang khachHang;
+    private String moTa;
 
     public DonDatPhong(String maDonDatPhong) {
-        this.maDonDatPhong = maDonDatPhong;
+        this.maDon = maDonDatPhong;
+    }
+    public DonDatPhong() {
     }
 
-    public DonDatPhong(String maDonDatPhong, LocalDate ngayTao, String phuongThucThanhToan, String trangThaiDonDatPhong, double tienDatCoc, LocalDate ngayThanhToan, NhanVien nhanVien, KhachHang khachHang) {
-        this.maDonDatPhong = maDonDatPhong;
+    public DonDatPhong(String maDon, LocalDate ngayTao, String phuongThucThanhToan, String trangThaiDonDatPhong, boolean trangThaiDatCoc, double tienDatCoc, LocalDate ngayThanhToan, NhanVien nhanVien, KhachHang khachHang, String moTa) {
+        this.maDon = maDon;
         this.ngayTao = ngayTao;
         this.phuongThucThanhToan = phuongThucThanhToan;
         this.trangThaiDonDatPhong = trangThaiDonDatPhong;
+        this.trangThaiDatCoc = trangThaiDatCoc;
         this.tienDatCoc = tienDatCoc;
         this.ngayThanhToan = ngayThanhToan;
         this.nhanVien = nhanVien;
         this.khachHang = khachHang;
+        this.moTa = moTa;
     }
 
-    public String getMaDonDatPhong() {
-        return maDonDatPhong;
+    public String getMaDon() {
+        return maDon;
     }
 
-    public void setMaDonDatPhong(String maDonDatPhong) {
-        this.maDonDatPhong = maDonDatPhong;
+    public void setMaDon(String maDon) {
+        this.maDon = maDon;
     }
 
     public LocalDate getNgayTao() {
@@ -102,29 +108,47 @@ public class DonDatPhong {
         this.khachHang = khachHang;
     }
 
+    public boolean isTrangThaiDatCoc() {
+        return trangThaiDatCoc;
+    }
+
+    public void setTrangThaiDatCoc(boolean trangThaiDatCoc) {
+        this.trangThaiDatCoc = trangThaiDatCoc;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DonDatPhong that)) return false;
-        return Objects.equals(maDonDatPhong, that.maDonDatPhong);
+        return Objects.equals(maDon, that.maDon);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(maDonDatPhong);
+        return Objects.hash(maDon);
     }
 
     @Override
     public String toString() {
         return "DonDatPhong{" +
-                "maDonDatPhong='" + maDonDatPhong + '\'' +
+                "maDon='" + maDon + '\'' +
                 ", ngayTao=" + ngayTao +
                 ", phuongThucThanhToan='" + phuongThucThanhToan + '\'' +
                 ", trangThaiDonDatPhong='" + trangThaiDonDatPhong + '\'' +
+                ", trangThaiDatCoc=" + trangThaiDatCoc +
                 ", tienDatCoc=" + tienDatCoc +
                 ", ngayThanhToan=" + ngayThanhToan +
                 ", nhanVien=" + nhanVien +
                 ", khachHang=" + khachHang +
+                ", moTa='" + moTa + '\'' +
                 '}';
     }
 }

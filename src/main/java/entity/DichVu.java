@@ -21,9 +21,10 @@ public class DichVu {
     private String moTa;  // Mô tả chi tiết của dịch vụ
     private LocalDate ngayTao;  // Ngày tạo dịch vụ
     private boolean conHoatDong;  // Trạng thái hoạt động của dịch vụ
+    private String donVi;
 
     // Constructor đầy đủ tham số
-    public DichVu(String maDichVu, double donGia, String tenDichVu, int soLuongTon, String moTa, LocalDate ngayTao, boolean conHoatDong) {
+    public DichVu(String maDichVu, double donGia, String tenDichVu, int soLuongTon, String moTa, LocalDate ngayTao, boolean conHoatDong, String donVi) {
         setMaDichVu(maDichVu);
         setDonGia(donGia);
         setTenDichVu(tenDichVu);
@@ -31,6 +32,7 @@ public class DichVu {
         this.moTa = moTa;
         this.ngayTao = ngayTao;
         this.conHoatDong = conHoatDong;
+        this.donVi = donVi;
     }
     // Constructor thuoc tinh ma 
     public DichVu(String maDichVu){
@@ -106,6 +108,14 @@ public class DichVu {
         this.conHoatDong = conHoatDong;
     }
 
+    public String getDonVi() {
+        return donVi;
+    }
+
+    public void setDonVi(String donVi) {
+        this.donVi = donVi;
+    }
+
     // Override phương thức equals và hashCode
     @Override
     public boolean equals(Object o) {
@@ -120,6 +130,7 @@ public class DichVu {
     }
 
     // Override phương thức toString
+
     @Override
     public String toString() {
         return "DichVu{" +
@@ -130,6 +141,7 @@ public class DichVu {
                 ", moTa='" + moTa + '\'' +
                 ", ngayTao=" + ngayTao +
                 ", conHoatDong=" + conHoatDong +
+                ", donVi='" + donVi + '\'' +
                 '}';
     }
 }

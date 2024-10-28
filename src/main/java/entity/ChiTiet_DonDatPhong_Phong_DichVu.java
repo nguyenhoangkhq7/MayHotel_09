@@ -13,37 +13,40 @@ package entity;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class ChiTiet_DonDatPhong_DichVu {
-    private String maCT_DDP_DV;  // Mã chi tiết đơn đặt phòng - dịch vụ
+public class ChiTiet_DonDatPhong_Phong_DichVu {
+    private String maCT_DDP_P_DV;  // Mã chi tiết đơn đặt phòng - dịch vụ
     private int soLuongDat;  // Số lượng dịch vụ đặt
     private LocalDate ngayTao;  // Ngày tạo đơn đặt dịch vụ
     private DichVu dichVu;  // Đối tượng dịch vụ
     private DonDatPhong donDatPhong;  // Đối tượng đơn đặt phòng
-
+    private String moTa;
     // Constructor 
-    public ChiTiet_DonDatPhong_DichVu(String maCT_DDP_DV, int soLuongDat, LocalDate ngayTao, DichVu dichVu, DonDatPhong donDatPhong) {
-        setMaCT_DDP_DV(maCT_DDP_DV);
+    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_DV, int soLuongDat, LocalDate ngayTao, DichVu dichVu, DonDatPhong donDatPhong,String moTa) {
+        setMaCT_DDP_P_DV(maCT_DDP_DV);
         setSoLuongDat(soLuongDat);
         this.ngayTao = ngayTao;
         setDichVu(dichVu);
         setDonDatPhong(donDatPhong);
+        this.moTa = moTa;
     }
 
-    public ChiTiet_DonDatPhong_DichVu(String maCT_DDP_DV) {
-		super();
-		this.maCT_DDP_DV = maCT_DDP_DV;
+    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_DV) {
+		this.maCT_DDP_P_DV = maCT_DDP_DV;
 	}
 
-	// Getter và Setter cho các thuộc tính
-    public String getMaCT_DDP_DV() {
-        return maCT_DDP_DV;
+    public ChiTiet_DonDatPhong_Phong_DichVu() {
     }
 
-    public void setMaCT_DDP_DV(String maCT_DDP_DV) {
-        if (maCT_DDP_DV == null || maCT_DDP_DV.isEmpty()) {
+    // Getter và Setter cho các thuộc tính
+    public String getMaCT_DDP_P_DV() {
+        return maCT_DDP_P_DV;
+    }
+
+    public void setMaCT_DDP_P_DV(String maCT_DDP_P_DV) {
+        if (maCT_DDP_P_DV == null || maCT_DDP_P_DV.isEmpty()) {
             throw new IllegalArgumentException("Mã chi tiết đơn đặt phòng - dịch vụ không được rỗng");
         }
-        this.maCT_DDP_DV = maCT_DDP_DV;
+        this.maCT_DDP_P_DV = maCT_DDP_P_DV;
     }
 
     public int getSoLuongDat() {
@@ -87,28 +90,38 @@ public class ChiTiet_DonDatPhong_DichVu {
         this.donDatPhong = donDatPhong;
     }
 
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+
     // Override phương thức equals và hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ChiTiet_DonDatPhong_DichVu that)) return false;
-        return Objects.equals(maCT_DDP_DV, that.maCT_DDP_DV);
+        if (!(o instanceof ChiTiet_DonDatPhong_Phong_DichVu that)) return false;
+        return Objects.equals(maCT_DDP_P_DV, that.maCT_DDP_P_DV);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(maCT_DDP_DV);
+        return Objects.hash(maCT_DDP_P_DV);
     }
 
     // Override phương thức toString
+
     @Override
     public String toString() {
-        return "ChiTiet_DonDatPhong_DichVu{" +
-                "maCT_DDP_DV='" + maCT_DDP_DV + '\'' +
+        return "ChiTiet_DonDatPhong_Phong_DichVu{" +
+                "maCT_DDP_P_DV='" + maCT_DDP_P_DV + '\'' +
                 ", soLuongDat=" + soLuongDat +
                 ", ngayTao=" + ngayTao +
                 ", dichVu=" + dichVu +
                 ", donDatPhong=" + donDatPhong +
+                ", moTa='" + moTa + '\'' +
                 '}';
     }
 }

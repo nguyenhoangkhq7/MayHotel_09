@@ -15,13 +15,13 @@ import java.util.Objects;
 
 public class ChiTiet_DonDatPhong_Phong {
     private String maCT_DDP_P;
-    private LocalDate ngayTra;
     private DonDatPhong donDatPhong;
     private Phong phong;
+    private LocalDate ngayTra;
     private LocalDate ngayNhanPhong;
 
 //    constructor
-    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P, LocalDate ngayTra, DonDatPhong donDatPhong, Phong phong, LocalDate ngayNhanPhong) {
+    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P, DonDatPhong donDatPhong, Phong phong, LocalDate ngayNhanPhong, LocalDate ngayTra) {
         setMaCT_DDP_P(maCT_DDP_P);
         this.ngayTra = ngayTra;
         setDonDatPhong(donDatPhong);
@@ -33,7 +33,10 @@ public class ChiTiet_DonDatPhong_Phong {
         this.maCT_DDP_P = maCT_DDP_P;
     }
 
-//    setter getter
+    public ChiTiet_DonDatPhong_Phong() {
+    }
+
+    //    setter getter
     public String getMaCT_DDP_P() {
         return maCT_DDP_P;
     }
@@ -94,13 +97,14 @@ public class ChiTiet_DonDatPhong_Phong {
     }
 
     //    toString
+
     @Override
     public String toString() {
         return "ChiTiet_DonDatPhong_Phong{" +
                 "maCT_DDP_P='" + maCT_DDP_P + '\'' +
-                ", ngayTra=" + ngayTra +
                 ", donDatPhong=" + donDatPhong +
                 ", phong=" + phong +
+                ", ngayTra=" + ngayTra +
                 ", ngayNhanPhong=" + ngayNhanPhong +
                 '}';
     }
