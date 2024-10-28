@@ -10,7 +10,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import database.ConnectDB;
+import entity.HoaDon;
+import entity.KhachHang;
 import entity.KhuyenMai;
+import entity.NhanVien;
 
 public class KhuyenMaiDAL {
 	public ArrayList<KhuyenMai> dsKhuyenMai;
@@ -35,7 +38,8 @@ public class KhuyenMaiDAL {
                 Boolean conHoatDong = rs.getBoolean(5);
                 int soLuong = rs.getInt(6);
                 LocalDate ngayHetHan = rs.getDate(7)!= null ? rs.getDate(7).toLocalDate() : null;
-                KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan);
+                String dieuKienApDung = rs.getString(8);
+                KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan,dieuKienApDung);
                 dsKhuyenMai.add(khuyenMai);
             }
         } catch (SQLException e) {
@@ -50,7 +54,7 @@ public class KhuyenMaiDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO KhuyenMai (maKM, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO KhuyenMai (maKM, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan, dieuKienApDung) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khuyenMai.getMaKhuyenMai());
             stmt.setString(2, khuyenMai.getTenKhuyenMai());
@@ -59,7 +63,7 @@ public class KhuyenMaiDAL {
             stmt.setBoolean(5, khuyenMai.getConHoatDong());
             stmt.setInt(6, khuyenMai.getSoLuong());
             stmt.setDate(7, Date.valueOf(khuyenMai.getNgayHetHan()));
-            
+            stmt.setString(8, khuyenMai.getDieuKienApDung());
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -74,7 +78,7 @@ public class KhuyenMaiDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE KhuyenMai SET tenKhuyenMai = ?, giaTri = ?, ngayTao = ?, conHoatDong = ?, soLuong = ?, ngayHetHan = ? WHERE maKM = ?";
+            String sql = "UPDATE KhuyenMai SET tenKhuyenMai = ?, giaTri = ?, ngayTao = ?, conHoatDong = ?, soLuong = ?, ngayHetHan = ?, dieuKienApDung = ? WHERE maKM = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khuyenMai.getTenKhuyenMai());
             stmt.setDouble(2, khuyenMai.getGiaTri()); 
@@ -83,6 +87,7 @@ public class KhuyenMaiDAL {
             stmt.setInt(5, khuyenMai.getSoLuong());
             stmt.setDate(6, Date.valueOf(khuyenMai.getNgayHetHan()));
             stmt.setString(7, khuyenMai.getMaKhuyenMai());
+            stmt.setString(8, khuyenMai.getDieuKienApDung());
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -90,6 +95,45 @@ public class KhuyenMaiDAL {
         }
         return n > 0;
     }
+	 // Tìm khuyến mãi theo mã khuyến mãi
+    public KhuyenMai getKhuyenMaiTheoMa(String maKhuyenMai) {
+        KhuyenMai khuyenMai = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM KhuyenMai WHERE maKhuyenMai = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maKhuyenMai);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+            	String tenKhuyenMai = rs.getString("tenKhuyenMai");
+            	double giaTri = rs.getDouble("giaTri");
+            	LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+                boolean conHoatDong = rs.getBoolean("conHoatDong");
+                int soLuong = rs.getInt("soLuong");
+                LocalDate ngayHetHan = rs.getDate("ngayHetHan").toLocalDate();
+                String dieuKienApDung = rs.getString("dieuKienApDung");
+                khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao,conHoatDong, soLuong, ngayHetHan, dieuKienApDung);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return khuyenMai;
+    }
+
+    // Đóng kết nối
+    private void closeConnection() {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+	
 
     // Xóa khuyến mãi khỏi cơ sở dữ liệu
 //    public boolean xoaKhuyenMai(String maKhuyenMai) {
@@ -111,13 +155,13 @@ public class KhuyenMaiDAL {
     public static void main(String[] args) {
           KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL();
 //          khuyenMaiDAL.themKhuyenMai(new KhuyenMai("KM006", "Giam 70%", 0.7, LocalDate.now(), true, 2, LocalDate.now()));
-// in danh sach khuyen mai
+ //in danh sach khuyen mai
 //   	   ArrayList<KhuyenMai> dsKhuyenMai = khuyenMaiDAL.getAllKhuyenMai();
 //        for (KhuyenMai khuyenMai : dsKhuyenMai) {
 //            System.out.println(khuyenMai);
 //    }
 // test suakm          
-          khuyenMaiDAL.suaKhuyenMai("H006", new KhuyenMai("KM006", "Giam 80%", 0.8, LocalDate.now(), true, 2, LocalDate.now()));
+//          khuyenMaiDAL.suaKhuyenMai("H006", new KhuyenMai("KM006", "Giam 80%", 0.8, LocalDate.now(), true, 2, LocalDate.now(), "abc"));
     }
 
 }

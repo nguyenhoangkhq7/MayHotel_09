@@ -23,7 +23,7 @@ public class KhuyenMai {
     }
 
     // Constructor đầy đủ
-    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayTao, Boolean conHoatDong,
+    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayTao, boolean conHoatDong,
 			int soLuong, LocalDate ngayHetHan, String dieuKienApDung) {
         super();
         this.maKhuyenMai = maKhuyenMai;
@@ -79,10 +79,7 @@ public class KhuyenMai {
         return conHoatDong;
     }
 
-    public void setConHoatDong(Boolean conHoatDong) {
-        if (conHoatDong == null) {
-            throw new IllegalArgumentException("Trạng thái hoạt động không được để trống");
-        }
+    public void setConHoatDong(boolean conHoatDong) {
         this.conHoatDong = conHoatDong;
     }
 

@@ -23,7 +23,7 @@ public class PhieuThuChi {
 
 	// Constructor đầy đủ
 	 public PhieuThuChi(String maPhieu, String loaiPhieu, String moTa, LocalDate ngayTao, double soTien,
-			String phuongThuc, Boolean conHoatDong, NhanVien nhanVien) {
+			String phuongThuc, boolean conHoatDong, NhanVien nhanVien) {
 		super();
 		this.maPhieu = maPhieu;
 		this.loaiPhieu = loaiPhieu;

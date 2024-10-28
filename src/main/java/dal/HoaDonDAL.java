@@ -9,7 +9,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import database.ConnectDB;
+import entity.DonDatPhong;
 import entity.HoaDon;
+import entity.KhachHang;
 import entity.NhanVien;
 import entity.PhieuThuChi;
 
@@ -35,11 +37,11 @@ public class HoaDonDAL {
                 LocalDate ngayTao = rs.getDate(2)!= null ? rs.getDate(2).toLocalDate() : null;
                 Boolean trangThai = rs.getBoolean(3);
                 double thanhTien = rs.getDouble(4);
-                String maKH = rs.getString(5);
-                String maNV = rs.getString(6);
-                String maDV = rs.getString(7);
-                String maKM = rs.getString(8);
-                HoaDon hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, maKH, maNV, maDV, maKM);
+                NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(5));
+                KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(rs.getString(6));
+                DichVu dichVu = new DichVuDAL().getDichVuTheoMa(rs.getString(7));
+                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString(8));
+                HoaDon hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, nhanVien, khachHang, dichVu, khuyenMai);
                 dsHoaDon.add(hoaDon);
 
             }
@@ -55,16 +57,16 @@ public class HoaDonDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO HoaDon (maHoaDon, ngayTao, trangThai, thanhTien, maKH, maNV, maDV, maKM) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO HoaDon (maHoaDon, ngayTao, trangThai, thanhTien, maNV, maKH, maDV, maKM) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql); 
             stmt.setString(1, hoaDon.getMaHoaDon());
             stmt.setDate(2, Date.valueOf(hoaDon.getNgayTao()));
             stmt.setBoolean(3, hoaDon.getTrangThai());
             stmt.setDouble(4, hoaDon.getThanhTien());
-            stmt.setString(5, hoaDon.getMaKhachHang());
-            stmt.setString(6, hoaDon.getMaNhanVien());
-            stmt.setString(7, hoaDon.getMaDichVu());
-            stmt.setString(8, hoaDon.getMaKhuyenMai());           
+            stmt.setString(5, hoaDon.getNhanVien().getMaNV());
+            stmt.setString(6, hoaDon.getKhachHang().getMaKH());
+            stmt.setString(7, hoaDon.getDichVu().getMaDichVu());
+            stmt.setString(8, hoaDon.getKhuyenMai().getMaKhuyenMai());           
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,15 +80,15 @@ public class HoaDonDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE HoaDon SET ngayTao = ?, trangThai = ?, thanhTien = ?, maKH = ?, maNV = ?, maDV = ?, maKM = ?, WHERE maHoaDon = ?";
+            String sql = "UPDATE HoaDon SET ngayTao = ?, trangThai = ?, thanhTien = ?, maNV = ?, maKH = ?, maDV = ?, maKM = ?, WHERE maHoaDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setDate(1, Date.valueOf(hoaDon.getNgayTao()));
             stmt.setBoolean(2, hoaDon.getTrangThai());
             stmt.setDouble(3, hoaDon.getThanhTien());
-            stmt.setString(4, hoaDon.getMaKhachHang());
-            stmt.setString(5, hoaDon.getMaNhanVien());
-            stmt.setString(6, hoaDon.getMaDichVu());
-            stmt.setString(7, hoaDon.getMaKhuyenMai());  
+            stmt.setString(4, hoaDon.getNhanVien().getMaNV());
+            stmt.setString(5, hoaDon.getKhachHang().getMaKH());
+            stmt.setString(6, hoaDon.getDichVu().getMaDichVu());
+            stmt.setString(7, hoaDon.getKhuyenMai().getMaKhuyenMai());      
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -110,36 +112,76 @@ public class HoaDonDAL {
 		}
 		return n>0;
 	}
-
-    // Tìm hóa đơn
-    public ArrayList<HoaDon> timKiemHoaDon(String tuKhoa) {
-        ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
-        String sql = "SELECT * FROM HoaDon WHERE maHoaDon LIKE ? OR maKH LIKE ?";
+	 // Tìm hóa đơn theo mã hóa đơn
+    public HoaDon getHoaDonTheoMa(String maHoaDon) {
+        HoaDon hoaDon = null;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM HoaDon WHERE maHoaDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, "%" + tuKhoa + "%");
-            stmt.setString(2, "%" + tuKhoa + "%");
+            stmt.setString(1, maHoaDon);
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String maHoaDon = rs.getString("maHoaDon");
+            if (rs.next()) {
                 LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
-                Boolean trangThai  = rs.getBoolean("trangThai");
+                boolean trangThai = rs.getBoolean("trangThai");
                 double thanhTien = rs.getDouble("thanhTien");
-                String maKH = rs.getString("maKH");
-                String maNV = rs.getString("maNV");
-                String maDV = rs.getString("maDV");
-                String maKM = rs.getString("maKM");
+                NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString("maNV"));
+                KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(rs.getString("maKH"));
+                DichVu dichVu = new DichVuDAL().getDichVuTheoMa(rs.getString("maDV"));
+                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString("maKM"));
 
-                HoaDon hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, maKH, maNV, maDV, maKM);
-                dsHoaDon.add(hoaDon);
+
+                hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, nhanVien, khachHang, dichVu, khuyenMai);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return hoaDon;
+    }
+
+    // Đóng kết nối
+    private void closeConnection() {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return dsHoaDon;
     }
+	
+    // Tìm hóa đơn
+//    public ArrayList<HoaDon> timKiemHoaDon(String tuKhoa) {
+//        ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
+//        String sql = "SELECT * FROM HoaDon WHERE maHoaDon LIKE ? OR maKH LIKE ?";
+//        try {
+//            ConnectDB.getInstance().connect();
+//            con = ConnectDB.getConnection();
+//            PreparedStatement stmt = con.prepareStatement(sql);
+//            stmt.setString(1, "%" + tuKhoa + "%");
+//            stmt.setString(2, "%" + tuKhoa + "%");
+//            ResultSet rs = stmt.executeQuery();
+//            while (rs.next()) {
+//                String maHoaDon = rs.getString("maHoaDon");
+//                LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+//                Boolean trangThai  = rs.getBoolean("trangThai");
+//                double thanhTien = rs.getDouble("thanhTien");
+//                String maKH = rs.getString("maKH");
+//                String maNV = rs.getString("maNV");
+//                String maDV = rs.getString("maDV");
+//                String maKM = rs.getString("maKM");
+//
+//                HoaDon hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, maKH, maNV, maDV, maKM);
+//                dsHoaDon.add(hoaDon);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return dsHoaDon;
+//    }
 
     public static void main(String[] args) {
     	   HoaDonDAL dal = new HoaDonDAL();
