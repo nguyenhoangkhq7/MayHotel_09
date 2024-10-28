@@ -7,7 +7,7 @@ import java.util.Objects;
 public class HoaDon {
 	private String maHoaDon;
 	private LocalDate ngayTao;
-	private Boolean trangThai;
+	private boolean trangThai;
 	private double thanhTien;
 	private NhanVien nhanVien;
 	private KhachHang khachHang;
@@ -20,7 +20,7 @@ public class HoaDon {
 	public HoaDon() {
 	}
 	// Constructor đầy đủ
-	public HoaDon(String maHoaDon, LocalDate ngayTao, Boolean trangThai, double thanhTien, NhanVien nhanVien, KhachHang khachHang, DichVu dichVu, KhuyenMai khuyenMai) {
+	public HoaDon(String maHoaDon, LocalDate ngayTao, boolean trangThai, double thanhTien, NhanVien nhanVien, KhachHang khachHang, DichVu dichVu, KhuyenMai khuyenMai) {
 		this.maHoaDon = maHoaDon;
 		this.ngayTao = ngayTao;
 		this.trangThai = trangThai;
@@ -54,11 +54,11 @@ public class HoaDon {
 		this.ngayTao = ngayTao;
 	}
 
-	public Boolean getTrangThai() {
+	public boolean getTrangThai() {
 		return trangThai;
 	}
 
-	public void setTrangThai(Boolean trangThai) {
+	public void setTrangThai(boolean trangThai) {
 		this.trangThai = trangThai;
 	}
 
