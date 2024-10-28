@@ -7,7 +7,7 @@ public class KhuyenMai {
     private String tenKhuyenMai;
     private double giaTri;
     private LocalDate ngayTao;
-    private Boolean conHoatDong;
+    private boolean conHoatDong;
     private int soLuong;
     private LocalDate ngayHetHan;
     private String dieuKienApDung;
@@ -75,7 +75,7 @@ public class KhuyenMai {
         this.ngayTao = ngayTao;
     }
 
-    public Boolean getConHoatDong() {
+    public boolean getConHoatDong() {
         return conHoatDong;
     }
 
