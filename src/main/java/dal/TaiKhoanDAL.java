@@ -6,19 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import database.ConnectDB;
-import entity.ChiTiet_DonDatPhong_Phong;
 import entity.TaiKhoan;
 
 public class TaiKhoanDAL {
-	private ArrayList<TaiKhoan> dsTaiKhoan;
+    private ArrayList<TaiKhoan> dsTaiKhoan;
     private Connection con;
-    
-    public TaiKhoanDAL(){
-    	dsTaiKhoan = new ArrayList<>();
+
+    public TaiKhoanDAL() {
+        dsTaiKhoan = new ArrayList<>();
     }
+
+    // Lấy tất cả tài khoản
     public ArrayList<TaiKhoan> getAllTaiKhoan() {
+        ArrayList<TaiKhoan> dsTaiKhoan = new ArrayList<>();
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
@@ -26,8 +27,8 @@ public class TaiKhoanDAL {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                String tenTaiKhoan = rs.getString(1);
-                String matKhau = rs.getString(2);
+                String tenTaiKhoan = rs.getString("tenTaiKhoan");
+                String matKhau = rs.getString("matKhau");
 
                 // Tạo đối tượng TaiKhoan từ dữ liệu truy vấn
                 TaiKhoan taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
@@ -35,10 +36,13 @@ public class TaiKhoanDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return dsTaiKhoan;
     }
- // Thêm tài khoản mới
+
+    // Thêm tài khoản mới
     public boolean themTaiKhoan(TaiKhoan taiKhoan) {
         int n = 0;
         try {
@@ -51,6 +55,8 @@ public class TaiKhoanDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return n > 0;
     }
@@ -68,6 +74,8 @@ public class TaiKhoanDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return n > 0;
     }
@@ -84,12 +92,14 @@ public class TaiKhoanDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return n > 0;
     }
 
     // Tìm tài khoản theo tên đăng nhập
-    public TaiKhoan timTaiKhoan(String tenTaiKhoan) {
+    public TaiKhoan getTaiKhoanTheoMa(String tenTaiKhoan) {
         TaiKhoan taiKhoan = null;
         try {
             ConnectDB.getInstance().connect();
@@ -99,26 +109,43 @@ public class TaiKhoanDAL {
             stmt.setString(1, tenTaiKhoan);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String matKhau = rs.getString(2);
+                String matKhau = rs.getString("matKhau");
                 taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return taiKhoan;
     }
 
+    // Đóng kết nối
+    private void closeConnection() {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         TaiKhoanDAL dal = new TaiKhoanDAL();
-        // Thực hiện các thao tác kiểm tra, ví dụ thêm tài khoản mới
+        // Thêm tài khoản mới
         boolean result = dal.themTaiKhoan(new TaiKhoan("user1", "password123"));
         System.out.println("Thêm tài khoản thành công: " + result);
 
-        // Kiểm tra cập nhật mật khẩu
+        // Cập nhật mật khẩu
         boolean updateResult = dal.suaTaiKhoan("user1", "newpassword456");
         System.out.println("Cập nhật mật khẩu thành công: " + updateResult);
 
-        // Kiểm tra xóa tài khoản
+        // Tìm tài khoản
+        TaiKhoan taiKhoan = dal.getTaiKhoanTheoMa("user1");
+        System.out.println("Tìm tài khoản: " + taiKhoan);
+
+        // Xóa tài khoản
         boolean deleteResult = dal.xoaTaiKhoan("user1");
         System.out.println("Xóa tài khoản thành công: " + deleteResult);
     }

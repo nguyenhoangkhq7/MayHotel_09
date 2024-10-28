@@ -1,13 +1,3 @@
-/*
-    *MayHotel  day creative: 9/26/2024
-    version: 2023.2  IntelliJ IDEA
-    author: Nguyễn Hoàng Khang  */
-    /*
-       *class description:
-            write description right here   
-     */
-
-
 package dal;
 
 import java.sql.Connection;
@@ -16,147 +6,182 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import entity.ChiTiet_DonDatPhong_Phong;
+import database.ConnectDB;
 import entity.NhanVien;
+import entity.TaiKhoan;
 
 public class NhanVienDAL {
-	private ArrayList<NhanVien> dsNhanVien;
-	private Connection con;
-	
-	public NhanVienDAL() {
-		dsNhanVien = new ArrayList<NhanVien>();
-	}
-	// Lấy danh sách tất cả nhân viên
+    private ArrayList<NhanVien> dsNhanVien;
+    private Connection con;
+
+    public NhanVienDAL() {
+        dsNhanVien = new ArrayList<>();
+    }
+
+    // Lấy tất cả nhân viên
     public ArrayList<NhanVien> getAllNhanVien() {
         ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
-        String sql = "SELECT * FROM NhanVien";
         try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM NhanVien";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String maNV = rs.getString("maNV");
-                String hoten = rs.getString("hoten");
+                String hoten = rs.getString("hoTen");
                 String soDienThoai = rs.getString("soDienThoai");
-                String cancuoc = rs.getString("cancuoc");
+                String soCanCuoc = rs.getString("soCanCuoc");
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 String email = rs.getString("email");
                 String diaChi = rs.getString("diaChi");
                 Integer vaiTro = rs.getInt("vaiTro");
+                
+                TaiKhoan taiKhoan = new TaiKhoanDAL().getTaiKhoanTheoMa(rs.getString("tenTaiKhoan"));
 
-                NhanVien nhanVien = new NhanVien(maNV, hoten, soDienThoai, cancuoc, conHoatDong, email, diaChi, vaiTro);
+                // Tạo đối tượng NhanVien từ dữ liệu truy vấn
+                NhanVien nhanVien = new NhanVien(maNV, hoten, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, taiKhoan);
                 dsNhanVien.add(nhanVien);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return dsNhanVien;
     }
- // Thêm mới nhân viên
+
+    // Thêm nhân viên mới
     public boolean themNhanVien(NhanVien nhanVien) {
         int n = 0;
-        String sql = "INSERT INTO NhanVien(maNV, hoten, soDienThoai, cancuoc, conHoatDong, email, diaChi, vaiTro) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "INSERT INTO NhanVien (maNV, hoTen, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, tenTaiKhoan, matKhau) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, nhanVien.getMaNV());
             stmt.setString(2, nhanVien.getHoten());
             stmt.setString(3, nhanVien.getSoDienThoai());
-            stmt.setString(4, nhanVien.getCancuoc());
+            stmt.setString(4, nhanVien.getSoCanCuoc());
             stmt.setBoolean(5, nhanVien.isConHoatDong());
             stmt.setString(6, nhanVien.getEmail());
             stmt.setString(7, nhanVien.getDiaChi());
             stmt.setInt(8, nhanVien.getVaiTro());
+            stmt.setString(9, nhanVien.getTaiKhoan().getTenDangNhap());
+            stmt.setString(10, nhanVien.getTaiKhoan().getMatKhau());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return n > 0;
     }
 
- // Sửa thông tin nhân viên
-    public boolean suaNhanVien(String maNV, NhanVien nhanVien) {
+    // Cập nhật thông tin nhân viên
+    public boolean suaNhanVien(NhanVien nhanVien) {
         int n = 0;
-        String sql = "UPDATE NhanVien SET hoten = ?, soDienThoai = ?, cancuoc = ?, conHoatDong = ?, email = ?, diaChi = ?, vaiTro = ? WHERE maNV = ?";
         try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "UPDATE NhanVien SET hoTen = ?, soDienThoai = ?, soCanCuoc = ?, conHoatDong = ?, email = ?, diaChi = ?, vaiTro = ? WHERE maNV = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, nhanVien.getHoten());
             stmt.setString(2, nhanVien.getSoDienThoai());
-            stmt.setString(3, nhanVien.getCancuoc());
+            stmt.setString(3, nhanVien.getSoCanCuoc());
             stmt.setBoolean(4, nhanVien.isConHoatDong());
             stmt.setString(5, nhanVien.getEmail());
             stmt.setString(6, nhanVien.getDiaChi());
             stmt.setInt(7, nhanVien.getVaiTro());
-            stmt.setString(8, maNV);
+            stmt.setString(8, nhanVien.getMaNV());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return n > 0;
     }
- // Tìm kiếm nhân viên theo mã hoặc tên
-    public ArrayList<NhanVien> timKiemNhanVien(String tuKhoa) {
-        ArrayList<NhanVien> dsNhanVien = new ArrayList<>();
-        String sql = "SELECT * FROM NhanVien WHERE maNV LIKE ? OR hoten LIKE ?";
-        try {
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, "%" + tuKhoa + "%");
-            stmt.setString(2, "%" + tuKhoa + "%");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String maNV = rs.getString("maNV");
-                String hoten = rs.getString("hoten");
-                String soDienThoai = rs.getString("soDienThoai");
-                String cancuoc = rs.getString("cancuoc");
-                boolean conHoatDong = rs.getBoolean("conHoatDong");
-                String email = rs.getString("email");
-                String diaChi = rs.getString("diaChi");
-                Integer vaiTro = rs.getInt("vaiTro");
 
-                NhanVien nhanVien = new NhanVien(maNV, hoten, soDienThoai, cancuoc, conHoatDong, email, diaChi, vaiTro);
-                dsNhanVien.add(nhanVien);
-            }
+    // Xóa nhân viên theo mã nhân viên
+    public boolean xoaNhanVien(String maNV) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "DELETE FROM NhanVien WHERE maNV = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maNV);
+            n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
-        return dsNhanVien;
+        return n > 0;
     }
-    public NhanVien getNhanVienByMa(String maNV) {
+
+    // Tìm nhân viên theo mã nhân viên
+    public NhanVien getNhanVienTheoMa(String maNV) {
         NhanVien nhanVien = null;
-        String sql = "SELECT * FROM NhanVien WHERE maNV = ?";
         try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM NhanVien WHERE maNV = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maNV);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String hoten = rs.getString("hoten");
+                String hoten = rs.getString("hoTen");
                 String soDienThoai = rs.getString("soDienThoai");
-                String cancuoc = rs.getString("cancuoc");
+                String soCanCuoc = rs.getString("soCanCuoc");
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 String email = rs.getString("email");
                 String diaChi = rs.getString("diaChi");
                 Integer vaiTro = rs.getInt("vaiTro");
+                
+                TaiKhoan taiKhoan = new TaiKhoan(rs.getString("tenTaiKhoan"), rs.getString("matKhau"));
 
-                nhanVien = new NhanVien(maNV, hoten, soDienThoai, cancuoc, conHoatDong, email, diaChi, vaiTro);
+                nhanVien = new NhanVien(maNV, hoten, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, taiKhoan);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return nhanVien;
     }
 
-    // Test main
+    // Đóng kết nối
+    private void closeConnection() {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         NhanVienDAL dal = new NhanVienDAL();
-        
-        // Test thêm mới nhân viên
-        NhanVien nv = new NhanVien("NV001", "Nguyễn Văn A", "0123456789", "123456789012", true, "a@gmail.com", "Hà Nội", 1);
-        boolean result = dal.themNhanVien(nv);
-        System.out.println("Thêm mới thành công: " + result);
-        
-        // Test lấy danh sách nhân viên
-        ArrayList<NhanVien> dsNhanVien = dal.getAllNhanVien();
-        for (NhanVien nhanVien : dsNhanVien) {
-            System.out.println(nhanVien);
-        }
+        // Thêm nhân viên mới
+        TaiKhoan taiKhoan = new TaiKhoan("user1", "password123");
+        NhanVien nhanVien = new NhanVien("NV01", "Nguyen Van A", "0123456789", "123456789012", true, "example@gmail.com", "123 Street", 1, taiKhoan);
+        boolean result = dal.themNhanVien(nhanVien);
+        System.out.println("Thêm nhân viên thành công: " + result);
+
+        // Cập nhật thông tin nhân viên
+        nhanVien.setHoten("Nguyen Van B");
+        boolean updateResult = dal.suaNhanVien(nhanVien);
+        System.out.println("Cập nhật nhân viên thành công: " + updateResult);
+
+        // Tìm nhân viên
+        NhanVien foundNhanVien = dal.getNhanVienTheoMa("NV01");
+        System.out.println("Tìm nhân viên: " + foundNhanVien);
+
+        // Xóa nhân viên
+        boolean deleteResult = dal.xoaNhanVien("NV01");
+        System.out.println("Xóa nhân viên thành công: " + deleteResult);
     }
 }

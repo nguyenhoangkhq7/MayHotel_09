@@ -35,7 +35,10 @@ public class KhachHang {
     	this.maKH = maKH;
     }
 
-    // Getter và Setter cho các thuộc tính
+    public KhachHang() {
+		super();
+	}
+	// Getter và Setter cho các thuộc tính
     public String getMaKH() {
         return maKH;
     }
