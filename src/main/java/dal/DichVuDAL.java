@@ -32,6 +32,38 @@ public class DichVuDAL {
 	//Kết nói với cơ sở dữ liệu
 	Connection con;
 	
+	// Lấy dịch vụ theo mã dịch vụ
+	public DichVu getDichVuTheoMa(String maDichVu) {
+	    DichVu dichVu = null;
+	    try {
+	        ConnectDB.getInstance().connect();
+	        con = ConnectDB.getConnection();
+	        String sql = "SELECT * FROM DichVu WHERE maDichVu = ?";
+	        PreparedStatement stmt = con.prepareStatement(sql);
+	        stmt.setString(1, maDichVu);
+
+	        ResultSet rs = stmt.executeQuery();
+	        
+	        // Nếu có kết quả, tạo đối tượng DichVu từ dữ liệu truy vấn
+	        if (rs.next()) {
+	            String maDV = rs.getString(1);
+	            double donGia = rs.getDouble(2);
+	            String tenDichVu = rs.getString(3);
+	            int soLuongTon = rs.getInt(4);
+	            String moTa = rs.getString(5);
+	            LocalDate ngayTao = rs.getDate(6).toLocalDate();
+	            boolean conHoatDong = rs.getBoolean(7);
+	            String donVi = rs.getString(8);
+
+	            // Tạo đối tượng DichVu với dữ liệu từ cơ sở dữ liệu
+	            dichVu = new DichVu(maDV, donGia, tenDichVu, soLuongTon, moTa, ngayTao, conHoatDong, donVi);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return dichVu;
+	}
 	//Lấy danh sách dịch vụ từ cơ sở dữ liệu
 	public ArrayList<DichVu> getAllDichVu(){
 		try {
@@ -51,8 +83,9 @@ public class DichVuDAL {
 				String moTa = rs.getString(5);
 				LocalDate ngayTao = rs.getDate(6).toLocalDate();
 				boolean conHoatDong = rs.getBoolean(7);
+				String donVi = rs.getString(8);
 				//Tao doi tuong dich vu
-				DichVu dichVu = new DichVu(maDichVu, donGia, tenDichVu, soLuongTon, moTa, ngayTao, conHoatDong);
+				DichVu dichVu = new DichVu(maDichVu, donGia, tenDichVu, soLuongTon, moTa, ngayTao, conHoatDong,donVi);
 				dsDichVu.add(dichVu);
 			}
 		
@@ -68,7 +101,7 @@ public class DichVuDAL {
 		try {
 			ConnectDB.getInstance().connect();
 			con = ConnectDB.getConnection();
-			String sql = "INSERT INTO DichVu (maDichVu, donGia, tenDichVu, soLuongTon, moTa, ngayTao, conHoatDong) VALUES (?,?,?,?,?,?,?)" ;
+			String sql = "INSERT INTO DichVu (maDichVu, donGia, tenDichVu, soLuongTon, moTa, ngayTao, conHoatDong, donVi) VALUES (?,?,?,?,?,?,?,?)" ;
 			PreparedStatement stmt = con.prepareStatement(sql);
 			stmt.setString(1, dichVu.getMaDichVu());
 			stmt.setDouble(2, dichVu.getDonGia());
@@ -77,6 +110,7 @@ public class DichVuDAL {
 			stmt.setString(5, dichVu.getMoTa());
 			stmt.setDate(6, Date.valueOf(dichVu.getNgayTao()));
 			stmt.setBoolean(7, dichVu.isConHoatDong());
+			stmt.setString(8, dichVu.getDonVi());
 			n = stmt.executeUpdate(); 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -89,14 +123,15 @@ public class DichVuDAL {
 		try {
 			ConnectDB.getInstance().connect();
 			con = ConnectDB.getConnection();
-			String sql = "UPDATE DichVu SET donGia = ?, tenDichVu = ?, soLuongTon = ? , moTa = ?, conHoatDong = ? WHERE maDichVu = ?";
+			String sql = "UPDATE DichVu SET donGia = ?, tenDichVu = ?, soLuongTon = ? , moTa = ?, conHoatDong = ?, donVi = ? WHERE maDichVu = ?";
 			PreparedStatement stmt = con.prepareStatement(sql);
 			stmt.setDouble(1, dichVu.getDonGia());
 			stmt.setString(2, dichVu.getTenDichVu());
 			stmt.setInt(3, dichVu.getSoLuongTon());
 			stmt.setString(4, dichVu.getMoTa());
 			stmt.setBoolean(5, dichVu.isConHoatDong());
-			stmt.setNString(6, maDichVu);
+			stmt.setString(6, dichVu.getDonVi());
+			stmt.setNString(7, maDichVu);
 			
 			n= stmt.executeUpdate();
 		} catch (SQLException e) {

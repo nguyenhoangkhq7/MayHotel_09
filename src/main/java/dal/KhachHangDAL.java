@@ -18,6 +18,38 @@ public class KhachHangDAL {
         dsKhachHang = new ArrayList<>();
     }
 
+ // Lấy khách hàng theo mã khách hàng
+    public KhachHang getKhachHangTheoMa(String maKH) {
+        KhachHang khachHang = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maKH);
+
+            ResultSet rs = stmt.executeQuery();
+
+            // Nếu có kết quả, tạo đối tượng KhachHang từ dữ liệu truy vấn
+            if (rs.next()) {
+                String ma = rs.getString(1);
+                String hoTen = rs.getString(2);
+                String soDienThoai = rs.getString(3);
+                String soCanCuoc = rs.getString(4);
+                String email = rs.getString(5);
+                double tienTichLuy = rs.getDouble(6);
+                LoaiKhachHang loaiKhachHang = LoaiKhachHang.valueOf(rs.getString(10)); // Chuyển đổi từ String thành enum
+
+                // Tạo đối tượng KhachHang với dữ liệu từ cơ sở dữ liệu
+                khachHang = new KhachHang(ma, hoTen, soDienThoai, soCanCuoc, email, tienTichLuy, loaiKhachHang);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return khachHang;
+    }
+
     // Lấy danh sách khách hàng từ cơ sở dữ liệu
     public ArrayList<KhachHang> getAllKhachHang() {
         try {
@@ -35,7 +67,7 @@ public class KhachHangDAL {
                 String soCanCuoc = rs.getString(4);
                 String email = rs.getString(5);
                 double tienTichLuy = rs.getDouble(6);
-                LoaiKhachHang loaiKhachHang = LoaiKhachHang.valueOf(rs.getString(7));       // Chuyển đổi từ String thành enum 
+                LoaiKhachHang loaiKhachHang = LoaiKhachHang.valueOf(rs.getString(10));       // Chuyển đổi từ String thành enum 
                 // Tạo đối tượng KhachHang
                 KhachHang khachHang = new KhachHang(maKH, hoTen, soDienThoai, soCanCuoc, email, tienTichLuy, loaiKhachHang);
                 dsKhachHang.add(khachHang);

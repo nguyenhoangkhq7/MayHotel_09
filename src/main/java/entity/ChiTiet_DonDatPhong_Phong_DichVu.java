@@ -14,30 +14,31 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class ChiTiet_DonDatPhong_Phong_DichVu {
-    private String maCT_DDP_P_DV;  // Mã chi tiết đơn đặt phòng - dịch vụ
-    private int soLuongDat;  // Số lượng dịch vụ đặt
-    private LocalDate ngayTao;  // Ngày tạo đơn đặt dịch vụ
-    private DichVu dichVu;  // Đối tượng dịch vụ
-    private DonDatPhong donDatPhong;  // Đối tượng đơn đặt phòng
-    private String moTa;
-    // Constructor 
-    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_DV, int soLuongDat, LocalDate ngayTao, DichVu dichVu, DonDatPhong donDatPhong,String moTa) {
-        setMaCT_DDP_P_DV(maCT_DDP_DV);
+    private String maCT_DDP_P_DV; // Mã chi tiết đơn đặt phòng - dịch vụ
+    private int soLuongDat;       // Số lượng dịch vụ đặt
+    private LocalDate ngayTao;    // Ngày tạo đơn đặt dịch vụ
+    private DichVu dichVu;        // Đối tượng dịch vụ
+    private ChiTiet_DonDatPhong_Phong cT_DDP_P; // Đối tượng chi tiết đơn đặt phòng - phòng
+    private String moTa;          // Mô tả
+
+    // Constructor
+    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_P_DV, int soLuongDat, LocalDate ngayTao, DichVu dichVu, ChiTiet_DonDatPhong_Phong cT_DDP_P, String moTa) {
+        setMaCT_DDP_P_DV(maCT_DDP_P_DV);
         setSoLuongDat(soLuongDat);
         this.ngayTao = ngayTao;
         setDichVu(dichVu);
-        setDonDatPhong(donDatPhong);
+        setCT_DDP_P(cT_DDP_P);
         this.moTa = moTa;
     }
 
-    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_DV) {
-		this.maCT_DDP_P_DV = maCT_DDP_DV;
-	}
+    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_P_DV) {
+        this.maCT_DDP_P_DV = maCT_DDP_P_DV;
+    }
 
     public ChiTiet_DonDatPhong_Phong_DichVu() {
     }
 
-    // Getter và Setter cho các thuộc tính
+    // Getters and Setters
     public String getMaCT_DDP_P_DV() {
         return maCT_DDP_P_DV;
     }
@@ -79,15 +80,15 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
         this.dichVu = dichVu;
     }
 
-    public DonDatPhong getDonDatPhong() {
-        return donDatPhong;
+    public ChiTiet_DonDatPhong_Phong getCT_DDP_P() {
+        return cT_DDP_P;
     }
 
-    public void setDonDatPhong(DonDatPhong donDatPhong) {
-        if (donDatPhong == null) {
-            throw new IllegalArgumentException("Đơn đặt phòng không được null");
+    public void setCT_DDP_P(ChiTiet_DonDatPhong_Phong cT_DDP_P) {
+        if (cT_DDP_P == null) {
+            throw new IllegalArgumentException("Chi tiết đơn đặt phòng - phòng không được null");
         }
-        this.donDatPhong = donDatPhong;
+        this.cT_DDP_P = cT_DDP_P;
     }
 
     public String getMoTa() {
@@ -98,7 +99,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
         this.moTa = moTa;
     }
 
-    // Override phương thức equals và hashCode
+    // Override equals and hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,8 +112,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
         return Objects.hash(maCT_DDP_P_DV);
     }
 
-    // Override phương thức toString
-
+    // Override toString method
     @Override
     public String toString() {
         return "ChiTiet_DonDatPhong_Phong_DichVu{" +
@@ -120,7 +120,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
                 ", soLuongDat=" + soLuongDat +
                 ", ngayTao=" + ngayTao +
                 ", dichVu=" + dichVu +
-                ", donDatPhong=" + donDatPhong +
+                ", cT_DDP_P=" + cT_DDP_P +
                 ", moTa='" + moTa + '\'' +
                 '}';
     }
