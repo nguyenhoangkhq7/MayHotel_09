@@ -1,6 +1,6 @@
 package dal;
 
-import entity.ChiTiet_DonDatPhong_DichVu;
+import entity.ChiTiet_DonDatPhong_Phong_DichVu;
 import entity.DichVu;
 import entity.DonDatPhong;
 import database.ConnectDB;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ChiTiet_DonDatPhong_DichVuDAL {
-    private ArrayList<ChiTiet_DonDatPhong_DichVu> dsChiTiet;
+    private ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dsChiTiet;
     private Connection con;
 
     public ChiTiet_DonDatPhong_DichVuDAL() {
@@ -23,7 +23,7 @@ public class ChiTiet_DonDatPhong_DichVuDAL {
     }
 
     // Lấy danh sách tất cả ChiTiet_DonDatPhong_DichVu
-    public ArrayList<ChiTiet_DonDatPhong_DichVu> getAllChiTiet() {
+    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getAllChiTiet() {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
@@ -42,7 +42,7 @@ public class ChiTiet_DonDatPhong_DichVuDAL {
                 DonDatPhong donDatPhong = new DonDatPhong(maDonDatPhong);
 
                 // Tạo đối tượng ChiTiet_DonDatPhong_DichVu từ dữ liệu truy vấn
-                ChiTiet_DonDatPhong_DichVu chiTiet = new ChiTiet_DonDatPhong_DichVu(maCT_DDP_DV, soLuongDat, ngayTao, dichVu, donDatPhong);
+                ChiTiet_DonDatPhong_Phong_DichVu chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_DV, soLuongDat, ngayTao, dichVu, donDatPhong);
                 dsChiTiet.add(chiTiet);
             }
         } catch (SQLException e) {
@@ -52,18 +52,18 @@ public class ChiTiet_DonDatPhong_DichVuDAL {
     }
 
     // Thêm mới ChiTiet_DonDatPhong_DichVu
-    public boolean themChiTiet(ChiTiet_DonDatPhong_DichVu chiTiet) {
+    public boolean themChiTiet(ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
             String sql = "INSERT INTO ChiTiet_DonDatPhong_DichVu VALUES(?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, chiTiet.getMaCT_DDP_DV());
+            stmt.setString(1, chiTiet.getMaCT_DDP_P_DV());
             stmt.setInt(2, chiTiet.getSoLuongDat());
             stmt.setDate(3, Date.valueOf(chiTiet.getNgayTao()));
             stmt.setString(4, chiTiet.getDichVu().getMaDichVu()); 
-            stmt.setString(5, chiTiet.getDonDatPhong().getMaDonDatPhong());
+            stmt.setString(5, chiTiet.getDonDatPhong().getMaDon());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,7 +72,7 @@ public class ChiTiet_DonDatPhong_DichVuDAL {
     }
 
     // Cập nhật ChiTiet_DonDatPhong_DichVu
-    public boolean suaChiTiet(String maCT_DDP_DV, ChiTiet_DonDatPhong_DichVu chiTiet) {
+    public boolean suaChiTiet(String maCT_DDP_DV, ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
@@ -82,7 +82,7 @@ public class ChiTiet_DonDatPhong_DichVuDAL {
             stmt.setInt(1, chiTiet.getSoLuongDat());
             stmt.setDate(2, java.sql.Date.valueOf(chiTiet.getNgayTao()));
             stmt.setString(3, chiTiet.getDichVu().getMaDichVu());
-            stmt.setString(4, chiTiet.getDonDatPhong().getMaDonDatPhong());
+            stmt.setString(4, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(5, maCT_DDP_DV);
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -110,7 +110,7 @@ public class ChiTiet_DonDatPhong_DichVuDAL {
     public static void main(String[] args) {
         ChiTiet_DonDatPhong_DichVuDAL dal = new ChiTiet_DonDatPhong_DichVuDAL();
         // Thực hiện các thao tác kiểm tra ở đây, ví dụ thêm mới, cập nhật, xóa...
-        boolean result = dal.themChiTiet(new ChiTiet_DonDatPhong_DichVu("CT001", 2, LocalDate.now(), new DichVu("DV001"), new DonDatPhong("DDP001")));
+        boolean result = dal.themChiTiet(new ChiTiet_DonDatPhong_Phong_DichVu("CT001", 2, LocalDate.now(), new DichVu("DV001"), new DonDatPhong("DDP001")));
         System.out.println("Thêm mới thành công: " + result);
     }
 }

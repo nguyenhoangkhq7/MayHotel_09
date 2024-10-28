@@ -29,31 +29,31 @@ public class PhongDAL {
     }
 
     // Lấy tất cả các phòng từ cơ sở dữ liệu
+    // Lấy tất cả các phòng từ cơ sở dữ liệu
     public ArrayList<Phong> getAllPhong() {
-        ArrayList<Phong> dsPhong = new ArrayList<>(); // Khởi tạo danh sách Phong
+        ArrayList<Phong> dsPhong = new ArrayList<>();
         try {
-            ConnectDB.getInstance().connect(); // Kết nối đến cơ sở dữ liệu
-            con = ConnectDB.getConnection(); // Lấy kết nối
-            String sql = "SELECT * FROM Phong"; // Câu lệnh SQL
-            Statement stmt = con.createStatement(); // Tạo Statement
-            ResultSet rs = stmt.executeQuery(sql); // Thực hiện truy vấn
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Phong";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
 
-            while (rs.next()) { // Duyệt qua từng kết quả trong ResultSet
-                String maPhong = rs.getString(1); // Lấy mã phòng
-                String tenPhong = rs.getString(2); // Lấy tên phòng
-                String tang = rs.getString(3); // Lấy tầng
-                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(4)); // Lấy loại phòng theo mã
-                boolean trangThaiPhong = rs.getBoolean(5); // Lấy trạng thái phòng
-                String moTa = rs.getString(6); // Lấy mô tả
+            while (rs.next()) {
+                String maPhong = rs.getString(1);
+                String tenPhong = rs.getString(2);
+                String tang = rs.getString(3);
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(4));
+                boolean trangThaiPhong = rs.getBoolean(5);
+                String moTa = rs.getString(6);
 
-                // Tạo một đối tượng Phong mới từ dữ liệu truy vấn
                 Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
-                dsPhong.add(phong); // Thêm phòng vào danh sách
+                dsPhong.add(phong);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Xử lý lỗi
+            e.printStackTrace();
         }
-        return dsPhong; // Trả về danh sách các phòng
+        return dsPhong;
     }
 
     // Thêm một phòng mới vào cơ sở dữ liệu
@@ -62,13 +62,14 @@ public class PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO Phong (maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Phong (maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, phong.getMaPhong());
             stmt.setString(2, phong.getTenPhong());
             stmt.setString(3, phong.getLoaiPhong().getMaLoaiPhong());
             stmt.setBoolean(4, phong.isTrangThaiPhong());
             stmt.setString(5, phong.getMoTa());
+            stmt.setString(6, phong.getTang());
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -76,30 +77,31 @@ public class PhongDAL {
         }
         return n > 0;
     }
+
     // lấy phòng từ mã phòng
-    public Phong getPhongTheoMa(String maPhong) {
-        Phong phong = null; // Khởi tạo biến Phong
+    public Phong timPhongTheoMa(String maPhong) {
+        Phong phong = null;
         try {
-            ConnectDB.getInstance().connect(); // Kết nối đến cơ sở dữ liệu
-            con = ConnectDB.getConnection(); // Lấy kết nối
-            String sql = "SELECT * FROM Phong WHERE maPhong = ?"; // Câu lệnh SQL với tham số
-            PreparedStatement stmt = con.prepareStatement(sql); // Tạo PreparedStatement
-            stmt.setString(1, maPhong); // Gán giá trị cho tham số
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Phong WHERE maPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maPhong);
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 String tenPhong = rs.getString(2);
-                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(3)); // Lấy loại phòng theo mã
-                boolean trangThaiPhong = rs.getBoolean(4);
-                String moTa = rs.getString(5);
-                String tang = rs.getString(6);
-                // Tạo một đối tượng Phong mới từ dữ liệu truy vấn
+                String tang = rs.getString(3);
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(4));
+                boolean trangThaiPhong = rs.getBoolean(5);
+                String moTa = rs.getString(6);
+
                 phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Xử lý lỗi
+            e.printStackTrace();
         }
-        return phong; // Trả về đối tượng Phong
+        return phong;
     }
 
     // Sửa thông tin phòng trong cơ sở dữ liệu
@@ -108,13 +110,14 @@ public class PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE Phong SET tenPhong = ?, loaiPhong = ?, trangThaiPhong = ?, moTa = ? WHERE maPhong = ?";
+            String sql = "UPDATE Phong SET tenPhong = ?, loaiPhong = ?, trangThaiPhong = ?, moTa = ?, tang = ? WHERE maPhong = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, phong.getTenPhong());
-            stmt.setString(2, phong.getLoaiPhong().toString()); // chuyển đổi enum sang chuỗi
+            stmt.setString(2, phong.getLoaiPhong().getMaLoaiPhong());
             stmt.setBoolean(3, phong.isTrangThaiPhong());
             stmt.setString(4, phong.getMoTa());
-            stmt.setString(5, maPhong);
+            stmt.setString(5, phong.getTang());
+            stmt.setString(6, maPhong);
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -122,6 +125,7 @@ public class PhongDAL {
         }
         return n > 0;
     }
+
 
     // Xóa phòng khỏi cơ sở dữ liệu
     public boolean xoaPhong(String maPhong) {
@@ -132,7 +136,6 @@ public class PhongDAL {
             String sql = "DELETE FROM Phong WHERE maPhong = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maPhong);
-
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
