@@ -11,6 +11,7 @@ import database.ConnectDB;
 import entity.DonDatPhong;
 import entity.KhachHang;
 import entity.NhanVien;
+import entity.TaiKhoan;
 
 public class DonDatPhongDAL {
     private ArrayList<DonDatPhong> dsDonDatPhong;
@@ -128,7 +129,7 @@ public class DonDatPhongDAL {
     }
 
     // Tìm đơn đặt phòng theo mã đơn
-    public DonDatPhong timDonDatPhong(String maDon) {
+    public DonDatPhong getDonDatPhongTheoMa(String maDon) {
         DonDatPhong donDatPhong = null;
         try {
             ConnectDB.getInstance().connect();
@@ -186,7 +187,7 @@ public class DonDatPhongDAL {
         System.out.println("Cập nhật đơn đặt phòng thành công: " + updateResult);
 
         // Tìm đơn đặt phòng
-        DonDatPhong foundDonDatPhong = dal.timDonDatPhong("D001");
+        DonDatPhong foundDonDatPhong = dal.getDonDatPhongTheoMa("D001");
         System.out.println("Tìm đơn đặt phòng: " + foundDonDatPhong);
 
         // Xóa đơn đặt phòng

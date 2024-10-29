@@ -9,11 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import database.ConnectDB;
-import entity.DonDatPhong;
-import entity.HoaDon;
-import entity.KhachHang;
-import entity.NhanVien;
-import entity.PhieuThuChi;
+import entity.*;
 
 
 public class HoaDonDAL {
@@ -152,57 +148,10 @@ public class HoaDonDAL {
             e.printStackTrace();
         }
     }
-	
-    // Tìm hóa đơn
-//    public ArrayList<HoaDon> timKiemHoaDon(String tuKhoa) {
-//        ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
-//        String sql = "SELECT * FROM HoaDon WHERE maHoaDon LIKE ? OR maKH LIKE ?";
-//        try {
-//            ConnectDB.getInstance().connect();
-//            con = ConnectDB.getConnection();
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            stmt.setString(1, "%" + tuKhoa + "%");
-//            stmt.setString(2, "%" + tuKhoa + "%");
-//            ResultSet rs = stmt.executeQuery();
-//            while (rs.next()) {
-//                String maHoaDon = rs.getString("maHoaDon");
-//                LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
-//                Boolean trangThai  = rs.getBoolean("trangThai");
-//                double thanhTien = rs.getDouble("thanhTien");
-//                String maKH = rs.getString("maKH");
-//                String maNV = rs.getString("maNV");
-//                String maDV = rs.getString("maDV");
-//                String maKM = rs.getString("maKM");
-//
-//                HoaDon hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, maKH, maNV, maDV, maKM);
-//                dsHoaDon.add(hoaDon);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return dsHoaDon;
-//    }
+
 
     public static void main(String[] args) {
-    	   HoaDonDAL dal = new HoaDonDAL();
 
-//    	   HoaDon hd = new HoaDon("HD006", LocalDate.now(), true, 400000.00, "KH001", "NV001","DV001" , "KM002");
-//           boolean result = dal.themHoaDon(hd);
-//    	   System.out.println("Thêm mới thành công: " + result);
-
-// get dshoadon
-//    	   ArrayList<HoaDon> dsHoaDon = dal.getAllHoaDon();
-//           for (HoaDon hoaDon : dsHoaDon) {
-//               System.out.println(hoaDon);
-   //        }
-//tim hoadon 
-
-//	   ArrayList<HoaDon> dsHoaDon = dal.timKiemHoaDon("KH003");
-//	   for (HoaDon hoaDon : dsHoaDon) {
-//             System.out.println(hoaDon);
-//         
-//test huy hoa don
-    	   dal.huyHoaDon("HD004");
     }
 
 

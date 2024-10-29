@@ -79,7 +79,7 @@ public class PhongDAL {
     }
 
     // lấy phòng từ mã phòng
-    public Phong timPhongTheoMa(String maPhong) {
+    public Phong getPhongTheoMa(String maPhong) {
         Phong phong = null;
         try {
             ConnectDB.getInstance().connect();

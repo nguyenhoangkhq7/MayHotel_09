@@ -126,22 +126,6 @@ public class KhachHangDAL {
         return n > 0;
     }
 
-//    // Xóa khách hàng
-//    public boolean huyKhachHang(String maKH) {
-//        int n = 0;
-//        try {
-//            ConnectDB.getInstance().connect();
-//            con = ConnectDB.getConnection();
-//            String sql = "UPDATE KhachHang SET conHoatDong = 0 WHERE maKH = ?";
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            stmt.setString(1, maKH);
-//            n = stmt.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return n > 0;
-//    }
-
     public static void main(String[] args) {
         KhachHangDAL khachHangDAL = new KhachHangDAL();
         ArrayList<KhachHang> danhSachKhachHang = khachHangDAL.getAllKhachHang();
@@ -157,25 +141,6 @@ public class KhachHangDAL {
             System.out.println("Loại khách hàng: " + khachHang.getLoaiKhachHang());
             System.out.println("-------------------------------------");
         }
-//        KhachHang khachHangMoi = new KhachHang(
-//                "KH009",                            // Mã khách hàng
-//                "Nguyễn Văn A",                     // Họ tên khách hàng
-//                "0123456789",                       // Số điện thoại
-//                "123456789",                        // Số căn cước
-//                "nguyenvana@example.com",           // Email
-//                1500.75,                            // Tiền tích lũy
-//                LoaiKhachHang.HANGBAC              // Loại khách hàng
-//            );
-//        boolean checkTao = khachHangDAL.themKhachHang(khachHangMoi);
-//        KhachHang khachHangMoi1 = new KhachHang(
-//                "KH009",                            // Mã khách hàng
-//                "Nguyễn Văn A",                     // Họ tên khách hàng
-//                "123",                       // Số điện thoại
-//                "123",                        // Số căn cước
-//                "123",           // Email
-//                1500.75,                            // Tiền tích lũy
-//                LoaiKhachHang.HANGBAC              // Loại khách hàng
-//            );
-//        boolean checkSua = khachHangDAL.suaKhachHang("KH009",khachHangMoi1);
+
     }
 }
