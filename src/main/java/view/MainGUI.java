@@ -11,8 +11,6 @@
 package view;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.Timer;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -23,6 +21,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -102,12 +102,14 @@ public class MainGUI extends JFrame {
 		
 		//btnManHinhChinh
 		JButton btnManHinhChinh = new JButton("Màn hình chính");
+		btnManHinhChinh.setBorderPainted(false);
+		btnManHinhChinh.setFocusPainted(false); 
 		btnManHinhChinh.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\house.png"));
 		btnManHinhChinh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnManHinhChinh.setBackground(new Color(48, 47, 47));
+		btnManHinhChinh.setBackground(new Color(74, 74, 74));
 		btnManHinhChinh.setForeground(new Color(255, 255, 255));
 		btnManHinhChinh.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnManHinhChinh = new GridBagConstraints();
@@ -122,8 +124,10 @@ public class MainGUI extends JFrame {
 		
 		//btnDonDatPhong
 		JButton btnDonDatPhong = new JButton("Đơn đặt phòng");
+		btnDonDatPhong.setBorderPainted(false);
+		btnDonDatPhong.setFocusPainted(false); 
 		btnDonDatPhong.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\door.png"));
-		btnDonDatPhong.setBackground(new Color(48, 47, 47));
+		btnDonDatPhong.setBackground(new Color(74, 74, 74));
 		btnDonDatPhong.setForeground(new Color(255, 255, 255));
 		btnDonDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnDonDatPhong = new GridBagConstraints();
@@ -137,9 +141,11 @@ public class MainGUI extends JFrame {
 		
 		//btnHoaDon
 		JButton btnHoaDon = new JButton("Hóa đơn");
+		btnHoaDon.setBorderPainted(false);
+		btnHoaDon.setFocusPainted(false); 
 		btnHoaDon.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\checklist.png"));
 		btnHoaDon.setForeground(new Color(255, 255, 255));
-		btnHoaDon.setBackground(new Color(48, 47, 47));
+		btnHoaDon.setBackground(new Color(74, 74, 74));
 		btnHoaDon.setPreferredSize(new Dimension(300, 60));
 		btnHoaDon.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnHoaDon = new GridBagConstraints();
@@ -151,9 +157,11 @@ public class MainGUI extends JFrame {
 		
 		//btnKhachHang
 		JButton btnKhachHang = new JButton("Khách hàng");
+		btnKhachHang.setBorderPainted(false);
+		btnKhachHang.setFocusPainted(false); 
 		btnKhachHang.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\rating.png"));
 		btnKhachHang.setForeground(new Color(255, 255, 255));
-		btnKhachHang.setBackground(new Color(48, 47, 47));
+		btnKhachHang.setBackground(new Color(74, 74, 74));
 		btnKhachHang.setPreferredSize(new Dimension(300, 60));
 		btnKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnKhachHang = new GridBagConstraints();
@@ -166,13 +174,15 @@ public class MainGUI extends JFrame {
 		
 		//btnBaoCao
 		JButton btnBaoCao = new JButton("Báo cáo");
+		btnBaoCao.setBorderPainted(false);
+		btnBaoCao.setFocusPainted(false); 
 		btnBaoCao.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\report.png"));
 		btnBaoCao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		btnBaoCao.setForeground(new Color(255, 255, 255));
-		btnBaoCao.setBackground(new Color(48, 47, 47));
+		btnBaoCao.setBackground(new Color(74, 74, 74));
 		btnBaoCao.setPreferredSize(new Dimension(300, 60));
 		btnBaoCao.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnBaoCao = new GridBagConstraints();
@@ -181,6 +191,82 @@ public class MainGUI extends JFrame {
 		gbc_btnBaoCao.gridx = 0;
 		gbc_btnBaoCao.gridy = 4;
 		panelMenu.add(btnBaoCao, gbc_btnBaoCao);
+//Sự kiện btn		
+		btnManHinhChinh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				btnManHinhChinh.setBackground(new Color(48,47,47));
+				btnManHinhChinh.setForeground(new Color(243,125,0));
+				btnDonDatPhong.setBackground(new Color(74,74,74));
+				btnDonDatPhong.setForeground(new Color(255,255,255));
+				btnHoaDon.setBackground(new Color(74,74,74));
+				btnHoaDon.setForeground(new Color(255,255,255));
+				btnKhachHang.setBackground(new Color(74,74,74));
+				btnKhachHang.setForeground(new Color(255,255,255));
+				btnBaoCao.setBackground(new Color(74,74,74));
+				btnBaoCao.setForeground(new Color(255,255,255));
+			}
+		});
+		btnDonDatPhong.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				btnManHinhChinh.setBackground(new Color(74,74,74));
+				btnManHinhChinh.setForeground(new Color(255,255,255));
+				btnDonDatPhong.setBackground(new Color(48,47,47));
+				btnDonDatPhong.setForeground(new Color(243,125,0));
+				btnHoaDon.setBackground(new Color(74,74,74));
+				btnHoaDon.setForeground(new Color(255,255,255));
+				btnKhachHang.setBackground(new Color(74,74,74));
+				btnKhachHang.setForeground(new Color(255,255,255));
+				btnBaoCao.setBackground(new Color(74,74,74));
+				btnBaoCao.setForeground(new Color(255,255,255));
+			}
+		});
+		btnHoaDon.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				btnManHinhChinh.setBackground(new Color(74,74,74));
+				btnManHinhChinh.setForeground(new Color(255,255,255));
+				btnDonDatPhong.setBackground(new Color(74,74,74));
+				btnDonDatPhong.setForeground(new Color(255,255,255));
+				btnHoaDon.setBackground(new Color(48,47,47));
+				btnHoaDon.setForeground(new Color(243,125,0));
+				btnKhachHang.setBackground(new Color(74,74,74));
+				btnKhachHang.setForeground(new Color(255,255,255));
+				btnBaoCao.setBackground(new Color(74,74,74));
+				btnBaoCao.setForeground(new Color(255,255,255));
+			}
+		});
+		btnKhachHang.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				btnManHinhChinh.setBackground(new Color(74,74,74));
+				btnManHinhChinh.setForeground(new Color(255,255,255));
+				btnDonDatPhong.setBackground(new Color(74,74,74));
+				btnDonDatPhong.setForeground(new Color(255,255,255));
+				btnHoaDon.setBackground(new Color(74,74,74));
+				btnHoaDon.setForeground(new Color(255,255,255));
+				btnKhachHang.setBackground(new Color(48,47,47));
+				btnKhachHang.setForeground(new Color(243,125,0));
+				btnBaoCao.setBackground(new Color(74,74,74));
+				btnBaoCao.setForeground(new Color(255,255,255));
+			}
+		});
+		btnBaoCao.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				btnManHinhChinh.setBackground(new Color(74,74,74));
+				btnManHinhChinh.setForeground(new Color(255,255,255));
+				btnDonDatPhong.setBackground(new Color(74,74,74));
+				btnDonDatPhong.setForeground(new Color(255,255,255));
+				btnHoaDon.setBackground(new Color(74,74,74));
+				btnHoaDon.setForeground(new Color(255,255,255));
+				btnKhachHang.setBackground(new Color(74,74,74));
+				btnKhachHang.setForeground(new Color(255,255,255));
+				btnBaoCao.setBackground(new Color(48,47,47));
+				btnBaoCao.setForeground(new Color(243,125,0));
+			}
+		});
 		
 		//panelUser
 		JPanel panelUser = new JPanel();
