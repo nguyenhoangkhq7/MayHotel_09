@@ -9,6 +9,9 @@
 
 
 package view;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.Timer;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -39,6 +42,7 @@ public class MainGUI extends JFrame {
 		JPanelMain.setLayout(new BorderLayout(0, 0));
 		//JPanelMenu
 		JPanel JPanelMenu = new JPanel();
+		JPanelMenu.setPreferredSize(new Dimension(350, JPanelMenu.getPreferredSize().height));
 		JPanelMenu.setBackground(new Color(69, 96, 117));
 		JPanelMain.add(JPanelMenu, BorderLayout.WEST);
 		JPanelMenu.setLayout(new BorderLayout(0, 0));
@@ -62,11 +66,11 @@ public class MainGUI extends JFrame {
 		panelNameHotel.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblHotelName = new JLabel("MAY HOTEL");
-		lblHotelName.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 45));
+		lblHotelName.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 41));
 		panelNameHotel.add(lblHotelName, BorderLayout.NORTH);
 		
 		JLabel lblSlogan = new JLabel("The best place to be");
-		lblSlogan.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 37));
+		lblSlogan.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 30));
 		panelNameHotel.add(lblSlogan, BorderLayout.CENTER);
 		
 		JPanel panelButtonDX = new JPanel();
@@ -80,7 +84,7 @@ public class MainGUI extends JFrame {
 		btnDangXuat.setBackground(new Color(48, 47, 47));
 		panelButtonDX.add(btnDangXuat, BorderLayout.EAST);
 		
-		JLabel lblLine = new JLabel("_________________________________________________________________");
+		JLabel lblLine = new JLabel("_________________________________________________");
 		lblLine.setForeground(new Color(192, 192, 192));
 		panelButtonDX.add(lblLine, BorderLayout.SOUTH);
 
@@ -96,27 +100,29 @@ public class MainGUI extends JFrame {
 		panelMenu.setLayout(gbl_panelMenu);
 		
 		
-		//btntrangchu
-		JButton btnTrangChu = new JButton("Trang chủ");
-		btnTrangChu.addActionListener(new ActionListener() {
+		//btnManHinhChinh
+		JButton btnManHinhChinh = new JButton("Màn hình chính");
+		btnManHinhChinh.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\house.png"));
+		btnManHinhChinh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnTrangChu.setBackground(new Color(48, 47, 47));
-		btnTrangChu.setForeground(new Color(255, 255, 255));
-		btnTrangChu.setFont(new Font("Segoe UI", Font.BOLD, 25));
-		GridBagConstraints gbc_btnTrangChu = new GridBagConstraints();
-		gbc_btnTrangChu.fill = GridBagConstraints.VERTICAL;
-		gbc_btnTrangChu.insets = new Insets(30, 5, 60, 5);
-		gbc_btnTrangChu.weightx = 1.0;
-		gbc_btnTrangChu.gridx = 0;
-		gbc_btnTrangChu.gridy = 0;
-		btnTrangChu.setPreferredSize(new Dimension(270, 40));
-		panelMenu.add(btnTrangChu, gbc_btnTrangChu);
+		btnManHinhChinh.setBackground(new Color(48, 47, 47));
+		btnManHinhChinh.setForeground(new Color(255, 255, 255));
+		btnManHinhChinh.setFont(new Font("Segoe UI", Font.BOLD, 25));
+		GridBagConstraints gbc_btnManHinhChinh = new GridBagConstraints();
+		gbc_btnManHinhChinh.fill = GridBagConstraints.VERTICAL;
+		gbc_btnManHinhChinh.insets = new Insets(60, 5, 60, 5);
+		gbc_btnManHinhChinh.weightx = 1.0;
+		gbc_btnManHinhChinh.gridx = 0;
+		gbc_btnManHinhChinh.gridy = 0;
+		btnManHinhChinh.setPreferredSize(new Dimension(300, 60));
+		panelMenu.add(btnManHinhChinh, gbc_btnManHinhChinh);
 		
 		
 		//btnDonDatPhong
 		JButton btnDonDatPhong = new JButton("Đơn đặt phòng");
+		btnDonDatPhong.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\door.png"));
 		btnDonDatPhong.setBackground(new Color(48, 47, 47));
 		btnDonDatPhong.setForeground(new Color(255, 255, 255));
 		btnDonDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 25));
@@ -125,15 +131,16 @@ public class MainGUI extends JFrame {
 		gbc_btnDonDatPhong.insets = new Insets(0, 5, 60, 5);
 		gbc_btnDonDatPhong.gridx = 0;
 		gbc_btnDonDatPhong.gridy = 1;
-		btnDonDatPhong.setPreferredSize(new Dimension(270, 40));
+		btnDonDatPhong.setPreferredSize(new Dimension(300, 60));
 		panelMenu.add(btnDonDatPhong, gbc_btnDonDatPhong);
 		
 		
 		//btnHoaDon
 		JButton btnHoaDon = new JButton("Hóa đơn");
+		btnHoaDon.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\checklist.png"));
 		btnHoaDon.setForeground(new Color(255, 255, 255));
 		btnHoaDon.setBackground(new Color(48, 47, 47));
-		btnHoaDon.setPreferredSize(new Dimension(270, 40));
+		btnHoaDon.setPreferredSize(new Dimension(300, 60));
 		btnHoaDon.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnHoaDon = new GridBagConstraints();
 		gbc_btnHoaDon.fill = GridBagConstraints.VERTICAL;
@@ -144,9 +151,10 @@ public class MainGUI extends JFrame {
 		
 		//btnKhachHang
 		JButton btnKhachHang = new JButton("Khách hàng");
+		btnKhachHang.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\rating.png"));
 		btnKhachHang.setForeground(new Color(255, 255, 255));
 		btnKhachHang.setBackground(new Color(48, 47, 47));
-		btnKhachHang.setPreferredSize(new Dimension(270, 40));
+		btnKhachHang.setPreferredSize(new Dimension(300, 60));
 		btnKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnKhachHang = new GridBagConstraints();
 		gbc_btnKhachHang.fill = GridBagConstraints.VERTICAL;
@@ -158,9 +166,14 @@ public class MainGUI extends JFrame {
 		
 		//btnBaoCao
 		JButton btnBaoCao = new JButton("Báo cáo");
+		btnBaoCao.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\report.png"));
+		btnBaoCao.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnBaoCao.setForeground(new Color(255, 255, 255));
 		btnBaoCao.setBackground(new Color(48, 47, 47));
-		btnBaoCao.setPreferredSize(new Dimension(270, 40));
+		btnBaoCao.setPreferredSize(new Dimension(300, 60));
 		btnBaoCao.setFont(new Font("Segoe UI", Font.BOLD, 25));
 		GridBagConstraints gbc_btnBaoCao = new GridBagConstraints();
 		gbc_btnBaoCao.fill = GridBagConstraints.VERTICAL;
@@ -176,13 +189,35 @@ public class MainGUI extends JFrame {
 		panelUser.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblUser = new JLabel("USER");
-		lblUser.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblUser.setFont(new Font("Segoe UI", Font.BOLD, 30));
 		panelUser.add(lblUser);
 		
 		JLabel lblIconUser = new JLabel("");
 		lblIconUser.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\icons8_user_20px_1.png"));
 		panelUser.add(lblIconUser, BorderLayout.WEST);
+		
+		JLabel lblDateTime = new JLabel();
+		lblDateTime.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		lblDateTime.setForeground(new Color(255, 255, 255));
+		lblDateTime.setHorizontalAlignment(SwingConstants.CENTER);
+		panelUser.add(lblDateTime, BorderLayout.SOUTH);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		
+		// Tạo Timer để cập nhật thời gian
+		Timer timer = new Timer(1000, new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Lấy thời gian hiện hành và cập nhật JLabel
+		        lblDateTime.setText(sdf.format(new Date()));
+		    }
+		});
+		timer.start();
+
 		setBounds(100, 100, 1440, 900);
+		
+		
+		
 		/* Menu dành cho nhân viên quản lý
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
