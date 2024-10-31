@@ -20,10 +20,12 @@ public class DonDatPhong {
     private String trangThaiDonDatPhong;
     private boolean trangThaiDatCoc;
     private double tienDatCoc;
-    private LocalDate ngayThanhToan;
     private NhanVien nhanVien;
     private KhachHang khachHang;
+    private double tongTien;
     private String moTa;
+    private LocalDate ngayNhanPhong;
+    private LocalDate ngayTra;
 
     public DonDatPhong(String maDonDatPhong) {
         this.maDon = maDonDatPhong;
@@ -31,17 +33,43 @@ public class DonDatPhong {
     public DonDatPhong() {
     }
 
-    public DonDatPhong(String maDon, LocalDate ngayTao, String phuongThucThanhToan, String trangThaiDonDatPhong, boolean trangThaiDatCoc, double tienDatCoc, LocalDate ngayThanhToan, NhanVien nhanVien, KhachHang khachHang, String moTa) {
+    public DonDatPhong(String maDon, LocalDate ngayTao, String phuongThucThanhToan, String trangThaiDonDatPhong, boolean trangThaiDatCoc, double tienDatCoc, NhanVien nhanVien, KhachHang khachHang, double tongTien, String moTa, LocalDate ngayNhanPhong, LocalDate ngayTra) {
         this.maDon = maDon;
         this.ngayTao = ngayTao;
         this.phuongThucThanhToan = phuongThucThanhToan;
         this.trangThaiDonDatPhong = trangThaiDonDatPhong;
         this.trangThaiDatCoc = trangThaiDatCoc;
         this.tienDatCoc = tienDatCoc;
-        this.ngayThanhToan = ngayThanhToan;
         this.nhanVien = nhanVien;
         this.khachHang = khachHang;
+        this.tongTien = tongTien;
         this.moTa = moTa;
+        this.ngayNhanPhong = ngayNhanPhong;
+        this.ngayTra = ngayTra;
+    }
+
+    public double getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(double tongTien) {
+        this.tongTien = tongTien;
+    }
+
+    public LocalDate getNgayNhanPhong() {
+        return ngayNhanPhong;
+    }
+
+    public void setNgayNhanPhong(LocalDate ngayNhanPhong) {
+        this.ngayNhanPhong = ngayNhanPhong;
+    }
+
+    public LocalDate getNgayTra() {
+        return ngayTra;
+    }
+
+    public void setNgayTra(LocalDate ngayTra) {
+        this.ngayTra = ngayTra;
     }
 
     public String getMaDon() {
@@ -84,13 +112,6 @@ public class DonDatPhong {
         this.tienDatCoc = tienDatCoc;
     }
 
-    public LocalDate getNgayThanhToan() {
-        return ngayThanhToan;
-    }
-
-    public void setNgayThanhToan(LocalDate ngayThanhToan) {
-        this.ngayThanhToan = ngayThanhToan;
-    }
 
     public NhanVien getNhanVien() {
         return nhanVien;
@@ -145,10 +166,12 @@ public class DonDatPhong {
                 ", trangThaiDonDatPhong='" + trangThaiDonDatPhong + '\'' +
                 ", trangThaiDatCoc=" + trangThaiDatCoc +
                 ", tienDatCoc=" + tienDatCoc +
-                ", ngayThanhToan=" + ngayThanhToan +
                 ", nhanVien=" + nhanVien +
                 ", khachHang=" + khachHang +
+                ", tongTien=" + tongTien +
                 ", moTa='" + moTa + '\'' +
+                ", ngayNhanPhong=" + ngayNhanPhong +
+                ", ngayTra=" + ngayTra +
                 '}';
     }
 }

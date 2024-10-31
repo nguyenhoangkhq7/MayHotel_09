@@ -15,10 +15,10 @@ import java.util.Objects;
 public class Phong {
     private String maPhong;
     private String tenPhong;
-    private String tang;
     private LoaiPhong loaiPhong;
     private boolean trangThaiPhong;
     private String moTa;
+    private String tang;
 
 //    constructor
     public Phong(String maPhong, String tenPhong, LoaiPhong loaiPhong, boolean trangThaiPhong, String moTa,String tang) {

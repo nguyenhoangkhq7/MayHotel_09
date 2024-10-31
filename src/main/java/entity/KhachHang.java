@@ -15,21 +15,23 @@ public class KhachHang {
     private String maKH;         // Mã khách hàng
     private String hoTen;        // Họ tên khách hàng
     private String soDienThoai;  // Số điện thoại khách hàng
+    private double tienTichLuy;  // Tiền tích lũy của khách hàng
     private String soCanCuoc;    // Số căn cước công dân hoặc chứng minh nhân dân
     private String email;        // Email khách hàng
-    private double tienTichLuy;  // Tiền tích lũy của khách hàng
     private LoaiKhachHang loaiKhachHang;  // Loại khách hàng (có thể là Regular, VIP, vv.)
 
     // Constructor đầy đủ tham số
-    public KhachHang(String maKH, String hoTen, String soDienThoai, String soCanCuoc, String email, double tienTichLuy, LoaiKhachHang loaiKhachHang) {
-        setMaKH(maKH);
-        setHoTen(hoTen);
-        setSoDienThoai(soDienThoai);
-        setSoCanCuoc(soCanCuoc);
-        setEmail(email);
-        setTienTichLuy(tienTichLuy);
-        setLoaiKhachHang(loaiKhachHang);
+
+    public KhachHang(String maKH, String hoTen, String soDienThoai, double tienTichLuy, String soCanCuoc, String email, LoaiKhachHang loaiKhachHang) {
+        this.maKH = maKH;
+        this.hoTen = hoTen;
+        this.soDienThoai = soDienThoai;
+        this.tienTichLuy = tienTichLuy;
+        this.soCanCuoc = soCanCuoc;
+        this.email = email;
+        this.loaiKhachHang = loaiKhachHang;
     }
+
     // Constructor ma
     public KhachHang(String maKH) {
     	this.maKH = maKH;

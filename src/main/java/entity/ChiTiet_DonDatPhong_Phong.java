@@ -17,16 +17,38 @@ public class ChiTiet_DonDatPhong_Phong {
     private String maCT_DDP_P;
     private DonDatPhong donDatPhong;
     private Phong phong;
-    private LocalDate ngayTra;
     private LocalDate ngayNhanPhong;
+    private LocalDate ngayTra;
+    private boolean laPhongChuyen;
+    private double chietKhau;
 
 //    constructor
-    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P, DonDatPhong donDatPhong, Phong phong, LocalDate ngayNhanPhong, LocalDate ngayTra) {
-        setMaCT_DDP_P(maCT_DDP_P);
+
+
+    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P, DonDatPhong donDatPhong, Phong phong, LocalDate ngayNhanPhong, LocalDate ngayTra, boolean laPhongChuyen, double chietKhau) {
+        this.maCT_DDP_P = maCT_DDP_P;
+        this.donDatPhong = donDatPhong;
+        this.phong = phong;
         this.ngayTra = ngayTra;
-        setDonDatPhong(donDatPhong);
-        setPhong(phong);
+        this.laPhongChuyen = laPhongChuyen;
         this.ngayNhanPhong = ngayNhanPhong;
+        this.chietKhau = chietKhau;
+    }
+
+    public boolean isLaPhongChuyen() {
+        return laPhongChuyen;
+    }
+
+    public void setLaPhongChuyen(boolean laPhongChuyen) {
+        this.laPhongChuyen = laPhongChuyen;
+    }
+
+    public double getChietKhau() {
+        return chietKhau;
+    }
+
+    public void setChietKhau(double chietKhau) {
+        this.chietKhau = chietKhau;
     }
 
     public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P) {
