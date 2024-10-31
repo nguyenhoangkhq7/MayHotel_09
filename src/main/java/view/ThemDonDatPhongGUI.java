@@ -20,7 +20,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public class ThemDonDatPhongGUI extends JFrame {
+public class ThemDonDatPhongGUI extends JPanel {
 // Local variable
     private JButton btnReset,btnClose, btnChonPhong, btnCheckThongTinKhachHang, btnDatPhong;
     private JDateChooser jdcCheckIn, jdcCheckout;
@@ -32,15 +32,11 @@ public class ThemDonDatPhongGUI extends JFrame {
 
 
     public ThemDonDatPhongGUI() {
-        setTitle("Khách sạn MAY");
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         this.setBackground(Color.WHITE);
         showHeader();
         showContent();
-
-        setSize(1440,860);
+//
+//        setSize(1440,860);git sta
     }
 
     public void showContent() {
@@ -62,7 +58,7 @@ public class ThemDonDatPhongGUI extends JFrame {
         splitPane.setContinuousLayout(true);
 
         // Thêm splitPane vào frame
-        this.getContentPane().add(splitPane, BorderLayout.CENTER);
+        this.add(splitPane, BorderLayout.CENTER);
     }
 
 
@@ -237,7 +233,7 @@ public class ThemDonDatPhongGUI extends JFrame {
         jpn2.setOpaque(false);
         headerRight.setOpaque(false);
 
-        this.getContentPane().add(jpnHeader, BorderLayout.NORTH);
+        this.add(jpnHeader, BorderLayout.NORTH);
     }
 
 
