@@ -10,14 +10,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import database.ConnectDB;
-import entity.HoaDon;
-import entity.KhachHang;
 import entity.KhuyenMai;
-import entity.NhanVien;
 
 public class KhuyenMaiDAL {
-	public ArrayList<KhuyenMai> dsKhuyenMai;
+    public ArrayList<KhuyenMai> dsKhuyenMai;
     Connection con;
+
     public KhuyenMaiDAL() {
         dsKhuyenMai = new ArrayList<>();
     }
@@ -34,16 +32,18 @@ public class KhuyenMaiDAL {
                 String maKhuyenMai = rs.getString(1);
                 String tenKhuyenMai = rs.getString(2);
                 double giaTri = rs.getDouble(3);
-            	LocalDate ngayTao = rs.getDate(4)!= null ? rs.getDate(4).toLocalDate() : null;
-                Boolean conHoatDong = rs.getBoolean(5);
+                LocalDate ngayTao = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
+                boolean conHoatDong = rs.getBoolean(5);
                 int soLuong = rs.getInt(6);
-                LocalDate ngayHetHan = rs.getDate(7)!= null ? rs.getDate(7).toLocalDate() : null;
+                LocalDate ngayHetHan = rs.getDate(7) != null ? rs.getDate(7).toLocalDate() : null;
                 String dieuKienApDung = rs.getString(8);
-                KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan,dieuKienApDung);
+                KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan, dieuKienApDung);
                 dsKhuyenMai.add(khuyenMai);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return dsKhuyenMai;
     }
@@ -58,7 +58,7 @@ public class KhuyenMaiDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khuyenMai.getMaKhuyenMai());
             stmt.setString(2, khuyenMai.getTenKhuyenMai());
-            stmt.setDouble(3, khuyenMai.getGiaTri()); 
+            stmt.setDouble(3, khuyenMai.getGiaTri());
             stmt.setDate(4, Date.valueOf(khuyenMai.getNgayTao()));
             stmt.setBoolean(5, khuyenMai.getConHoatDong());
             stmt.setInt(6, khuyenMai.getSoLuong());
@@ -68,6 +68,8 @@ public class KhuyenMaiDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return n > 0;
     }
@@ -81,39 +83,42 @@ public class KhuyenMaiDAL {
             String sql = "UPDATE KhuyenMai SET tenKhuyenMai = ?, giaTri = ?, ngayTao = ?, conHoatDong = ?, soLuong = ?, ngayHetHan = ?, dieuKienApDung = ? WHERE maKM = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khuyenMai.getTenKhuyenMai());
-            stmt.setDouble(2, khuyenMai.getGiaTri()); 
+            stmt.setDouble(2, khuyenMai.getGiaTri());
             stmt.setDate(3, Date.valueOf(khuyenMai.getNgayTao()));
             stmt.setBoolean(4, khuyenMai.getConHoatDong());
             stmt.setInt(5, khuyenMai.getSoLuong());
             stmt.setDate(6, Date.valueOf(khuyenMai.getNgayHetHan()));
-            stmt.setString(7, khuyenMai.getMaKhuyenMai());
-            stmt.setString(8, khuyenMai.getDieuKienApDung());
+            stmt.setString(7, khuyenMai.getDieuKienApDung());
+            stmt.setString(8, maKhuyenMai);  // Fixed the order here
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            closeConnection();
         }
         return n > 0;
     }
-	 // Tìm khuyến mãi theo mã khuyến mãi
+
+    // Tìm khuyến mãi theo mã khuyến mãi
     public KhuyenMai getKhuyenMaiTheoMa(String maKhuyenMai) {
         KhuyenMai khuyenMai = null;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM KhuyenMai WHERE maKhuyenMai = ?";
+            String sql = "SELECT * FROM KhuyenMai WHERE maKM = ?"; // Fixed column name to "maKM"
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maKhuyenMai);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-            	String tenKhuyenMai = rs.getString("tenKhuyenMai");
-            	double giaTri = rs.getDouble("giaTri");
-            	LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+                String tenKhuyenMai = rs.getString("tenKhuyenMai");
+                double giaTri = rs.getDouble("giaTri");
+                LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 int soLuong = rs.getInt("soLuong");
                 LocalDate ngayHetHan = rs.getDate("ngayHetHan").toLocalDate();
                 String dieuKienApDung = rs.getString("dieuKienApDung");
-                khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao,conHoatDong, soLuong, ngayHetHan, dieuKienApDung);
+                khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan, dieuKienApDung);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,35 +138,8 @@ public class KhuyenMaiDAL {
             e.printStackTrace();
         }
     }
-	
-
-    // Xóa khuyến mãi khỏi cơ sở dữ liệu
-//    public boolean xoaKhuyenMai(String maKhuyenMai) {
-//        int n = 0;
-//        try {
-//            ConnectDB.getInstance().connect();
-//            con = ConnectDB.getConnection();
-//            String sql = "DELETE FROM KhuyenMai WHERE maKM = ?";
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            stmt.setString(1, maKhuyenMai);
-//
-//            n = stmt.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return n > 0;
-//    }
 
     public static void main(String[] args) {
-          KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL();
-//          khuyenMaiDAL.themKhuyenMai(new KhuyenMai("KM006", "Giam 70%", 0.7, LocalDate.now(), true, 2, LocalDate.now()));
- //in danh sach khuyen mai
-//   	   ArrayList<KhuyenMai> dsKhuyenMai = khuyenMaiDAL.getAllKhuyenMai();
-//        for (KhuyenMai khuyenMai : dsKhuyenMai) {
-//            System.out.println(khuyenMai);
-//    }
-// test suakm          
-//          khuyenMaiDAL.suaKhuyenMai("H006", new KhuyenMai("KM006", "Giam 80%", 0.8, LocalDate.now(), true, 2, LocalDate.now(), "abc"));
-    }
 
+    }
 }

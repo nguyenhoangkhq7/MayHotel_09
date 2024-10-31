@@ -35,8 +35,8 @@ public class NhanVienDAL {
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 String email = rs.getString("email");
                 String diaChi = rs.getString("diaChi");
-                Integer vaiTro = rs.getInt("vaiTro");
-                
+                String vaiTro = rs.getString("vaiTro");
+
                 TaiKhoan taiKhoan = new TaiKhoanDAL().getTaiKhoanTheoMa(rs.getString("tenTaiKhoan"));
 
                 // Tạo đối tượng NhanVien từ dữ liệu truy vấn
@@ -66,7 +66,7 @@ public class NhanVienDAL {
             stmt.setBoolean(5, nhanVien.isConHoatDong());
             stmt.setString(6, nhanVien.getEmail());
             stmt.setString(7, nhanVien.getDiaChi());
-            stmt.setInt(8, nhanVien.getVaiTro());
+            stmt.setString(8, nhanVien.getVaiTro());
             stmt.setString(9, nhanVien.getTaiKhoan().getTenDangNhap());
             stmt.setString(10, nhanVien.getTaiKhoan().getMatKhau());
             n = stmt.executeUpdate();
@@ -92,7 +92,7 @@ public class NhanVienDAL {
             stmt.setBoolean(4, nhanVien.isConHoatDong());
             stmt.setString(5, nhanVien.getEmail());
             stmt.setString(6, nhanVien.getDiaChi());
-            stmt.setInt(7, nhanVien.getVaiTro());
+            stmt.setString(7, nhanVien.getVaiTro());
             stmt.setString(8, nhanVien.getMaNV());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -138,8 +138,8 @@ public class NhanVienDAL {
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 String email = rs.getString("email");
                 String diaChi = rs.getString("diaChi");
-                Integer vaiTro = rs.getInt("vaiTro");
-                
+                String vaiTro = rs.getString("vaiTro"); // Đã sửa thành String
+
                 TaiKhoan taiKhoan = new TaiKhoan(rs.getString("tenTaiKhoan"), rs.getString("matKhau"));
 
                 nhanVien = new NhanVien(maNV, hoten, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, taiKhoan);
@@ -151,6 +151,7 @@ public class NhanVienDAL {
         }
         return nhanVien;
     }
+
 
     // Đóng kết nối
     private void closeConnection() {
@@ -167,7 +168,7 @@ public class NhanVienDAL {
         NhanVienDAL dal = new NhanVienDAL();
         // Thêm nhân viên mới
         TaiKhoan taiKhoan = new TaiKhoan("user1", "password123");
-        NhanVien nhanVien = new NhanVien("NV01", "Nguyen Van A", "0123456789", "123456789012", true, "example@gmail.com", "123 Street", 1, taiKhoan);
+        NhanVien nhanVien = new NhanVien("NV01", "Nguyen Van A", "0123456789", "123456789012", true, "example@gmail.com", "123 Street", "Nhan viên", taiKhoan);
         boolean result = dal.themNhanVien(nhanVien);
         System.out.println("Thêm nhân viên thành công: " + result);
 

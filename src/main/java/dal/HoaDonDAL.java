@@ -1,4 +1,5 @@
 package dal;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,11 +12,11 @@ import java.util.ArrayList;
 import database.ConnectDB;
 import entity.*;
 
-
 public class HoaDonDAL {
-	
-	public ArrayList<HoaDon> dsHoaDon;
+
+    public ArrayList<HoaDon> dsHoaDon;
     Connection con;
+
     public HoaDonDAL() {
         dsHoaDon = new ArrayList<>();
     }
@@ -30,16 +31,14 @@ public class HoaDonDAL {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String maHoaDon = rs.getString(1);
-                LocalDate ngayTao = rs.getDate(2)!= null ? rs.getDate(2).toLocalDate() : null;
+                LocalDate ngayTao = rs.getDate(2) != null ? rs.getDate(2).toLocalDate() : null;
                 Boolean trangThai = rs.getBoolean(3);
                 double thanhTien = rs.getDouble(4);
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(5));
-                KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(rs.getString(6));
-                DichVu dichVu = new DichVuDAL().getDichVuTheoMa(rs.getString(7));
-                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString(8));
-                HoaDon hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, nhanVien, khachHang, dichVu, khuyenMai);
-                dsHoaDon.add(hoaDon);
+                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString(6));
 
+                HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, null, ngayTao);
+                dsHoaDon.add(hoaDon);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,16 +52,14 @@ public class HoaDonDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO HoaDon (maHoaDon, ngayTao, trangThai, thanhTien, maNV, maKH, maDV, maKM) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sql); 
+            String sql = "INSERT INTO HoaDon (maHoaDon, ngayTao, trangThai, thanhTien, maNV, maKM) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, hoaDon.getMaHoaDon());
             stmt.setDate(2, Date.valueOf(hoaDon.getNgayTao()));
             stmt.setBoolean(3, hoaDon.getTrangThai());
             stmt.setDouble(4, hoaDon.getThanhTien());
             stmt.setString(5, hoaDon.getNhanVien().getMaNV());
-            stmt.setString(6, hoaDon.getKhachHang().getMaKH());
-            stmt.setString(7, hoaDon.getDichVu().getMaDichVu());
-            stmt.setString(8, hoaDon.getKhuyenMai().getMaKhuyenMai());           
+            stmt.setString(6, hoaDon.getKhuyenMai().getMaKhuyenMai());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,16 +73,14 @@ public class HoaDonDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE HoaDon SET ngayTao = ?, trangThai = ?, thanhTien = ?, maNV = ?, maKH = ?, maDV = ?, maKM = ?, WHERE maHoaDon = ?";
+            String sql = "UPDATE HoaDon SET ngayTao = ?, trangThai = ?, thanhTien = ?, maNV = ?, maKM = ? WHERE maHoaDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setDate(1, Date.valueOf(hoaDon.getNgayTao()));
             stmt.setBoolean(2, hoaDon.getTrangThai());
             stmt.setDouble(3, hoaDon.getThanhTien());
             stmt.setString(4, hoaDon.getNhanVien().getMaNV());
-            stmt.setString(5, hoaDon.getKhachHang().getMaKH());
-            stmt.setString(6, hoaDon.getDichVu().getMaDichVu());
-            stmt.setString(7, hoaDon.getKhuyenMai().getMaKhuyenMai());      
-
+            stmt.setString(5, hoaDon.getKhuyenMai().getMaKhuyenMai());
+            stmt.setString(6, maHoaDon);
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,22 +88,24 @@ public class HoaDonDAL {
         return n > 0;
     }
 
-    // Hủy hóa đơn 
-	public boolean huyHoaDon(String maHoaDon) {
-		int n = 0;
-		try {
-			ConnectDB.getInstance().connect();
-			con = ConnectDB.getConnection();
-			String sql = "update HoaDon set trangThai = N'false' where maHoaDon = ? ";
-			PreparedStatement stmt = con.prepareStatement(sql);
-			stmt.setString(1, maHoaDon);
-			n = stmt.executeUpdate();
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return n>0;
-	}
-	 // Tìm hóa đơn theo mã hóa đơn
+    // Hủy hóa đơn
+    public boolean huyHoaDon(String maHoaDon) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "UPDATE HoaDon SET trangThai = ? WHERE maHoaDon = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setBoolean(1, false);  // Giả sử 'false' là trạng thái hủy
+            stmt.setString(2, maHoaDon);
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0;
+    }
+
+    // Tìm hóa đơn theo mã hóa đơn
     public HoaDon getHoaDonTheoMa(String maHoaDon) {
         HoaDon hoaDon = null;
         try {
@@ -123,12 +120,9 @@ public class HoaDonDAL {
                 boolean trangThai = rs.getBoolean("trangThai");
                 double thanhTien = rs.getDouble("thanhTien");
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString("maNV"));
-                KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(rs.getString("maKH"));
-                DichVu dichVu = new DichVuDAL().getDichVuTheoMa(rs.getString("maDV"));
                 KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString("maKM"));
 
-
-                hoaDon = new HoaDon(maHoaDon, ngayTao, trangThai, thanhTien, nhanVien, khachHang, dichVu, khuyenMai);
+                hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, null, ngayTao);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,10 +143,7 @@ public class HoaDonDAL {
         }
     }
 
-
     public static void main(String[] args) {
-
+        // Test các phương thức ở đây nếu cần
     }
-
-
 }

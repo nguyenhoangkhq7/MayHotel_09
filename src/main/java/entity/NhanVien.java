@@ -22,12 +22,12 @@ public class NhanVien {
     private boolean conHoatDong;
     private String email;
     private String diaChi;
-    private Integer vaiTro;
+    private String vaiTro;
     private TaiKhoan taiKhoan;
 
     // Constructor với đầy đủ tham số
     public NhanVien(String maNV, String hoten, String soDienThoai, String soCanCuoc, boolean conHoatDong,
-                    String email, String diaChi, Integer vaiTro, TaiKhoan taiKhoan) {
+                    String email, String diaChi, String vaiTro, TaiKhoan taiKhoan) {
         setMaNV(maNV); // Sử dụng setter để đảm bảo tính hợp lệ
         setHoten(hoten);
         setSoDienThoai(soDienThoai);
@@ -124,14 +124,13 @@ public class NhanVien {
     }
 
     // Getter và Setter cho vai trò
-    public Integer getVaiTro() {
+
+
+    public String getVaiTro() {
         return vaiTro;
     }
 
-    public void setVaiTro(Integer vaiTro) {
-        if (vaiTro != 1 && vaiTro != 2) {
-            throw new IllegalArgumentException("Vai trò không hợp lệ");
-        }
+    public void setVaiTro(String vaiTro) {
         this.vaiTro = vaiTro;
     }
 

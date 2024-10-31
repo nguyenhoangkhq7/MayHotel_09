@@ -6,29 +6,28 @@ import java.util.Objects;
 
 public class HoaDon {
 	private String maHoaDon;
-	private LocalDate ngayTao;
 	private boolean trangThai;
 	private double thanhTien;
 	private NhanVien nhanVien;
-	private KhachHang khachHang;
-	private DichVu dichVu;
 	private KhuyenMai khuyenMai;
+	private DonDatPhong donDatPhong;
+	private LocalDate ngayTao;
 
-//	    private static int maHoaDonCounter = 1;  // Đếm số hóa đơn để tạo mã
 
 	// Constructor không tham số
 	public HoaDon() {
 	}
 	// Constructor đầy đủ
-	public HoaDon(String maHoaDon, LocalDate ngayTao, boolean trangThai, double thanhTien, NhanVien nhanVien, KhachHang khachHang, DichVu dichVu, KhuyenMai khuyenMai) {
+
+
+	public HoaDon(String maHoaDon, boolean trangThai, double thanhTien, NhanVien nhanVien, KhuyenMai khuyenMai, DonDatPhong donDatPhong, LocalDate ngayTao) {
 		this.maHoaDon = maHoaDon;
-		this.ngayTao = ngayTao;
 		this.trangThai = trangThai;
 		this.thanhTien = thanhTien;
 		this.nhanVien = nhanVien;
-		this.khachHang = khachHang;
-		this.dichVu = dichVu;
 		this.khuyenMai = khuyenMai;
+		this.donDatPhong = donDatPhong;
+		this.ngayTao = ngayTao;
 	}
 
 	// Constructor 1 tham so maHoaDon
@@ -78,22 +77,6 @@ public class HoaDon {
 		this.nhanVien = nhanVien;
 	}
 
-	public KhachHang getKhachHang() {
-		return khachHang;
-	}
-
-	public void setKhachHang(KhachHang khachHang) {
-		this.khachHang = khachHang;
-	}
-
-	public DichVu getDichVu() {
-		return dichVu;
-	}
-
-	public void setDichVu(DichVu dichVu) {
-		this.dichVu = dichVu;
-	}
-
 	public KhuyenMai getKhuyenMai() {
 		return khuyenMai;
 	}
@@ -125,13 +108,12 @@ public class HoaDon {
 	public String toString() {
 		return "HoaDon{" +
 				"maHoaDon='" + maHoaDon + '\'' +
-				", ngayTao=" + ngayTao +
 				", trangThai=" + trangThai +
 				", thanhTien=" + thanhTien +
 				", nhanVien=" + nhanVien +
-				", khachHang=" + khachHang +
-				", dichVu=" + dichVu +
 				", khuyenMai=" + khuyenMai +
+				", donDatPhong=" + donDatPhong +
+				", ngayTao=" + ngayTao +
 				'}';
 	}
 }

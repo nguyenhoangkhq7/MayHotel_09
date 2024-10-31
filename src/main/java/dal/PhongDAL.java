@@ -28,8 +28,6 @@ public class PhongDAL {
         dsPhong = new ArrayList<>();
     }
 
-    // Lấy tất cả các phòng từ cơ sở dữ liệu
-    // Lấy tất cả các phòng từ cơ sở dữ liệu
     public ArrayList<Phong> getAllPhong() {
         ArrayList<Phong> dsPhong = new ArrayList<>();
         try {

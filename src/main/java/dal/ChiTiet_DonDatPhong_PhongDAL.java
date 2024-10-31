@@ -22,7 +22,8 @@ public class ChiTiet_DonDatPhong_PhongDAL {
     public ChiTiet_DonDatPhong_PhongDAL() {
         dsChiTiet = new ArrayList<>();
     }
-    // Lấy danh sách tất cả ChiTiet_DonDatPhong_Phong
+
+    // Retrieve all ChiTiet_DonDatPhong_Phong records
     public ArrayList<ChiTiet_DonDatPhong_Phong> getAllChiTietDonDatPhongPhong() {
         ArrayList<ChiTiet_DonDatPhong_Phong> chiTietList = new ArrayList<>();
         try {
@@ -37,13 +38,17 @@ public class ChiTiet_DonDatPhong_PhongDAL {
                 String maDonDatPhong = rs.getString(3);
                 String maPhong = rs.getString(4);
                 LocalDate ngayNhanPhong = rs.getDate(5).toLocalDate();
+                boolean laPhongChuyen = rs.getBoolean(6);
+                double chietKhau = rs.getDouble(7);
 
-                // Tạo các đối tượng DonDatPhong và Phong từ mã
+                // Retrieve DonDatPhong and Phong objects
                 DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(maDonDatPhong);
                 Phong phong = new PhongDAL().getPhongTheoMa(maPhong);
 
-                // Tạo đối tượng ChiTiet_DonDatPhong_Phong từ dữ liệu truy vấn
-                ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong(maCT_DDP_P, donDatPhong, phong, ngayNhanPhong, ngayTra);
+                // Create ChiTiet_DonDatPhong_Phong object with retrieved data
+                ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong(
+                        maCT_DDP_P, donDatPhong, phong, ngayNhanPhong, ngayTra, laPhongChuyen, chietKhau
+                );
                 chiTietList.add(chiTiet);
             }
         } catch (SQLException e) {
@@ -52,7 +57,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         return chiTietList;
     }
 
-    // Lấy ChiTiet_DonDatPhong_Phong theo mã
+    // Retrieve ChiTiet_DonDatPhong_Phong by ID
     public ChiTiet_DonDatPhong_Phong getChiTietDonDatPhongPhongTheoMa(String maCT_DDP_P) {
         ChiTiet_DonDatPhong_Phong chiTiet = null;
         try {
@@ -67,32 +72,37 @@ public class ChiTiet_DonDatPhong_PhongDAL {
                 String maDonDatPhong = rs.getString(3);
                 String maPhong = rs.getString(4);
                 LocalDate ngayNhanPhong = rs.getDate(5).toLocalDate();
+                boolean laPhongChuyen = rs.getBoolean(6);
+                double chietKhau = rs.getDouble(7);
 
-                // Tạo các đối tượng DonDatPhong và Phong từ mã
+                // Retrieve DonDatPhong and Phong objects
                 DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(maDonDatPhong);
                 Phong phong = new PhongDAL().getPhongTheoMa(maPhong);
 
-                // Khởi tạo đối tượng ChiTiet_DonDatPhong_Phong từ dữ liệu truy vấn
-                chiTiet = new ChiTiet_DonDatPhong_Phong(maCT_DDP_P, donDatPhong, phong, ngayNhanPhong, ngayTra);
+                // Initialize ChiTiet_DonDatPhong_Phong object
+                chiTiet = new ChiTiet_DonDatPhong_Phong(maCT_DDP_P, donDatPhong, phong, ngayNhanPhong, ngayTra, laPhongChuyen, chietKhau);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return chiTiet;
     }
-    // Thêm mới ChiTiet_DonDatPhong_Phong
+
+    // Add new ChiTiet_DonDatPhong_Phong
     public boolean themChiTiet(ChiTiet_DonDatPhong_Phong chiTiet) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO ChiTiet_DonDatPhong_Phong VALUES(?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO ChiTiet_DonDatPhong_Phong VALUES(?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, chiTiet.getMaCT_DDP_P());
             stmt.setDate(2, java.sql.Date.valueOf(chiTiet.getNgayTra()));
             stmt.setString(3, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(4, chiTiet.getPhong().getMaPhong());
             stmt.setDate(5, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
+            stmt.setBoolean(6, chiTiet.isLaPhongChuyen());
+            stmt.setDouble(7, chiTiet.getChietKhau());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,19 +110,21 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         return n > 0;
     }
 
-    // Cập nhật ChiTiet_DonDatPhong_Phong
+    // Update ChiTiet_DonDatPhong_Phong
     public boolean suaChiTiet(String maCT_DDP_P, ChiTiet_DonDatPhong_Phong chiTiet) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE ChiTiet_DonDatPhong_Phong SET ngayTra = ?, maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ? WHERE maCT_DDP_P = ?";
+            String sql = "UPDATE ChiTiet_DonDatPhong_Phong SET ngayTra = ?, maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ?, laPhongChuyen = ?, chietKhau = ? WHERE maCT_DDP_P = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setDate(1, java.sql.Date.valueOf(chiTiet.getNgayTra()));
             stmt.setString(2, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(3, chiTiet.getPhong().getMaPhong());
             stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
-            stmt.setString(5, maCT_DDP_P);
+            stmt.setBoolean(5, chiTiet.isLaPhongChuyen());
+            stmt.setDouble(6, chiTiet.getChietKhau());
+            stmt.setString(7, maCT_DDP_P);
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,7 +132,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         return n > 0;
     }
 
-    // Xóa ChiTiet_DonDatPhong_Phong theo mã
+    // Delete ChiTiet_DonDatPhong_Phong by ID
     public boolean xoaChiTiet(String maCT_DDP_P) {
         int n = 0;
         try {
@@ -138,10 +150,10 @@ public class ChiTiet_DonDatPhong_PhongDAL {
 
     public static void main(String[] args) {
         ChiTiet_DonDatPhong_PhongDAL dal = new ChiTiet_DonDatPhong_PhongDAL();
-        // Thực hiện các thao tác kiểm tra ở đây, ví dụ thêm mới, cập nhật, xóa...
-        DonDatPhong donDatPhong = new DonDatPhong("DDP001");  // Giả định đã tồn tại
-        Phong phong = new Phong("P001");  // Giả định đã tồn tại
-        ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong("CT001", donDatPhong, phong, LocalDate.now(), LocalDate.now().plusDays(3));
+        // Example operations
+        DonDatPhong donDatPhong = new DonDatPhong("DDP001");
+        Phong phong = new Phong("P001");
+        ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong("CT001", donDatPhong, phong, LocalDate.now(), LocalDate.now().plusDays(3), true, 0.1);
         boolean result = dal.themChiTiet(chiTiet);
         System.out.println("Thêm mới thành công: " + result);
     }

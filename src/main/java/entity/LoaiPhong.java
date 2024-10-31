@@ -1,12 +1,13 @@
 /*
     *MayHotel  day creative: 10/1/2024
     version: 2023.2  IntelliJ IDEA
-    author: Nguyễn Hoàng Khang  */
-    /*
-       *class description:
-            write description right here   
-     */
-
+    author: Nguyễn Hoàng Khang
+ */
+/*
+    *class description:
+    Class representing a room type (LoaiPhong) in the hotel management system.
+    Contains attributes like code, name, capacity, price, description, and discount.
+*/
 
 package entity;
 
@@ -20,7 +21,7 @@ public class LoaiPhong {
     private String mota;
     private double chietKhau;
 
-//    constructor
+    // constructor
     public LoaiPhong(String maLoaiPhong, String tenLoaiPhong, int sucChua, double donGia, String mota, double chietKhau) {
         setMaLoaiPhong(maLoaiPhong);
         this.tenLoaiPhong = tenLoaiPhong;
@@ -31,17 +32,16 @@ public class LoaiPhong {
     }
 
     public LoaiPhong(String maLoaiPhong) {
-        this.maLoaiPhong = maLoaiPhong;
+        this(maLoaiPhong, null, 0, 0.0, null, 0.0);
     }
 
-//    getter setter
-
+    // getter and setter methods
     public String getMaLoaiPhong() {
         return maLoaiPhong;
     }
 
     public void setMaLoaiPhong(String maLoaiPhong) {
-        if(maLoaiPhong.equals(""))
+        if (maLoaiPhong == null || maLoaiPhong.isEmpty())
             throw new IllegalArgumentException("Mã loại phòng không được rỗng");
         this.maLoaiPhong = maLoaiPhong;
     }
@@ -59,7 +59,7 @@ public class LoaiPhong {
     }
 
     public void setSucChua(int sucChua) {
-        if(sucChua <= 0)
+        if (sucChua <= 0)
             throw new IllegalArgumentException("Sức chứa > 0");
         this.sucChua = sucChua;
     }
@@ -69,7 +69,7 @@ public class LoaiPhong {
     }
 
     public void setDonGia(double donGia) {
-        if(donGia <= 0)
+        if (donGia <= 0)
             throw new IllegalArgumentException("Đơn giá > 0");
         this.donGia = donGia;
     }
@@ -87,12 +87,12 @@ public class LoaiPhong {
     }
 
     public void setChietKhau(double chietKhau) {
-        if(chietKhau <= 0)
-            throw new IllegalArgumentException("Chiết khấu > 0");
+        if (chietKhau < 0) // Chấp nhận chiết khấu 0 hoặc dương
+            throw new IllegalArgumentException("Chiết khấu không thể âm");
         this.chietKhau = chietKhau;
     }
 
-//    hashcode equal
+    // hashCode and equals
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,8 +105,7 @@ public class LoaiPhong {
         return Objects.hash(maLoaiPhong);
     }
 
-//    toString
-
+    // toString
     @Override
     public String toString() {
         return "LoaiPhong{" +
