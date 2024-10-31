@@ -133,7 +133,7 @@ public class DonDatPhongGUI extends JFrame {
         jpnSearch.add(Box.createVerticalGlue());
 
         // Tạo GridBagConstraints để thêm jpnSearch
-        GridBagConstraints gbcSearch = new GridBagConstraints();
+        Grid BagConstraints gbcSearch = new GridBagConstraints();
         gbcSearch.fill = GridBagConstraints.BOTH; // Chiếm toàn bộ không gian
         gbcSearch.weightx = 1; // Tỷ lệ chiều ngang
         gbcSearch.weighty = 1; // Tỷ lệ chiều dọc
