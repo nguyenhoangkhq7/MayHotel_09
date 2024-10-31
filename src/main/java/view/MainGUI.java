@@ -68,7 +68,7 @@ public class MainGUI extends JFrame {
 		panelLogo.add(panelIcon, BorderLayout.WEST);
 		
 		JLabel lblIcon = new JLabel("");
-		lblIcon.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\Microsoft-Fluentui-Emoji-Mono-Hotel.48.png"));
+		lblIcon.setIcon(new ImageIcon("src/main/java/icon/Microsoft-Fluentui-Emoji-Mono-Hotel.48.png"));
 		panelIcon.add(lblIcon);
 		
 		JPanel panelNameHotel = new JPanel();
@@ -126,7 +126,7 @@ public class MainGUI extends JFrame {
     			btnManHinhChinh = new JButton("Màn hình chính");
     			btnManHinhChinh.setBorderPainted(false);
     			btnManHinhChinh.setFocusPainted(false); 
-    			btnManHinhChinh.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\house.png"));
+    			btnManHinhChinh.setIcon(new ImageIcon("src/main/java/icon/house.png"));
     			btnManHinhChinh.addActionListener(new ActionListener() {
     				public void actionPerformed(ActionEvent e) {
     				}
@@ -164,7 +164,7 @@ public class MainGUI extends JFrame {
     			btnDonDatPhong = new JButton("Đơn đặt phòng");
     			btnDonDatPhong.setBorderPainted(false);
     			btnDonDatPhong.setFocusPainted(false); 
-    			btnDonDatPhong.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\door.png"));
+    			btnDonDatPhong.setIcon(new ImageIcon("src/main/java/icon/door.png"));
     			btnDonDatPhong.setBackground(new Color(74, 74, 74));
     			btnDonDatPhong.setForeground(new Color(255, 255, 255));
     			btnDonDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 25));
@@ -197,7 +197,7 @@ public class MainGUI extends JFrame {
     			btnHoaDon = new JButton("Hóa đơn");
     			btnHoaDon.setBorderPainted(false);
     			btnHoaDon.setFocusPainted(false); 
-    			btnHoaDon.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\checklist.png"));
+    			btnHoaDon.setIcon(new ImageIcon("src/main/java/icon/checklist.png"));
     			btnHoaDon.setForeground(new Color(255, 255, 255));
     			btnHoaDon.setBackground(new Color(74, 74, 74));
     			btnHoaDon.setPreferredSize(new Dimension(300, 60));
@@ -229,7 +229,7 @@ public class MainGUI extends JFrame {
     			btnKhachHang = new JButton("Khách hàng");
     			btnKhachHang.setBorderPainted(false);
     			btnKhachHang.setFocusPainted(false); 
-    			btnKhachHang.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\rating.png"));
+    			btnKhachHang.setIcon(new ImageIcon("src/main/java/icon/rating.png"));
     			btnKhachHang.setForeground(new Color(255, 255, 255));
     			btnKhachHang.setBackground(new Color(74, 74, 74));
     			btnKhachHang.setPreferredSize(new Dimension(300, 60));
@@ -343,7 +343,7 @@ public class MainGUI extends JFrame {
 		btnManHinhChinh = new JButton("Màn hình chính");
 		btnManHinhChinh.setBorderPainted(false);
 		btnManHinhChinh.setFocusPainted(false); 
-		btnManHinhChinh.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\house.png"));
+		btnManHinhChinh.setIcon(new ImageIcon("src/main/java/icon/house.png"));
 		btnManHinhChinh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -388,7 +388,7 @@ public class MainGUI extends JFrame {
 		btnKhuyenMai = new JButton("Khuyến mãi");
 		btnKhuyenMai.setBorderPainted(false);
 		btnKhuyenMai.setFocusPainted(false); 
-		btnKhuyenMai.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\door.png"));
+		btnKhuyenMai.setIcon(new ImageIcon("src/main/java/icon/tag.png"));
 		btnKhuyenMai.setBackground(new Color(74, 74, 74));
 		btnKhuyenMai.setForeground(new Color(255, 255, 255));
 		btnKhuyenMai.setFont(new Font("Segoe UI", Font.BOLD, 25));
@@ -399,7 +399,7 @@ public class MainGUI extends JFrame {
 		gbc_btnKhuyenMai.gridy = 1;
 		btnKhuyenMai.setPreferredSize(new Dimension(300, 60));
 		panelMenu.add(btnKhuyenMai, gbc_btnKhuyenMai);
-		//Sự kiện btn Đơn đặt phòng
+		//Sự kiện btn Khuyến mãi
 		btnKhuyenMai.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -464,7 +464,7 @@ public class MainGUI extends JFrame {
 		btnNhanVien = new JButton("Nhân viên");
 		btnNhanVien.setBorderPainted(false);
 		btnNhanVien.setFocusPainted(false); 
-		btnNhanVien.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\door.png"));
+		btnNhanVien.setIcon(new ImageIcon("src/main/java/icon/division.png"));
 		btnNhanVien.setBackground(new Color(74, 74, 74));
 		btnNhanVien.setForeground(new Color(255, 255, 255));
 		btnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 25));
@@ -502,7 +502,7 @@ public class MainGUI extends JFrame {
 		btnDichVu = new JButton("Dịch vụ");
 		btnDichVu.setBorderPainted(false);
 		btnDichVu.setFocusPainted(false); 
-		btnDichVu.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\door.png"));
+		btnDichVu.setIcon(new ImageIcon("src/main/java/icon/diet.png"));
 		btnDichVu.setBackground(new Color(74, 74, 74));
 		btnDichVu.setForeground(new Color(255, 255, 255));
 		btnDichVu.setFont(new Font("Segoe UI", Font.BOLD, 25));
@@ -578,7 +578,7 @@ public class MainGUI extends JFrame {
 		btnHoaDon = new JButton("Hóa đơn");
 		btnHoaDon.setBorderPainted(false);
 		btnHoaDon.setFocusPainted(false); 
-		btnHoaDon.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\checklist.png"));
+		btnHoaDon.setIcon(new ImageIcon("src/main/java/icon/checklist.png"));
 		btnHoaDon.setForeground(new Color(255, 255, 255));
 		btnHoaDon.setBackground(new Color(74, 74, 74));
 		btnHoaDon.setPreferredSize(new Dimension(300, 60));
@@ -616,7 +616,7 @@ public class MainGUI extends JFrame {
 		btnKhachHang = new JButton("Khách hàng");
 		btnKhachHang.setBorderPainted(false);
 		btnKhachHang.setFocusPainted(false); 
-		btnKhachHang.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\rating.png"));
+		btnKhachHang.setIcon(new ImageIcon("src/main/java/icon/rating.png"));
 		btnKhachHang.setForeground(new Color(255, 255, 255));
 		btnKhachHang.setBackground(new Color(74, 74, 74));
 		btnKhachHang.setPreferredSize(new Dimension(300, 60));
