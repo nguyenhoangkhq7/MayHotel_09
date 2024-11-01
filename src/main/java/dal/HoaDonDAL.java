@@ -34,9 +34,9 @@ public class HoaDonDAL {
                 LocalDate ngayTao = rs.getDate(2) != null ? rs.getDate(2).toLocalDate() : null;
                 Boolean trangThai = rs.getBoolean(3);
                 double thanhTien = rs.getDouble(4);
-                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(rs.getString(5));
-                NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(6));
-                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString(7));
+                NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(5));
+                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString(6));
+                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(rs.getString(7));
 
                 HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);
                 dsHoaDon.add(hoaDon);
