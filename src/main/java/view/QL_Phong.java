@@ -13,7 +13,7 @@ import constraints.CONSTRAINTS;
 
 import javax.swing.table.DefaultTableModel;
 
-public class QL_Phong extends JFrame {
+public class QL_Phong extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -56,19 +56,13 @@ public class QL_Phong extends JFrame {
 	private JButton btnLuu;
 
     public QL_Phong() {
-        setTitle("Quản lí khách hàng");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 1080);
-
-        JPanel contentPane = new JPanel();
-        contentPane.setBackground(new Color(255, 255, 255));
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+    	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(new Color(255, 255, 255));
+        setBorder(new EmptyBorder(5, 5, 5, 5));
 
         JPanel pnlTieuDe = new JPanel();
         pnlTieuDe.setBackground(new Color(255, 255, 255));
-        contentPane.add(pnlTieuDe);
+        add(pnlTieuDe);
         pnlTieuDe.setLayout(new FlowLayout());
 
         JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ PHÒNG");
@@ -81,7 +75,7 @@ public class QL_Phong extends JFrame {
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
                 "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
        
-        contentPane.add(pnlThongTin);
+        add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
         
         panelForm = new JPanel();
@@ -207,7 +201,7 @@ public class QL_Phong extends JFrame {
         panel_ThongTinLoaiPhong.setBackground(new Color(255, 255, 255));
         panel_ThongTinLoaiPhong.setBorder(
                 new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        contentPane.add(panel_ThongTinLoaiPhong);
+        add(panel_ThongTinLoaiPhong);
         panel_ThongTinLoaiPhong.setLayout(new FlowLayout());
 
         btnThem = new JButton("Thêm");
@@ -240,7 +234,7 @@ public class QL_Phong extends JFrame {
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
                 "Chi tết quản lý phòng", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
-        contentPane.add(pnlBang);
+        add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
 
         // Tạo JScrollPane để chứa JTable
@@ -304,9 +298,13 @@ public class QL_Phong extends JFrame {
     }
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
+    	EventQueue.invokeLater(() -> {
             try {
-                QL_Phong frame = new QL_Phong();
+                JFrame frame = new JFrame("Quản lí phòng");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setContentPane(new QL_Phong());
+                frame.pack();
+                frame.setSize(800, 600);
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();

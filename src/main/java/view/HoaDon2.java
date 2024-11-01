@@ -3,7 +3,6 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
@@ -13,7 +12,7 @@ import constraints.CONSTRAINTS;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 
-public class HoaDon2 extends JFrame {
+public class HoaDon2 extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -56,20 +55,13 @@ public class HoaDon2 extends JFrame {
     private JTextField txtTongThanhToan;
 
     public HoaDon2() {
-        setTitle("Quản lý hóa đơn");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 1080);
-
-        JPanel contentPane = new JPanel();
-        contentPane.setBackground(new Color(255, 255, 255));
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(Color.WHITE);
 
         // Title Panel
         JPanel pnlTieuDe = new JPanel();
         pnlTieuDe.setBackground(new Color(255, 255, 255));
-        contentPane.add(pnlTieuDe);
+        add(pnlTieuDe);
         pnlTieuDe.setLayout(new FlowLayout());
 
         JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ HÓA ĐƠN");
@@ -82,7 +74,7 @@ public class HoaDon2 extends JFrame {
         pnlThongTin.setBackground(new Color(255, 255, 255));
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
                 "TÌM KIẾM GIAO DỊCH", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
-        contentPane.add(pnlThongTin);
+        add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
 
         // Form Panel
@@ -150,7 +142,7 @@ public class HoaDon2 extends JFrame {
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
                 "Thiết lập thông tin khách hàng", TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
-        contentPane.add(pnlBang);
+        add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
 
         pnlTableCTHD = new JPanel();
@@ -158,106 +150,45 @@ public class HoaDon2 extends JFrame {
                 new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
                 "Thông tin chi tiết hóa đơn", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
         pnlTableCTHD.setBackground(new Color(255, 255, 255));
-        pnlTableCTHD.setBounds(20, 48, 800, 300);
-        pnlBang.add(pnlTableCTHD, BorderLayout.CENTER); // Center of pnlBang
-        pnlTableCTHD.setLayout(new BorderLayout()); // Set layout to BorderLayout
+        pnlTableCTHD.setLayout(new BorderLayout());
+        pnlBang.add(pnlTableCTHD, BorderLayout.CENTER);
 
-        // Scroll pane for the table
         scrDSHD = new JScrollPane();
-        scrDSHD.setPreferredSize(new Dimension(0, 200)); // Chiếm ít không gian hơn
-        scrDSHD.setBounds(12, 21, 1071, 200); // Điều chỉnh kích thước nếu cần
-        pnlTableCTHD.add(scrDSHD, BorderLayout.CENTER); // Center of pnlTableCTHD
+        scrDSHD.setPreferredSize(new Dimension(0, 200));
+        pnlTableCTHD.add(scrDSHD, BorderLayout.CENTER);
 
-        // Table for detail information
         table_CTHD = new JTable();
         table_CTHD.setBackground(new Color(224, 255, 255));
 
-        // Tạo DefaultTableModel để quản lý dữ liệu cho table_CTHD
         DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Mã HĐ", "Tên Khách Hàng", "SĐT Khách Hàng" });
-
-        // Thêm một số dữ liệu mẫu
         model.addRow(new Object[] { "HD001", "Nguyễn Văn A", "0123456789" });
         model.addRow(new Object[] { "HD002", "Trần Thị B", "0987654321" });
         model.addRow(new Object[] { "HD003", "Lê Văn C", "0345678901" });
         model.addRow(new Object[] { "HD004", "Phạm Thị D", "0912345678" });
         model.addRow(new Object[] { "HD005", "Đỗ Văn E", "0789123456" });
 
-        // Gán model cho table_CTHD
         table_CTHD.setModel(model);
-
-        // Thêm bảng vào scroll pane
         scrDSHD.setViewportView(table_CTHD);
 
-
-        // Panel for invoice information
-        pnlThongTinHD = new JPanel();
-        pnlThongTinHD.setBackground(new Color(255, 255, 255));
-        pnlThongTinHD.setBounds(12, 21, 849, 200); // Điều chỉnh kích thước nếu cần
-        pnlThongTinHD.setBorder(new TitledBorder(
-                new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
-                "Thông tin hóa đơn", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-        pnlThongTinHD.setLayout(new BorderLayout());
-        pnlTableCTHD.add(pnlThongTinHD, BorderLayout.EAST); // Add to East of pnlTableCTHD
-
-        // Customer info panel
-        pnlKhachHang = new JPanel();
-        pnlKhachHang.setBorder(new LineBorder(new Color(0, 0, 0)));
-        pnlKhachHang.setBackground(new Color(255, 255, 255));
-        pnlThongTinHD.add(pnlKhachHang, BorderLayout.NORTH); // Add to North of pnlThongTinHD
-        pnlKhachHang.setLayout(new GridLayout(3, 2,0,40)); // Use GridLayout for labels and text fields
-        
-        lblMaHD = new JLabel("Mã hóa đơn");
-        lblMaHD.setFont(new Font("Times New Roman", Font.BOLD, 15));
-        pnlKhachHang.add(lblMaHD);
-
-        txtMaHD = new JTextField();
-        txtMaHD.setEditable(false);
-        pnlKhachHang.add(txtMaHD);
-
-        lblTenKH = new JLabel("Tên khách hàng");
-        lblTenKH.setFont(new Font("Times New Roman", Font.BOLD, 15));
-        pnlKhachHang.add(lblTenKH);
-
-        txtTenKH = new JTextField();
-        txtTenKH.setEditable(false);
-        pnlKhachHang.add(txtTenKH);
-
-        lblSDT = new JLabel("Số điện thoại");
-        lblSDT.setFont(new Font("Times New Roman", Font.BOLD, 15));
-        pnlKhachHang.add(lblSDT);
-
-        txtSDT = new JTextField();
-        txtSDT.setEditable(false);
-        pnlKhachHang.add(txtSDT);
-
-        
-
         btnTimKiem.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
-                // Lấy thông tin từ các trường tìm kiếm
                 String maHD = txtMaHD.getText().trim();
                 String tenKH = txtTenKH.getText().trim();
                 String sdtKH = txtSDT.getText().trim();
-                
-                // Thực hiện tìm kiếm ở đây. 
-                // Ví dụ: In thông tin tìm kiếm ra console (có thể thay thế bằng logic tìm kiếm thực tế)
+
                 System.out.println("Tìm kiếm với:");
                 System.out.println("Mã hóa đơn: " + maHD);
                 System.out.println("Tên khách hàng: " + tenKH);
                 System.out.println("Số điện thoại: " + sdtKH);
-                
-                // Logic tìm kiếm trong bảng hoặc trong dữ liệu của bạn
-                // Cập nhật bảng kết quả nếu cần thiết
             }
         });
-
-
-        // Final Settings
-        setVisible(true);
     }
 
     public static void main(String[] args) {
-        new HoaDon2();
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1920, 1080);
+        frame.add(new HoaDon2());
+        frame.setVisible(true);
     }
 }

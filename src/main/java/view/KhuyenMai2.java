@@ -13,7 +13,7 @@ import constraints.CONSTRAINTS;
 
 import javax.swing.table.DefaultTableModel;
 
-public class KhuyenMai2 extends JFrame {
+public class KhuyenMai2 extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -71,22 +71,18 @@ public class KhuyenMai2 extends JFrame {
 	private JTextField txtTenKM;
 
     public KhuyenMai2() {
-        setTitle("Quản lí khuyến mãi");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 1080);
+    	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(new Color(255, 255, 255));
+        setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        JPanel contentPane = new JPanel();
-        contentPane.setBackground(new Color(255, 255, 255));
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+        
 
         JPanel pnlTieuDe = new JPanel();
         pnlTieuDe.setBackground(new Color(255, 255, 255));
-        contentPane.add(pnlTieuDe);
+        add(pnlTieuDe);
         pnlTieuDe.setLayout(new FlowLayout());
 
-        JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ PHÒNG");
+        JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ KHUYẾN MÃI");
         lblTieuDeTrang.setHorizontalAlignment(SwingConstants.CENTER);
         lblTieuDeTrang.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 20));
         pnlTieuDe.add(lblTieuDeTrang);
@@ -96,7 +92,7 @@ public class KhuyenMai2 extends JFrame {
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
                 "Thiết lập thông tin khuyến mãi", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
        
-        contentPane.add(pnlThongTin);
+        add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
         
         panelForm = new JPanel();
@@ -221,7 +217,7 @@ public class KhuyenMai2 extends JFrame {
 		table_SP.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		table_SP.setBackground(new Color(204, 255, 255));
 		table_SP.setForeground(new Color(0, 0, 0));
-		getContentPane().add(scrDSSP = new JScrollPane(table_SP, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+		add(scrDSSP = new JScrollPane(table_SP, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS), BorderLayout.CENTER);
 		scrDSSP.setBounds(10, 45, 920, 200);
 		panel_DSSP.add(scrDSSP,BorderLayout.CENTER);
@@ -236,7 +232,7 @@ public class KhuyenMai2 extends JFrame {
         panel_2.setBackground(new Color(255, 255, 255));
         panel_2.setBorder(
                 new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        contentPane.add(panel_2);
+        add(panel_2);
         panel_2.setLayout(new FlowLayout());
 
         btnThem = new JButton("Thêm");
@@ -257,7 +253,7 @@ public class KhuyenMai2 extends JFrame {
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
                 "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
-        contentPane.add(pnlBang);
+        add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
         
         
@@ -408,9 +404,13 @@ public class KhuyenMai2 extends JFrame {
     }
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
+    	EventQueue.invokeLater(() -> {
             try {
-                KhuyenMai2 frame = new KhuyenMai2();
+                JFrame frame = new JFrame("Quản lí khuyến mãi");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setContentPane(new KhuyenMai2());
+                frame.pack();
+                frame.setSize(800, 600);
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();

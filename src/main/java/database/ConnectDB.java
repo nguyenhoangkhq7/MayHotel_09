@@ -13,7 +13,7 @@ public class ConnectDB {
 	}
 	
 	public void connect() throws SQLException {
-		String url = "jdbc:sqlserver://localhost:1433;databasename=QuanLyDatPhongKS;encrypt=false";
+		String url = "jdbc:sqlserver://localhost:1433;databasename=QLKH_09;encrypt=false";
 		String user = "sa";
 
 		String password = "123456"; // đổi thành pass word của mọi ng vào
