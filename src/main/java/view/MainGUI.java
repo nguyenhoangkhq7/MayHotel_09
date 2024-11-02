@@ -42,6 +42,7 @@ public class MainGUI extends JFrame {
 	private JButton btnNhanVien;
 	private JButton btnDichVu;
 	private JButton btnDoanhThu;
+	private JLabel lblUser;
     public MainGUI() {
   
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,7 +102,7 @@ public class MainGUI extends JFrame {
 		lblLine.setForeground(new Color(192, 192, 192));
 		panelButtonDX.add(lblLine, BorderLayout.SOUTH);
 		
-//		showMenuNVLT();
+		showMenuNVLT();
 
 //		showMenuNVQL();
 
@@ -298,7 +299,7 @@ public class MainGUI extends JFrame {
     			JPanelMenu.add(panelUser, BorderLayout.SOUTH);
     			panelUser.setLayout(new BorderLayout(0, 0));
     			
-    			JLabel lblUser = new JLabel("USER");
+    			lblUser = new JLabel("");
     			lblUser.setFont(new Font("Segoe UI", Font.BOLD, 30));
     			panelUser.add(lblUser);
     			
@@ -655,9 +656,11 @@ public class MainGUI extends JFrame {
 		JPanelMenu.add(panelUser, BorderLayout.SOUTH);
 		panelUser.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblUser = new JLabel("USER");
+		lblUser = new JLabel("");
 		lblUser.setFont(new Font("Segoe UI", Font.BOLD, 30));
 		panelUser.add(lblUser);
+		
+
 		
 		JLabel lblIconUser = new JLabel("");
 		lblIconUser.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\icons8_user_20px_1.png"));
@@ -680,8 +683,13 @@ public class MainGUI extends JFrame {
 		    }
 		});
 		timer.start();
+		
 
     }
+    public void setUser(String name) {
+        lblUser.setText(name);
+    }
+
     public static void main(String[] args) {
 		new MainGUI ();
 	}
