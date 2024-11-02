@@ -27,15 +27,17 @@ public class KhachHangDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maKH);
             ResultSet rs = stmt.executeQuery();
+            if (rs.next()) { // Thêm điều kiện kiểm tra để đảm bảo có dữ liệu
                 khachHang = new KhachHang(
                         rs.getString(1),  // maKH
                         rs.getString(2),  // hoTen
                         rs.getString(3),  // soDienThoai
-                        rs.getDouble(6),  // tienTichLuy
-                        rs.getString(4),  // soCanCuoc
-                        rs.getString(5),  // email
+                        rs.getDouble(4),  // tienTichLuy (đã chuyển từ cột 6 sang cột 4)
+                        rs.getString(5),  // soCanCuoc
+                        rs.getString(6),  // email
                         LoaiKhachHang.valueOf(rs.getString(7))  // loaiKhachHang
                 );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -56,9 +58,9 @@ public class KhachHangDAL {
                         rs.getString(1),  // maKH
                         rs.getString(2),  // hoTen
                         rs.getString(3),  // soDienThoai
-                        rs.getDouble(6),  // tienTichLuy
-                        rs.getString(4),  // soCanCuoc
-                        rs.getString(5),  // email
+                        rs.getDouble(4),  // tienTichLuy (đã chuyển từ cột 6 sang cột 4)
+                        rs.getString(5),  // soCanCuoc
+                        rs.getString(6),  // email
                         LoaiKhachHang.valueOf(rs.getString(7))  // loaiKhachHang
                 );
                 dsKhachHang.add(khachHang);
@@ -75,14 +77,14 @@ public class KhachHangDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO KhachHang (maKH, hoTen, soDienThoai, soCanCuoc, email, tienTichLuy, loaiKhachHang) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO KhachHang (maKH, hoTen, soDienThoai, tienTichLuy, soCanCuoc, email, loaiKhachHang) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khachHang.getMaKH());
             stmt.setString(2, khachHang.getHoTen());
             stmt.setString(3, khachHang.getSoDienThoai());
-            stmt.setString(4, khachHang.getSoCanCuoc());
-            stmt.setString(5, khachHang.getEmail());
-            stmt.setDouble(6, khachHang.getTienTichLuy());
+            stmt.setDouble(4, khachHang.getTienTichLuy()); // đã chuyển từ cột 6 sang cột 4
+            stmt.setString(5, khachHang.getSoCanCuoc());
+            stmt.setString(6, khachHang.getEmail());
             stmt.setString(7, khachHang.getLoaiKhachHang().name());
 
             n = stmt.executeUpdate();
@@ -98,13 +100,13 @@ public class KhachHangDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE KhachHang SET hoTen = ?, soDienThoai = ?, soCanCuoc = ?, email = ?, tienTichLuy = ?, loaiKhachHang = ? WHERE maKH = ?";
+            String sql = "UPDATE KhachHang SET hoTen = ?, soDienThoai = ?, tienTichLuy = ?, soCanCuoc = ?, email = ?, loaiKhachHang = ? WHERE maKH = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khachHang.getHoTen());
             stmt.setString(2, khachHang.getSoDienThoai());
-            stmt.setString(3, khachHang.getSoCanCuoc());
-            stmt.setString(4, khachHang.getEmail());
-            stmt.setDouble(5, khachHang.getTienTichLuy());
+            stmt.setDouble(3, khachHang.getTienTichLuy()); // đã chuyển từ cột 6 sang cột 4
+            stmt.setString(4, khachHang.getSoCanCuoc());
+            stmt.setString(5, khachHang.getEmail());
             stmt.setString(6, khachHang.getLoaiKhachHang().name());
             stmt.setString(7, maKH);
 
@@ -113,5 +115,16 @@ public class KhachHangDAL {
             e.printStackTrace();
         }
         return n > 0;
+    }
+
+    public static void main(String[] args) {
+        Connection con = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            System.out.println(new KhachHangDAL().getAllKhachHang());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
