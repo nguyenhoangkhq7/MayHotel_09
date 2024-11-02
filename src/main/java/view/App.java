@@ -13,7 +13,6 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-
 // nơi chạy chương trình
 public class App {
     public static void main(String[] args) {

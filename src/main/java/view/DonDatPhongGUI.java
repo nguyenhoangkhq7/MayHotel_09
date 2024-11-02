@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
 import constraints.CONSTRAINTS;
+import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.DonDatPhongDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.DonDatPhong;
@@ -60,27 +61,34 @@ public class DonDatPhongGUI extends JPanel {
         JPanel jpnSearch = new JPanel();
         JPanel jpnDetail = new JPanel();
 
-        container.add(jpnSearch, BorderLayout.WEST);
-        container.add(jpnDetail, BorderLayout.CENTER);
+        container.add(jpnSearch, BorderLayout.CENTER);
+//        container.add(jpnDetail, BorderLayout.CENTER);
 
         showSearchComponent(jpnSearch);
-        showDetailComponent(jpnDetail);
+//        showDetailComponent(jpnDetail);
     }
 
 
 
     private void showDanhSachDDP(JPanel container) {
         JPanel jpnDanhSachDDP = new JPanel();
-        jpnDanhSachDDP.setLayout(new GridLayout(0, 6, 25, 30));
+        jpnDanhSachDDP.setLayout(new GridLayout(0, 5, 25, 30));
         JScrollPane scroll = new JScrollPane(jpnDanhSachDDP);
-        container.add(scroll);
+
+        container.add(scroll, BorderLayout.CENTER);
+
+        ArrayList<ChiTiet_DonDatPhong_Phong> chiTiet = new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong();
+        for (ChiTiet_DonDatPhong_Phong ct : chiTiet) {
+            jpnDanhSachDDP.add(createJPNDonDatPhong(ct));
+        }
     }
+
 
 
     public JPanel createJPNDonDatPhong(ChiTiet_DonDatPhong_Phong ct) {
         JPanel jpnDDP = new JPanel();
         jpnDDP.setLayout(new BoxLayout(jpnDDP, BoxLayout.Y_AXIS));
-        jpnDDP.setPreferredSize(new Dimension(30, 60));
+        jpnDDP.setPreferredSize(new Dimension(250, 242));
         jpnDDP.setBorder(BorderFactory.createLineBorder(CONSTRAINTS.ORANGE, 2));
 
         JPanel jpn1 = new JPanel();
@@ -125,8 +133,12 @@ public class DonDatPhongGUI extends JPanel {
         jpn1.add(UIHelpers.create_Form_Label_JComboBox("Tầng", cboTang =  new JComboBox()));
         jpn1.add(UIHelpers.create_Form_Label_JComboBox("Trạng thái", cboTrangThai =  new JComboBox()));
         jpn1.add(new JPanel());
-        jpn1.add(btnTraCuu = new JButton("Tra cứu"));
+
+        JPanel jpnTmp = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        jpnTmp.add(btnTraCuu = new JButton("Tra cứu"));
         UIHelpers.set_Button_Blue_Style(btnTraCuu);
+
+        jpn1.add(jpnTmp);
 
     }
 
@@ -134,17 +146,17 @@ public class DonDatPhongGUI extends JPanel {
         JPanel jpnDetail = new JPanel(new GridLayout(6, 2));
         container.add(jpnDetail);
 
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Mã đơn", new JTextField()));
         jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Tên khách hàng", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số phòng", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Ngày nhận phòng", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Ngày trả phòng", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
-        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số điện thoại", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số căn cước", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Email", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Tên phòng", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Tầng", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Trạng thái phòng", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Ngày checkin", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Ngày checkout", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Phương thức thanh toán", new JTextField()));
+        jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Trạng thái đặt cọc", new JTextField()));
         jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
         jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
         jpnDetail.add(UIHelpers.create_Form_Label_JTextField("Số tiền", new JTextField()));
