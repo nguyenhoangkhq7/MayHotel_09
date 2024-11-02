@@ -100,7 +100,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM CT_DonDatPhong_Phong WHERE maCT_DDP_P = ?"; // Updated table name
+            String sql = "SELECT * FROM CT_DonDatPhong_Phong WHERE maCT_DonDatPhong_Phong = ?"; // Updated table name
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maCT_DDP_P);
             ResultSet rs = stmt.executeQuery();
