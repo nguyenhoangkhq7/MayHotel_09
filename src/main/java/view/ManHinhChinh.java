@@ -70,7 +70,7 @@ public class ManHinhChinh extends JFrame {
 		panelManHinhChinh.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		
 		JLabel lblBackground = new JLabel("");
-		lblBackground.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\Backround Welcome.png"));
+		lblBackground.setIcon(new ImageIcon("src/main/java/icon/Backround Welcome.png"));
 		panelManHinhChinh.add(lblBackground);
 		
 	}

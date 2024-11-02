@@ -245,7 +245,7 @@ public class JframeLogin extends JFrame {
 		panelLogin.add(lblExit);
 		
 		JLabel lblIconHotel = new JLabel("");
-		lblIconHotel.setIcon(new ImageIcon("D:\\Code\\Demo\\src\\main\\java\\icon\\Microsoft-Fluentui-Emoji-Mono-Hotel.48.png"));
+		lblIconHotel.setIcon(new ImageIcon("src/main/java/icon/Microsoft-Fluentui-Emoji-Mono-Hotel.48.png"));
 		lblIconHotel.setBounds(265, 11, 49, 42);
 		panelLogin.add(lblIconHotel);
 		
