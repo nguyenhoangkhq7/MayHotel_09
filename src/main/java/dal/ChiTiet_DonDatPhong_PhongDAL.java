@@ -29,7 +29,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong";
+            String sql = "SELECT * FROM CT_DonDatPhong_Phong"; // Updated table name
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
@@ -64,7 +64,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong WHERE maCT_DDP_P = ?";
+            String sql = "SELECT * FROM CT_DonDatPhong_Phong WHERE maCT_DDP_P = ?"; // Updated table name
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maCT_DDP_P);
             ResultSet rs = stmt.executeQuery();
@@ -96,7 +96,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO ChiTiet_DonDatPhong_Phong VALUES(?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO CT_DonDatPhong_Phong VALUES(?, ?, ?, ?, ?, ?, ?)"; // Updated table name
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, chiTiet.getMaCT_DDP_P());
             stmt.setString(2, chiTiet.getDonDatPhong().getMaDon());
@@ -119,7 +119,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE ChiTiet_DonDatPhong_Phong SET maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ?, ngayTra = ?, laPhongChuyen = ?, chietKhau = ? WHERE maCT_DDP_P = ?";
+            String sql = "UPDATE CT_DonDatPhong_Phong SET maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ?, ngayTra = ?, laPhongChuyen = ?, chietKhau = ? WHERE maCT_DDP_P = ?"; // Updated table name
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(2, chiTiet.getPhong().getMaPhong());
@@ -142,7 +142,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "DELETE FROM ChiTiet_DonDatPhong_Phong WHERE maCT_DDP_P = ?";
+            String sql = "DELETE FROM CT_DonDatPhong_Phong WHERE maCT_DDP_P = ?"; // Updated table name
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maCT_DDP_P);
             n = stmt.executeUpdate();
@@ -153,12 +153,13 @@ public class ChiTiet_DonDatPhong_PhongDAL {
     }
 
     public static void main(String[] args) {
-        ChiTiet_DonDatPhong_PhongDAL dal = new ChiTiet_DonDatPhong_PhongDAL();
-        // Example operations
-        DonDatPhong donDatPhong = new DonDatPhong("DDP001");
-        Phong phong = new Phong("P001");
-        ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong("CT001", donDatPhong, phong, LocalDate.now(), LocalDate.now().plusDays(3), true, 0.1);
-        boolean result = dal.themChiTiet(chiTiet);
-        System.out.println("Thêm mới thành công: " + result);
+        Connection con = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            System.out.println(new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

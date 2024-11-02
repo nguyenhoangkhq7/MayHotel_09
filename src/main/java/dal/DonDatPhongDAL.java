@@ -180,6 +180,13 @@ public class DonDatPhongDAL {
     }
 
     public static void main(String[] args) {
-        // Bạn có thể viết mã kiểm tra ở đây
+        Connection con = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            System.out.println(new DonDatPhongDAL().getAllDonDatPhong());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

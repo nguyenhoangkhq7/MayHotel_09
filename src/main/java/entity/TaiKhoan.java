@@ -18,8 +18,10 @@ public class TaiKhoan {
     private String matKhau;
 
     public TaiKhoan(String tenDangNhap, String matKhau) {
-        setTenDangNhap(tenDangNhap); 
-        setMatKhau(matKhau); 
+//        setTenDangNhap(tenDangNhap);
+//        setMatKhau(matKhau);
+        this.tenDangNhap = tenDangNhap;
+        this.matKhau = matKhau;
     }
 
     public String getTenDangNhap() {

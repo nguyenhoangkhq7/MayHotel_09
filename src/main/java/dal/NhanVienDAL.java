@@ -140,7 +140,7 @@ public class NhanVienDAL {
                 String diaChi = rs.getString("diaChi");
                 String vaiTro = rs.getString("vaiTro"); // Đã sửa thành String
 
-                TaiKhoan taiKhoan = new TaiKhoan(rs.getString("tenTaiKhoan"), rs.getString("matKhau"));
+                TaiKhoan taiKhoan = new TaiKhoanDAL().getTaiKhoanTheoMa(rs.getString("tenTaiKhoan"));
 
                 nhanVien = new NhanVien(maNV, hoten, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, taiKhoan);
             }
@@ -165,24 +165,13 @@ public class NhanVienDAL {
     }
 
     public static void main(String[] args) {
-        NhanVienDAL dal = new NhanVienDAL();
-        // Thêm nhân viên mới
-        TaiKhoan taiKhoan = new TaiKhoan("user1", "password123");
-        NhanVien nhanVien = new NhanVien("NV01", "Nguyen Van A", "0123456789", "123456789012", true, "example@gmail.com", "123 Street", "Nhan viên", taiKhoan);
-        boolean result = dal.themNhanVien(nhanVien);
-        System.out.println("Thêm nhân viên thành công: " + result);
-
-        // Cập nhật thông tin nhân viên
-        nhanVien.setHoten("Nguyen Van B");
-        boolean updateResult = dal.suaNhanVien(nhanVien);
-        System.out.println("Cập nhật nhân viên thành công: " + updateResult);
-
-        // Tìm nhân viên
-        NhanVien foundNhanVien = dal.getNhanVienTheoMa("NV01");
-        System.out.println("Tìm nhân viên: " + foundNhanVien);
-
-        // Xóa nhân viên
-        boolean deleteResult = dal.xoaNhanVien("NV01");
-        System.out.println("Xóa nhân viên thành công: " + deleteResult);
+        Connection con = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            System.out.println(new NhanVienDAL().getAllNhanVien());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

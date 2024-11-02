@@ -83,4 +83,21 @@ public class DonDatPhong {
     public LocalDate getNgayTra() {
         return ngayTra;
     }
+    @Override
+    public String toString() {
+        return "DonDatPhong{" +
+                "maDon='" + maDon + '\'' +
+                ", ngayTao=" + ngayTao +
+                ", phuongThucThanhToan='" + phuongThucThanhToan + '\'' +
+                ", trangThaiDonDatPhong='" + trangThaiDonDatPhong + '\'' +
+                ", trangThaiDatCoc=" + trangThaiDatCoc +
+                ", nhanVien=" + nhanVien +
+                ", khachHang=" + khachHang +
+                ", tongTien=" + tongTien +
+                ", moTa='" + moTa + '\'' +
+                ", ngayNhanPhong=" + ngayNhanPhong +
+                ", ngayTra=" + ngayTra +
+                '}';
+    }
+
 }

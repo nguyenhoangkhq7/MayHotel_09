@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
 import constraints.CONSTRAINTS;
+import dal.DonDatPhongDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.DonDatPhong;
 import entity.KhachHang;
@@ -58,12 +60,8 @@ public class DonDatPhongGUI extends JPanel {
         JPanel jpnSearch = new JPanel();
         JPanel jpnDetail = new JPanel();
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jpnSearch, jpnDetail);
-        splitPane.setResizeWeight(0.4); // Đặt tỷ lệ 60% cho panel trái và 40% cho panel phải
-        splitPane.setDividerSize(5);    // Độ rộng của thanh chia
-        splitPane.setContinuousLayout(true);
-
-        container.add(splitPane);
+        container.add(jpnSearch, BorderLayout.WEST);
+        container.add(jpnDetail, BorderLayout.CENTER);
 
         showSearchComponent(jpnSearch);
         showDetailComponent(jpnDetail);
@@ -120,6 +118,8 @@ public class DonDatPhongGUI extends JPanel {
         container.add(boxContain);
 
         JPanel jpn1 = new JPanel(new GridLayout(3, 2));
+        boxContain.add(jpn1);
+
         jpn1.add(UIHelpers.create_Form_Label_JDateChooser("Từ ngày",jdcNgayDen = new JDateChooser()));
         jpn1.add(UIHelpers.create_Form_Label_JDateChooser("Đến ngày", jdcNgayDi = new JDateChooser()));
         jpn1.add(UIHelpers.create_Form_Label_JComboBox("Tầng", cboTang =  new JComboBox()));
@@ -127,6 +127,7 @@ public class DonDatPhongGUI extends JPanel {
         jpn1.add(new JPanel());
         jpn1.add(btnTraCuu = new JButton("Tra cứu"));
         UIHelpers.set_Button_Blue_Style(btnTraCuu);
+
     }
 
     public void showDetailComponent(JPanel container) {
@@ -177,9 +178,5 @@ public class DonDatPhongGUI extends JPanel {
         headerRight.setOpaque(false);
 
         this.add(jpnHeader, BorderLayout.NORTH);
-    }
-
-    public static void main(String[] args) {
-        new DonDatPhongGUI();
     }
 }
