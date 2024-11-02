@@ -2,6 +2,7 @@ package bus;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import dal.ChiTiet_DonDatPhong_PhongDAL;
@@ -15,6 +16,22 @@ import entity.PhieuThuChi;
 
 public class BangBaoCaoBUS {
 	
+	public double tinhTienPhong(ChiTiet_DonDatPhong_Phong ctdddpp) {
+	    // Lấy thông tin giá phòng và chiết khấu
+	    double donGia = ctdddpp.getPhong().getLoaiPhong().getDonGia();
+	    double chietKhauPhong = ctdddpp.getPhong().getLoaiPhong().getChietKhau(); // Phần trăm chiết khấu của loại phòng
+	    double chietKhauCTDDPP = ctdddpp.getChietKhau(); // Chiết khấu cụ thể cho chi tiết đơn đặt phòng
+
+	    // Tính số ngày ở, đảm bảo tối thiểu là 1
+	    long soNgayO = Math.max(ChronoUnit.DAYS.between(ctdddpp.getNgayNhanPhong(), ctdddpp.getNgayTra()), 1);
+
+	    // Tính tiền phòng
+	    double tienPhong = donGia * soNgayO; // Tiền phòng chưa chiết khấu
+	    tienPhong -= tienPhong * (chietKhauPhong / 100); // Áp dụng chiết khấu của loại phòng
+	    tienPhong -= tienPhong * (chietKhauCTDDPP / 100); // Áp dụng chiết khấu của chi tiết đơn đặt phòng
+
+	    return tienPhong;
+	}
 	public Object[][] layDuLieuBang(LocalDate startDate, LocalDate endDate) {
 	    // Lấy danh sách hóa đơn trong khoảng thời gian
 	    ArrayList<HoaDon> dsHoaDon = new HoaDonDAL().getHoaDonByDateRange(startDate, endDate);
@@ -35,6 +52,15 @@ public class BangBaoCaoBUS {
 
 	    // Biến đếm số phòng
 	    int soPhongDuocThue = 0;
+	    
+
+        // Biến đếm cho từng loại phòng
+        int soLoaiDeluxKing = 0;
+        int soLoaiDeluxTwin = 0;
+        int soLoaiDeluxTriple = 0;
+        int soLoaiExecutiveSuite = 0;
+        int soLoaiExecutiveTwin = 0;
+        int soLoaiSuiteFamily = 0;
 
 	    // Tính toán khoản thu và khoản chi từ phiếu thu chi
 	    double khoanThu = 0; // Tổng tiền phiếu có loại phiếu là Thu
@@ -74,6 +100,33 @@ public class BangBaoCaoBUS {
                 ///
                 ChiTiet_DonDatPhong_Phong_DichVuDAL dichVuDAL = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
                 for (ChiTiet_DonDatPhong_Phong chiTiet : chiTietList) {
+                	doanhThuPhong += tinhTienPhong(chiTiet);
+                	
+                	// Cập nhật số lượng theo loại phòng
+                    String loaiPhong = chiTiet.getPhong().getLoaiPhong().getTenLoaiPhong(); // Giả sử có phương thức getTen()
+                    switch (loaiPhong) {
+                        case "Delux King":
+                            soLoaiDeluxKing++;
+                            break;
+                        case "Delux TWin":
+                            soLoaiDeluxTwin++;
+                            break;
+                        case "Delux Triple":
+                            soLoaiDeluxTriple++;
+                            break;
+                        case "Executive Suite":
+                            soLoaiExecutiveSuite++;
+                            break;
+                        case "Executive TWin":
+                            soLoaiExecutiveTwin++;
+                            break;
+                        case "Suite Family":
+                            soLoaiSuiteFamily++;
+                            break;
+                        default:
+                            break;
+                    }
+                    
                     ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> danhSachDichVu = dichVuDAL.getDSChiTietDonDatPhongPhongDichVuTheoMa(chiTiet.getMaCT_DDP_P());
                     
                     for (ChiTiet_DonDatPhong_Phong_DichVu ctDV : danhSachDichVu) {
@@ -105,23 +158,22 @@ public class BangBaoCaoBUS {
 	        {"1", "Số hóa đơn", String.valueOf(soHoaDon)},
 	        {"2", "Số hóa đơn hủy", String.valueOf(soHoaDonHuy)},
 	        {"3", "Tổng doanh thu (đã bao gồm VAT)", df.format(tongDoanhThu)},
-	        {"4", "VAT", String.valueOf(vat)},
-	        {"5", "Doanh thu phòng", String.valueOf(doanhThuPhong)},
-	        {"6", "Dịch vụ", df.format(dichVu)}, 
-	        {"7", "Khoản thu khác", df.format(khoanThuKhac)},
-	        {"8", "Ngân hàng", df.format(tienNganHang)},
-	        {"9", "Tiền mặt", df.format(tienMat)},
-	        {"10", "Khuyến mãi", df.format(khuyenMai)},
-	        {"11", "Khoản chi khác", df.format(khoanChiKhac)},
-	        {"12", "Tổng doanh thu ròng", df.format(tongDoanhThuRong)},
-	        {"13", "Thực thu", df.format(thucThu)},
-	        {"14", "Số phòng được thuê", String.valueOf(soPhongDuocThue)}, // Số phòng được thuê
-	        {"15", "Loại 1", "0"},
-	        {"16", "Loại 2", "0"},
-	        {"17", "Loại 3", "0"},
-	        {"18", "Loại 4", "0"},
-	        {"19", "Loại 5", "0"},
-	        {"20", "Loại 6", "0"}
+	        {"4", "Doanh thu phòng", df.format(doanhThuPhong)},
+	        {"5", "Dịch vụ", df.format(dichVu)}, 
+	        {"6", "Khoản thu khác", df.format(khoanThuKhac)},
+	        {"7", "Ngân hàng", df.format(tienNganHang)},
+	        {"8", "Tiền mặt", df.format(tienMat)},
+	        {"9", "Khuyến mãi", df.format(khuyenMai)},
+	        {"10", "Khoản chi khác", df.format(khoanChiKhac)},
+	        {"11", "Tổng doanh thu ròng", df.format(tongDoanhThuRong)},
+	        {"12", "Thực thu", df.format(thucThu)},
+	        {"13", "Số phòng được thuê", String.valueOf(soPhongDuocThue)}, // Số phòng được thuê
+	        {"14", "Loại Delux King", String.valueOf(soLoaiDeluxKing)},
+            {"15", "Loại Delux Twin", String.valueOf(soLoaiDeluxTwin)},
+            {"16", "Loại Delux Triple", String.valueOf(soLoaiDeluxTriple)},
+            {"17", "Loại Executive Suite", String.valueOf(soLoaiExecutiveSuite)},
+            {"18", "Loại Executive Twin", String.valueOf(soLoaiExecutiveTwin)},
+            {"19", "Loại Suite Family", String.valueOf(soLoaiSuiteFamily)}
 	    };
 	}
 

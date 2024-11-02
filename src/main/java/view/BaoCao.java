@@ -31,45 +31,25 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 
-public class BaoCao extends JFrame {
+public class BaoCao extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
     private JPanel content; // Khai báo JPanel con
 
-	/**
-	 * Launch the application.
-	 */
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BaoCao frame = new BaoCao();
-					frame.setVisible(true);
-			        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  // Đặt JFrame ở trạng thái toàn màn hình
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	
 	public BaoCao() {
-        setTitle("Báo Cáo");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1920, 1080);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+	     setLayout(new BorderLayout());
+			
+	 	
 
-		setContentPane(contentPane);
+
+		
+		contentPane = new JPanel();
+
 		contentPane.setLayout(new BorderLayout(0, 0));
+		add(contentPane, BorderLayout.CENTER);
+
 		// menu
 		//content
 		content = new JPanel();
