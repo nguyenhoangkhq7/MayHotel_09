@@ -99,7 +99,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
 
     // Update record
     public boolean suaChiTiet(String maCT_DDP_P_DV, ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
-        String sql = "UPDATE ChiTiet_DonDatPhong_Phong_DichVu SET soLuongDat = ?, ngayTao = ?, maDichVu = ?, maCT_DDP_P = ?, moTa = ? WHERE maCT_DDP_P_DV = ?";
+        String sql = "UPDATE ChiTiet_DonDatPhong_Phong_DichVu SET soLuongDat = ?, ngayTao = ?, maDichVu = ?, cT_DDP_P = ?, moTa = ? WHERE maCT_DDP_P_DV = ?";
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 

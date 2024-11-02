@@ -74,31 +74,31 @@ public class KhuyenMaiDAL {
         return n > 0;
     }
 
-    // Sửa thông tin khuyến mãi trong cơ sở dữ liệu
-    public boolean suaKhuyenMai(String maKhuyenMai, KhuyenMai khuyenMai) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "UPDATE KhuyenMai SET tenKhuyenMai = ?, giaTri = ?, ngayTao = ?, conHoatDong = ?, soLuong = ?, ngayHetHan = ?, dieuKienApDung = ? WHERE maKM = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, khuyenMai.getTenKhuyenMai());
-            stmt.setDouble(2, khuyenMai.getGiaTri());
-            stmt.setDate(3, Date.valueOf(khuyenMai.getNgayTao()));
-            stmt.setBoolean(4, khuyenMai.getConHoatDong());
-            stmt.setInt(5, khuyenMai.getSoLuong());
-            stmt.setDate(6, Date.valueOf(khuyenMai.getNgayHetHan()));
-            stmt.setString(7, khuyenMai.getDieuKienApDung());
-            stmt.setString(8, maKhuyenMai);  // Fixed the order here
+// Sửa thông tin khuyến mãi trong cơ sở dữ liệu
+public boolean suaKhuyenMai(String maKhuyenMai, KhuyenMai khuyenMai) {
+    int n = 0;
+    try {
+        ConnectDB.getInstance().connect();
+        con = ConnectDB.getConnection();
+        String sql = "UPDATE KhuyenMai SET tenKhuyenMai = ?, giaTri = ?, ngayTao = ?, conHoatDong = ?, soLuong = ?, ngayHetHan = ?, dieuKienApDung = ? WHERE maKM = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, khuyenMai.getTenKhuyenMai());
+        stmt.setDouble(2, khuyenMai.getGiaTri());
+        stmt.setDate(3, Date.valueOf(khuyenMai.getNgayTao()));
+        stmt.setBoolean(4, khuyenMai.getConHoatDong());
+        stmt.setInt(5, khuyenMai.getSoLuong());
+        stmt.setDate(6, Date.valueOf(khuyenMai.getNgayHetHan()));
+        stmt.setString(7, khuyenMai.getDieuKienApDung());
+        stmt.setString(8, maKhuyenMai);  // Fixed the order here
 
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return n > 0;
+        n = stmt.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeConnection();
     }
+    return n > 0;
+}
 
     // Tìm khuyến mãi theo mã khuyến mãi
     public KhuyenMai getKhuyenMaiTheoMa(String maKhuyenMai) {
@@ -106,7 +106,7 @@ public class KhuyenMaiDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM KhuyenMai WHERE maKM = ?"; // Fixed column name to "maKM"
+            String sql = "SELECT * FROM KhuyenMai WHERE maKhuyenMai = ?"; // Fixed column name to "maKM"
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maKhuyenMai);
             ResultSet rs = stmt.executeQuery();
@@ -117,7 +117,7 @@ public class KhuyenMaiDAL {
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 int soLuong = rs.getInt("soLuong");
                 LocalDate ngayHetHan = rs.getDate("ngayHetHan").toLocalDate();
-                String dieuKienApDung = rs.getString("dieuKienApDung");
+                String dieuKienApDung = rs.getString("khachHangApDung");
                 khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayTao, conHoatDong, soLuong, ngayHetHan, dieuKienApDung);
             }
         } catch (SQLException e) {
