@@ -22,7 +22,43 @@ public class ChiTiet_DonDatPhong_PhongDAL {
     public ChiTiet_DonDatPhong_PhongDAL() {
         dsChiTiet = new ArrayList<>();
     }
+    public ArrayList<ChiTiet_DonDatPhong_Phong> getChiTietDonDatPhongPhongTheoMaDDP(String maDonDatPhong) {
+        ArrayList<ChiTiet_DonDatPhong_Phong> chiTietList = new ArrayList<>();
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            
+            // Câu lệnh SQL có điều kiện WHERE
+            String sql = "SELECT * FROM CT_DonDatPhong_Phong WHERE maDonDatPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maDonDatPhong);  // Truyền giá trị mã đơn đặt phòng vào câu lệnh SQL
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                String maCT_DDP_P = rs.getString(1);
+                LocalDate ngayTra = rs.getDate(5).toLocalDate();
+                String maPhong = rs.getString(3);
+                LocalDate ngayNhanPhong = rs.getDate(4).toLocalDate();
+                boolean laPhongChuyen = rs.getBoolean(6);
+                double chietKhau = rs.getDouble(7);
 
+                // Lấy đối tượng DonDatPhong và Phong
+                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(maDonDatPhong);
+                Phong phong = new PhongDAL().getPhongTheoMa(maPhong);
+
+                // Tạo đối tượng ChiTiet_DonDatPhong_Phong với dữ liệu đã lấy
+                ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong(
+                        maCT_DDP_P, donDatPhong, phong, ngayNhanPhong, ngayTra, laPhongChuyen, chietKhau
+                );
+                chiTietList.add(chiTiet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return chiTietList;
+    }
+    
     // Retrieve all ChiTiet_DonDatPhong_Phong records
     public ArrayList<ChiTiet_DonDatPhong_Phong> getAllChiTietDonDatPhongPhong() {
         ArrayList<ChiTiet_DonDatPhong_Phong> chiTietList = new ArrayList<>();

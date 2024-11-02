@@ -20,6 +20,39 @@ public class PhieuThuChiDAL {
         dsPhieuThuChi = new ArrayList<>();
     }
 
+    public ArrayList<PhieuThuChi> getPhieuThuChiByDateRange(LocalDate startDate, LocalDate endDate) {
+        ArrayList<PhieuThuChi> dsPhieuThuChi = new ArrayList<>();
+
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM PhieuThuChi WHERE ngayTao BETWEEN ? AND ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setDate(1, Date.valueOf(startDate));
+            stmt.setDate(2, Date.valueOf(endDate));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String maPhieu = rs.getString(1);
+                String loaiPhieu = rs.getString(2);
+                String moTa = rs.getString(3);
+                LocalDate ngayTao = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
+                double soTien = rs.getDouble(5);
+                String phuongThuc = rs.getString(6);
+                boolean conHoatDong = rs.getBoolean(7);
+                NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(8));
+
+                PhieuThuChi phieuThuChi = new PhieuThuChi(maPhieu, loaiPhieu, moTa, ngayTao, soTien, phuongThuc, conHoatDong, nhanVien);
+                dsPhieuThuChi.add(phieuThuChi);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return dsPhieuThuChi;
+    }
+    
     public ArrayList<PhieuThuChi> getAllPhieuThuChi() {
         try {
             ConnectDB.getInstance().connect();

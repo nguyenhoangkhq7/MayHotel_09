@@ -30,6 +30,16 @@ public class HoaDon {
 		this.ngayTao = ngayTao;
 	}
 
+	public DonDatPhong getDonDatPhong() {
+		return donDatPhong;
+	}
+
+
+	public void setDonDatPhong(DonDatPhong donDatPhong) {
+		this.donDatPhong = donDatPhong;
+	}
+
+
 	// Constructor 1 tham so maHoaDon
 	public HoaDon(String maHoaDon) {
 		this.maHoaDon = maHoaDon;

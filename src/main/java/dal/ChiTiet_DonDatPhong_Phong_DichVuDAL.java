@@ -22,6 +22,36 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
         return ConnectDB.getConnection();
     }
 
+    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMa(String maCT_DDP_P) {
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE cT_DDP_P = ?";
+        
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            
+            pstmt.setString(1, maCT_DDP_P);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String maCT_DDP_P_DV = rs.getString(1);
+                    int soLuongDat = rs.getInt(2);
+                    LocalDate ngayTao = rs.getDate(3).toLocalDate();
+                    String maDichVu = rs.getString(4);
+                    String moTa = rs.getString(6);
+
+                    DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
+                    ChiTiet_DonDatPhong_Phong cT_DDP_P = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maCT_DDP_P);
+
+                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, ngayTao, dichVu, cT_DDP_P, moTa));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching records by CT DDP P: " + e.getMessage());
+        }
+        
+        return chiTietList;
+    }
+    
     // Get all ChiTiet_DonDatPhong_Phong_DichVu records
     public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getAllChiTietDonDatPhongPhongDichVu() {
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();

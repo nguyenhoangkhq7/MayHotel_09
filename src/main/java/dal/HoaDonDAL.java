@@ -21,6 +21,56 @@ public class HoaDonDAL {
         dsHoaDon = new ArrayList<>();
     }
 
+    public ArrayList<HoaDon> getHoaDonByDateRange(LocalDate startDate, LocalDate endDate) {
+        ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
+
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM HoaDon WHERE ngayTao BETWEEN ? AND ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            
+            // Thiết lập tham số cho câu truy vấn
+            stmt.setDate(1, Date.valueOf(startDate));
+            stmt.setDate(2, Date.valueOf(endDate));
+            ResultSet rs = stmt.executeQuery();
+
+            // Lặp qua từng hàng kết quả
+            while (rs.next()) {
+                String maHoaDon = rs.getString("maHoaDon");
+                LocalDate ngayTao = rs.getDate("ngayTao") != null ? rs.getDate("ngayTao").toLocalDate() : null;
+                Boolean trangThai = rs.getBoolean("trangThai");
+                double thanhTien = rs.getDouble("thanhTien");
+                
+                // Lấy thông tin từ các bảng liên quan
+                NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString("maNV"));
+                String maKhuyenMai = rs.getString("maKhuyenMai"); // Lấy mã khuyến mãi
+                KhuyenMai khuyenMai = null; // Khởi tạo biến khuyến mãi là null
+
+                // Kiểm tra xem mã khuyến mãi có phải là null không
+                if (maKhuyenMai != null) { // Sử dụng null thay vì "NULL"
+                    khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(maKhuyenMai);
+                }
+                
+                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(rs.getString("maDon"));
+                
+                // Tạo đối tượng HoaDon
+                HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);
+                dsHoaDon.add(hoaDon);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log lỗi hoặc xử lý ngoại lệ
+        } finally {
+            // Đảm bảo rằng kết nối được đóng sau khi sử dụng
+            try {
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return dsHoaDon;
+    }
     // Lấy tất cả các danh sách hóa đơn từ cơ sở dữ liệu
     public ArrayList<HoaDon> getAllHoaDon() {
         try {

@@ -1,25 +1,27 @@
 package view;
 
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Color;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
-
 import constraints.CONSTRAINTS;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -27,61 +29,35 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.JScrollBar;
+
+import bus.BangBaoCaoBUS;
+
 import javax.swing.JScrollPane;
-import javax.swing.border.BevelBorder;
+import javax.swing.ImageIcon;
+import java.awt.Cursor;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.print.*;
 
-public class BangBaoCao extends JFrame {
+public class BangBaoCao extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTable table;
+    private static final long serialVersionUID = 1L;
+    private JTable table;
+    private JPanel content;
+     private JPanel contentPane;
+     private JLabel  lbltennguoithongke;
+     private JLabel lbngaythongke;
+    private BangBaoCaoBUS bangBaoCaoBUS;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					BangBaoCao frame = new BangBaoCao();
-					frame.setVisible(true);
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  // Đặt JFrame ở trạng thái toàn màn hình
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	private String layThoiGianThongKeBang() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-
-        // Lấy thời gian hiện tại và thời gian bắt đầu của ngày
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
-
-        // Định dạng thời gian để hiển thị
-        return startOfDay.format(formatter) + " - " + now.format(formatter);
-    }
-	/**
-	 * Create the frame.
-	 */
-	public BangBaoCao() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1920, 1080);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+    public BangBaoCao(BaoCao baoCaoFrame) {
+	     setLayout(new BorderLayout());
 		
-		JPanel menu = new JPanel();
-		contentPane.add(menu, BorderLayout.WEST);
-		
-		JPanel content = new JPanel();
-		contentPane.add(content, BorderLayout.CENTER);
-		content.setLayout(new BorderLayout(0, 0));
-		
+	
+ JPanel content = new JPanel();
+        content.setLayout(new BorderLayout(0, 0));
+        add(content, BorderLayout.CENTER);
+
 		
 		
 		JPanel header = new JPanel();
@@ -93,7 +69,7 @@ public class BangBaoCao extends JFrame {
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
 		
-	/////////head
+		/////////head
 		JButton btninbaocao = new JButton("In báo cáo");
 		btninbaocao.setForeground(new Color(243, 125, 0));
 		btninbaocao.setBackground(Color.WHITE);
@@ -101,6 +77,8 @@ public class BangBaoCao extends JFrame {
 		btninbaocao.setFocusPainted(false);
 		btninbaocao.setToolTipText("bấm vào để in báo cáo ra file pdf");
 		btninbaocao.setFont(new Font("Times New Roman", Font.BOLD, 20));
+		btninbaocao.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Đặt con trỏ chuột thành dạng tay
+
 		 btninbaocao.addMouseListener(new MouseAdapter() {
 			 @Override
 	            public void mouseEntered(MouseEvent e) {
@@ -113,29 +91,56 @@ public class BangBaoCao extends JFrame {
              // Khôi phục viền và màu nền gốc khi chuột rời đi
              btninbaocao.setBackground(Color.WHITE); // Khôi phục màu nền ban đầu
          }
+         public void mouseClicked(MouseEvent e) {
+             inBaoCao(); // Gọi phương thức in báo cáo khi nhấn nút
+         }
 	          
 		 } );
 		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setIcon(new ImageIcon("D:\\\\GITHTB_PTUD\\\\MayHotel_09\\\\src\\\\main\\\\java\\\\icon\\\\back.png"));
+		lblNewLabel_1.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Đặt con trỏ chuột thành dạng tay
+		lblNewLabel_1.addMouseListener(new java.awt.event.MouseAdapter() {
+	            public void mouseClicked(java.awt.event.MouseEvent evt) {
+	                baoCaoFrame.showMainContent(); // Quay về màn hình chính
+	            }
+	            public void mouseEntered(MouseEvent evt) {
+	            	lblNewLabel_1.setIcon(new ImageIcon("D:\\\\GITHTB_PTUD\\\\MayHotel_09\\\\src\\\\main\\\\java\\\\icon\\\\backcam.png")); // Đổi icon sang màu cam khi trỏ vào
+	            }
+
+	            public void mouseExited(MouseEvent evt) {
+	            	lblNewLabel_1.setIcon(new ImageIcon("D:\\\\GITHTB_PTUD\\\\MayHotel_09\\\\src\\\\main\\\\java\\\\icon\\\\back.png")); // Trở về icon ban đầu khi trỏ ra
+	            }
+	        });
+
+
 		//Group của head
 		GroupLayout gl_header = new GroupLayout(header);
 		gl_header.setHorizontalGroup(
 			gl_header.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_header.createSequentialGroup()
-					.addGap(34)
+				.addGroup(gl_header.createSequentialGroup()
+					.addGap(22)
+					.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(lblNewLabel)
-					.addPreferredGap(ComponentPlacement.RELATED, 1494, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 1524, Short.MAX_VALUE)
 					.addComponent(btninbaocao, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
 					.addGap(20))
 		);
 		gl_header.setVerticalGroup(
 			gl_header.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_header.createSequentialGroup()
-					.addGap(20)
-					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-				.addGroup(Alignment.TRAILING, gl_header.createSequentialGroup()
+					.addContainerGap(32, Short.MAX_VALUE)
+					.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_header.createSequentialGroup()
 					.addGap(30)
-					.addComponent(btninbaocao, GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+					.addComponent(btninbaocao, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
 					.addGap(20))
+				.addGroup(Alignment.TRAILING, gl_header.createSequentialGroup()
+					.addContainerGap(36, Short.MAX_VALUE)
+					.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		header.setLayout(gl_header);
 	
@@ -159,19 +164,19 @@ public class BangBaoCao extends JFrame {
 		lbtentieudebang.setFont(new Font("Times New Roman", Font.BOLD, 32));
 		lbtentieudebang.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel lbngaythongke = new JLabel(layThoiGianThongKeBang());
+		lbngaythongke = new JLabel(layThoiGianThongKeBang());
 		lbngaythongke.setHorizontalAlignment(SwingConstants.CENTER);
 		lbngaythongke.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		
-		JLabel lbltennguoithongke = new JLabel("Nhân viên: Thái Bảo");
+	    lbltennguoithongke = new JLabel("Nhân viên: Thái Bảo");
 		lbltennguoithongke.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
 		lbltennguoithongke.setHorizontalAlignment(SwingConstants.CENTER);
 		GroupLayout gl_tieudebang = new GroupLayout(tieudebang);
 		gl_tieudebang.setHorizontalGroup(
 			gl_tieudebang.createParallelGroup(Alignment.LEADING)
-				.addComponent(lbtentieudebang, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
 				.addComponent(lbngaythongke, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
 				.addComponent(lbltennguoithongke, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
+				.addComponent(lbtentieudebang, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
 		);
 		gl_tieudebang.setVerticalGroup(
 			gl_tieudebang.createParallelGroup(Alignment.LEADING)
@@ -194,29 +199,15 @@ public class BangBaoCao extends JFrame {
 		table = new JTable();
 		table.setFillsViewportHeight(true);
 		table.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		bangBaoCaoBUS = new BangBaoCaoBUS();
+		// Xác định khoảng thời gian (có thể thay đổi theo yêu cầu)
+        LocalDate startDate = LocalDate.of(2024, 10, 5); // Ngày bắt đầu
+        LocalDate endDate = LocalDate.of(2024, 10, 12);   // Ngày kết thúc
+
+		Object[][] layDuLieuBang = bangBaoCaoBUS.layDuLieuBang(startDate, endDate);
+			
 		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"1", "S\u1ED1 h\u00F3a \u0111\u01A1n", "0"},
-				{"2", "S\u1ED1 h\u00F3a \u0111\u01A1n h\u1EE7y", "0"},
-				{"3", "T\u1ED5ng doanh thu (\u0111\u00E3 bao g\u1ED3m VAT)", "0"},
-				{"4", "VAT", "0"},
-				{"5", "Doanh thu ph\u00F2ng", "0"},
-				{"6", "D\u1ECBch v\u1EE5", "0"},
-				{"7", "Kho\u1EA3n thu kh\u00E1c", "0"},
-				{"8", "Ng\u00E2n h\u00E0ng", "0"},
-				{"9", "Ti\u1EC1n m\u1EB7t", "0"},
-				{"10", "Khuy\u1EBFn m\u00E3i", "0"},
-				{"11", "Kho\u1EA3n chi kh\u00E1c", "0"},
-				{"12", "T\u1ED5ng doanh thu r\u00F2ng", "0"},
-				{"13", "Th\u1EF1c thu", "0"},
-				{"14", "S\u1ED1 ph\u00F2ng \u0111\u01B0\u1EE3c thu\u00EA", "0"},
-				{"15", "Loai 1", "0"},
-				{"16", "Lo\u1EA1i 2", "0"},
-				{"17", "Lo\u1EA1i 3", "0"},
-				{"18", "Lo\u1EA1i 4", "0"},
-				{"19", "Loai 5", "0"},
-				{"20", "Lo\u1EA1i 6", "0"},
-			},
+			layDuLieuBang,
 			new String[] {
 				"STT", "C\u00E1c m\u1EE5c", "T\u1ED5ng"
 			}
@@ -227,11 +218,14 @@ public class BangBaoCao extends JFrame {
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
+			boolean[] columnEditables = new boolean[] {
+				false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
 		});
-		table.getColumnModel().getColumn(0).setResizable(false);
-		table.getColumnModel().getColumn(1).setResizable(false);
 		table.getColumnModel().getColumn(1).setPreferredWidth(900);
-		table.getColumnModel().getColumn(2).setResizable(false);
 		table.getColumnModel().getColumn(2).setPreferredWidth(900);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(30); // Thay đổi 40 thành chiều cao bạn muốn
@@ -242,21 +236,25 @@ public class BangBaoCao extends JFrame {
      // Căn giữa cột STT
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer); // Áp dụng cho cột STT (cột 0)
-      // Căn giữa cột STT
-        DefaultTableCellRenderer centerRenderer1 = new DefaultTableCellRenderer();
-        centerRenderer1.setHorizontalAlignment(SwingConstants.RIGHT);
-        table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer1); // Áp dụng cho cột STT (cột 0)
-     // Tạo renderer in nghiêng cho cột 2
-        DefaultTableCellRenderer italicRenderer = new DefaultTableCellRenderer() {
-            @Override
-            public void setValue(Object value) {
-                setFont(new Font("Times New Roman", Font.ITALIC, 18)); // Thiết lập font in nghiêng
-                setText(value != null ? value.toString() : "");
-            }
-        };
-        table.getColumnModel().getColumn(1).setCellRenderer(italicRenderer); // Áp dụng cho cột "Các mục" (cột 1)
-        
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer); // Áp dụng cho cột "STT"
+
+
+     // Tạo renderer căn phải cho cột "Tổng"
+     DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+     rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+     table.getColumnModel().getColumn(2).setCellRenderer(rightRenderer); // Áp dụng cho cột "Tổng"
+
+
+  // Tạo renderer in nghiêng cho cột "Các mục"
+  DefaultTableCellRenderer italicRenderer = new DefaultTableCellRenderer() {
+      @Override
+      public void setValue(Object value) {
+          setFont(new Font("Times New Roman", Font.ITALIC, 18)); // Thiết lập font in nghiêng
+          setText(value != null ? value.toString() : "");
+      }
+  };
+  table.getColumnModel().getColumn(1).setCellRenderer(italicRenderer); // Áp dụng cho cột "Các mục"
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		bang.setLayout(new BorderLayout());
 		bang.add(scrollPane, BorderLayout.CENTER);  
@@ -266,6 +264,134 @@ public class BangBaoCao extends JFrame {
 		bang.add(taolechobang1, BorderLayout.EAST);
 		JPanel taolechobang2 = new JPanel();
 		bang.add(taolechobang2, BorderLayout.WEST);
+		
+		
 	}
-	/////
+    
+ // Phương thức để in báo cáo
+    public void inBaoCao() {
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(new PrintTable());
+        boolean doPrint = job.printDialog();
+        if (doPrint) {
+            try {
+                job.print();
+            } catch (PrinterException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Lớp nội bộ để thực hiện việc in bảng
+    private class PrintTable implements Printable {
+        @Override
+        public int print(Graphics g, PageFormat pageFormat, int pageIndex) throws PrinterException {
+            if (pageIndex > 0) {
+                return NO_SUCH_PAGE;
+            }
+
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+            // Quốc hiệu
+            g2d.setFont(new Font("Arial", Font.BOLD, 14));
+            g2d.drawString("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM", 150, 30);
+            g2d.setFont(new Font("Arial", Font.PLAIN, 14));
+            g2d.drawString("Độc lập - Tự do - Hạnh phúc", 190, 50);
+
+            // Biên bản bàn giao ca
+            g2d.setFont(new Font("Arial", Font.BOLD, 18));
+            g2d.drawString("BIÊN BẢN BÀN GIAO CA", 170, 80);
+            
+            String tenNhanVien = lbltennguoithongke.getText();
+           
+            String date = lbngaythongke.getText(); // Lấy chuỗi từ JLabel
+            String[] parts = date.split("-"); // Tách chuỗi tại dấu gạch ngang
+
+            // Kiểm tra xem phần tử thứ hai có tồn tại không và lấy giá trị
+            String datePart = (parts.length > 1) ? parts[1].trim() : ""; // Lấy phần sau dấu gạch ngang và loại bỏ khoảng trắng
+
+            
+            // Thông tin nhân viên và ngày in
+            g2d.setFont(new Font("Arial", Font.PLAIN, 12));
+            g2d.drawString(tenNhanVien , 50, 120);
+            g2d.drawString(datePart, 400, 120);
+            
+            
+            // Sao chép mô hình dữ liệu từ bảng `table`
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            DefaultTableModel printModel = new DefaultTableModel();
+
+            // Sao chép cấu trúc cột
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                printModel.addColumn(model.getColumnName(i));
+            }
+
+            // Sao chép từng hàng dữ liệu
+            for (int i = 0; i < model.getRowCount(); i++) {
+                Object[] row = new Object[model.getColumnCount()];
+                for (int j = 0; j < model.getColumnCount(); j++) {
+                    row[j] = model.getValueAt(i, j);
+                }
+                printModel.addRow(row);
+            }
+
+            // Tạo bảng mới với dữ liệu sao chép
+            JTable printTable = new JTable(printModel);
+
+            // Thiết lập độ rộng cột cho bảng in
+            printTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+            printTable.getColumnModel().getColumn(1).setMinWidth(250);
+            printTable.getColumnModel().getColumn(1).setMaxWidth(400);
+
+            // Độ rộng cột thứ 3
+            printTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+            printTable.getColumnModel().getColumn(2).setMinWidth(100);
+            printTable.getColumnModel().getColumn(2).setMaxWidth(200);
+
+            // Đặt kích thước bảng in
+            printTable.setSize((int) pageFormat.getImageableWidth(), printTable.getPreferredSize().height);
+
+            
+            // Dịch bảng vào vị trí mong muốn
+            int yPosition = 80;
+            g2d.translate(80, yPosition);
+         // Vẽ tiêu đề các cột
+            g2d.setFont(new Font("Arial", Font.BOLD, 12));
+            g2d.drawString("STT", 35, yPosition + 20);
+            g2d.drawString("Các mục", 170, yPosition + 20);
+            g2d.drawString("Tổng", 370, yPosition + 20);
+
+            // Vẽ đường kẻ dưới tiêu đề cột
+            g2d.drawLine(0, yPosition + 25, 425, yPosition + 25); // Dòng kẻ dưới tiêu đề
+
+            // Dịch tiếp xuống dưới để in nội dung bảng sau tiêu đề
+            yPosition += 30; // Cập nhật vị trí y để in bảng
+            g2d.translate(0, yPosition);
+
+            printTable.printAll(g2d); // In nội dung bảng
+            // Vẽ phần chữ ký dưới bảng in
+            int signaturePositionY = yPosition + printTable.getHeight() ; // Sử dụng chiều cao của `printTable`
+            g2d.setFont(new Font("Arial", Font.ITALIC, 12));
+            g2d.drawString("Người bàn giao", 50, signaturePositionY);
+            g2d.drawString("Người nhận bàn giao", 350, signaturePositionY);
+
+            // Vẽ dòng kẻ dưới chữ ký
+            g2d.drawLine(40, signaturePositionY + 20, 100, signaturePositionY + 20);   // Dòng kẻ dưới "Người bàn giao"
+            g2d.drawLine(340, signaturePositionY + 20,430 , signaturePositionY + 20);  // Dòng kẻ dưới "Người nhận bàn giao"
+            
+            return PAGE_EXISTS;
+        }
+    }
+
+
+
+    ///////////////////////////////
+    private String layThoiGianThongKeBang() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
+        return startOfDay.format(formatter) + " - " + now.format(formatter);
+    }
+
 }

@@ -16,6 +16,18 @@
 
 <!--nơi chứa các thư viện-->
     <dependencies>
-        
+        <dependency>
+		    <groupId>com.microsoft.sqlserver</groupId>
+		    <artifactId>mssql-jdbc</artifactId>
+		    <version>12.8.1.jre11</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.toedter/jcalendar -->
+		<dependency>
+		    <groupId>com.toedter</groupId>
+		    <artifactId>jcalendar</artifactId>
+		    <version>1.4</version>
+		</dependency>
+
     </dependencies>
+    
 </project>
