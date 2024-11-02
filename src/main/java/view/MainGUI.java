@@ -9,16 +9,9 @@
 
 
 package view;
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -29,8 +22,8 @@ import javax.swing.border.EmptyBorder;
 
 // nơi chứa các giao diện khác
 public class MainGUI extends JFrame {
-	private JPanel JPanelMain;
-	private JPanel JPanelMenu;
+	private JPanel jpnMain;
+	private JPanel jpnMenu;
 	private JButton btnDangXuat;
 	private JButton btnManHinhChinh;
 	private JButton btnDonDatPhong;
@@ -47,21 +40,21 @@ public class MainGUI extends JFrame {
   
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		JPanelMain = new JPanel();
-		JPanelMain.setBorder(new EmptyBorder(0, 0, 0, 0));
+		jpnMain = new JPanel();
+		jpnMain.setBorder(new EmptyBorder(0, 0, 0, 0));
 
-		setContentPane(JPanelMain);
-		JPanelMain.setLayout(new BorderLayout(0, 0));
+		setContentPane(jpnMain);
+		jpnMain.setLayout(new BorderLayout(0, 0));
 		//JPanelMenu
-		JPanelMenu = new JPanel();
-		JPanelMenu.setPreferredSize(new Dimension(350, JPanelMenu.getPreferredSize().height));
-		JPanelMenu.setBackground(new Color(69, 96, 117));
-		JPanelMain.add(JPanelMenu, BorderLayout.WEST);
-		JPanelMenu.setLayout(new BorderLayout(0, 0));
+		jpnMenu = new JPanel();
+		jpnMenu.setPreferredSize(new Dimension(350, jpnMenu.getPreferredSize().height));
+		jpnMenu.setBackground(new Color(69, 96, 117));
+		jpnMain.add(jpnMenu, BorderLayout.WEST);
+		jpnMenu.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelLogo = new JPanel();
 		panelLogo.setBackground(new Color(69, 96, 117));
-		JPanelMenu.add(panelLogo, BorderLayout.NORTH);
+		jpnMenu.add(panelLogo, BorderLayout.NORTH);
 		panelLogo.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelIcon = new JPanel();
@@ -106,15 +99,83 @@ public class MainGUI extends JFrame {
 
 //		showMenuNVQL();
 
+		addOtherJPanel();
+
 		setBounds(100, 100, 1440, 900);
 		
     }
+
+	public void addOtherJPanel() {
+		CardLayout cardLayout = new CardLayout();
+		JPanel jpnContent = new JPanel(cardLayout);
+
+		jpnMain.add(jpnContent, BorderLayout.CENTER);
+
+//		các gui
+		JPanel themDonDatPhongGUI = new ThemDonDatPhongGUI();
+		JPanel donDatPhongGUI = new DonDatPhongGUI();
+		JPanel manHinHChinh = new ManHinhChinh();
+		JPanel hoaDonGUI = new HoaDon2();
+		JPanel khachHangGUI = new KH2();
+		JPanel baoCaoGUI = new BaoCao();
+
+		jpnContent.add(manHinHChinh, "Màn hình chính");
+		jpnContent.add(donDatPhongGUI, "Đơn đặt phòng");
+		jpnContent.add(themDonDatPhongGUI, "Thêm đơn đặt phòng");
+		jpnContent.add(hoaDonGUI, "Hóa đơn");
+		jpnContent.add(khachHangGUI, "Khách hàng");
+		jpnContent.add(baoCaoGUI, "Báo cáo");
+
+		btnBaoCao.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(jpnContent, "Báo cáo");
+			}
+		});
+		btnKhachHang.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(jpnContent, "Khách hàng");
+			}
+		});
+		btnHoaDon.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(jpnContent, "Hóa đơn");
+			}
+		});
+		btnManHinhChinh.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(jpnContent, "Màn hình chính");
+			}
+		});
+
+		btnDonDatPhong.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(jpnContent, "Đơn đặt phòng");
+			}
+		});
+
+
+
+		DonDatPhongGUI.btnDatPhong.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(jpnContent, "Thêm đơn đặt phòng");
+				System.out.println("Click thêm đơn");
+			}
+		});
+
+	}
+
     public void showMenuNVLT()
     {
     	//Panel Menu	
     			JPanel panelMenu = new JPanel();
     			panelMenu.setBackground(new Color(69, 96, 117));
-    			JPanelMenu.add(panelMenu, BorderLayout.CENTER);
+    			jpnMenu.add(panelMenu, BorderLayout.CENTER);
     			GridBagLayout gbl_panelMenu = new GridBagLayout();
     			gbl_panelMenu.columnWidths = new int[] {0, 0, 0, 0, 0, 1};
     			gbl_panelMenu.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
@@ -296,7 +357,7 @@ public class MainGUI extends JFrame {
     			//panelUser
     			JPanel panelUser = new JPanel();
     			panelUser.setBackground(new Color(69, 96, 117));
-    			JPanelMenu.add(panelUser, BorderLayout.SOUTH);
+    			jpnMenu.add(panelUser, BorderLayout.SOUTH);
     			panelUser.setLayout(new BorderLayout(0, 0));
     			
     			lblUser = new JLabel("");
@@ -331,7 +392,7 @@ public class MainGUI extends JFrame {
     	//Panel Menu	
 		JPanel panelMenu = new JPanel();
 		panelMenu.setBackground(new Color(69, 96, 117));
-		JPanelMenu.add(panelMenu, BorderLayout.CENTER);
+		jpnMenu.add(panelMenu, BorderLayout.CENTER);
 		GridBagLayout gbl_panelMenu = new GridBagLayout();
 		gbl_panelMenu.columnWidths = new int[] {0, 0, 0, 0, 0, 1};
 		gbl_panelMenu.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
@@ -653,7 +714,7 @@ public class MainGUI extends JFrame {
 		//panelUser
 		JPanel panelUser = new JPanel();
 		panelUser.setBackground(new Color(69, 96, 117));
-		JPanelMenu.add(panelUser, BorderLayout.SOUTH);
+		jpnMenu.add(panelUser, BorderLayout.SOUTH);
 		panelUser.setLayout(new BorderLayout(0, 0));
 		
 		lblUser = new JLabel("");

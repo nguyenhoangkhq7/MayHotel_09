@@ -17,10 +17,18 @@ import utils.UIHelpers;
 
 public class DonDatPhongGUI extends JPanel {
     // frame
-    JButton btnTraCuu, btnDatPhong;
+    JButton btnTraCuu;
+    public static JButton btnDatPhong;
     JDateChooser jdcNgayDen, jdcNgayDi;
     JComboBox cboTang, cboTrangThai;
 
+    public JButton getBtnDatPhong() {
+        return btnDatPhong;
+    }
+
+    public void setBtnDatPhong(JButton btnDatPhong) {
+        this.btnDatPhong = btnDatPhong;
+    }
 
     public DonDatPhongGUI() {
         setLayout(new BorderLayout()); // Sử dụng BorderLayout cho JFrame
