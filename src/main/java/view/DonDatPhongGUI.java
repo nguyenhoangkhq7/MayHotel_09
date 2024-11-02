@@ -119,24 +119,6 @@ public class DonDatPhongGUI extends JPanel {
         jpn1.add(new JPanel());
         jpn1.add(btnTraCuu = new JButton("Tra cứu"));
         UIHelpers.set_Button_Blue_Style(btnTraCuu);
-
-<<<<<<< HEAD
-        jpnSearch.add(jpn1);
-        jpnSearch.add(Box.createVerticalGlue());
-
-        // Tạo GridBagConstraints để thêm jpnSearch
-        Grid BagConstraints gbcSearch = new GridBagConstraints();
-        gbcSearch.fill = GridBagConstraints.BOTH; // Chiếm toàn bộ không gian
-        gbcSearch.weightx = 1; // Tỷ lệ chiều ngang
-        gbcSearch.weighty = 1; // Tỷ lệ chiều dọc
-        gbcSearch.gridx = 0; // Cột 0
-        gbcSearch.gridy = 0; // Hàng 0
-        gbcSearch.insets = new Insets(5, 5, 5, 5); // Khoảng cách giữa các thành phần
-        jpnContain_Search_Detail.add(jpnSearch, gbcSearch);
-=======
-        boxContain.add(jpn1);
-        boxContain.add(Box.createVerticalGlue());
->>>>>>> 25d810d27645ba6326964de7c86535893336cfe2
     }
 
     public void showDetailComponent(JPanel container) {
