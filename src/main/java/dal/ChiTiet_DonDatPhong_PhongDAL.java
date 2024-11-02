@@ -34,10 +34,10 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String maCT_DDP_P = rs.getString(1);
-                LocalDate ngayTra = rs.getDate(2).toLocalDate();
-                String maDonDatPhong = rs.getString(3);
-                String maPhong = rs.getString(4);
-                LocalDate ngayNhanPhong = rs.getDate(5).toLocalDate();
+                String maDonDatPhong = rs.getString(2);
+                String maPhong = rs.getString(3);
+                LocalDate ngayNhanPhong = rs.getDate(4).toLocalDate();
+                LocalDate ngayTra = rs.getDate(5).toLocalDate();
                 boolean laPhongChuyen = rs.getBoolean(6);
                 double chietKhau = rs.getDouble(7);
 
@@ -57,6 +57,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         return chiTietList;
     }
 
+
     // Retrieve ChiTiet_DonDatPhong_Phong by ID
     public ChiTiet_DonDatPhong_Phong getChiTietDonDatPhongPhongTheoMa(String maCT_DDP_P) {
         ChiTiet_DonDatPhong_Phong chiTiet = null;
@@ -68,10 +69,10 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             stmt.setString(1, maCT_DDP_P);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                LocalDate ngayTra = rs.getDate(2).toLocalDate();
-                String maDonDatPhong = rs.getString(3);
-                String maPhong = rs.getString(4);
-                LocalDate ngayNhanPhong = rs.getDate(5).toLocalDate();
+                String maDonDatPhong = rs.getString(2);
+                String maPhong = rs.getString(3);
+                LocalDate ngayNhanPhong = rs.getDate(4).toLocalDate();
+                LocalDate ngayTra = rs.getDate(5).toLocalDate();
                 boolean laPhongChuyen = rs.getBoolean(6);
                 double chietKhau = rs.getDouble(7);
 
@@ -88,6 +89,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         return chiTiet;
     }
 
+
     // Add new ChiTiet_DonDatPhong_Phong
     public boolean themChiTiet(ChiTiet_DonDatPhong_Phong chiTiet) {
         int n = 0;
@@ -97,10 +99,10 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             String sql = "INSERT INTO ChiTiet_DonDatPhong_Phong VALUES(?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, chiTiet.getMaCT_DDP_P());
-            stmt.setDate(2, java.sql.Date.valueOf(chiTiet.getNgayTra()));
-            stmt.setString(3, chiTiet.getDonDatPhong().getMaDon());
-            stmt.setString(4, chiTiet.getPhong().getMaPhong());
-            stmt.setDate(5, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
+            stmt.setString(2, chiTiet.getDonDatPhong().getMaDon());
+            stmt.setString(3, chiTiet.getPhong().getMaPhong());
+            stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
+            stmt.setDate(5, java.sql.Date.valueOf(chiTiet.getNgayTra()));
             stmt.setBoolean(6, chiTiet.isLaPhongChuyen());
             stmt.setDouble(7, chiTiet.getChietKhau());
             n = stmt.executeUpdate();
@@ -110,18 +112,19 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         return n > 0;
     }
 
+
     // Update ChiTiet_DonDatPhong_Phong
     public boolean suaChiTiet(String maCT_DDP_P, ChiTiet_DonDatPhong_Phong chiTiet) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE ChiTiet_DonDatPhong_Phong SET ngayTra = ?, maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ?, laPhongChuyen = ?, chietKhau = ? WHERE maCT_DDP_P = ?";
+            String sql = "UPDATE ChiTiet_DonDatPhong_Phong SET maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ?, ngayTra = ?, laPhongChuyen = ?, chietKhau = ? WHERE maCT_DDP_P = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setDate(1, java.sql.Date.valueOf(chiTiet.getNgayTra()));
-            stmt.setString(2, chiTiet.getDonDatPhong().getMaDon());
-            stmt.setString(3, chiTiet.getPhong().getMaPhong());
-            stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
+            stmt.setString(1, chiTiet.getDonDatPhong().getMaDon());
+            stmt.setString(2, chiTiet.getPhong().getMaPhong());
+            stmt.setDate(3, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
+            stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayTra()));
             stmt.setBoolean(5, chiTiet.isLaPhongChuyen());
             stmt.setDouble(6, chiTiet.getChietKhau());
             stmt.setString(7, maCT_DDP_P);
@@ -131,6 +134,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         }
         return n > 0;
     }
+
 
     // Delete ChiTiet_DonDatPhong_Phong by ID
     public boolean xoaChiTiet(String maCT_DDP_P) {

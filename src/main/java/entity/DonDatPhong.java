@@ -32,6 +32,13 @@ public class DonDatPhong {
         this.ngayTra = ngayTra;
     }
 
+    public DonDatPhong(String maDon) {
+        this.maDon = maDon;
+    }
+
+    public DonDatPhong() {
+    }
+
     // Getters và Setters
     public String getMaDon() {
         return maDon;

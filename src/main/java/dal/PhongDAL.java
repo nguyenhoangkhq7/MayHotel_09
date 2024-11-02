@@ -40,10 +40,10 @@ public class PhongDAL {
             while (rs.next()) {
                 String maPhong = rs.getString(1);
                 String tenPhong = rs.getString(2);
-                String tang = rs.getString(3);
-                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(4));
-                boolean trangThaiPhong = rs.getBoolean(5);
-                String moTa = rs.getString(6);
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(3));
+                boolean trangThaiPhong = rs.getBoolean(4);
+                String moTa = rs.getString(5);
+                String tang = rs.getString(6);
 
                 Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
                 dsPhong.add(phong);
@@ -89,10 +89,10 @@ public class PhongDAL {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 String tenPhong = rs.getString(2);
-                String tang = rs.getString(3);
-                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(4));
-                boolean trangThaiPhong = rs.getBoolean(5);
-                String moTa = rs.getString(6);
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(3));
+                boolean trangThaiPhong = rs.getBoolean(4);
+                String moTa = rs.getString(5);
+                String tang = rs.getString(6);
 
                 phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
             }
