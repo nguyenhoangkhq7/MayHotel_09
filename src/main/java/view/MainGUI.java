@@ -20,6 +20,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import view.JframeLogin;
+
 // nơi chứa các giao diện khác
 public class MainGUI extends JFrame {
 	private JPanel jpnMain;
@@ -89,6 +91,19 @@ public class MainGUI extends JFrame {
 		btnDangXuat.setFocusPainted(false); 
 		btnDangXuat.setForeground(new Color(243, 125, 0));
 		btnDangXuat.setBackground(new Color(48, 47, 47));
+		
+//Sự kiện nút đăng xuất		
+		btnDangXuat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JframeLogin loginFrame = new JframeLogin();
+				loginFrame.setVisible(true);
+		        loginFrame.setLocationRelativeTo(null);
+
+		        ((JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource())).dispose();
+				
+			}
+		});
+
 		panelButtonDX.add(btnDangXuat, BorderLayout.EAST);
 		
 		JLabel lblLine = new JLabel("_________________________________________________");
@@ -102,7 +117,7 @@ public class MainGUI extends JFrame {
 
 		addOtherJPanel();
 
-		setBounds(100, 100, 1920, 1080);
+		setBounds(100, 100, 1440, 900);
 		
     }
 
