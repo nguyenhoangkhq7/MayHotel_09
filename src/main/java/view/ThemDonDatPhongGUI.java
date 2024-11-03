@@ -12,6 +12,10 @@ package view;
 
 import com.toedter.calendar.JDateChooser;
 import constraints.CONSTRAINTS;
+import dal.LoaiPhongDAL;
+import dal.PhongDAL;
+import entity.LoaiPhong;
+import entity.Phong;
 import utils.UIHelpers;
 
 import javax.swing.*;
@@ -19,8 +23,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-public class ThemDonDatPhongGUI extends JPanel {
+public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
 // Local variable
     private JButton btnReset,btnClose, btnChonPhong, btnCheckThongTinKhachHang, btnDatPhong;
     private JDateChooser jdcCheckIn, jdcCheckout;
@@ -37,6 +44,60 @@ public class ThemDonDatPhongGUI extends JPanel {
         add(showHeader(), BorderLayout.NORTH);
         showContent();
 
+        themLoaiPhongCbo();
+
+        btnClose.addActionListener(this);
+        btnReset.addActionListener(this);
+        btnDatPhong.addActionListener(this);
+        btnCheckThongTinKhachHang.addActionListener(this);
+        btnChonPhong.addActionListener(this);
+        cboLoaiPhong.addActionListener(this);
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object o = e.getSource();
+        if(o.equals(btnClose)) {
+            System.out.println("HEHEE");
+            this.setVisible(false);
+        }
+        else if(o.equals(btnReset)) {
+
+        }
+        else if(o.equals(btnDatPhong)) {
+
+        }
+        else if(o.equals(btnCheckThongTinKhachHang)) {
+
+        }
+        else if(o.equals(btnChonPhong)) {
+
+        } else if (o.equals(cboLoaiPhong)) {
+            updateSoPhong();
+        }
+    }
+
+    public void themLoaiPhongCbo() {
+        ArrayList<LoaiPhong> dsLoaiPhong = new LoaiPhongDAL().getAllLoaiPhong();
+        for(LoaiPhong lp : dsLoaiPhong) {
+            cboLoaiPhong.addItem(lp.getTenLoaiPhong());
+        }
+        cboLoaiPhong.setSelectedItem(0);
+    }
+    private void updateSoPhong() {
+        // Xóa tất cả các mục hiện có trong cboSoPhong
+        cboSoPhong.removeAllItems();
+
+        // Lấy loại phòng được chọn
+        String loaiPhong = new LoaiPhongDAL().getMaLoaiPhongByTen((String) cboLoaiPhong.getSelectedItem());
+        // Kiểm tra nếu loại phòng không null
+        if (loaiPhong != null) {
+            // Lấy danh sách phòng dựa trên loại phòng được chọn
+            ArrayList<Phong> dsPhong = new PhongDAL().getAllPhongByMaLoaiPhong(loaiPhong);
+            // Thêm các phòng vào cboSoPhong
+            for (Phong p : dsPhong) {
+                cboSoPhong.addItem(p.getTenPhong());
+            }
+        }
     }
 
     public void showContent() {
@@ -61,11 +122,6 @@ public class ThemDonDatPhongGUI extends JPanel {
         // Thêm splitPane vào frame
         this.add(jpnMainContent, BorderLayout.CENTER);
     }
-
-
-
-
-
 
     public void showRightContent(JPanel container) {
         JPanel main = new JPanel(new GridLayout(2,1));
@@ -102,7 +158,6 @@ public class ThemDonDatPhongGUI extends JPanel {
 
         // Đặt listPanel vào JScrollPane
         JScrollPane scroll = new JScrollPane(listPanel);
-//        scroll.setPreferredSize(new Dimension(400, 200)); // Kích thước của JScrollPane
 
         // Thêm JScrollPane vào boxContain
         boxContain.add(scroll);
@@ -153,7 +208,7 @@ public class ThemDonDatPhongGUI extends JPanel {
         Box boxContain2 = Box.createHorizontalBox();
         boxContain2.add(UIHelpers.create_Form_Label_JComboBox("Loại phòng", cboLoaiPhong = new JComboBox()));
         boxContain2.add(Box.createHorizontalStrut(20));
-        boxContain2.add(UIHelpers.create_Form_Label_JComboBox("Số phòng", cboLoaiPhong = new JComboBox()));
+        boxContain2.add(UIHelpers.create_Form_Label_JComboBox("Số phòng", cboSoPhong = new JComboBox()));
         boxContain2.add(Box.createHorizontalStrut(20));
         boxContain2.add(btnChonPhong = new JButton("Chọn phòng"));
         UIHelpers.set_Button_Blue_Style(btnChonPhong);
@@ -203,7 +258,9 @@ public class ThemDonDatPhongGUI extends JPanel {
         jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
 
         boxContain.add(jpnContainDichVu);
+
     }
+
 
 
     public JPanel showHeader() {
@@ -243,4 +300,6 @@ public class ThemDonDatPhongGUI extends JPanel {
     public static void main(String[] args) {
         new ThemDonDatPhongGUI();
     }
+
+
 }

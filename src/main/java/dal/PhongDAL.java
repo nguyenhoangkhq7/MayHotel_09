@@ -28,6 +28,46 @@ public class PhongDAL {
         dsPhong = new ArrayList<>();
     }
 
+    // Lấy tất cả phòng theo mã loại phòng
+    public ArrayList<Phong> getAllPhongByMaLoaiPhong(String maLoaiPhong) {
+        ArrayList<Phong> dsPhongTheoLoai = new ArrayList<>();
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Phong WHERE maLoaiPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maLoaiPhong);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String maPhong = rs.getString("maPhong");
+                String tenPhong = rs.getString("tenPhong");
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(maLoaiPhong);
+                boolean trangThaiPhong = rs.getBoolean("trangThaiPhong");
+                String moTa = rs.getString("moTa");
+                String tang = rs.getString("tang");
+
+                Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
+                dsPhongTheoLoai.add(phong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return dsPhongTheoLoai;
+    }
+
+    private void closeConnection() {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public ArrayList<Phong> getAllPhong() {
         ArrayList<Phong> dsPhong = new ArrayList<>();
         try {
@@ -142,7 +182,6 @@ public class PhongDAL {
     }
 
     public static void main(String[] args) {
-        PhongDAL phongDAL = new PhongDAL();
-        phongDAL.xoaPhong("P002");
+//        System.out.println(new PhongDAL().getAllPhongByMaLoaiPhong("LP001"));
     }
 }

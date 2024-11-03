@@ -225,12 +225,24 @@ public void suKienTraCuu() {
             DonDatPhongPanel ddpPanel = createJPNDonDatPhong(ddp);
             jpnShowDanhSachDDP.add(ddpPanel.getPanel());
 
-            ArrayList<ChiTiet_DonDatPhong_Phong> ct = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMaDDP(ddp.getMaDon());
+            ArrayList<ChiTiet_DonDatPhong_Phong> dsChiTiet = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMaDDP(ddp.getMaDon());
             ddpPanel.getBtnXemChiTiet().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ChiTietDonDatPhong_PhongGUI dialog = new ChiTietDonDatPhong_PhongGUI(ddpPanel.getPanel(), ct); // truyền `this` nếu bạn đang ở JFrame
+                    ChiTietDonDatPhong_PhongGUI dialog = new ChiTietDonDatPhong_PhongGUI(ddpPanel.getPanel(), dsChiTiet); // truyền `this` nếu bạn đang ở JFrame
                     dialog.setVisible(true); // Hiển thị dialog
+                }
+            });
+            ddpPanel.getBtnCheckout().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            ddpPanel.getBtnCheckin().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
                 }
             });
         }

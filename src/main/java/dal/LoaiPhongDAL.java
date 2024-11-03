@@ -27,8 +27,31 @@ public class LoaiPhongDAL {
     public LoaiPhongDAL() {
         dsLoaiPhong = new ArrayList<>();
     }
+    // Get room type code by room type name
+    public String getMaLoaiPhongByTen(String tenLoaiPhong) {
+        String maLoaiPhong = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT maLoaiPhong FROM LoaiPhong WHERE tenLoaiPhong = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, tenLoaiPhong);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                maLoaiPhong = rs.getString("maLoaiPhong");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return maLoaiPhong;
+    }
+
 
     // Get all room types
+
     public ArrayList<LoaiPhong> getAllLoaiPhong() {
         dsLoaiPhong.clear(); // Clear the existing list
         try {
