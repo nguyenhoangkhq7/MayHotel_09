@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,11 +13,9 @@ import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 import constraints.CONSTRAINTS;
 import dal.ChiTiet_DonDatPhong_PhongDAL;
+import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import dal.DonDatPhongDAL;
-import entity.ChiTiet_DonDatPhong_Phong;
-import entity.DonDatPhong;
-import entity.KhachHang;
-import entity.Phong;
+import entity.*;
 import utils.UIHelpers;
 
 public class DonDatPhongGUI extends JPanel {
@@ -72,20 +72,31 @@ public class DonDatPhongGUI extends JPanel {
 
     private void showDanhSachDDP(JPanel container) {
         JPanel jpnDanhSachDDP = new JPanel();
-        jpnDanhSachDDP.setLayout(new GridLayout(0, 5, 25, 30));
+        jpnDanhSachDDP.setLayout(new GridLayout(0, 3, 150, 30));
         JScrollPane scroll = new JScrollPane(jpnDanhSachDDP);
 
         container.add(scroll, BorderLayout.CENTER);
+        ArrayList<DonDatPhong> dsDDP = new DonDatPhongDAL().getAllDonDatPhong();
+        for (DonDatPhong ddp : dsDDP) {
+            // lấy 1 chi tiết đơn đặt phòng phòng để có thông tin đơn đặt phòng và phòng
+            ArrayList<ChiTiet_DonDatPhong_Phong> ct = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMaDDP(ddp.getMaDon());
+            DonDatPhongPanel ddpPanel = createJPNDonDatPhong(ct.get(0));
 
-        ArrayList<ChiTiet_DonDatPhong_Phong> chiTiet = new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong();
-        for (ChiTiet_DonDatPhong_Phong ct : chiTiet) {
-            jpnDanhSachDDP.add(createJPNDonDatPhong(ct));
+            jpnDanhSachDDP.add(ddpPanel.getPanel());
+            ddpPanel.getBtnXemChiTiet().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ChiTietDonDatPhong_PhongGUI dialog = new ChiTietDonDatPhong_PhongGUI(ddpPanel.getPanel(), ct); // truyền `this` nếu bạn đang ở JFrame
+                    dialog.setVisible(true); // Hiển thị dialog
+                }
+            });
         }
     }
 
 
 
-    public JPanel createJPNDonDatPhong(ChiTiet_DonDatPhong_Phong ct) {
+    public DonDatPhongPanel createJPNDonDatPhong(ChiTiet_DonDatPhong_Phong ct) {
+
         JPanel jpnDDP = new JPanel();
         jpnDDP.setLayout(new BoxLayout(jpnDDP, BoxLayout.Y_AXIS));
         jpnDDP.setPreferredSize(new Dimension(250, 242));
@@ -96,6 +107,25 @@ public class DonDatPhongGUI extends JPanel {
         JPanel jpn3 = new JPanel();
         JPanel jpn4 = new JPanel();
         JPanel jpn5 = new JPanel();
+        JPanel jpnButton = new JPanel();
+        JPanel jpnXemChiTiet = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+        // Đặt màu nền trong suốt cho các panel con
+        jpn1.setOpaque(false);
+        jpn2.setOpaque(false);
+        jpn3.setOpaque(false);
+        jpn4.setOpaque(false);
+        jpn5.setOpaque(false);
+        jpnButton.setOpaque(false);
+        jpnXemChiTiet.setOpaque(false);
+
+        JButton btnCheckin = new JButton("Checkin"); btnCheckin.setFocusPainted(false);
+        JButton btnCheckout = new JButton("Checkout"); btnCheckout.setFocusPainted(false);
+        JButton btnThemDichVu = new JButton("Thêm dịch vụ"); btnThemDichVu.setFocusPainted(false);
+        JButton btnHuy = new JButton("Hủy đơn"); btnHuy.setFocusPainted(false);
+        JButton btnXemChiTiet = new JButton("Chi tiết"); btnXemChiTiet.setFocusPainted(false);
+
+        jpnXemChiTiet.add(btnXemChiTiet);
 
         JLabel lblMaPhong = new JLabel("Mã phòng: " + ct.getPhong().getMaPhong());
         JLabel lblTang = new JLabel("Tầng: " + ct.getPhong().getTang());
@@ -111,14 +141,33 @@ public class DonDatPhongGUI extends JPanel {
         jpn4.add(lblNgayNhanPhong);
         jpn5.add(lblNgayTraPhong);
 
+        if (ct.getDonDatPhong().getTrangThaiDonDatPhong().equals("Dat truoc")) {
+        // Thiết lập màu nền cho jpnDDP
+            jpnButton.add(btnCheckin);
+            jpnButton.add(btnHuy);
+            jpnDDP.setBackground(CONSTRAINTS.DAT_TRUOC_COLOR);
+        } else if(ct.getDonDatPhong().getTrangThaiDonDatPhong().equals("Dang o")) {
+            jpnButton.add(btnThemDichVu);
+            jpnButton.add(btnCheckout);
+            jpnDDP.setBackground(CONSTRAINTS.DANG_O_COLOR);
+        }
+        else {
+            jpnButton.add(btnThemDichVu);
+            jpnButton.add(btnCheckout);
+            jpnDDP.setBackground(CONSTRAINTS.ORANGE);
+        }
+
+        jpnDDP.add(jpnXemChiTiet);
         jpnDDP.add(jpn1);
         jpnDDP.add(jpn2);
         jpnDDP.add(jpn3);
         jpnDDP.add(jpn4);
         jpnDDP.add(jpn5);
+        jpnDDP.add(jpnButton);
 
-        return jpnDDP;
+        return new DonDatPhongPanel(jpnDDP, btnCheckin, btnCheckout, btnThemDichVu, btnHuy, btnXemChiTiet);
     }
+
 
     public void showSearchComponent(JPanel container) {
 

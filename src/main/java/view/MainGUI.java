@@ -102,7 +102,7 @@ public class MainGUI extends JFrame {
 
 		addOtherJPanel();
 
-		setBounds(100, 100, 1440, 900);
+		setBounds(100, 100, 1920, 1080);
 		
     }
 

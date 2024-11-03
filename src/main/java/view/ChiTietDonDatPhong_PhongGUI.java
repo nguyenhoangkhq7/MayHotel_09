@@ -1,10 +1,14 @@
 package view;
 
+import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
+import entity.ChiTiet_DonDatPhong_Phong;
+import entity.ChiTiet_DonDatPhong_Phong_DichVu;
 import utils.UIHelpers;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ChiTietDonDatPhong_PhongGUI extends JDialog {
 
@@ -13,11 +17,11 @@ public class ChiTietDonDatPhong_PhongGUI extends JDialog {
     private JTextField txtSoCCCD;
     private JTextField txtEmail;
     private JTextField txtLoaiKH;
-
     private JTable bangDichVu;
+    private ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet;
 
-    public ChiTietDonDatPhong_PhongGUI(JFrame parent) {
-        super(parent, "Chi Tiết Đơn Đặt Phòng", true);
+    public ChiTietDonDatPhong_PhongGUI(JPanel parent, ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet) {
+        this.danhSachChiTiet = danhSachChiTiet;
         setLayout(new BorderLayout());
         showHeader();
 
@@ -28,13 +32,16 @@ public class ChiTietDonDatPhong_PhongGUI extends JDialog {
 
         // Panel chứa thông tin khách hàng ở phần đầu
         JPanel customerInfoPanel = new JPanel(new BorderLayout());
-        showKhachHangInfo(customerInfoPanel);
+        if (!danhSachChiTiet.isEmpty()) {
+            showKhachHangInfo(customerInfoPanel, danhSachChiTiet.get(0));
+        }
         mainPanel.add(customerInfoPanel);
 
         // Danh sách phòng ở giữa
-        String[] roomNames = {"Phòng 101", "Phòng 102", "Phòng 103"};
-        JList<String> roomList = new JList<>(roomNames);
-        roomList.addListSelectionListener(e -> showRoomDetails(roomList.getSelectedValue()));
+        JList<String> roomList = new JList<>(danhSachChiTiet.stream()
+                .map(ct -> ct.getPhong().getMaPhong())
+                .toArray(String[]::new));
+        roomList.addListSelectionListener(e -> showRoomDetails(danhSachChiTiet.get(roomList.getSelectedIndex())));
         JScrollPane roomListScrollPane = new JScrollPane(roomList);
         roomListScrollPane.setBorder(BorderFactory.createTitledBorder("Danh Sách Phòng"));
         mainPanel.add(roomListScrollPane);
@@ -46,20 +53,10 @@ public class ChiTietDonDatPhong_PhongGUI extends JDialog {
         mainPanel.add(serviceTableScrollPane);
 
         setSize(800, 1000);
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(null);
     }
 
-    public void showHeader() {
-        // Nút đóng
-        JPanel jpnClose = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton closeButton = new JButton("Đóng");
-        UIHelpers.set_Orange_Blue_Style(closeButton);
-        jpnClose.add(closeButton);
-        closeButton.addActionListener(e -> dispose());
-        add(jpnClose, BorderLayout.NORTH);
-    }
-
-    private void showKhachHangInfo(JPanel container) {
+    private void showKhachHangInfo(JPanel container, ChiTiet_DonDatPhong_Phong ct) {
         JPanel jpnContainInfoKhachHang = new JPanel(new GridLayout(0, 2));
         container.add(jpnContainInfoKhachHang, BorderLayout.NORTH);
 
@@ -70,6 +67,13 @@ public class ChiTietDonDatPhong_PhongGUI extends JDialog {
         txtEmail = new JTextField();
         txtLoaiKH = new JTextField();
 
+        // Thiết lập thông tin khách hàng
+        txtTenKhachHang.setText(ct.getDonDatPhong().getKhachHang().getHoTen());
+        txtSoDienThoai.setText(ct.getDonDatPhong().getKhachHang().getSoDienThoai());
+        txtSoCCCD.setText(ct.getDonDatPhong().getKhachHang().getSoCanCuoc());
+        txtEmail.setText(ct.getDonDatPhong().getKhachHang().getEmail());
+        txtLoaiKH.setText(ct.getDonDatPhong().getKhachHang().getLoaiKhachHang().toString());
+
         // Thêm nhãn và trường vào panel
         jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("Tên khách hàng", txtTenKhachHang));
         jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("Số điện thoại", txtSoDienThoai));
@@ -78,35 +82,40 @@ public class ChiTietDonDatPhong_PhongGUI extends JDialog {
         jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("Loại khách hàng", txtLoaiKH));
     }
 
-    private void showRoomDetails(String selectedRoom) {
-        if (selectedRoom != null) {
-            // Giả lập thông tin khách hàng
-            txtTenKhachHang.setText("Nguyễn Văn A");
-            txtSoDienThoai.setText("0123456789");
-            txtSoCCCD.setText("123456789");
-            txtEmail.setText("nguyenvana@example.com");
-            txtLoaiKH.setText("Thường");
-
-            // Cập nhật thông tin dịch vụ
-            String[][] services = {
-                    {"Dịch vụ A", "100.000", "2", "Lần"},
-                    {"Dịch vụ B", "200.000", "1", "Lần"}
-            };
-            String[] columnNames = {"Tên Dịch Vụ", "Đơn Giá", "Số Lượng", "Đơn Vị"};
-            DefaultTableModel model = new DefaultTableModel(services, columnNames);
-            bangDichVu.setModel(model);
+    private void showRoomDetails(ChiTiet_DonDatPhong_Phong ct) {
+        // Lấy thông tin dịch vụ từ danh sách dịch vụ của đối tượng ChiTiet_DonDatPhong_Phong
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dichVuList = new ChiTiet_DonDatPhong_Phong_DichVuDAL().getDSChiTietDonDatPhongPhongDichVuTheoMaCT_DDP_P(ct.getMaCT_DDP_P());
+        String[][] services = new String[dichVuList.size()][4];
+        for (int i = 0; i < dichVuList.size(); i++) {
+            ChiTiet_DonDatPhong_Phong_DichVu dv = dichVuList.get(i);
+            services[i][0] = dv.getDichVu().getTenDichVu();
+            services[i][1] = String.valueOf(dv.getDichVu().getDonGia());
+            services[i][2] = String.valueOf(dv.getSoLuongDat());
+            services[i][3] = dv.getDichVu().getDonVi();
         }
+        String[] columnNames = {"Tên Dịch Vụ", "Đơn Giá", "Số Lượng", "Đơn Vị"};
+        DefaultTableModel model = new DefaultTableModel(services, columnNames);
+        bangDichVu.setModel(model);
+    }
+
+    private void showHeader() {
+        // Nút đóng
+        JPanel jpnClose = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton closeButton = new JButton("Đóng");
+        UIHelpers.set_Orange_Blue_Style(closeButton);
+        jpnClose.add(closeButton);
+        closeButton.addActionListener(e -> dispose());
+        add(jpnClose, BorderLayout.NORTH);
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        frame.setSize(600, 400);
+        frame.setSize(600, 1000);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
 
-        // Hiển thị dialog modal
-        ChiTietDonDatPhong_PhongGUI dialog = new ChiTietDonDatPhong_PhongGUI(frame);
-        dialog.setVisible(true);
+        // Tạo dữ liệu mẫu để kiểm tra
+
     }
 }
