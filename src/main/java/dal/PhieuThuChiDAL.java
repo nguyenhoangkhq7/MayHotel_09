@@ -20,6 +20,40 @@ public class PhieuThuChiDAL {
         dsPhieuThuChi = new ArrayList<>();
     }
 
+
+    public String layMaPhieuTiepTheo() {
+        String maPhieuCuoi = ""; // Biến để lưu mã phiếu cuối cùng
+
+        try {
+            // Kết nối tới cơ sở dữ liệu
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT TOP 1 maPhieu FROM PhieuThuChi ORDER BY maPhieu DESC"; // Lấy mã phiếu mới nhất
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                maPhieuCuoi = rs.getString("maPhieu");
+            }
+
+            // Kiểm tra xem maPhieuCuoi có hợp lệ không
+            if (maPhieuCuoi != null && !maPhieuCuoi.isEmpty()) {
+                // Tăng mã phiếu lên 1
+                int soHienTai = Integer.parseInt(maPhieuCuoi.replaceAll("[^0-9]", "")); // Lấy số từ mã phiếu
+                soHienTai++;
+                return String.format("PTC%04d", soHienTai); // Định dạng lại thành PTC0002, PTC0003, ...
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            // Xử lý lỗi khi chuyển đổi số
+        }
+
+        return "PTC0001"; // Nếu không tìm thấy, bắt đầu từ PTC0001
+    }
+
+
     public ArrayList<PhieuThuChi> getPhieuThuChiByDateRange(LocalDate startDate, LocalDate endDate) {
         ArrayList<PhieuThuChi> dsPhieuThuChi = new ArrayList<>();
 
@@ -186,4 +220,29 @@ public class PhieuThuChiDAL {
         }
         return n > 0;
     }
+    public static void main(String[] args) {
+        // Tạo đối tượng của lớp PhieuThuChiDAL
+        PhieuThuChiDAL phieuThuChiDAL = new PhieuThuChiDAL();
+
+        // Định nghĩa khoảng thời gian ngày bắt đầu và ngày kết thúc
+        LocalDate startDate = LocalDate.of(2024, 1, 1); // Ngày bắt đầu
+        LocalDate endDate = LocalDate.of(2024, 12, 31); // Ngày kết thúc
+
+        // Gọi hàm getPhieuThuChiByDateRange và nhận kết quả
+        ArrayList<PhieuThuChi> dsPhieuThuChi = phieuThuChiDAL.getPhieuThuChiByDateRange(startDate, endDate);
+
+        // In ra danh sách phiếu thu chi nhận được
+        for (PhieuThuChi phieu : dsPhieuThuChi) {
+            System.out.println("Mã phiếu: " + phieu.getMaPhieu());
+            System.out.println("Loại phiếu: " + phieu.getLoaiPhieu());
+            System.out.println("Mô tả: " + phieu.getMoTa());
+            System.out.println("Ngày tạo: " + phieu.getNgayTao());
+            System.out.println("Số tiền: " + phieu.getSoTien());
+            System.out.println("Phương thức: " + phieu.getPhuongThuc());
+            System.out.println("Trạng thái: " + (phieu.isConHoatDong() ? "Còn hoạt động" : "Đã hủy"));
+            System.out.println("--------------------------------");
+        }
+    
 }
+}
+

@@ -151,6 +151,36 @@ public class NhanVienDAL {
         }
         return nhanVien;
     }
+    public NhanVien getNhanVienTheoTen(String tenNV) {
+        NhanVien nhanVien = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM NhanVien WHERE hoTen = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenNV);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                String maNV = rs.getString("maNV");
+                String soDienThoai = rs.getString("soDienThoai");
+                String soCanCuoc = rs.getString("soCanCuoc");
+                boolean conHoatDong = rs.getBoolean("conHoatDong");
+                String email = rs.getString("email");
+                String diaChi = rs.getString("diaChi");
+                String vaiTro = rs.getString("vaiTro"); // Đã sửa thành String
+
+                TaiKhoan taiKhoan = new TaiKhoanDAL().getTaiKhoanTheoMa(rs.getString("tenTaiKhoan"));
+
+                nhanVien = new NhanVien(maNV, tenNV, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, taiKhoan);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return nhanVien;
+    }
 
 
     // Đóng kết nối
