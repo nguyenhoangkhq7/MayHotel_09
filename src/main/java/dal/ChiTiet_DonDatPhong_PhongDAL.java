@@ -58,22 +58,40 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         }
         return chiTietList;
     }
-    
-    // Retrieve all ChiTiet_DonDatPhong_Phong records
+ // Retrieve all ChiTiet_DonDatPhong_Phong records
     public ArrayList<ChiTiet_DonDatPhong_Phong> getAllChiTietDonDatPhongPhong() {
         ArrayList<ChiTiet_DonDatPhong_Phong> chiTietList = new ArrayList<>();
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM CT_DonDatPhong_Phong"; // Updated table name
+            String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong"; // Updated table name
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String maCT_DDP_P = rs.getString(1);
                 String maDonDatPhong = rs.getString(2);
                 String maPhong = rs.getString(3);
-                LocalDate ngayNhanPhong = rs.getDate(4).toLocalDate();
-                LocalDate ngayTra = rs.getDate(5).toLocalDate();
+                
+                // Lấy ngày nhận phòng và ngày trả phòng với kiểm tra null
+                LocalDate ngayNhanPhong = null;
+                LocalDate ngayTra = null;
+
+                java.sql.Date sqlNgayNhanPhong = rs.getDate(4);
+                if (sqlNgayNhanPhong != null) {
+                    ngayNhanPhong = sqlNgayNhanPhong.toLocalDate();
+                } else {
+                    // Xử lý trường hợp ngày nhận phòng là null
+                    // Ví dụ: gán giá trị mặc định hoặc ném một ngoại lệ
+                }
+
+                java.sql.Date sqlNgayTra = rs.getDate(5);
+                if (sqlNgayTra != null) {
+                    ngayTra = sqlNgayTra.toLocalDate();
+                } else {
+                    // Xử lý trường hợp ngày trả phòng là null
+                    // Ví dụ: gán giá trị mặc định hoặc ném một ngoại lệ
+                }
+
                 boolean laPhongChuyen = rs.getBoolean(6);
                 double chietKhau = rs.getDouble(7);
 
@@ -92,6 +110,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         }
         return chiTietList;
     }
+
 
 
     // Retrieve ChiTiet_DonDatPhong_Phong by ID

@@ -95,13 +95,14 @@ public class MainGUI extends JFrame {
 		lblLine.setForeground(new Color(192, 192, 192));
 		panelButtonDX.add(lblLine, BorderLayout.SOUTH);
 		
+		
 		showMenuNVLT();
 
 //		showMenuNVQL();
 
 		addOtherJPanel();
 
-		setBounds(100, 100, 1920, 1080);
+		setBounds(100, 100, 1440, 900);
 		
     }
 

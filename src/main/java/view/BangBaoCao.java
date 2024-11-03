@@ -200,9 +200,10 @@ public class BangBaoCao extends JPanel {
 		table.setFillsViewportHeight(true);
 		table.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		bangBaoCaoBUS = new BangBaoCaoBUS();
+		
 		// Xác định khoảng thời gian (có thể thay đổi theo yêu cầu)
-        LocalDate startDate = LocalDate.of(2024, 10, 5); // Ngày bắt đầu
-        LocalDate endDate = LocalDate.of(2024, 10, 12);   // Ngày kết thúc
+        LocalDate startDate = LocalDate.now(); // Ngày bắt đầu
+        LocalDate endDate = LocalDate.now();   // Ngày kết thúc
 
 		Object[][] layDuLieuBang = bangBaoCaoBUS.layDuLieuBang(startDate, endDate);
 			
