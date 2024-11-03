@@ -19,6 +19,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
     private ArrayList<ChiTiet_DonDatPhong_Phong> dsChiTiet;
     private Connection con;
 
+
     public ChiTiet_DonDatPhong_PhongDAL() {
         dsChiTiet = new ArrayList<>();
     }
@@ -64,7 +65,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong"; // Updated table name
+            String sql = "SELECT * FROM CT_DonDatPhong_Phong"; // Updated table name
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {

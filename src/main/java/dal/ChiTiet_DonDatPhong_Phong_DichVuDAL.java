@@ -55,7 +55,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
     // Get all ChiTiet_DonDatPhong_Phong_DichVu records
     public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getAllChiTietDonDatPhongPhongDichVu() {
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
-        String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong_DichVu";
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu";
         try (Connection con = getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -82,7 +82,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
     // Fetch by ID
     public ChiTiet_DonDatPhong_Phong_DichVu getChiTietDonDatPhongPhongDichVuTheoMa(String maCT_DDP_P_DV) {
         ChiTiet_DonDatPhong_Phong_DichVu chiTiet = null;
-        String sql = "SELECT * FROM ChiTiet_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P_DV = ?";
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P_DV = ?";
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
@@ -109,7 +109,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
 
     // Insert new record
     public boolean themChiTiet(ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
-        String sql = "INSERT INTO ChiTiet_DonDatPhong_Phong_DichVu VALUES(?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO CT_DonDatPhong_Phong_DichVu VALUES(?, ?, ?, ?, ?, ?)";
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
@@ -126,10 +126,41 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
             return false;
         }
     }
+    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMaCT_DDP_P(String maCT_DDP_P) {
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE cT_DDP_P = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, maCT_DDP_P);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String maCT_DDP_P_DV = rs.getString(1);
+                    int soLuongDat = rs.getInt(2);
+                    LocalDate ngayTao = rs.getDate(3).toLocalDate();
+                    String maDichVu = rs.getString(4);
+                    String moTa = rs.getString(6);
+
+                    // Lấy đối tượng DichVu và ChiTiet_DonDatPhong_Phong từ DAL
+                    DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
+                    ChiTiet_DonDatPhong_Phong cT_DDP_P = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maCT_DDP_P);
+
+                    // Thêm chi tiết vào danh sách
+                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, ngayTao, dichVu, cT_DDP_P, moTa));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching records by CT DDP P ID: " + e.getMessage());
+        }
+
+        return chiTietList;
+    }
 
     // Update record
     public boolean suaChiTiet(String maCT_DDP_P_DV, ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
-        String sql = "UPDATE ChiTiet_DonDatPhong_Phong_DichVu SET soLuongDat = ?, ngayTao = ?, maDichVu = ?, cT_DDP_P = ?, moTa = ? WHERE maCT_DDP_P_DV = ?";
+        String sql = "UPDATE CT_DonDatPhong_Phong_DichVu SET soLuongDat = ?, ngayTao = ?, maDichVu = ?, cT_DDP_P = ?, moTa = ? WHERE maCT_DDP_P_DV = ?";
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
@@ -149,7 +180,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
 
     // Delete record
     public boolean xoaChiTiet(String maCT_DDP_P_DV) {
-        String sql = "DELETE FROM ChiTiet_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P_DV = ?";
+        String sql = "DELETE FROM CT_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P_DV = ?";
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
