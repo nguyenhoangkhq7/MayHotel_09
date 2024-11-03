@@ -40,49 +40,95 @@ public class DonDatPhong {
     }
 
     // Getters và Setters
+
     public String getMaDon() {
         return maDon;
+    }
+
+    public void setMaDon(String maDon) {
+        this.maDon = maDon;
     }
 
     public LocalDate getNgayTao() {
         return ngayTao;
     }
 
+    public void setNgayTao(LocalDate ngayTao) {
+        this.ngayTao = ngayTao;
+    }
+
     public String getPhuongThucThanhToan() {
         return phuongThucThanhToan;
+    }
+
+    public void setPhuongThucThanhToan(String phuongThucThanhToan) {
+        this.phuongThucThanhToan = phuongThucThanhToan;
     }
 
     public String getTrangThaiDonDatPhong() {
         return trangThaiDonDatPhong;
     }
 
+    public void setTrangThaiDonDatPhong(String trangThaiDonDatPhong) {
+        this.trangThaiDonDatPhong = trangThaiDonDatPhong;
+    }
+
     public boolean isTrangThaiDatCoc() {
         return trangThaiDatCoc;
+    }
+
+    public void setTrangThaiDatCoc(boolean trangThaiDatCoc) {
+        this.trangThaiDatCoc = trangThaiDatCoc;
     }
 
     public NhanVien getNhanVien() {
         return nhanVien;
     }
 
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
     public KhachHang getKhachHang() {
         return khachHang;
+    }
+
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
     }
 
     public double getTongTien() {
         return tongTien;
     }
 
+    public void setTongTien(double tongTien) {
+        this.tongTien = tongTien;
+    }
+
     public String getMoTa() {
         return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
 
     public LocalDate getNgayNhanPhong() {
         return ngayNhanPhong;
     }
 
+    public void setNgayNhanPhong(LocalDate ngayNhanPhong) {
+        this.ngayNhanPhong = ngayNhanPhong;
+    }
+
     public LocalDate getNgayTra() {
         return ngayTra;
     }
+
+    public void setNgayTra(LocalDate ngayTra) {
+        this.ngayTra = ngayTra;
+    }
+
     @Override
     public String toString() {
         return "DonDatPhong{" +

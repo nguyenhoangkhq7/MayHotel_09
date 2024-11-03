@@ -32,33 +32,34 @@ public class ThemDonDatPhongGUI extends JPanel {
 
 
     public ThemDonDatPhongGUI() {
-        this.setBackground(Color.WHITE);
-        showHeader();
+        this.setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
+        add(showHeader(), BorderLayout.NORTH);
         showContent();
-//
-//        setSize(1440,860);git sta
+
     }
 
     public void showContent() {
+
+        JPanel jpnMainContent = new JPanel(new BorderLayout());
+
         // Tạo panel trái và phải
         JPanel jpnContentLeft = new JPanel(new BorderLayout());
         jpnContentLeft.setBackground(Color.WHITE);
         JPanel jpnContentRight = new JPanel(new BorderLayout());
         jpnContentRight.setBackground(Color.WHITE);
 
+        jpnMainContent.add(jpnContentLeft,BorderLayout.CENTER);
+        jpnMainContent.add(jpnContentRight, BorderLayout.EAST);
+
 
         // Thêm nội dung vào các panel bên trái và phải
         showLeftContent(jpnContentLeft);
         showRightContent(jpnContentRight);
 
-        // Sử dụng JSplitPane với tỷ lệ 60-40
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jpnContentLeft, jpnContentRight);
-        splitPane.setResizeWeight(0.6); // Đặt tỷ lệ 60% cho panel trái và 40% cho panel phải
-        splitPane.setDividerSize(5);    // Độ rộng của thanh chia
-        splitPane.setContinuousLayout(true);
 
         // Thêm splitPane vào frame
-        this.add(splitPane, BorderLayout.CENTER);
+        this.add(jpnMainContent, BorderLayout.CENTER);
     }
 
 
@@ -125,7 +126,7 @@ public class ThemDonDatPhongGUI extends JPanel {
         boxContain.add(containCalculate);
 
         boxContain.add(UIHelpers.create_Title_Panel("Thanh toán"));
-        boxContain.add(UIHelpers.create_Form_Label_JComboBox("Phương thức thanh toán", cboPhuongThucThanhToan = new JComboBox()));
+        boxContain.add(new JPanel().add(UIHelpers.create_Form_Label_JComboBox("Phương thức thanh toán", cboPhuongThucThanhToan = new JComboBox())));
 
         JPanel containBtnDatPhong = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         containBtnDatPhong.add(btnDatPhong = new JButton("Đặt phòng"));
@@ -205,7 +206,7 @@ public class ThemDonDatPhongGUI extends JPanel {
     }
 
 
-    public void showHeader() {
+    public JPanel showHeader() {
         JPanel jpnHeader = new JPanel(new GridLayout(1,2));
         jpnHeader.setBackground(CONSTRAINTS.BACKGROUND);
 
@@ -233,7 +234,7 @@ public class ThemDonDatPhongGUI extends JPanel {
         jpn2.setOpaque(false);
         headerRight.setOpaque(false);
 
-        this.add(jpnHeader, BorderLayout.NORTH);
+        return jpnHeader;
     }
 
 

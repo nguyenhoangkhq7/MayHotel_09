@@ -97,7 +97,7 @@ private static Box createLabelAndComponent(String labelTitle, JComponent compone
     }
 
     public static Box create_Form_Label_JComboBox(String labelTitle, JComboBox cbo) {
-        cbo.setPreferredSize(CONSTRAINTS.INPUT_SIZE);
+        cbo.setPreferredSize(new Dimension());
         return createLabelAndComponent(labelTitle, cbo);
     }
     public static Box create_Form_Label_JTextArea(String labelTitle, JTextArea jta) {

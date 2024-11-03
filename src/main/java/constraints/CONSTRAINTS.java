@@ -25,9 +25,9 @@ public class CONSTRAINTS {
     public static final Color DEN_HAN_COLOR = new Color(221,75,58,255);
     public static final Dimension BUTTON_SIZE = new Dimension(125,45);
     public static final Dimension DATEPICKER_SIZE = new Dimension(350,350);
-    public static final Dimension INPUT_SIZE = new Dimension(200,35);
+    public static final Dimension INPUT_SIZE = new Dimension(200,25);
     public static final Dimension TEXTAREA_SIZE = new Dimension(300,60);
-
+    public static final Dimension TRANGTHAI_SIZE = new Dimension(30,30);
     public static final int TEXT_SIZE = 16;
     public static final int TEXT_TITLE_SIZE = 20;
 
