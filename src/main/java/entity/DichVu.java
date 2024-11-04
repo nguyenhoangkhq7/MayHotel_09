@@ -34,7 +34,11 @@ public class DichVu {
         this.conHoatDong = conHoatDong;
         this.donVi = donVi;
     }
-    // Constructor thuoc tinh ma 
+    
+    public DichVu() {
+	}
+
+	// Constructor thuoc tinh ma 
     public DichVu(String maDichVu){
     	this.maDichVu = maDichVu;
     }  	

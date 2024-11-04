@@ -107,6 +107,51 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
         return chiTiet;
     }
 
+    public String getNextMaCT_DDP_P_DV() {
+        String sql = "SELECT MAX(maCT_DDP_P_DV) FROM CT_DonDatPhong_Phong_DichVu";
+        String nextMa = "CTDDP_DV001"; // Giá trị mặc định, nếu không có mã nào trong DB
+        Connection con = null; // Khai báo biến kết nối
+        try {
+            ConnectDB.getInstance().connect(); // kết nối đến cơ sở dữ liệu
+            con = ConnectDB.getConnection(); // lấy kết nối
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            if (rs.next()) {
+                String maxMa = rs.getString(1);
+                // Chỉ lấy phần số từ mã
+                if (maxMa != null) {
+                    // Tách phần số ra khỏi chuỗi mà không sử dụng dấu gạch dưới
+                    String numberPart = maxMa.replaceAll("[^0-9]", ""); // Lấy phần số
+                    if (!numberPart.isEmpty()) {
+                        try {
+                            int nextId = Integer.parseInt(numberPart) + 1; // Lấy phần số và tăng thêm 1
+                            // Định dạng lại mã theo định dạng CTDDP_DV001
+                            nextMa = "CTDDP_DV" + String.format("%03d", nextId); // Không có dấu gạch dưới
+                        } catch (NumberFormatException e) {
+                            System.err.println("Error parsing number from ID: " + maxMa);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching next CT DDP P DV ID: " + e.getMessage());
+        } finally {
+            // Đảm bảo đóng kết nối
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    System.err.println("Error closing connection: " + e.getMessage());
+                }
+            }
+        }
+        return nextMa;
+    }
+
+
+
+	
     // Insert new record
     public boolean themChiTiet(ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
         String sql = "INSERT INTO CT_DonDatPhong_Phong_DichVu VALUES(?, ?, ?, ?, ?, ?)";
@@ -194,12 +239,12 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
 
     // Test main method
     public static void main(String[] args) {
-        ChiTiet_DonDatPhong_Phong_DichVuDAL dal = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
-        ChiTiet_DonDatPhong_Phong_DichVu chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(
-                "CT_DDP_P_DV_001", 2, LocalDate.now(), new DichVu("DV001"),
-                new ChiTiet_DonDatPhong_Phong("CT_DDP_P_001"), "Mô tả dịch vụ"
-        );
-        boolean result = dal.themChiTiet(chiTiet);
-        System.out.println("Thêm mới thành công: " + result);
+ChiTiet_DonDatPhong_Phong_DichVuDAL dal = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
+        
+        // Kiểm tra giá trị trả về từ hàm getNextMaCT_DDP_P_DV
+        String nextMa = dal.getNextMaCT_DDP_P_DV();
+        System.out.println("Mã tiếp theo: " + nextMa);
+        
+     
     }
 }

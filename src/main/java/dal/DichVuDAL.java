@@ -64,6 +64,8 @@ public class DichVuDAL {
 	    }
 	    return dichVu;
 	}
+	
+
 	//Lấy danh sách dịch vụ từ cơ sở dữ liệu
 	public ArrayList<DichVu> getAllDichVu(){
 		try {
