@@ -191,7 +191,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         return n > 0;
     }
 
-
+    
     // Delete ChiTiet_DonDatPhong_Phong by ID
     public boolean xoaChiTiet(String maCT_DDP_P) {
         int n = 0;
@@ -207,7 +207,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         }
         return n > 0;
     }
-
+    
     public static void main(String[] args) {
         Connection con = null;
         try {

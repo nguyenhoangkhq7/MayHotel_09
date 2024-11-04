@@ -16,10 +16,12 @@ public class ConnectDB {
 		String url = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false";
 		String user = "sa";
 
-		String password = "123456789HHkk"; // đổi thành pass word của mọi ng vào
+		String password = "sapassword"; // đổi thành pass word của mọi ng vào
 
 		
 		con = DriverManager.getConnection(url, user, password);
+		
+//		con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=QuanLyDatPhongKS;encrypt=false", "sa", "sapassword");
 
 	}
 	public void disconnect() {
@@ -38,6 +40,7 @@ public class ConnectDB {
 	public static void main(String[] args) {
 		try {
 			ConnectDB.getInstance().connect();
+			System.out.println("Kết nối thành công");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

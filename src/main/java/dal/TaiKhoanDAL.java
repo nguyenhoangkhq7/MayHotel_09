@@ -10,11 +10,10 @@ import database.ConnectDB;
 import entity.TaiKhoan;
 
 public class TaiKhoanDAL {
-    private ArrayList<TaiKhoan> dsTaiKhoan;
     private Connection con;
 
     public TaiKhoanDAL() {
-        dsTaiKhoan = new ArrayList<>();
+        // Constructor
     }
 
     // Lấy tất cả tài khoản
@@ -133,6 +132,7 @@ public class TaiKhoanDAL {
 
     public static void main(String[] args) {
         TaiKhoanDAL dal = new TaiKhoanDAL();
+
         // Thêm tài khoản mới
         boolean result = dal.themTaiKhoan(new TaiKhoan("user1", "password123"));
         System.out.println("Thêm tài khoản thành công: " + result);
