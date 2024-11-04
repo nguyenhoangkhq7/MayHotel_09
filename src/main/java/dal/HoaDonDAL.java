@@ -66,6 +66,34 @@ public class HoaDonDAL {
         }
         return dsHoaDon;
     }
+ // Thêm một hóa đơn mới vào cơ sở dữ liệu
+    public boolean themHoaDon(HoaDon hoaDon) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "INSERT INTO HoaDon (maHoaDon, trangThai, thanhTien, maNV, maKM, maDon, ngayTao) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql);
+
+            // Thiết lập các tham số cho câu lệnh SQL
+            stmt.setString(1, hoaDon.getMaHoaDon()); // Mã hóa đơn
+            stmt.setBoolean(2, hoaDon.getTrangThai()); // Trạng thái hóa đơn
+            stmt.setDouble(3, hoaDon.getThanhTien()); // Thành tiền
+            stmt.setString(4, hoaDon.getNhanVien().getMaNV()); // Mã nhân viên
+            stmt.setString(5, hoaDon.getKhuyenMai() != null ? hoaDon.getKhuyenMai().getMaKhuyenMai() : null); // Mã khuyến mãi
+            stmt.setString(6, hoaDon.getDonDatPhong() != null ? hoaDon.getDonDatPhong().getMaDon() : null); // Mã đơn đặt
+            stmt.setDate(7, Date.valueOf(hoaDon.getNgayTao())); // Ngày tạo
+
+            // Thực thi câu lệnh SQL
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(); // Đóng kết nối sau khi thực hiện
+        }
+        return n > 0; // Trả về true nếu thành công
+    }
+
 
     // Lấy tất cả các danh sách hóa đơn từ cơ sở dữ liệu
     public ArrayList<HoaDon> getAllHoaDon() {
@@ -96,28 +124,28 @@ public class HoaDonDAL {
         }
         return dsHoaDon;
     }
-
-    // Thêm một hóa đơn mới vào cơ sở dữ liệu
-    public boolean themHoaDon(HoaDon hoaDon) {
-        int n = 0;
+ // Inside HoaDonDAL class
+    public String getLastMaHD() {
+        String lastMaHD = null;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO HoaDon (maHoaDon, trangThai, thanhTien, maNV, maKM, maDon, ngayTao) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, hoaDon.getMaHoaDon());
-            stmt.setBoolean(2, hoaDon.getTrangThai());
-            stmt.setDouble(3, hoaDon.getThanhTien());
-            stmt.setString(4, hoaDon.getNhanVien().getMaNV());
-            stmt.setString(5, hoaDon.getKhuyenMai() != null ? hoaDon.getKhuyenMai().getMaKhuyenMai() : null);
-            stmt.setString(6, hoaDon.getDonDatPhong() != null ? hoaDon.getDonDatPhong().getMaDon() : null);
-            stmt.setDate(7, Date.valueOf(hoaDon.getNgayTao()));
-            n = stmt.executeUpdate();
+            String sql = "SELECT maHoaDon FROM HoaDon ORDER BY maHoaDon DESC LIMIT 1";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            
+            if (rs.next()) {
+                lastMaHD = rs.getString("maHoaDon");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return n > 0;
+        return lastMaHD;
     }
+
+
+    // Thêm một hóa đơn mới vào cơ sở dữ liệu
+   
 
     // Sửa thông tin hóa đơn trong cơ sở dữ liệu
     public boolean suaHoaDon(String maHoaDon, HoaDon hoaDon) {
@@ -185,7 +213,7 @@ public class HoaDonDAL {
         }
         return hoaDon;
     }
-
+    
     // Đóng kết nối
     private void closeConnection() {
         try {

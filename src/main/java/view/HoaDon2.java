@@ -16,11 +16,17 @@ import bus.PhieuThuChiBUS;
 import constraints.CONSTRAINTS;
 import dal.DonDatPhongDAL;
 import dal.HoaDonDAL;
+import dal.KhachHangDAL;
+import dal.KhuyenMaiDAL;
 import dal.NhanVienDAL;
+import dal.PhongDAL;
 import entity.DonDatPhong;
 import entity.HoaDon;
+import entity.KhachHang;
 import entity.KhuyenMai;
+import entity.LoaiKhachHang;
 import entity.NhanVien;
+import entity.Phong;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -80,11 +86,25 @@ public class HoaDon2 extends JPanel {
 	private JTextField txtthanhTien;
 	private JComboBox<String> cboTrangThai;
 	private JTextField txtmaNV;
+	private JComboBox<String> comboBox;
+	JComboBox<String> cboNhanVien = new JComboBox<String>();
+	JComboBox<String> cboDonDatPhong = new JComboBox<String>();
+	JComboBox<String> cboKhuyenMai = new JComboBox<String>();
+	private JTextField txtmaHD;
+	private JTextField txtTrangThai;
+	private JTextField txtThanhTien2;
+	private JComboBox<String> cboTrangThai2;
+
 
     public HoaDon2() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
-
+        
+        loadDonDatPhongOptions();
+        
+        loadNhanVienOptions();
+        loadKhuyenMaiOptions();
+        
         // Title Panel
         JPanel pnlTieuDe = new JPanel();
         pnlTieuDe.setBackground(new Color(255, 255, 255));
@@ -100,13 +120,13 @@ public class HoaDon2 extends JPanel {
         JPanel pnlThongTin = new JPanel();
         pnlThongTin.setBackground(new Color(255, 255, 255));
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "TÌM KIẾM GIAO DỊCH", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                "Hóa Đơn", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
         add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
 
         // Form Panel
         panelForm = new JPanel();
-        panelForm.setLayout(new GridLayout(3, 2, 10, 10));
+        panelForm.setLayout(new GridLayout(4, 2, 10, 10));
 
         JLabel lbMaHD = new JLabel("Mã hóa đơn:");
         lbMaHD.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -117,7 +137,7 @@ public class HoaDon2 extends JPanel {
         panelForm.add(txtmaHoaDon);
         txtmaHoaDon.setColumns(10);
 
-        JLabel lbngayTao = new JLabel("Từ ngày:");
+        JLabel lbngayTao = new JLabel("Tạo ngày:");
         lbngayTao.setFont(new Font("Tahoma", Font.BOLD, 13));
         panelForm.add(lbngayTao);
 
@@ -140,26 +160,40 @@ public class HoaDon2 extends JPanel {
         cboTrangThai = new JComboBox<String>();
         cboTrangThai.setFont(new Font("Tahoma", Font.BOLD, 13));
         cboTrangThai.setBounds(145, 154, 205, 20);
-        cboTrangThai.addItem("Còn");
-        cboTrangThai.addItem("Hết hạn");
+        cboTrangThai.addItem("Đã Thanh Toán");
+        cboTrangThai.addItem("Chưa Thanh Toán");
         panelForm.add(cboTrangThai);
         
-        JLabel lbSDTKH = new JLabel("Mã Đơn Đặt Phòng");
-        lbSDTKH.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbSDTKH);
-        txtmaDon = new JTextField();
-        txtmaDon.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        panelForm.add(txtmaDon);
-        txtmaDon.setColumns(10);
+        JLabel lbDonDatPhong = new JLabel("Mã Đơn Đặt Phòng");
+        lbDonDatPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panelForm.add(lbDonDatPhong);
+        cboDonDatPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
+        cboDonDatPhong.setBounds(145, 154, 205, 20);
+        panelForm.add(cboDonDatPhong);
         
         
-        JLabel lbnaNV = new JLabel("Mã Nhân Viên");
-        lbnaNV.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbnaNV);
-        txtmaNV = new JTextField();
-        txtmaNV.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        panelForm.add(txtmaNV);
-        txtmaNV.setColumns(10);
+        JLabel lbNhanVien = new JLabel("Mã Nhân Viên:");
+        lbNhanVien.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lbNhanVien.setBounds(10, 151, 50, 14);
+        panelForm.add(lbNhanVien);
+        
+        cboNhanVien.setFont(new Font("Tahoma", Font.BOLD, 13));
+        cboNhanVien.setBounds(145, 154, 205, 20);
+        panelForm.add(cboNhanVien);
+        
+        JLabel lbKhuyenMai = new JLabel("Mã Khuyến Mãi:");
+        lbKhuyenMai.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lbKhuyenMai.setBounds(10, 151, 50, 14);
+        panelForm.add(lbKhuyenMai);
+        
+        cboKhuyenMai.setFont(new Font("Tahoma", Font.BOLD, 13));
+        cboKhuyenMai.setBounds(145, 154, 205, 20);
+        panelForm.add(cboKhuyenMai);
+        
+        JLabel null1 = new JLabel();
+        panelForm.add(null1);
+        JLabel null2 = new JLabel();
+        panelForm.add(null2);
         
 
         
@@ -232,57 +266,52 @@ public class HoaDon2 extends JPanel {
         panelForm.add(lbnull3);
         panelForm.add(lbnull4);
         // Mã KM
-        JLabel lbMaKM = new JLabel("Mã KM:");
-        lbMaKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        
-        panelForm.add(lbMaKM);
-
-        txtMaKM = new JTextField("KH******");
-        txtMaKM.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        txtMaKM.setEditable(false);
-        panelForm.add(txtMaKM);
-        txtMaKM.setColumns(10);
+//        JLabel lbMaKM = new JLabel("Mã KM:");
+//        lbMaKM.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        
+//        panelForm.add(lbMaKM);
+//
+//        txtMaKM = new JTextField("KH******");
+//        txtMaKM.setFont(new Font("Tahoma", Font.PLAIN, 13));
+//        txtMaKM.setEditable(false);
+//        panelForm.add(txtMaKM);
+//        txtMaKM.setColumns(10);
 
         // Tên KM
-        JLabel lbTenKM = new JLabel("Tên KM:");
-        lbTenKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbTenKM);
+        JLabel lbMaHĐ = new JLabel("Mã Hóa Đơn:");
+        lbMaHĐ.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panelForm.add(lbMaHĐ);
 
-        txtTenKM = new JTextField("");
-        txtTenKM.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        panelForm.add(txtTenKM);
-        txtTenKM.setColumns(10);
+        txtmaHD = new JTextField("");
+        txtmaHD.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        panelForm.add(txtmaHD);
+        txtmaHD.setColumns(10);
 
         // Giá trị
-        JLabel lbGiaTri = new JLabel("Giá trị:");
-        lbGiaTri.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbGiaTri);
-
-        txtGiaTri = new JTextField();
-        txtGiaTri.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(txtGiaTri);
-        txtGiaTri.setColumns(10);
+        JLabel lbTrangThai2 = new JLabel("Trạng Thái Hóa Đơn:");
+        lbTrangThai2.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lbTrangThai2.setBounds(10, 151, 50, 14);
+        panelForm.add(lbTrangThai2);
+        cboTrangThai2 = new JComboBox<String>();
+        cboTrangThai2.setFont(new Font("Tahoma", Font.BOLD, 13));
+        cboTrangThai2.setBounds(145, 154, 205, 20);
+        cboTrangThai2.addItem("Đã Thanh Toán");
+        cboTrangThai2.addItem("Chưa Thanh Toán");
+        cboTrangThai2.setEnabled(false);
+        panelForm.add(cboTrangThai);
 
         // Số lượng
-        JLabel lbSoLuong = new JLabel("Số lượng:");
-        lbSoLuong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbSoLuong);
+        JLabel lbThanhTien = new JLabel("ThanhTien:");
+        lbThanhTien.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panelForm.add(lbThanhTien);
 
-        txtSoLuong = new JTextField();
-        txtSoLuong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(txtSoLuong);
-        txtSoLuong.setColumns(10);
+        txtThanhTien2 = new JTextField();
+        txtThanhTien2.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panelForm.add(txtThanhTien2);
+        txtThanhTien2.setColumns(10);
 
         // Trạng Thái Khuyến Mãi
-        JLabel lbTrangThaiKM = new JLabel("Trạng Thái Khuyến Mãi:");
-        lbTrangThaiKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbTrangThaiKM);
-
-        cboTrangThaiKM = new JComboBox<String>();
-        cboTrangThaiKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboTrangThaiKM.addItem("Còn");
-        cboTrangThaiKM.addItem("Hết hạn");
-        panelForm.add(cboTrangThaiKM);
+        
 
         // Khách hàng áp dụng
         JLabel lbAD = new JLabel("Khách hàng áp dụng :");
@@ -394,38 +423,7 @@ public class HoaDon2 extends JPanel {
         btnTimKiem.setFont(new Font("Tahoma", Font.BOLD, 13));
         hBox2.add(btnTimKiem);
         
-        btnTimKiem.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        String maHD = txtmaHoaDon.getText().trim(); // Lấy mã phiếu từ JTextField
-
-		        // Kiểm tra nếu mã phiếu rỗng hoặc là giá trị mặc định
-		        if (maHD.isEmpty() || maHD.equals("nhập vào mã hóa đơn")) {
-		            // Nếu mã phiếu rỗng, gọi hàm updateTable() với ngày đầu và ngày cuối
-		            updateTable();
-		        } else {
-		        	HoaDonBUS hoaDonBUS = new HoaDonBUS();
-		        	   Object[][] data = new Object[1][8];
-		        	   data = hoaDonBUS.layDuLieuBangTim(maHD);
-		            if (data != null) {
-		              
-		                table_1.setModel(new DefaultTableModel(data, new String[]{
-		                		"Mã phiếu thu chi", // Column 1
-		                	    "Tên nhân viên",     // Column 2
-		                	    "Ngày tạo",         // Column 3
-		                	    "Loại phiếu",       // Column 4
-		                	    "Trạng thái",       // Column 5
-		                	    "Phương thức",      // Column 6
-		                	    "Số tiền",          // Column 7
-		                	    "Mô tả"             // Column 8
-		                	    }));
-		            } else {
-		                // Thông báo nếu không tìm thấy phiếu thu chi
-		                JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn với mã này.");
-		            }
-		        }
-		    }
-		});
+        
 
         // Add boxes to panel
         lpnlDeTimKiemKM.add(hBox1);
@@ -434,71 +432,27 @@ public class HoaDon2 extends JPanel {
         // JTable setup
         
         model.addColumn("Mã HĐ");
-        model.addColumn("Tên KH");
-        model.addColumn("Địa chỉ");
-        model.addColumn("Số ĐT");
-        model.addColumn("Ngày lập");
-        model.addColumn("Tổng thanh toán");
-        table_CTHD = new JTable(model);
-        scrDSHD.setViewportView(table_CTHD);
-        hienThiDuLieu();
-        // Thêm hành động cho nút tìm kiếm
-        btnThem.addActionListener(new ActionListener() {
-            private String maNV;
-			private KhuyenMai khuyenMai;
-			private DonDatPhong donDatPhong;
-			private double thanhTien;
-			private boolean trangThai;
-
-			@Override
-            public void actionPerformed(ActionEvent e) {
-                // Tạo một đối tượng HoaDonDAL để thao tác với cơ sở dữ liệu
-                HoaDonDAL hoaDonDAL = new HoaDonDAL();
-
-                // Lấy thông tin từ các trường nhập liệu (như JTextField, JComboBox, v.v.)
-                String maHoaDon = txtmaHoaDon.getText(); // Giả sử có JTextField cho mã hóa đơn             
-                String maKM = txtMaKM.getText(); // Giả sử có JTextField cho mã khuyến mãi
-                String maDon = txtmaDon.getText(); // Giả sử có JTextField cho mã đơn đặt phòng
-
-             // Lấy nhân viên theo mã
-                NhanVienDAL nvDal = new NhanVienDAL();
-                NhanVien nhanVien = nvDal.getNhanVienTheoMa(maNV);
-                
-                if (nhanVien == null) {
-                    JOptionPane.showMessageDialog(null, "Mã hóa đơn không hợp lệ.");
-                    return;
-                }
-                LocalDate ngayTao = LocalDate.now();
-                double soTien;
-                
-                // Lấy số tiền và xử lý
-                try {
-                    String soTienStr = txtthanhTien.getText().trim();
-                    if (soTienStr.equals("nhập tiền tại đây") || soTienStr.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Vui lòng nhập số tiền.");
-                        return;
-                    }
-                    soTien = Double.parseDouble(soTienStr);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Số tiền không hợp lệ.");
-                    return;
-                }
-                entity.HoaDon hoaDon = new entity.HoaDon(maHoaDon,trangThai,thanhTien,nhanVien,khuyenMai,donDatPhong,ngayTao);
-                
-                HoaDonBUS hoaDonBUS = new HoaDonBUS();
-                boolean isSuccess = hoaDonBUS.themHoaDon(hoaDon);
-                
-                if (isSuccess) {
-                    JOptionPane.showMessageDialog(null, "Thêm phiếu chi thành công.");
-                    // Cập nhật lại bảng nếu cần
-                    txtthanhTien.setText(""); // Đặt ô số tiền về rỗng
-                } else {
-                    JOptionPane.showMessageDialog(null, "Thêm phiếu chi thất bại.");
-                }
-            }
-        });
+        model.addColumn("Trạng Thái");
+        model.addColumn("Thành Tiền");
+        model.addColumn("Mã Nhân Viên");
+        model.addColumn("Mã Khuyến Mãi");
+        model.addColumn("Mã Đơn Đặt Phòng");
+        model.addColumn("Ngày Tạo");
 
         
+        table_CTHD = new JTable(model);
+        scrDSHD.setViewportView(table_CTHD);
+        btnThem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				themHoaDon();
+				
+			}
+		});
+        hienThiDuLieu();
+        // Thêm hành động cho nút tìm kiếm
+
     }
     public void hienThiDuLieu() {
     	ArrayList<HoaDon> dsHoaDon;
@@ -516,6 +470,106 @@ public class HoaDon2 extends JPanel {
             model.addRow(row);
         }
     }
+    private void loadNhanVienOptions() {
+        // Assuming you have a NhanVienDAL class to handle the database operations
+        NhanVienDAL nhanVienDAL = new NhanVienDAL(); // Create an instance of the DAL
+        ArrayList<NhanVien> dsNhanVien = nhanVienDAL.getAllNhanVien(); // Get all employees from the DAL
+
+        // Clear existing items in the combo box (optional, if you want to refresh it)
+        cboNhanVien.removeAllItems();
+
+        // Add each NhanVien object to the combo box
+        for (NhanVien nhanVien : dsNhanVien) {
+            cboNhanVien.addItem(nhanVien.getMaNV()); // Assuming getMaNV() returns the employee ID
+        }
+    }
+    private void loadKhuyenMaiOptions() {
+        // Assuming you have a NhanVienDAL class to handle the database operations
+        KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL(); // Create an instance of the DAL
+        ArrayList<KhuyenMai> dskhuyenMai = khuyenMaiDAL.getAllKhuyenMai(); // Get all employees from the DAL
+
+        // Clear existing items in the combo box (optional, if you want to refresh it)
+        cboKhuyenMai.removeAllItems();
+
+        // Add each NhanVien object to the combo box
+        for (KhuyenMai khuyenMai : dskhuyenMai) {
+            cboNhanVien.addItem(khuyenMai.getMaKhuyenMai()); // Assuming getMaNV() returns the employee ID
+        }
+    }
+    private void loadDonDatPhongOptions() {
+        // Assuming you have a NhanVienDAL class to handle the database operations
+        DonDatPhongDAL donDatPhongDAL = new DonDatPhongDAL(); // Create an instance of the DAL
+        ArrayList<DonDatPhong> dsDonDatPhong = donDatPhongDAL.getAllDonDatPhong(); // Get all employees from the DAL
+
+        // Clear existing items in the combo box (optional, if you want to refresh it)
+        cboNhanVien.removeAllItems();
+
+        // Add each NhanVien object to the combo box
+        for (DonDatPhong donDatPhong : dsDonDatPhong) {
+            cboDonDatPhong.addItem(donDatPhong.getMaDon()); // Assuming getMaNV() returns the employee ID
+        }
+    }
+
+
+ // Inside the HoaDon2 class (or relevant class)
+    private String generateNewMaHD(String lastMaHD) {
+        // Assuming the invoice code is of the format "HD000001", "HD000002", etc.
+        if (lastMaHD == null || lastMaHD.isEmpty()) {
+            return "HD000001"; // Start with a default code if there is no last code.
+        }
+        
+        // Extract the numeric part from the last invoice code
+        String numericPart = lastMaHD.substring(2); // Skip the "HD" prefix
+        int newNumber = Integer.parseInt(numericPart) + 1; // Increment the number
+
+        // Format the new number to maintain the same length
+        return String.format("HD%06d", newNumber); // Format to "HDxxxxxx"
+    }
+
+    private void themHoaDon() {
+        try {
+            HoaDonDAL hoaDonDAL = new HoaDonDAL();
+            String lastMaHD = hoaDonDAL.getLastMaHD();
+            String newMaHD = generateNewMaHD(lastMaHD);
+
+            // Lấy thông tin từ giao diện người dùng
+            String maHoaDon = newMaHD; // Sử dụng mã hóa đơn mới được tạo
+            double thanhTien = Double.parseDouble(txtthanhTien.getText());
+            boolean trangThai = cboTrangThai.getSelectedItem().equals("Đã thanh toán");
+
+            // Lấy các đối tượng liên quan
+            NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa((String) cboNhanVien.getSelectedItem());
+            KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa((String) cboKhuyenMai.getSelectedItem());
+            DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa((String) cboDonDatPhong.getSelectedItem());
+            LocalDate ngayTao = LocalDate.now();
+
+            // Tạo đối tượng hóa đơn
+            HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);
+            
+            // Thêm hóa đơn vào cơ sở dữ liệu
+            boolean isSuccess = hoaDonDAL.themHoaDon(hoaDon);
+            if (isSuccess) {
+                model.addRow(new Object[]{
+                    maHoaDon,
+                    thanhTien,
+                    trangThai,
+                    nhanVien.getHoten(), // Lấy tên nhân viên
+                    khuyenMai != null ? khuyenMai.getMaKhuyenMai() : null, // Kiểm tra khuyến mãi
+                    donDatPhong.getMaDon(), // Mã đơn đặt phòng
+                    ngayTao
+                });
+                clearFields(); // Gọi phương thức xóa các trường
+                JOptionPane.showMessageDialog(null, "Thêm hóa đơn thành công!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Lỗi khi thêm hóa đơn.");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi xảy ra: " + ex.getMessage());
+        }
+    }
+
+
     private void updateTable() {
         
         
@@ -528,6 +582,14 @@ public class HoaDon2 extends JPanel {
 
 
         }
+    private void clearFields() {
+        txtmaHoaDon.setText("");
+        txtthanhTien.setText("");
+        cboTrangThai.setSelectedIndex(0);
+        cboNhanVien.setSelectedIndex(0);
+        cboKhuyenMai.setSelectedIndex(0);
+        cboDonDatPhong.setSelectedIndex(0);
+    }
     
 
     public static void main(String[] args) {

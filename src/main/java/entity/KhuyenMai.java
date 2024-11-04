@@ -1,40 +1,43 @@
 package entity;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class KhuyenMai {
-    private String maKhuyenMai;
-    private String tenKhuyenMai;
-    private double giaTri;
-    private LocalDate ngayTao;
-    private boolean conHoatDong;
-    private int soLuong;
-    private LocalDate ngayHetHan;
-    private String dieuKienApDung;
+    private String maKhuyenMai;          // Mã khuyến mãi
+    private String tenKhuyenMai;         // Tên khuyến mãi
+    private double giaTri;               // Giá trị khuyến mãi
+    private LocalDate ngayTao;           // Ngày tạo khuyến mãi
+    private boolean conHoatDong;         // Trạng thái hoạt động
+    private int soLuong;                 // Số lượng khuyến mãi
+    private String donViTinh;            // Đơn vị tính
+    private String moTa;                 // Mô tả khuyến mãi
+    private LocalDate ngayHetHan;        // Ngày hết hạn
+    private String khachHangApDung;      // Điều kiện áp dụng
 
     // Constructor không tham số
     public KhuyenMai() {
     }
 
-    // Constructor 1 tham so maKhuyenMai
-    public KhuyenMai(String maKhuyenMai)
-    {
-    	this.maKhuyenMai= maKhuyenMai;
+    // Constructor 1 tham số maKhuyenMai
+    public KhuyenMai(String maKhuyenMai) {
+        this.maKhuyenMai = maKhuyenMai;
     }
 
     // Constructor đầy đủ
     public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayTao, boolean conHoatDong,
-			int soLuong, LocalDate ngayHetHan, String dieuKienApDung) {
-        super();
-        this.maKhuyenMai = maKhuyenMai;
-        this.tenKhuyenMai = tenKhuyenMai;
-        this.giaTri = giaTri;
-        this.ngayTao = ngayTao;
-        this.conHoatDong = conHoatDong;
-        this.soLuong = soLuong;
-        this.ngayHetHan = ngayHetHan;
-        this.dieuKienApDung = dieuKienApDung;
-    }
+            int soLuong, LocalDate ngayHetHan, String dieuKienApDung) {
+super();
+this.maKhuyenMai = maKhuyenMai;
+this.tenKhuyenMai = tenKhuyenMai;
+this.giaTri = giaTri;
+this.ngayTao = ngayTao;
+this.conHoatDong = conHoatDong;
+this.soLuong = soLuong;
+this.ngayHetHan = ngayHetHan;
+this.khachHangApDung = dieuKienApDung;
+}
+
 
     // Getters and Setters
     public String getMaKhuyenMai() {
@@ -75,7 +78,7 @@ public class KhuyenMai {
         this.ngayTao = ngayTao;
     }
 
-    public boolean getConHoatDong() {
+    public boolean isConHoatDong() {  // Đổi tên phương thức để tuân thủ quy ước đặt tên
         return conHoatDong;
     }
 
@@ -94,6 +97,22 @@ public class KhuyenMai {
         this.soLuong = soLuong;
     }
 
+    public String getDonViTinh() {
+        return donViTinh;
+    }
+
+    public void setDonViTinh(String donViTinh) {
+        this.donViTinh = donViTinh;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+
     public LocalDate getNgayHetHan() {
         return ngayHetHan;
     }
@@ -105,12 +124,12 @@ public class KhuyenMai {
         this.ngayHetHan = ngayHetHan;
     }
 
-    public String getDieuKienApDung() {
-        return dieuKienApDung;
+    public String getKhachHangApDung() {
+        return khachHangApDung;
     }
 
-    public void setDieuKienApDung(String dieuKienApDung) {
-        this.dieuKienApDung = dieuKienApDung;
+    public void setKhachHangApDung(String dieuKienApDung) {
+        this.khachHangApDung = dieuKienApDung;
     }
 
     // Override equals and hashCode
@@ -128,7 +147,6 @@ public class KhuyenMai {
     }
 
     // toString method
-
     @Override
     public String toString() {
         return "KhuyenMai{" +
@@ -138,9 +156,10 @@ public class KhuyenMai {
                 ", ngayTao=" + ngayTao +
                 ", conHoatDong=" + conHoatDong +
                 ", soLuong=" + soLuong +
+                ", donViTinh='" + donViTinh + '\'' +
+                ", moTa='" + moTa + '\'' +
                 ", ngayHetHan=" + ngayHetHan +
-                ", dieuKienApDung='" + dieuKienApDung + '\'' +
-                '}';
+                ", dieuKienApDung='" + khachHangApDung + '\'' +
+                '}'; 
     }
 }
-

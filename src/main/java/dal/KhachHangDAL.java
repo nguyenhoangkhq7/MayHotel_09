@@ -27,15 +27,15 @@ public class KhachHangDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maKH);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) { // Thêm điều kiện kiểm tra để đảm bảo có dữ liệu
+            if (rs.next()) {
                 khachHang = new KhachHang(
-                        rs.getString(1),  // maKH
-                        rs.getString(2),  // hoTen
-                        rs.getString(3),  // soDienThoai
-                        rs.getDouble(4),  // tienTichLuy (đã chuyển từ cột 6 sang cột 4)
-                        rs.getString(5),  // soCanCuoc
-                        rs.getString(6),  // email
-                        LoaiKhachHang.valueOf(rs.getString(7))  // loaiKhachHang
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        LoaiKhachHang.valueOf(rs.getString(7))
                 );
             }
         } catch (SQLException e) {
@@ -55,13 +55,13 @@ public class KhachHangDAL {
 
             while (rs.next()) {
                 KhachHang khachHang = new KhachHang(
-                        rs.getString(1),  // maKH
-                        rs.getString(2),  // hoTen
-                        rs.getString(3),  // soDienThoai
-                        rs.getDouble(4),  // tienTichLuy (đã chuyển từ cột 6 sang cột 4)
-                        rs.getString(5),  // soCanCuoc
-                        rs.getString(6),  // email
-                        LoaiKhachHang.valueOf(rs.getString(7))  // loaiKhachHang
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getDouble(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        LoaiKhachHang.valueOf(rs.getString(7))
                 );
                 dsKhachHang.add(khachHang);
             }
@@ -82,7 +82,7 @@ public class KhachHangDAL {
             stmt.setString(1, khachHang.getMaKH());
             stmt.setString(2, khachHang.getHoTen());
             stmt.setString(3, khachHang.getSoDienThoai());
-            stmt.setDouble(4, khachHang.getTienTichLuy()); // đã chuyển từ cột 6 sang cột 4
+            stmt.setDouble(4, khachHang.getTienTichLuy());
             stmt.setString(5, khachHang.getSoCanCuoc());
             stmt.setString(6, khachHang.getEmail());
             stmt.setString(7, khachHang.getLoaiKhachHang().name());
@@ -96,6 +96,12 @@ public class KhachHangDAL {
 
     // Sửa thông tin khách hàng
     public boolean suaKhachHang(String maKH, KhachHang khachHang) {
+        khachHang.setMaKH(maKH); // Đặt mã khách hàng vào đối tượng trước khi gọi saveCustomerToDatabase
+        return saveCustomerToDatabase(khachHang); // Gọi phương thức cập nhật
+    }
+
+    // Cập nhật thông tin khách hàng vào cơ sở dữ liệu
+    public boolean saveCustomerToDatabase(KhachHang khachHang) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
@@ -104,11 +110,11 @@ public class KhachHangDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khachHang.getHoTen());
             stmt.setString(2, khachHang.getSoDienThoai());
-            stmt.setDouble(3, khachHang.getTienTichLuy()); // đã chuyển từ cột 6 sang cột 4
+            stmt.setDouble(3, khachHang.getTienTichLuy());
             stmt.setString(4, khachHang.getSoCanCuoc());
             stmt.setString(5, khachHang.getEmail());
             stmt.setString(6, khachHang.getLoaiKhachHang().name());
-            stmt.setString(7, maKH);
+            stmt.setString(7, khachHang.getMaKH()); // Sử dụng mã khách hàng từ đối tượng khachHang
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -116,7 +122,8 @@ public class KhachHangDAL {
         }
         return n > 0;
     }
- // Xóa khách hàng
+
+    // Xóa khách hàng
     public boolean xoaKhachHang(String maKH) {
         int n = 0;
         try {
@@ -131,6 +138,28 @@ public class KhachHangDAL {
             e.printStackTrace();
         }
         return n > 0;
+    }
+
+    // Phương thức lấy mã khách hàng cuối cùng từ cơ sở dữ liệu
+    public String getLastMaKH() {
+        String lastMaKH = null;
+        String sql = "SELECT TOP 1 maKH FROM KhachHang ORDER BY maKH DESC"; // Lấy mã khách hàng cuối cùng
+
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                lastMaKH = rs.getString("maKH"); // Lấy mã khách hàng cuối cùng
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error retrieving last customer ID: " + e.getMessage());
+        }
+
+        return lastMaKH;
     }
 
     public static void main(String[] args) {

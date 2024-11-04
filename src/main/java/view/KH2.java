@@ -48,11 +48,11 @@ public class KH2 extends JPanel {
     private JPanel panelForm;
     private JPanel panelDetail_KH;
     private JTextField txtCMND;
-    private JComboBox<String> cboLoaiKhach;
     private JTextField txtTienTichLuy;
     private JTextField txtTim;
 	private JTable table_CTHD;
 	DefaultTableModel model = new DefaultTableModel();
+	private JButton btnLuu;
 
     public KH2() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -107,6 +107,7 @@ public class KH2 extends JPanel {
         cboLoaiKhachHang.addItem("Hạng Bạc");
         cboLoaiKhachHang.addItem("Hạng Vàng");
         cboLoaiKhachHang.addItem("Hạng Kim Cương");
+        cboLoaiKhachHang.setEnabled(false);
         panelForm.add(cboLoaiKhachHang);
 
         JLabel lbTenKH = new JLabel("Tên khách hàng:");
@@ -164,15 +165,10 @@ public class KH2 extends JPanel {
         btnXoa.setFont(new Font("Tahoma", Font.BOLD, 13));
         panel_2.add(btnXoa);
 
-        btnLamMoi = new JButton("Làm Mới");
-        btnLamMoi.setBackground(Color.LIGHT_GRAY);
-        btnLamMoi.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panel_2.add(btnLamMoi);
-
-        btnXuatCSV = new JButton("Xuất CSV");
-        btnXuatCSV.setBackground(Color.YELLOW);
-        btnXuatCSV.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panel_2.add(btnXuatCSV);
+        btnLuu = new JButton("Lưu");
+        btnLuu.setBackground(Color.LIGHT_GRAY);
+        btnLuu.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panel_2.add(btnLuu);
 
         JPanel pnlBang = new JPanel();
         pnlBang.setBackground(Color.WHITE);
@@ -185,7 +181,7 @@ public class KH2 extends JPanel {
         pnlBang.add(scrDSKH, BorderLayout.CENTER);
 
         Box hBox = Box.createHorizontalBox();
-        JLabel lbTimTenKH = new JLabel("Tên khách hàng:");
+        JLabel lbTimTenKH = new JLabel("Mã khách hàng:");
         lbTimTenKH.setFont(new Font("Tahoma", Font.BOLD, 13));
 
         txtTim = new JTextField();
@@ -224,6 +220,47 @@ public class KH2 extends JPanel {
                 addCustomer(); // Gọi phương thức thêm khách hàng
             }
         });
+        btnXoa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				deleteCustomer();
+				
+			}
+		});
+        btnSua.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = table_CTHD.getSelectedRow();
+			    if (selectedRow != -1) {
+			        // Hiển thị hộp thoại xác nhận
+			        int confirm = JOptionPane.showConfirmDialog(null, 
+			            "Bạn có chắc chắn muốn sửa thông tin khách hàng này?", 
+			            "Xác nhận sửa", 
+			            JOptionPane.YES_NO_OPTION);
+			        
+			        if (confirm == JOptionPane.YES_OPTION) {
+			            // Gọi phương thức editCustomer để điền thông tin vào các trường
+			            editCustomer();
+			        }
+			    } else {
+			        JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng để sửa.");
+			    }
+				
+			}
+		});
+        btnTim.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Lấy từ khóa tìm kiếm từ trường nhập liệu
+                String keyword = txtTim.getText().trim(); // Giả sử txtSearch là JTextField nhập mã khách hàng
+
+                // Gọi phương thức tìm kiếm
+                searchCustomer(keyword);
+            }
+        });
+
 //        btnSua.addActionListener(e -> editCustomer());
 //        btnXoa.addActionListener(e -> deleteCustomer());
 //        btnLamMoi.addActionListener(e -> clearForm());
@@ -231,16 +268,21 @@ public class KH2 extends JPanel {
         hienThiDuLieu();
         
     }
+    
 
     private void addCustomer() {
         try {
-            String maKH = txtMaKH.getText().trim(); 
+            // Sinh mã khách hàng tự động
+            KhachHangDAL khachHangDAL = new KhachHangDAL();
+            String lastMaKH = khachHangDAL.getLastMaKH();
+            String newMaKH = generateNewMaKH(lastMaKH);
+
             String hoTen = txtTenKH.getText().trim(); 
             String soDienThoai = txtSDT.getText().trim();
             String soCanCuoc = txtCMND.getText().trim();
             String email = txtEmail.getText().trim();
 
-            if (maKH.isEmpty() || hoTen.isEmpty() || soDienThoai.isEmpty() || soCanCuoc.isEmpty() || email.isEmpty()) {
+            if (newMaKH.isEmpty() || hoTen.isEmpty() || soDienThoai.isEmpty() || soCanCuoc.isEmpty() || email.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin khách hàng.");
                 return;
             }
@@ -254,13 +296,12 @@ public class KH2 extends JPanel {
             }
 
             LoaiKhachHang loaiKH = getLoaiKhachHang(cboLoaiKhachHang.getSelectedItem().toString());
-            KhachHang khachHang = new KhachHang(maKH, hoTen, soDienThoai, tienTichLuy, soCanCuoc, email, loaiKH);
+            KhachHang khachHang = new KhachHang(newMaKH, hoTen, soDienThoai, tienTichLuy, soCanCuoc, email, loaiKH);
 
-            KhachHangDAL khachHangDAL = new KhachHangDAL();
             boolean isSuccess = khachHangDAL.themKhachHang(khachHang);
 
             if (isSuccess) {
-                model.addRow(new Object[]{maKH, hoTen, soDienThoai, soCanCuoc, email, tienTichLuy, loaiKH});
+                model.addRow(new Object[]{newMaKH, hoTen, soDienThoai, soCanCuoc, email, tienTichLuy, loaiKH});
                 clearForm();
                 JOptionPane.showMessageDialog(null, "Thêm khách hàng thành công!");
             } else {
@@ -271,6 +312,33 @@ public class KH2 extends JPanel {
             JOptionPane.showMessageDialog(null, "Lỗi xảy ra: " + ex.getMessage());
         }
     }
+    private void editCustomer() {
+        int selectedRow = table_CTHD.getSelectedRow();
+        if (selectedRow != -1) {
+            txtMaKH.setText(model.getValueAt(selectedRow, 0).toString());
+            txtTenKH.setText(model.getValueAt(selectedRow, 1).toString());
+            txtSDT.setText(model.getValueAt(selectedRow, 2).toString());
+            txtCMND.setText(model.getValueAt(selectedRow, 3).toString());
+            txtEmail.setText(model.getValueAt(selectedRow, 4).toString());
+            txtTienTichLuy.setText(model.getValueAt(selectedRow, 5).toString());
+            cboLoaiKhachHang.setSelectedItem(model.getValueAt(selectedRow, 6).toString());
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng để sửa.");
+        }
+    }
+
+
+    // Phương thức sinh mã khách hàng mới dựa trên mã cuối cùng
+    private String generateNewMaKH(String lastMaKH) {
+        if (lastMaKH == null) {
+            return "KH000001"; // Nếu chưa có khách hàng nào
+        }
+
+        String numericPart = lastMaKH.substring(2); // Bỏ đi 'KH'
+        int newMaKHInt = Integer.parseInt(numericPart) + 1;
+        return String.format("KH%06d", newMaKHInt); // Tăng mã lên và định dạng lại
+    }
+
 
     // Phương thức ánh xạ tên loại khách hàng thành enum
     private LoaiKhachHang getLoaiKhachHang(String loaiKHStr) {
@@ -287,41 +355,41 @@ public class KH2 extends JPanel {
                 return null; // Hoặc có thể xử lý lỗi nếu cần
         }
     }
+    private void deleteCustomer() {
+        int selectedRow = table_CTHD.getSelectedRow();
+        if (selectedRow != -1) {
+            String maKH = model.getValueAt(selectedRow, 0).toString();
+            // Call to DAL method to delete customer in the database
+            KhachHangDAL khachHangDAL = new KhachHangDAL();
+            boolean isDeleted = khachHangDAL.xoaKhachHang(maKH);
+            if (isDeleted) {
+                model.removeRow(selectedRow);
+                JOptionPane.showMessageDialog(null, "Xóa khách hàng thành công!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Lỗi khi xóa khách hàng.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng để xóa.");
+        }
+    }
+    private void searchCustomer(String keyword) {
+        // Kiểm tra nếu từ khóa tìm kiếm là rỗng
+        if (keyword.isEmpty()) {
+            hienThiDuLieu(); // Hiển thị tất cả dữ liệu nếu không có từ khóa
+            return;
+        }
 
-    // Phương thức làm sạch các trường nhập
-    
+        // Lọc dữ liệu trong bảng dựa trên từ khóa
+        DefaultTableModel model = (DefaultTableModel) table_CTHD.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        table_CTHD.setRowSorter(sorter);
+
+        // Tạo một bộ lọc để tìm kiếm theo mã khách hàng
+        // Cột 0 là cột "Mã Khách Hàng", sử dụng biểu thức chính quy không phân biệt chữ hoa chữ thường
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 0)); 
+    }
 
 
-
-//    private void editCustomer() {
-//        DefaultTableModel model = (DefaultTableModel) table_1.getModel();
-//        int selectedRow = table_1.getSelectedRow();
-//
-//        if (selectedRow != -1) {
-//            model.setValueAt(txtMaKH.getText(), selectedRow, 0);
-//            model.setValueAt(txtTenKH.getText(), selectedRow, 1);
-//            model.setValueAt(txtSDT.getText(), selectedRow, 2);
-//            model.setValueAt(txtEmail.getText(), selectedRow, 3);
-//            model.setValueAt(cboLoaiKhach.getSelectedItem(), selectedRow, 4);
-//            model.setValueAt(txtCMND.getText(), selectedRow, 5);
-//            model.setValueAt(txtTienTichLuy.getText(), selectedRow, 6);
-//            clearForm();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng để sửa!");
-//        }
-//    }
-//
-//    private void deleteCustomer() {
-//        DefaultTableModel model = (DefaultTableModel) table_1.getModel();
-//        int selectedRow = table_1.getSelectedRow();
-//
-//        if (selectedRow != -1) {
-//            model.removeRow(selectedRow);
-//            clearForm();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng để xóa!");
-//        }
-//    }
 
     private void clearForm() {
         txtMaKH.setText("KH******");
@@ -330,17 +398,8 @@ public class KH2 extends JPanel {
         txtEmail.setText("");
         txtCMND.setText("");
         txtTienTichLuy.setText("");
-        cboLoaiKhach.setSelectedIndex(0);
+        cboLoaiKhachHang.setSelectedIndex(0);
     }
-
-//    private void searchCustomer() {
-//        String searchTerm = txtTim.getText().toLowerCase();
-//        DefaultTableModel model = (DefaultTableModel) table_1.getModel();
-//        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-//        table_1.setRowSorter(sorter);
-//        sorter.setRowFilter(RowFilter.regexFilter(searchTerm));
-//    }
-
     public void hienThiDuLieu() {
         ArrayList<KhachHang> dsKhachHang; // Thay đổi loại dữ liệu từ HoaDon sang KhachHang
         dsKhachHang = new KhachHangDAL().getAllKhachHang(); // Gọi phương thức lấy danh sách khách hàng
