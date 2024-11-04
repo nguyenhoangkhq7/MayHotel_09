@@ -10,12 +10,11 @@
 
 package view;
 
+import bus.DonDatPhongBUS;
 import com.toedter.calendar.JDateChooser;
 import constraints.CONSTRAINTS;
-import dal.LoaiPhongDAL;
-import dal.PhongDAL;
-import entity.LoaiPhong;
-import entity.Phong;
+import dal.*;
+import entity.*;
 import utils.UIHelpers;
 
 import javax.swing.*;
@@ -25,7 +24,13 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
 // Local variable
@@ -35,8 +40,10 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
     private JComboBox cboLoaiPhong, cboSoPhong, cboPhuongThucThanhToan;
     private JTextArea jtaMoTa;
     private JLabel lblTongSoPhong, lblTongThoiGianO, lblTongTien;
-
-
+    ArrayList<JPanel> listDanhSachPhongPanel = new ArrayList<>();
+    JPanel mainRightPanel;
+    JCheckBox chkTrangThaiDatCoc;
+    ArrayList<Phong> dsPhong = new ArrayList<>();
 
     public ThemDonDatPhongGUI() {
         this.setLayout(new BorderLayout());
@@ -52,6 +59,33 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         btnCheckThongTinKhachHang.addActionListener(this);
         btnChonPhong.addActionListener(this);
         cboLoaiPhong.addActionListener(this);
+        jdcCheckout.addPropertyChangeListener("date", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                // Lấy ngày Check-in
+                Date checkInDate = jdcCheckIn.getDate();
+                // Lấy ngày Check-out
+                Date checkOutDate = jdcCheckout.getDate();
+
+                // Kiểm tra xem cả hai ngày có giá trị không
+                if (checkInDate != null && checkOutDate != null) {
+                    LocalDate tgCheckin = checkInDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    LocalDate tgCheckout = checkOutDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+                    // Tính số ngày giữa hai ngày
+                    long tongThoiGianO = ChronoUnit.DAYS.between(tgCheckin, tgCheckout);
+
+                    // Cập nhật giá trị vào trường văn bản
+                    jtfTongThoiGianO.setText(String.valueOf(tongThoiGianO));
+                    System.out.println("Tổng thời gian ở: " + tongThoiGianO + " ngày");
+                } else {
+                    // Nếu một trong hai ngày là null, có thể đặt tổng thời gian ở về 0 hoặc để trống
+                    jtfTongThoiGianO.setText("");
+                    System.out.println("Vui lòng chọn cả hai ngày.");
+                }
+            }
+        });
+
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -63,18 +97,127 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         else if(o.equals(btnReset)) {
 
         }
-        else if(o.equals(btnDatPhong)) {
+        else if (o.equals(btnDatPhong)) {
+            // 1. Thu thập thông tin từ các trường nhập liệu
+            LocalDate tgCheckin = jdcCheckIn.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate tgCheckout = jdcCheckout.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            long tongThoiGianO = ChronoUnit.DAYS.between(tgCheckin, tgCheckout);
+            jtfTongThoiGianO.setText(String.valueOf(tongThoiGianO));
 
+            String loaiPhong = cboLoaiPhong.getSelectedItem().toString();
+            String soPhong = cboSoPhong.getSelectedItem().toString();
+
+            String soDienThoai = jtfSoDienThoai.getText();
+            String hoTen = jtfHoTen.getText();
+            String cccd = jtfCCCD.getText();
+            String email = jtfEmail.getText();
+            String moTa = jtaMoTa.getText();
+            String phuongThucThanhToan = cboPhuongThucThanhToan.getSelectedItem().toString();
+            boolean trangThaiDatCoc = chkTrangThaiDatCoc.isSelected();
+
+            // 2. Kiểm tra thông tin
+            if (soDienThoai.isEmpty() || hoTen.isEmpty() || cccd.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 3. Tạo đối tượng đơn đặt phòng
+            DonDatPhong ddp = new DonDatPhong();
+            ddp.setMaDon(DonDatPhongBUS.generateOrderCode()); // Tạo mã đơn mới
+            ddp.setNgayTao(LocalDate.now()); // Ngày tạo đơn
+            ddp.setTrangThaiDonDatPhong("Đặt trước"); // Cần xác định nếu có
+            ddp.setPhuongThucThanhToan(phuongThucThanhToan);
+            ddp.setTrangThaiDatCoc(trangThaiDatCoc); // Hoặc true nếu có đặt cọc
+            ddp.setNhanVien(App.nhanVienDangTruc);
+            if(new KhachHangDAL().checkKhachHang(soDienThoai)) {
+                ddp.setKhachHang(new KhachHangDAL().getKhachHangTheoSoDienThoai(soDienThoai)); // Tạo đối tượng khách hàng
+            } else {
+                KhachHang khachHang = new KhachHang();
+                khachHang.setMaKH(soDienThoai); // Giả sử mã khách hàng là số điện thoại
+                khachHang.setHoTen(hoTen);
+                khachHang.setSoDienThoai(soDienThoai);
+                khachHang.setSoCanCuoc(cccd);
+                khachHang.setEmail(email);
+                khachHang.setTienTichLuy(0); // Thiết lập tiền tích lũy ban đầu
+                khachHang.setLoaiKhachHang(LoaiKhachHang.NGUOIMOI); // Hoặc giá trị phù hợp
+                ddp.setKhachHang(khachHang);
+                new KhachHangDAL().themKhachHang(khachHang);
+            }
+            double tongTien = 0;
+            for(Phong p : dsPhong) {
+                tongTien += p.getLoaiPhong().getDonGia() * tongThoiGianO;
+            }
+            ddp.setTongTien(tongTien); // Tạm thời gán 0, cần tính toán tổng tiền
+            ddp.setMoTa(moTa);
+            ddp.setNgayNhanPhong(tgCheckin);
+            ddp.setNgayTra(tgCheckout);
+
+            // 4. Lưu đơn đặt phòng vào cơ sở dữ liệu
+            boolean isSuccess = new DonDatPhongDAL().themDonDatPhong(ddp);
+
+            // 5. Cập nhật giao diện
+            if (isSuccess) {
+                JOptionPane.showMessageDialog(null, "Đặt phòng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                resetFields(); // Hàm để làm mới các trường nhập liệu
+            } else {
+                JOptionPane.showMessageDialog(null, "Đặt phòng thất bại! Vui lòng thử lại.", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        else if(o.equals(btnCheckThongTinKhachHang)) {
 
+        else if(o.equals(btnCheckThongTinKhachHang)) {
+            String soDienThoai = jtfSoDienThoai.getText();
+            KhachHang khachHang = new KhachHangDAL().getKhachHangTheoSoDienThoai(soDienThoai);
+            if(khachHang!=null) {
+                jtfHoTen.setText(khachHang.getHoTen());
+                jtfCCCD.setText(khachHang.getSoCanCuoc());
+                jtfEmail.setText(khachHang.getEmail());
+            }
         }
         else if(o.equals(btnChonPhong)) {
+            String loaiPhong = cboLoaiPhong.getSelectedItem().toString();
+            String soPhong = cboSoPhong.getSelectedItem().toString();
 
-        } else if (o.equals(cboLoaiPhong)) {
+            dsPhong.add(new PhongDAL().getPhongTheoTenPhong(soPhong)); // lấy phòng bỏ vào danh sách
+
+            // Thêm phòng mới vào danh sách
+            listDanhSachPhongPanel.add(UIHelpers.create_Phong_Da_Them(soPhong, loaiPhong));
+
+            // Xóa nội dung cũ trong mainRightPanel
+            mainRightPanel.removeAll();
+
+            // Hiển thị danh sách phòng đã thêm
+            mainRightPanel.add(showDanhSachPhong(listDanhSachPhongPanel));
+
+            // Thêm phần tạm tính
+            mainRightPanel.add(showTamTinh());
+
+            // Cập nhật giao diện
+            mainRightPanel.revalidate();
+            mainRightPanel.repaint();
+        }
+        else if (o.equals(cboLoaiPhong)) {
             updateSoPhong();
         }
     }
+
+    private void resetFields() {
+        jtfSoDienThoai.setText("");
+        jtfHoTen.setText("");
+        jtfCCCD.setText("");
+        jtfEmail.setText("");
+        jtfTongThoiGianO.setText("");
+        cboLoaiPhong.setSelectedIndex(0);
+        cboSoPhong.removeAllItems();
+        jdcCheckIn.setDate(null);
+        jdcCheckout.setDate(null);
+        listDanhSachPhongPanel.clear();
+        mainRightPanel.removeAll();
+        mainRightPanel.add(showDanhSachPhong(listDanhSachPhongPanel));
+        mainRightPanel.add(showTamTinh());
+        mainRightPanel.revalidate();
+        mainRightPanel.repaint();
+    }
+
 
     public void themLoaiPhongCbo() {
         ArrayList<LoaiPhong> dsLoaiPhong = new LoaiPhongDAL().getAllLoaiPhong();
@@ -124,48 +267,32 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
     }
 
     public void showRightContent(JPanel container) {
-        JPanel main = new JPanel(new GridLayout(2,1));
-        container.add(main);
+        mainRightPanel = new JPanel(new GridLayout(2,1));
+        container.add(mainRightPanel);
 
-        showDanhSachPhong(main);
-        showTamTinh(main);
+        mainRightPanel.add(showDanhSachPhong(listDanhSachPhongPanel));
+        mainRightPanel.add(showTamTinh());
     }
-    public void showDanhSachPhong(JPanel container) {
-        Box boxContain = Box.createVerticalBox();
-        container.add(boxContain);
-        boxContain.add(UIHelpers.create_Title_Panel("Danh sách phòng đã thêm"));
+    public Box showDanhSachPhong(ArrayList<JPanel> listDanhSachPhongPanel) {
+        Box boxContainDanhSachPhong = Box.createVerticalBox();
+        boxContainDanhSachPhong.add(UIHelpers.create_Title_Panel("Danh sách phòng đã thêm"));
 
-        // Tạo JPanel chính chứa danh sách các phòng
-        JPanel listPanel = new JPanel();
-        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS)); // Sắp xếp các phòng theo chiều dọc
+        JPanel panelDanhSachPhong = new JPanel();
+        panelDanhSachPhong.setLayout(new BoxLayout(panelDanhSachPhong, BoxLayout.Y_AXIS));
 
-        // Thêm các phòng vào listPanel
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 013", "Delux Suites"));
-        listPanel.add(Box.createVerticalStrut(15));
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 014", "Standard Room"));
-        listPanel.add(Box.createVerticalStrut(15));
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 015", "Executive Suite"));
-        listPanel.add(Box.createVerticalStrut(15));
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 015", "Executive Suite"));
-        listPanel.add(Box.createVerticalStrut(15));
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 015", "Executive Suite"));
-        listPanel.add(Box.createVerticalStrut(15));
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 015", "Executive Suite"));
-        listPanel.add(Box.createVerticalStrut(15));
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 015", "Executive Suite"));
-        listPanel.add(Box.createVerticalStrut(15));
-        listPanel.add(UIHelpers.create_Phong_Da_Them("Phòng số 015", "Executive Suite"));
+        for(JPanel jpn : listDanhSachPhongPanel) {
+            panelDanhSachPhong.add(jpn);
+        }
 
-        // Đặt listPanel vào JScrollPane
-        JScrollPane scroll = new JScrollPane(listPanel);
+        JScrollPane scrollDanhSachPhong = new JScrollPane(panelDanhSachPhong);
+        boxContainDanhSachPhong.add(scrollDanhSachPhong);
 
-        // Thêm JScrollPane vào boxContain
-        boxContain.add(scroll);
+        return boxContainDanhSachPhong;
     }
 
-    public void showTamTinh(JPanel container) {
+
+    public Box showTamTinh() {
         Box boxContain = Box.createVerticalBox();
-        container.add(boxContain);
         boxContain.add(UIHelpers.create_Title_Panel("Tạm tính"));
 
         JPanel containCalculate = new JPanel(new GridLayout(3,3));
@@ -177,17 +304,23 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         containCalculate.add(lblTongThoiGianO = new JLabel("2"));
         containCalculate.add(lblTongTien = new JLabel("Tổng tiền: 3080"));
         containCalculate.add(new JPanel());
-        containCalculate.add(UIHelpers.create_Form_Label_Checkbox("Đặt cọc", new JCheckBox()));
+        containCalculate.add(UIHelpers.create_Form_Label_Checkbox("Đặt cọc",chkTrangThaiDatCoc = new JCheckBox()));
         boxContain.add(containCalculate);
 
         boxContain.add(UIHelpers.create_Title_Panel("Thanh toán"));
         boxContain.add(new JPanel().add(UIHelpers.create_Form_Label_JComboBox("Phương thức thanh toán", cboPhuongThucThanhToan = new JComboBox())));
+        cboPhuongThucThanhToan.addItem("Tiền mặt");
+        cboPhuongThucThanhToan.addItem("Visa");
+        cboPhuongThucThanhToan.addItem("Chuyển khoản ngân hàng");
+
 
         JPanel containBtnDatPhong = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         containBtnDatPhong.add(btnDatPhong = new JButton("Đặt phòng"));
         UIHelpers.set_Orange_Blue_Style(btnDatPhong);
 
         boxContain.add(containBtnDatPhong);
+
+        return boxContain;
     }
     public void showLeftContent(JPanel container) {
         Box boxContain = Box.createVerticalBox();
@@ -243,19 +376,11 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
 
 //        Checkbox dich vụ
         JPanel jpnContainDichVu = new JPanel(new GridLayout(0,5));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
-        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
+//        jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox("Dịch vụ", new JCheckBox()));
+        ArrayList<DichVu> dsDichVu = new DichVuDAL().getAllDichVu();
+        for(DichVu dv : dsDichVu) {
+            jpnContainDichVu.add(UIHelpers.create_Form_Label_Checkbox(dv.getTenDichVu(), new JCheckBox()));
+        }
 
         boxContain.add(jpnContainDichVu);
 

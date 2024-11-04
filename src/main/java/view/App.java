@@ -10,11 +10,15 @@
 
 package view;
 
+import dal.NhanVienDAL;
+import entity.NhanVien;
+
 import javax.swing.*;
 import java.awt.*;
 
 // nơi chạy chương trình
 public class App {
+    public static NhanVien nhanVienDangTruc = new NhanVienDAL().getNhanVienTheoMa("NV0001"); // lấy nhân viên đang trực
     public static void main(String[] args) {
         new MainGUI();
     }

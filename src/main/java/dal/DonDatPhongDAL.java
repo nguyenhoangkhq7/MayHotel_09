@@ -113,16 +113,40 @@ public class DonDatPhongDAL {
         }
         return n > 0;
     }
+    // Hàm lấy mã đơn đặt phòng cuối cùng
+    public String getLastDDP() {
+        String lastOrder = null;
+
+        String query = "SELECT MAX(maDon) FROM DonDatPhong"; // Truy vấn để lấy mã đơn lớn nhất
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                lastOrder = rs.getString(1); // Lấy mã đơn lớn nhất
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return lastOrder;
+    }
 
     // Xóa đơn đặt phòng theo mã đơn
+    // Cập nhật trạng thái đơn đặt phòng thành "Đã hủy" theo mã đơn
     public boolean xoaDonDatPhong(String maDon) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "DELETE FROM DonDatPhong WHERE maDon = ?";
+            String sql = "UPDATE DonDatPhong SET trangThaiDonDatPhong = ? WHERE maDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, maDon);
+            stmt.setString(1, "Da huy");  // Set trạng thái thành "Đã hủy"
+            stmt.setString(2, maDon);     // Điều kiện theo mã đơn
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,6 +155,7 @@ public class DonDatPhongDAL {
         }
         return n > 0;
     }
+
 
     // Tìm đơn đặt phòng theo mã đơn
     public DonDatPhong getDonDatPhongTheoMa(String maDon) {
