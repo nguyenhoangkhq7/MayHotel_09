@@ -158,6 +158,7 @@ public class KhachHangDAL {
         }
         return n > 0;
     }
+    // Lấy mã khách hàng cuối cùng
     public String getLastKhachHang() {
         String lastCode = null;
         String query = "SELECT maKhachHang FROM KhachHang ORDER BY maKhachHang DESC LIMIT 1"; // Thay 'maKhachHang' bằng tên cột mã trong bảng KhachHang
@@ -174,6 +175,24 @@ public class KhachHangDAL {
         }
         return lastCode;
     }
+
+    // Xóa khách hàng
+    public boolean xoaKhachHang(String maKH) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "DELETE FROM KhachHang WHERE maKH = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maKH);
+
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0;
+    }
+
     public static void main(String[] args) {
         Connection con = null;
         try {

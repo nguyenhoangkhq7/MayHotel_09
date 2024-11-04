@@ -6,18 +6,22 @@ import java.sql.SQLException;
 
 public class ConnectDB {
 	public static Connection con = null;  // biến con là biến kết nối với sql
-	private static ConnectDB instance = new ConnectDB(); 
-	
+	private static ConnectDB instance = new ConnectDB();
+
 	public static ConnectDB getInstance() {  // mỗi instance sẽ có biến con, 
 		return instance; 					//nếu lấy được instance ứng với biến con đã kết nối thì có thể sử dụng kết nối
 	}
-	
+
 	public void connect() throws SQLException {
-		String url = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false;useUnicode=true;characterEncoding=UTF-8;sendStringParametersAsUnicode=true";
+		String url = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false";
 		String user = "sa";
 
-		String password = "123456789HHkk"; // đổi thành pass word của mọi ng vào
+		String password = "sapassword"; // đổi thành pass word của mọi ng vào
+
+
 		con = DriverManager.getConnection(url, user, password);
+
+//		con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=QuanLyDatPhongKS;encrypt=false", "sa", "sapassword");
 
 	}
 	public void disconnect() {
@@ -32,10 +36,11 @@ public class ConnectDB {
 	public static Connection getConnection() {
 		return con;
 	}
-	
+
 	public static void main(String[] args) {
 		try {
 			ConnectDB.getInstance().connect();
+			System.out.println("Kết nối thành công");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
