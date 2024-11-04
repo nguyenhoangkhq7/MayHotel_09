@@ -128,7 +128,7 @@ private static Box createLabelAndComponent(String labelTitle, JComponent compone
     }
 
     public static JPanel create_Phong_Da_Them(String tenPhong, String loaiPhong) {
-        JPanel jpn = new JPanel(new GridLayout(1,3));
+        JPanel jpn = new JPanel(new GridLayout(1,3,20,10));
         jpn.setBorder(new EmptyBorder(10,10,10,10));
         jpn.setBackground(new Color(191,190,190,255));
         JLabel lblTenPhong = new JLabel(tenPhong); lblTenPhong.setFont(new Font("Arial", Font.BOLD,CONSTRAINTS.TEXT_SIZE));

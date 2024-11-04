@@ -13,12 +13,10 @@ public class ConnectDB {
 	}
 	
 	public void connect() throws SQLException {
-		String url = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false";
+		String url = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false;useUnicode=true;characterEncoding=UTF-8;sendStringParametersAsUnicode=true";
 		String user = "sa";
 
 		String password = "123456789HHkk"; // đổi thành pass word của mọi ng vào
-
-		
 		con = DriverManager.getConnection(url, user, password);
 
 	}

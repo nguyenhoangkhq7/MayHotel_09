@@ -208,6 +208,7 @@ public void suKienTraCuu() {
     private JScrollPane showDanhSachDDP(ArrayList<DonDatPhong> dsDDP) {
         JPanel jpnShowDanhSachDDP = new JPanel();
         jpnShowDanhSachDDP.setLayout(new GridLayout(0, 3, 150, 30));
+
         JScrollPane scroll = new JScrollPane(jpnShowDanhSachDDP);
 
         if (dsDDP.isEmpty()) {
@@ -221,6 +222,7 @@ public void suKienTraCuu() {
         }
 
         for (DonDatPhong ddp : dsDDP) {
+            if(ddp.getTrangThaiDonDatPhong().equals("Da huy")) continue;
             // lấy 1 chi tiết đơn đặt phòng phòng để có thông tin đơn đặt phòng và phòng
             DonDatPhongPanel ddpPanel = createJPNDonDatPhong(ddp);
             jpnShowDanhSachDDP.add(ddpPanel.getPanel());
@@ -242,6 +244,47 @@ public void suKienTraCuu() {
             ddpPanel.getBtnCheckin().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    int confirm = JOptionPane.showConfirmDialog(
+                            null,
+                            "Bạn có chắc chắn muốn Checkin?",
+                            "Xác nhận",
+                            JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        ddp.setTrangThaiDonDatPhong("Dang o");
+                        new DonDatPhongDAL().suaDonDatPhong(ddp);
+                        jpnDanhSachDDP.removeAll();
+                        jpnDanhSachDDP.add(showDanhSachDDP(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
+                    } else if (confirm == JOptionPane.NO_OPTION) {
+
+                    }
+
+                }
+            });
+
+            ddpPanel.getBtnThemDichVu().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+//                    jpnContent.add(new ThemDichVuGUI(new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMaDDP(ddp.getMaDon())));
+                }
+            });
+            ddpPanel.getBtnHuy().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int confirm = JOptionPane.showConfirmDialog(
+                            null,
+                            "Bạn có chắc chắn muốn Hủy đơn?",
+                            "Xác nhận",
+                            JOptionPane.YES_NO_OPTION
+                    );
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        new DonDatPhongDAL().xoaDonDatPhong(ddp.getMaDon());
+                        jpnDanhSachDDP.removeAll();
+                        jpnDanhSachDDP.add(showDanhSachDDP(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
+                    } else if (confirm == JOptionPane.NO_OPTION) {
+
+                    }
 
                 }
             });
