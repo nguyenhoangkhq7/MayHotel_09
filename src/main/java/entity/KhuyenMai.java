@@ -7,13 +7,11 @@ public class KhuyenMai {
     private String maKhuyenMai;          // Mã khuyến mãi
     private String tenKhuyenMai;         // Tên khuyến mãi
     private double giaTri;               // Giá trị khuyến mãi
-    private LocalDate ngayTao;           // Ngày tạo khuyến mãi
+    private LocalDate ngayBatDau;        // Ngày bắt đầu khuyến mãi
     private boolean conHoatDong;         // Trạng thái hoạt động
     private int soLuong;                 // Số lượng khuyến mãi
-    private String donViTinh;            // Đơn vị tính
-    private String moTa;                 // Mô tả khuyến mãi
-    private LocalDate ngayHetHan;        // Ngày hết hạn
-    private String khachHangApDung;      // Điều kiện áp dụng
+    private LocalDate ngayKetThuc;       // Ngày kết thúc khuyến mãi
+    private String loaiKhachHangApDung;  // Loại khách hàng áp dụng
 
     // Constructor không tham số
     public KhuyenMai() {
@@ -25,19 +23,17 @@ public class KhuyenMai {
     }
 
     // Constructor đầy đủ
-    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayTao, boolean conHoatDong,
-            int soLuong, LocalDate ngayHetHan, String dieuKienApDung) {
-super();
-this.maKhuyenMai = maKhuyenMai;
-this.tenKhuyenMai = tenKhuyenMai;
-this.giaTri = giaTri;
-this.ngayTao = ngayTao;
-this.conHoatDong = conHoatDong;
-this.soLuong = soLuong;
-this.ngayHetHan = ngayHetHan;
-this.khachHangApDung = dieuKienApDung;
-}
-
+    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayBatDau, boolean conHoatDong,
+                     int soLuong, LocalDate ngayKetThuc, String loaiKhachHangApDung) {
+        this.maKhuyenMai = maKhuyenMai;
+        this.tenKhuyenMai = tenKhuyenMai;
+        this.giaTri = giaTri;
+        this.ngayBatDau = ngayBatDau;
+        this.conHoatDong = conHoatDong;
+        this.soLuong = soLuong;
+        this.ngayKetThuc = ngayKetThuc;
+        this.loaiKhachHangApDung = loaiKhachHangApDung;
+    }
 
     // Getters and Setters
     public String getMaKhuyenMai() {
@@ -70,15 +66,15 @@ this.khachHangApDung = dieuKienApDung;
         this.giaTri = giaTri;
     }
 
-    public LocalDate getNgayTao() {
-        return ngayTao;
+    public LocalDate getNgayBatDau() {
+        return ngayBatDau;
     }
 
-    public void setNgayTao(LocalDate ngayTao) {
-        this.ngayTao = ngayTao;
+    public void setNgayBatDau(LocalDate ngayBatDau) {
+        this.ngayBatDau = ngayBatDau;
     }
 
-    public boolean isConHoatDong() {  // Đổi tên phương thức để tuân thủ quy ước đặt tên
+    public boolean isConHoatDong() {
         return conHoatDong;
     }
 
@@ -97,39 +93,23 @@ this.khachHangApDung = dieuKienApDung;
         this.soLuong = soLuong;
     }
 
-    public String getDonViTinh() {
-        return donViTinh;
+    public LocalDate getNgayKetThuc() {
+        return ngayKetThuc;
     }
 
-    public void setDonViTinh(String donViTinh) {
-        this.donViTinh = donViTinh;
-    }
-
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
-
-    public LocalDate getNgayHetHan() {
-        return ngayHetHan;
-    }
-
-    public void setNgayHetHan(LocalDate ngayHetHan) {
-        if (ngayHetHan == null || ngayHetHan.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Ngày hết hạn phải lớn hơn hoặc bằng ngày hiện tại");
+    public void setNgayKetThuc(LocalDate ngayKetThuc) {
+        if (ngayKetThuc == null || ngayKetThuc.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Ngày kết thúc phải lớn hơn hoặc bằng ngày hiện tại");
         }
-        this.ngayHetHan = ngayHetHan;
+        this.ngayKetThuc = ngayKetThuc;
     }
 
-    public String getKhachHangApDung() {
-        return khachHangApDung;
+    public String getLoaiKhachHangApDung() {
+        return loaiKhachHangApDung;
     }
 
-    public void setKhachHangApDung(String dieuKienApDung) {
-        this.khachHangApDung = dieuKienApDung;
+    public void setLoaiKhachHangApDung(String loaiKhachHangApDung) {
+        this.loaiKhachHangApDung = loaiKhachHangApDung;
     }
 
     // Override equals and hashCode
@@ -153,13 +133,11 @@ this.khachHangApDung = dieuKienApDung;
                 "maKhuyenMai='" + maKhuyenMai + '\'' +
                 ", tenKhuyenMai='" + tenKhuyenMai + '\'' +
                 ", giaTri=" + giaTri +
-                ", ngayTao=" + ngayTao +
+                ", ngayBatDau=" + ngayBatDau +
                 ", conHoatDong=" + conHoatDong +
                 ", soLuong=" + soLuong +
-                ", donViTinh='" + donViTinh + '\'' +
-                ", moTa='" + moTa + '\'' +
-                ", ngayHetHan=" + ngayHetHan +
-                ", dieuKienApDung='" + khachHangApDung + '\'' +
-                '}'; 
+                ", ngayKetThuc=" + ngayKetThuc +
+                ", loaiKhachHangApDung='" + loaiKhachHangApDung + '\'' +
+                '}';
     }
 }

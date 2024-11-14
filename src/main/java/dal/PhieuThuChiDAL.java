@@ -20,40 +20,34 @@ public class PhieuThuChiDAL {
         dsPhieuThuChi = new ArrayList<>();
     }
 
-
+    // Lấy mã phiếu tiếp theo
     public String layMaPhieuTiepTheo() {
-        String maPhieuCuoi = ""; // Biến để lưu mã phiếu cuối cùng
+        String maPhieuCuoi = "";
 
         try {
-            // Kết nối tới cơ sở dữ liệu
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT TOP 1 maPhieu FROM PhieuThuChi ORDER BY maPhieu DESC"; // Lấy mã phiếu mới nhất
+            String sql = "SELECT TOP 1 maPhieu FROM PhieuThuChi ORDER BY maPhieu DESC";
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 maPhieuCuoi = rs.getString("maPhieu");
             }
 
-            // Kiểm tra xem maPhieuCuoi có hợp lệ không
             if (maPhieuCuoi != null && !maPhieuCuoi.isEmpty()) {
-                // Tăng mã phiếu lên 1
-                int soHienTai = Integer.parseInt(maPhieuCuoi.replaceAll("[^0-9]", "")); // Lấy số từ mã phiếu
+                int soHienTai = Integer.parseInt(maPhieuCuoi.replaceAll("[^0-9]", ""));
                 soHienTai++;
-                return String.format("PTC%04d", soHienTai); // Định dạng lại thành PTC0002, PTC0003, ...
+                return String.format("PTC%04d", soHienTai);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            // Xử lý lỗi khi chuyển đổi số
         }
 
         return "PTC0001"; // Nếu không tìm thấy, bắt đầu từ PTC0001
     }
 
-
+    // Lấy danh sách phiếu thu chi theo khoảng thời gian
     public ArrayList<PhieuThuChi> getPhieuThuChiByDateRange(LocalDate startDate, LocalDate endDate) {
         ArrayList<PhieuThuChi> dsPhieuThuChi = new ArrayList<>();
 
@@ -70,13 +64,13 @@ public class PhieuThuChiDAL {
                 String maPhieu = rs.getString(1);
                 String loaiPhieu = rs.getString(2);
                 String moTa = rs.getString(3);
-                LocalDate ngayTao = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
+                LocalDate ngayLap = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
                 double soTien = rs.getDouble(5);
-                String phuongThuc = rs.getString(6);
+                String phuongThucThanhToan = rs.getString(6);
                 boolean conHoatDong = rs.getBoolean(7);
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(8));
 
-                PhieuThuChi phieuThuChi = new PhieuThuChi(maPhieu, loaiPhieu, moTa, ngayTao, soTien, phuongThuc, conHoatDong, nhanVien);
+                PhieuThuChi phieuThuChi = new PhieuThuChi(maPhieu, loaiPhieu, moTa, ngayLap, soTien, phuongThucThanhToan, conHoatDong, nhanVien);
                 dsPhieuThuChi.add(phieuThuChi);
             }
         } catch (SQLException e) {
@@ -86,7 +80,8 @@ public class PhieuThuChiDAL {
         }
         return dsPhieuThuChi;
     }
-    
+
+    // Lấy tất cả phiếu thu chi
     public ArrayList<PhieuThuChi> getAllPhieuThuChi() {
         try {
             ConnectDB.getInstance().connect();
@@ -98,13 +93,13 @@ public class PhieuThuChiDAL {
                 String maPhieu = rs.getString(1);
                 String loaiPhieu = rs.getString(2);
                 String moTa = rs.getString(3);
-                LocalDate ngayTao = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
+                LocalDate ngayLap = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
                 double soTien = rs.getDouble(5);
-                String phuongThuc = rs.getString(6);
+                String phuongThucThanhToan = rs.getString(6);
                 boolean conHoatDong = rs.getBoolean(7);
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString(8));
 
-                PhieuThuChi phieuThuChi = new PhieuThuChi(maPhieu, loaiPhieu, moTa, ngayTao, soTien, phuongThuc, conHoatDong, nhanVien);
+                PhieuThuChi phieuThuChi = new PhieuThuChi(maPhieu, loaiPhieu, moTa, ngayLap, soTien, phuongThucThanhToan, conHoatDong, nhanVien);
                 dsPhieuThuChi.add(phieuThuChi);
             }
         } catch (SQLException e) {
@@ -115,6 +110,7 @@ public class PhieuThuChiDAL {
         return dsPhieuThuChi;
     }
 
+    // Thêm phiếu thu chi
     public boolean themPhieuThuChi(PhieuThuChi phieuThuChi) {
         int n = 0;
         try {
@@ -125,9 +121,9 @@ public class PhieuThuChiDAL {
             stmt.setString(1, phieuThuChi.getMaPhieu());
             stmt.setString(2, phieuThuChi.getLoaiPhieu());
             stmt.setString(3, phieuThuChi.getMoTa());
-            stmt.setDate(4, Date.valueOf(phieuThuChi.getNgayTao()));
+            stmt.setDate(4, Date.valueOf(phieuThuChi.getNgayLap()));
             stmt.setDouble(5, phieuThuChi.getSoTien());
-            stmt.setString(6, phieuThuChi.getPhuongThuc());
+            stmt.setString(6, phieuThuChi.getPhuongThucThanhToan());
             stmt.setBoolean(7, phieuThuChi.isConHoatDong());
             stmt.setString(8, phieuThuChi.getNhanVien().getMaNV());
 
@@ -140,6 +136,7 @@ public class PhieuThuChiDAL {
         return n > 0;
     }
 
+    // Lấy phiếu thu chi theo mã
     public PhieuThuChi getPhieuThuChiTheoMa(String maPhieu) {
         PhieuThuChi phieuThuChi = null;
         try {
@@ -152,13 +149,13 @@ public class PhieuThuChiDAL {
             if (rs.next()) {
                 String loaiPhieu = rs.getString("loaiPhieu");
                 String moTa = rs.getString("moTa");
-                LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+                LocalDate ngayLap = rs.getDate("ngayLap").toLocalDate();
                 double soTien = rs.getDouble("soTien");
-                String phuongThuc = rs.getString("phuongThuc");
+                String phuongThucThanhToan = rs.getString("phuongThucThanhToan");
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString("maNV"));
 
-                phieuThuChi = new PhieuThuChi(maPhieu, loaiPhieu, moTa, ngayTao, soTien, phuongThuc, conHoatDong, nhanVien);
+                phieuThuChi = new PhieuThuChi(maPhieu, loaiPhieu, moTa, ngayLap, soTien, phuongThucThanhToan, conHoatDong, nhanVien);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -168,6 +165,7 @@ public class PhieuThuChiDAL {
         return phieuThuChi;
     }
 
+    // Đóng kết nối
     private void closeConnection() {
         try {
             if (con != null && !con.isClosed()) {
@@ -178,6 +176,7 @@ public class PhieuThuChiDAL {
         }
     }
 
+    // Sửa phiếu thu chi
     public boolean suaPhieuThuChi(String maPhieuThuChi, PhieuThuChi phieuThuChi) {
         int n = 0;
         try {
@@ -187,9 +186,9 @@ public class PhieuThuChiDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, phieuThuChi.getLoaiPhieu());
             stmt.setString(2, phieuThuChi.getMoTa());
-            stmt.setDate(3, Date.valueOf(phieuThuChi.getNgayTao()));
+            stmt.setDate(3, Date.valueOf(phieuThuChi.getNgayLap()));
             stmt.setDouble(4, phieuThuChi.getSoTien());
-            stmt.setString(5, phieuThuChi.getPhuongThuc());
+            stmt.setString(5, phieuThuChi.getPhuongThucThanhToan());
             stmt.setBoolean(6, phieuThuChi.isConHoatDong());
             stmt.setString(7, phieuThuChi.getNhanVien().getMaNV());
             stmt.setString(8, maPhieuThuChi);
@@ -203,15 +202,15 @@ public class PhieuThuChiDAL {
         return n > 0;
     }
 
-    public boolean huyPhieuThuChi(String maPhieuThuChi) {
+    // Xóa phiếu thu chi
+    public boolean xoaPhieuThuChi(String maPhieuThuChi) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE PhieuThuChi SET conHoatDong = 0 WHERE maPhieu = ?";
+            String sql = "DELETE FROM PhieuThuChi WHERE maPhieu = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maPhieuThuChi);
-
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -220,29 +219,4 @@ public class PhieuThuChiDAL {
         }
         return n > 0;
     }
-    public static void main(String[] args) {
-        // Tạo đối tượng của lớp PhieuThuChiDAL
-        PhieuThuChiDAL phieuThuChiDAL = new PhieuThuChiDAL();
-
-        // Định nghĩa khoảng thời gian ngày bắt đầu và ngày kết thúc
-        LocalDate startDate = LocalDate.of(2024, 1, 1); // Ngày bắt đầu
-        LocalDate endDate = LocalDate.of(2024, 12, 31); // Ngày kết thúc
-
-        // Gọi hàm getPhieuThuChiByDateRange và nhận kết quả
-        ArrayList<PhieuThuChi> dsPhieuThuChi = phieuThuChiDAL.getPhieuThuChiByDateRange(startDate, endDate);
-
-        // In ra danh sách phiếu thu chi nhận được
-        for (PhieuThuChi phieu : dsPhieuThuChi) {
-            System.out.println("Mã phiếu: " + phieu.getMaPhieu());
-            System.out.println("Loại phiếu: " + phieu.getLoaiPhieu());
-            System.out.println("Mô tả: " + phieu.getMoTa());
-            System.out.println("Ngày tạo: " + phieu.getNgayTao());
-            System.out.println("Số tiền: " + phieu.getSoTien());
-            System.out.println("Phương thức: " + phieu.getPhuongThuc());
-            System.out.println("Trạng thái: " + (phieu.isConHoatDong() ? "Còn hoạt động" : "Đã hủy"));
-            System.out.println("--------------------------------");
-        }
-    
 }
-}
-

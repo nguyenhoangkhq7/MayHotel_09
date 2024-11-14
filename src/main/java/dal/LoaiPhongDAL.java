@@ -1,181 +1,166 @@
-/*
-    *MayHotel  day creative: 10/15/2024
-    version: 2023.2  IntelliJ IDEA
-    author: Nguyễn Hoàng Khang
- */
-/*
-    *class description:
-    Data Access Layer (DAL) for managing LoaiPhong objects in the database.
-*/
-
 package dal;
 
-import entity.LoaiPhong;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
-
 import database.ConnectDB;
+import entity.LoaiPhong;
 
 public class LoaiPhongDAL {
-    private ArrayList<LoaiPhong> dsLoaiPhong;
     private Connection con;
 
     public LoaiPhongDAL() {
-        dsLoaiPhong = new ArrayList<>();
-    }
-    // Get room type code by room type name
-    public String getMaLoaiPhongByTen(String tenLoaiPhong) {
-        String maLoaiPhong = null;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "SELECT maLoaiPhong FROM LoaiPhong WHERE tenLoaiPhong = ?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, tenLoaiPhong);
-
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                maLoaiPhong = rs.getString("maLoaiPhong");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return maLoaiPhong;
+        // Constructor mặc định, không lưu trữ danh sách loại phòng trong DAL
     }
 
-
-    // Get all room types
-
+    // Lấy tất cả loại phòng từ cơ sở dữ liệu
     public ArrayList<LoaiPhong> getAllLoaiPhong() {
-        dsLoaiPhong.clear(); // Clear the existing list
+        ArrayList<LoaiPhong> dsLoaiPhong = new ArrayList<>();
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
             String sql = "SELECT * FROM LoaiPhong";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
                 LoaiPhong loaiPhong = new LoaiPhong(
-                        rs.getString("maLoaiPhong"),
-                        rs.getString("tenLoaiPhong"),
-                        rs.getInt("sucChua"),
-                        rs.getDouble("donGia"),
-                        rs.getString("mota"),
-                        rs.getDouble("chietKhau")
+                        rs.getString(1),  // maLoaiPhong
+                        rs.getString(2),  // tenLoaiPhong
+                        rs.getInt(3),     // sucChua
+                        rs.getDouble(4)   // donGia
                 );
                 dsLoaiPhong.add(loaiPhong);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return dsLoaiPhong;
     }
 
-    // Get room type by code
+    // Lấy loại phòng theo mã loại phòng
     public LoaiPhong getLoaiPhongTheoMa(String maLoaiPhong) {
         LoaiPhong loaiPhong = null;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
             String sql = "SELECT * FROM LoaiPhong WHERE maLoaiPhong = ?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, maLoaiPhong);
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maLoaiPhong);
+            ResultSet rs = stmt.executeQuery();
 
-            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 loaiPhong = new LoaiPhong(
-                        rs.getString("maLoaiPhong"),
-                        rs.getString("tenLoaiPhong"),
-                        rs.getInt("sucChua"),
-                        rs.getDouble("donGia"),
-                        rs.getString("mota"),
-                        rs.getDouble("chietKhau")
+                        rs.getString(1),  // maLoaiPhong
+                        rs.getString(2),  // tenLoaiPhong
+                        rs.getInt(3),     // sucChua
+                        rs.getDouble(4)   // donGia
                 );
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return loaiPhong;
     }
 
-    // Add new room type
+    // Thêm loại phòng mới vào cơ sở dữ liệu
     public boolean themLoaiPhong(LoaiPhong loaiPhong) {
+        int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO LoaiPhong (maLoaiPhong, tenLoaiPhong, sucChua, donGia, mota, chietKhau) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO LoaiPhong (maLoaiPhong, tenLoaiPhong, sucChua, donGia) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, loaiPhong.getMaLoaiPhong());
             stmt.setString(2, loaiPhong.getTenLoaiPhong());
             stmt.setInt(3, loaiPhong.getSucChua());
             stmt.setDouble(4, loaiPhong.getDonGia());
-            stmt.setString(5, loaiPhong.getMota());
-            stmt.setDouble(6, loaiPhong.getChietKhau());
-            return stmt.executeUpdate() > 0;
+
+            n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        } finally {
-            closeConnection();
         }
+        return n > 0;
     }
 
-    // Update room type
-    public boolean suaLoaiPhong(String maLoaiPhong, LoaiPhong loaiPhong) {
+    // Cập nhật loại phòng trong cơ sở dữ liệu
+    public boolean capNhatLoaiPhong(LoaiPhong loaiPhong) {
+        int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE LoaiPhong SET tenLoaiPhong = ?, sucChua = ?, donGia = ?, mota = ?, chietKhau = ? WHERE maLoaiPhong = ?";
+            String sql = "UPDATE LoaiPhong SET tenLoaiPhong = ?, sucChua = ?, donGia = ? WHERE maLoaiPhong = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, loaiPhong.getTenLoaiPhong());
             stmt.setInt(2, loaiPhong.getSucChua());
             stmt.setDouble(3, loaiPhong.getDonGia());
-            stmt.setString(4, loaiPhong.getMota());
-            stmt.setDouble(5, loaiPhong.getChietKhau());
-            stmt.setString(6, maLoaiPhong);
-            return stmt.executeUpdate() > 0;
+            stmt.setString(4, loaiPhong.getMaLoaiPhong());
+
+            n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        } finally {
-            closeConnection();
         }
+        return n > 0;
     }
 
-    // Delete room type
+    // Xóa loại phòng khỏi cơ sở dữ liệu
     public boolean xoaLoaiPhong(String maLoaiPhong) {
+        int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
             String sql = "DELETE FROM LoaiPhong WHERE maLoaiPhong = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maLoaiPhong);
-            return stmt.executeUpdate() > 0;
+
+            n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        } finally {
-            closeConnection();
+        }
+        return n > 0;
+    }
+
+    // Đóng kết nối sau khi thực hiện các thao tác
+    private void closeConnection() {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    private void closeConnection() {
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public static void main(String[] args) {
+        LoaiPhongDAL dal = new LoaiPhongDAL();
+
+        // Thêm loại phòng mới
+        LoaiPhong loaiPhong1 = new LoaiPhong("LP01", "Phòng Đơn", 2, 500000);
+        if (dal.themLoaiPhong(loaiPhong1)) {
+            System.out.println("Thêm loại phòng thành công");
+        }
+
+        // Lấy tất cả loại phòng
+        ArrayList<LoaiPhong> loaiPhongs = dal.getAllLoaiPhong();
+        for (LoaiPhong lp : loaiPhongs) {
+            System.out.println(lp);
+        }
+
+        // Lấy loại phòng theo mã
+        LoaiPhong loaiPhong = dal.getLoaiPhongTheoMa("LP01");
+        if (loaiPhong != null) {
+            System.out.println("Loại phòng tìm được: " + loaiPhong);
+        }
+
+        // Cập nhật loại phòng
+        loaiPhong.setTenLoaiPhong("Phòng Đôi");
+        loaiPhong.setSucChua(4);
+        if (dal.capNhatLoaiPhong(loaiPhong)) {
+            System.out.println("Cập nhật loại phòng thành công");
+        }
+
+        // Xóa loại phòng
+        if (dal.xoaLoaiPhong("LP01")) {
+            System.out.println("Xóa loại phòng thành công");
         }
     }
 }

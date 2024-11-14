@@ -158,7 +158,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             stmt.setString(2, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(3, chiTiet.getPhong().getMaPhong());
             stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
-            stmt.setDate(5, java.sql.Date.valueOf(chiTiet.getNgayTra()));
+            stmt.setDate(5, java.sql.Date.valueOf(chiTiet.getNgayTraPhong()));
             stmt.setBoolean(6, chiTiet.isLaPhongChuyen());
             stmt.setDouble(7, chiTiet.getChietKhau());
             n = stmt.executeUpdate();
@@ -180,7 +180,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             stmt.setString(1, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(2, chiTiet.getPhong().getMaPhong());
             stmt.setDate(3, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
-            stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayTra()));
+            stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayTraPhong()));
             stmt.setBoolean(5, chiTiet.isLaPhongChuyen());
             stmt.setDouble(6, chiTiet.getChietKhau());
             stmt.setString(7, maCT_DDP_P);

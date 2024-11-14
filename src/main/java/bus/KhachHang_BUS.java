@@ -4,31 +4,56 @@ import dal.KhachHangDAL;
 import entity.KhachHang;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class KhachHang_BUS {
     private KhachHangDAL khachHangDAL;
+    private List<KhachHang> dsKhachHang;
 
     public KhachHang_BUS() {
         khachHangDAL = new KhachHangDAL();
+        dsKhachHang = new ArrayList<>();
     }
 
-    public ArrayList<KhachHang> getAllKhachHang() {
-        return khachHangDAL.getAllKhachHang();
+    // Lấy tất cả khách hàng (có thể lấy từ bộ nhớ nếu có, hoặc từ cơ sở dữ liệu nếu chưa)
+    public List<KhachHang> getAllKhachHang() {
+        if (dsKhachHang.isEmpty()) {
+            dsKhachHang = khachHangDAL.getAllKhachHang();
+        }
+        return dsKhachHang;
     }
 
-    public KhachHang getKhachHangTheoMa(String maKH) {
-        return khachHangDAL.getKhachHangTheoMa(maKH);
-    }
-
+    // Thêm khách hàng và cập nhật danh sách trong bộ nhớ
     public boolean themKhachHang(KhachHang khachHang) {
-        return khachHangDAL.themKhachHang(khachHang);
+        boolean success = khachHangDAL.themKhachHang(khachHang);
+        if (success) {
+            dsKhachHang.add(khachHang); // Thêm vào bộ nhớ
+        }
+        return success;
     }
 
-    public boolean suaKhachHang(String maKH, KhachHang khachHang) {
-        return khachHangDAL.suaKhachHang(maKH, khachHang);
+    // Cập nhật khách hàng và cập nhật danh sách trong bộ nhớ
+    public boolean capNhatKhachHang(KhachHang khachHang) {
+        boolean success = khachHangDAL.capNhatKhachHang(khachHang);
+        if (success) {
+            // Cập nhật danh sách trong bộ nhớ
+            for (KhachHang kh : dsKhachHang) {
+                if (kh.getMaKH().equals(khachHang.getMaKH())) {
+                    dsKhachHang.set(dsKhachHang.indexOf(kh), khachHang);
+                    break;
+                }
+            }
+        }
+        return success;
     }
 
+    // Xóa khách hàng và cập nhật danh sách trong bộ nhớ
     public boolean xoaKhachHang(String maKH) {
-        return khachHangDAL.xoaKhachHang(maKH);
+        boolean success = khachHangDAL.xoaKhachHang(maKH);
+        if (success) {
+            // Xóa khỏi bộ nhớ
+            dsKhachHang.removeIf(kh -> kh.getMaKH().equals(maKH));
+        }
+        return success;
     }
 }

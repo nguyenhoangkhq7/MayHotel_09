@@ -1,36 +1,33 @@
 package dal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import database.ConnectDB;
 import entity.TaiKhoan;
+import database.ConnectDB;
+
+import java.sql.*;
+import java.util.ArrayList;
 
 public class TaiKhoanDAL {
     private Connection con;
 
     public TaiKhoanDAL() {
-        // Constructor
+        // Không lưu trữ danh sách tài khoản trong DAL
     }
 
-    // Lấy tất cả tài khoản
+    // Lấy tất cả tài khoản từ cơ sở dữ liệu
     public ArrayList<TaiKhoan> getAllTaiKhoan() {
         ArrayList<TaiKhoan> dsTaiKhoan = new ArrayList<>();
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
             String sql = "SELECT * FROM TaiKhoan";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                String tenTaiKhoan = rs.getString("tenTaiKhoan");
-                String matKhau = rs.getString("matKhau");
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
 
-                // Tạo đối tượng TaiKhoan từ dữ liệu truy vấn
-                TaiKhoan taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
+            while (rs.next()) {
+                TaiKhoan taiKhoan = new TaiKhoan(
+                        rs.getString(1), // tenTaiKhoan
+                        rs.getString(2)  // matKhau
+                );
                 dsTaiKhoan.add(taiKhoan);
             }
         } catch (SQLException e) {
@@ -41,64 +38,8 @@ public class TaiKhoanDAL {
         return dsTaiKhoan;
     }
 
-    // Thêm tài khoản mới
-    public boolean themTaiKhoan(TaiKhoan taiKhoan) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "INSERT INTO TaiKhoan (tenTaiKhoan, matKhau) VALUES(?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, taiKhoan.getTenDangNhap());
-            stmt.setString(2, taiKhoan.getMatKhau());
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return n > 0;
-    }
-
-    // Cập nhật mật khẩu tài khoản
-    public boolean suaTaiKhoan(String tenTaiKhoan, String matKhauMoi) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "UPDATE TaiKhoan SET matKhau = ? WHERE tenTaiKhoan = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, matKhauMoi);
-            stmt.setString(2, tenTaiKhoan);
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return n > 0;
-    }
-
-    // Xóa tài khoản theo tên đăng nhập
-    public boolean xoaTaiKhoan(String tenTaiKhoan) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "DELETE FROM TaiKhoan WHERE tenTaiKhoan = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, tenTaiKhoan);
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return n > 0;
-    }
-
-    // Tìm tài khoản theo tên đăng nhập
-    public TaiKhoan getTaiKhoanTheoMa(String tenTaiKhoan) {
+    // Lấy tài khoản theo tên tài khoản
+    public TaiKhoan getTaiKhoanTheoTen(String tenTaiKhoan) {
         TaiKhoan taiKhoan = null;
         try {
             ConnectDB.getInstance().connect();
@@ -107,9 +48,12 @@ public class TaiKhoanDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, tenTaiKhoan);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                String matKhau = rs.getString("matKhau");
-                taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
+                taiKhoan = new TaiKhoan(
+                        rs.getString(1),  // tenTaiKhoan
+                        rs.getString(2)   // matKhau
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,7 +63,66 @@ public class TaiKhoanDAL {
         return taiKhoan;
     }
 
-    // Đóng kết nối
+    // Thêm tài khoản mới vào cơ sở dữ liệu
+    public boolean themTaiKhoan(TaiKhoan taiKhoan) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "INSERT INTO TaiKhoan (tenTaiKhoan, matKhau) VALUES (?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, taiKhoan.getTenTaiKhoan());
+            stmt.setString(2, taiKhoan.getMatKhau()); // Đảm bảo mật khẩu đã được mã hóa
+
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return n > 0;
+    }
+
+    // Cập nhật tài khoản trong cơ sở dữ liệu
+    public boolean capNhatTaiKhoan(TaiKhoan taiKhoan) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "UPDATE TaiKhoan SET matKhau = ? WHERE tenTaiKhoan = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, taiKhoan.getMatKhau()); // Đảm bảo mật khẩu đã được mã hóa
+            stmt.setString(2, taiKhoan.getTenTaiKhoan());
+
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return n > 0;
+    }
+
+    // Xóa tài khoản khỏi cơ sở dữ liệu
+    public boolean xoaTaiKhoan(String tenTaiKhoan) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "DELETE FROM TaiKhoan WHERE tenTaiKhoan = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenTaiKhoan);
+
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+        return n > 0;
+    }
+
+    // Đóng kết nối với cơ sở dữ liệu
     private void closeConnection() {
         try {
             if (con != null && !con.isClosed()) {
@@ -131,22 +134,25 @@ public class TaiKhoanDAL {
     }
 
     public static void main(String[] args) {
-        TaiKhoanDAL dal = new TaiKhoanDAL();
+        // Đây là nơi bạn có thể thử nghiệm với các phương thức
+        TaiKhoanDAL taiKhoanDAL = new TaiKhoanDAL();
 
-        // Thêm tài khoản mới
-        boolean result = dal.themTaiKhoan(new TaiKhoan("user1", "password123"));
+        // Thêm tài khoản
+        TaiKhoan taiKhoan = new TaiKhoan("admin", "admin123");
+        boolean result = taiKhoanDAL.themTaiKhoan(taiKhoan);
         System.out.println("Thêm tài khoản thành công: " + result);
 
-        // Cập nhật mật khẩu
-        boolean updateResult = dal.suaTaiKhoan("user1", "newpassword456");
-        System.out.println("Cập nhật mật khẩu thành công: " + updateResult);
+        // Lấy tài khoản theo tên
+        TaiKhoan taiKhoanLayDuoc = taiKhoanDAL.getTaiKhoanTheoTen("admin");
+        System.out.println("Tài khoản lấy được: " + taiKhoanLayDuoc);
 
-        // Tìm tài khoản
-        TaiKhoan taiKhoan = dal.getTaiKhoanTheoMa("user1");
-        System.out.println("Tìm tài khoản: " + taiKhoan);
+        // Cập nhật tài khoản
+        taiKhoanLayDuoc.setMatKhau("newpassword123");
+        result = taiKhoanDAL.capNhatTaiKhoan(taiKhoanLayDuoc);
+        System.out.println("Cập nhật tài khoản thành công: " + result);
 
         // Xóa tài khoản
-        boolean deleteResult = dal.xoaTaiKhoan("user1");
-        System.out.println("Xóa tài khoản thành công: " + deleteResult);
+        result = taiKhoanDAL.xoaTaiKhoan("admin");
+        System.out.println("Xóa tài khoản thành công: " + result);
     }
 }

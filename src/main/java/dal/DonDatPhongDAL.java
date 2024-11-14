@@ -40,14 +40,14 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
+                LocalDate ngayTraPhong = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
                 LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
-                LocalDate ngayTra = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
 
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(maNV);
                 KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(maKH);
 
                 DonDatPhong donDatPhong = new DonDatPhong(maDon, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong,
-                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayNhanPhong, ngayTra);
+                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayTraPhong, ngayNhanPhong );
                 dsDonDatPhong.add(donDatPhong);
             }
         } catch (SQLException e) {
@@ -75,8 +75,9 @@ public class DonDatPhongDAL {
             stmt.setString(7, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(8, donDatPhong.getTongTien());
             stmt.setString(9, donDatPhong.getMoTa());
-            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
-            stmt.setDate(11, java.sql.Date.valueOf(donDatPhong.getNgayTra()));
+            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setDate(11, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
+            
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,8 +103,9 @@ public class DonDatPhongDAL {
             stmt.setString(6, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(7, donDatPhong.getTongTien());
             stmt.setString(8, donDatPhong.getMoTa());
-            stmt.setDate(9, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
-            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayTra()));
+            stmt.setDate(9, java.sql.Date.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
+            
             stmt.setString(11, donDatPhong.getMaDon());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -176,14 +178,15 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
+                LocalDate ngayTraPhong = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
+
                 LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
-                LocalDate ngayTra = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
 
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(maNV);
                 KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(maKH);
 
                 donDatPhong = new DonDatPhong(maDon, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong,
-                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayNhanPhong, ngayTra);
+                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa,ngayTraPhong, ngayNhanPhong);
             }
         } catch (SQLException e) {
             e.printStackTrace();

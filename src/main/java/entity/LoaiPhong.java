@@ -1,48 +1,34 @@
-/*
-    *MayHotel  day creative: 10/1/2024
-    version: 2023.2  IntelliJ IDEA
-    author: Nguyễn Hoàng Khang
- */
-/*
-    *class description:
-    Class representing a room type (LoaiPhong) in the hotel management system.
-    Contains attributes like code, name, capacity, price, description, and discount.
-*/
-
 package entity;
 
 import java.util.Objects;
 
 public class LoaiPhong {
-    private String maLoaiPhong;
-    private String tenLoaiPhong;
-    private int sucChua;
-    private double donGia;
-    private String mota;
-    private double chietKhau;
+    private String maLoaiPhong;    // Mã loại phòng
+    private String tenLoaiPhong;   // Tên loại phòng
+    private int sucChua;           // Sức chứa
+    private double donGia;         // Đơn giá
 
-    // constructor
-    public LoaiPhong(String maLoaiPhong, String tenLoaiPhong, int sucChua, double donGia, String mota, double chietKhau) {
+    // Constructor
+    public LoaiPhong(String maLoaiPhong, String tenLoaiPhong, int sucChua, double donGia) {
         setMaLoaiPhong(maLoaiPhong);
         this.tenLoaiPhong = tenLoaiPhong;
         setSucChua(sucChua);
         setDonGia(donGia);
-        this.mota = mota;
-        this.chietKhau = chietKhau;
     }
 
     public LoaiPhong(String maLoaiPhong) {
-        this(maLoaiPhong, null, 0, 0.0, null, 0.0);
+        this(maLoaiPhong, null, 0, 0.0);
     }
 
-    // getter and setter methods
+    // Getter and Setter methods
     public String getMaLoaiPhong() {
         return maLoaiPhong;
     }
 
     public void setMaLoaiPhong(String maLoaiPhong) {
-        if (maLoaiPhong == null || maLoaiPhong.isEmpty())
+        if (maLoaiPhong == null || maLoaiPhong.isEmpty()) {
             throw new IllegalArgumentException("Mã loại phòng không được rỗng");
+        }
         this.maLoaiPhong = maLoaiPhong;
     }
 
@@ -59,8 +45,9 @@ public class LoaiPhong {
     }
 
     public void setSucChua(int sucChua) {
-        if (sucChua <= 0)
-            throw new IllegalArgumentException("Sức chứa > 0");
+        if (sucChua <= 0) {
+            throw new IllegalArgumentException("Sức chứa phải lớn hơn 0");
+        }
         this.sucChua = sucChua;
     }
 
@@ -69,34 +56,18 @@ public class LoaiPhong {
     }
 
     public void setDonGia(double donGia) {
-        if (donGia <= 0)
-            throw new IllegalArgumentException("Đơn giá > 0");
+        if (donGia <= 0) {
+            throw new IllegalArgumentException("Đơn giá phải lớn hơn 0");
+        }
         this.donGia = donGia;
-    }
-
-    public String getMota() {
-        return mota;
-    }
-
-    public void setMota(String mota) {
-        this.mota = mota;
-    }
-
-    public double getChietKhau() {
-        return chietKhau;
-    }
-
-    public void setChietKhau(double chietKhau) {
-        if (chietKhau < 0) // Chấp nhận chiết khấu 0 hoặc dương
-            throw new IllegalArgumentException("Chiết khấu không thể âm");
-        this.chietKhau = chietKhau;
     }
 
     // hashCode and equals
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LoaiPhong loaiPhong)) return false;
+        if (!(o instanceof LoaiPhong)) return false;
+        LoaiPhong loaiPhong = (LoaiPhong) o;
         return Objects.equals(maLoaiPhong, loaiPhong.maLoaiPhong);
     }
 
@@ -113,8 +84,6 @@ public class LoaiPhong {
                 ", tenLoaiPhong='" + tenLoaiPhong + '\'' +
                 ", sucChua=" + sucChua +
                 ", donGia=" + donGia +
-                ", mota='" + mota + '\'' +
-                ", chietKhau=" + chietKhau +
                 '}';
     }
 }
