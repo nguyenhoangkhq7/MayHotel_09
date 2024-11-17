@@ -25,6 +25,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -48,12 +50,19 @@ public class ThemDichVuGUI extends JPanel {
 	private JComboBox comboBox_1;
 	private JTextArea textArea ;
 	private JComboBox<String> comboBox;
-
+	
+	
 	/**
 	 * Launch the application.
 	 */
 	  private ChiTiet_DonDatPhong_Phong chitietphong; // Thuộc tính lưu chi tiết phòng
-	
+	  public static void main(String[] args) {
+		  JFrame frame = new JFrame();
+	        frame.setSize(1920,1080);
+	        frame.setVisible(true);
+	        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	        frame.add(new ThemDichVuGUI(new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong().get(0)));
+	    }
 	public ThemDichVuGUI(ChiTiet_DonDatPhong_Phong chitietphong) {
         this.chitietphong = chitietphong; // Gán tham số cho thuộc tính
 
@@ -469,5 +478,6 @@ public class ThemDichVuGUI extends JPanel {
           }
       }
   	}
- 
+  
 }
+
