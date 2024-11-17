@@ -40,14 +40,14 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
+                LocalDate ngayTraPhong = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
                 LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
-                LocalDate ngayTra = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
 
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(maNV);
                 KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(maKH);
 
                 DonDatPhong donDatPhong = new DonDatPhong(maDon, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong,
-                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayNhanPhong, ngayTra);
+                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayTraPhong, ngayNhanPhong );
                 dsDonDatPhong.add(donDatPhong);
             }
         } catch (SQLException e) {
@@ -75,8 +75,9 @@ public class DonDatPhongDAL {
             stmt.setString(7, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(8, donDatPhong.getTongTien());
             stmt.setString(9, donDatPhong.getMoTa());
-            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
-            stmt.setDate(11, java.sql.Date.valueOf(donDatPhong.getNgayTra()));
+            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setDate(11, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
+            
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,8 +103,9 @@ public class DonDatPhongDAL {
             stmt.setString(6, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(7, donDatPhong.getTongTien());
             stmt.setString(8, donDatPhong.getMoTa());
-            stmt.setDate(9, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
-            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayTra()));
+            stmt.setDate(9, java.sql.Date.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
+            
             stmt.setString(11, donDatPhong.getMaDon());
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -113,16 +115,40 @@ public class DonDatPhongDAL {
         }
         return n > 0;
     }
+    // Hàm lấy mã đơn đặt phòng cuối cùng
+    public String getLastDDP() {
+        String lastOrder = null;
+
+        String query = "SELECT MAX(maDon) FROM DonDatPhong"; // Truy vấn để lấy mã đơn lớn nhất
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                lastOrder = rs.getString(1); // Lấy mã đơn lớn nhất
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+
+        return lastOrder;
+    }
 
     // Xóa đơn đặt phòng theo mã đơn
+    // Cập nhật trạng thái đơn đặt phòng thành "Đã hủy" theo mã đơn
     public boolean xoaDonDatPhong(String maDon) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "DELETE FROM DonDatPhong WHERE maDon = ?";
+            String sql = "UPDATE DonDatPhong SET trangThaiDonDatPhong = ? WHERE maDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, maDon);
+            stmt.setString(1, "Da huy");  // Set trạng thái thành "Đã hủy"
+            stmt.setString(2, maDon);     // Điều kiện theo mã đơn
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,6 +157,7 @@ public class DonDatPhongDAL {
         }
         return n > 0;
     }
+
 
     // Tìm đơn đặt phòng theo mã đơn
     public DonDatPhong getDonDatPhongTheoMa(String maDon) {
@@ -151,14 +178,15 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
+                LocalDate ngayTraPhong = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
+
                 LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
-                LocalDate ngayTra = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
 
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(maNV);
                 KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(maKH);
 
                 donDatPhong = new DonDatPhong(maDon, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong,
-                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayNhanPhong, ngayTra);
+                        trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa,ngayTraPhong, ngayNhanPhong);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -167,7 +195,7 @@ public class DonDatPhongDAL {
         }
         return donDatPhong;
     }
-
+    
     // Đóng kết nối
     private void closeConnection() {
         try {

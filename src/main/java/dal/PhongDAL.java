@@ -57,6 +57,34 @@ public class PhongDAL {
         }
         return dsPhongTheoLoai;
     }
+    // Lấy phòng theo tên phòng
+    public Phong getPhongTheoTenPhong(String tenPhong) {
+        Phong phong = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM Phong WHERE tenPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenPhong);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String maPhong = rs.getString(1);
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString(3));
+                boolean trangThaiPhong = rs.getBoolean(4);
+                String moTa = rs.getString(5);
+                String tang = rs.getString(6);
+
+                phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection(); // Đảm bảo đóng kết nối
+        }
+        return phong;
+    }
+
 
     private void closeConnection() {
         try {
@@ -162,26 +190,5 @@ public class PhongDAL {
             e.printStackTrace();
         }
         return n > 0;
-    }
-
-
-    // Xóa phòng khỏi cơ sở dữ liệu
-    public boolean xoaPhong(String maPhong) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "DELETE FROM Phong WHERE maPhong = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, maPhong);
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return n > 0;
-    }
-
-    public static void main(String[] args) {
-//        System.out.println(new PhongDAL().getAllPhongByMaLoaiPhong("LP001"));
     }
 }

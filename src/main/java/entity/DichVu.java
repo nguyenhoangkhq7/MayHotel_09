@@ -1,49 +1,46 @@
 /*
     *MayHotel  day creative: 10/1/2024
     version: 2023.2  IntelliJ IDEA
-    author: Đăng Thái Bảo  */
-    /*
-       *class description:
-            write description right here   
-     */
+    author: Đăng Thái Bảo
+*/
 
+/*
+   *class description:
+        Class này đại diện cho thông tin của một dịch vụ trong khách sạn
+*/
 
 package entity;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class DichVu {
     private String maDichVu;  // Mã dịch vụ
-    private double donGia;  // Đơn giá của dịch vụ
-    private String tenDichVu;  // Tên của dịch vụ
-    private int soLuongTon;  // Số lượng tồn kho của dịch vụ
-    private String moTa;  // Mô tả chi tiết của dịch vụ
-    private LocalDate ngayTao;  // Ngày tạo dịch vụ
-    private boolean conHoatDong;  // Trạng thái hoạt động của dịch vụ
-    private String donVi;
+    private double donGia;    // Đơn giá của dịch vụ
+    private String tenDichVu; // Tên của dịch vụ
+    private int soLuongTon;   // Số lượng tồn kho
+    private boolean conHoatDong; // Trạng thái hoạt động của dịch vụ
+    private String donVi;     // Đơn vị tính
 
     // Constructor đầy đủ tham số
-    public DichVu(String maDichVu, double donGia, String tenDichVu, int soLuongTon, String moTa, LocalDate ngayTao, boolean conHoatDong, String donVi) {
+    public DichVu(String maDichVu, double donGia, String tenDichVu, int soLuongTon, boolean conHoatDong, String donVi) {
         setMaDichVu(maDichVu);
         setDonGia(donGia);
         setTenDichVu(tenDichVu);
         setSoLuongTon(soLuongTon);
-        this.moTa = moTa;
-        this.ngayTao = ngayTao;
         this.conHoatDong = conHoatDong;
         this.donVi = donVi;
     }
-    
-    public DichVu() {
-	}
 
-	// Constructor thuoc tinh ma 
-    public DichVu(String maDichVu){
-    	this.maDichVu = maDichVu;
-    }  	
-  
-	// Getter và Setter cho các thuộc tính
+    // Constructor mặc định
+    public DichVu() {
+    }
+
+    // Constructor chỉ với mã dịch vụ
+    public DichVu(String maDichVu) {
+        this.maDichVu = maDichVu;
+    }
+
+    // Getter và Setter cho các thuộc tính
     public String getMaDichVu() {
         return maDichVu;
     }
@@ -88,22 +85,6 @@ public class DichVu {
         this.soLuongTon = soLuongTon;
     }
 
-    public String getMoTa() {
-        return moTa;
-    }
-
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
-    }
-
-    public LocalDate getNgayTao() {
-        return ngayTao;
-    }
-
-    public void setNgayTao(LocalDate ngayTao) {
-        this.ngayTao = ngayTao;
-    }
-
     public boolean isConHoatDong() {
         return conHoatDong;
     }
@@ -134,7 +115,6 @@ public class DichVu {
     }
 
     // Override phương thức toString
-
     @Override
     public String toString() {
         return "DichVu{" +
@@ -142,8 +122,6 @@ public class DichVu {
                 ", donGia=" + donGia +
                 ", tenDichVu='" + tenDichVu + '\'' +
                 ", soLuongTon=" + soLuongTon +
-                ", moTa='" + moTa + '\'' +
-                ", ngayTao=" + ngayTao +
                 ", conHoatDong=" + conHoatDong +
                 ", donVi='" + donVi + '\'' +
                 '}';

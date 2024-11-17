@@ -1,39 +1,38 @@
 package entity;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class KhuyenMai {
-    private String maKhuyenMai;
-    private String tenKhuyenMai;
-    private double giaTri;
-    private LocalDate ngayTao;
-    private boolean conHoatDong;
-    private int soLuong;
-    private LocalDate ngayHetHan;
-    private String dieuKienApDung;
+    private String maKhuyenMai;          // Mã khuyến mãi
+    private String tenKhuyenMai;         // Tên khuyến mãi
+    private double giaTri;               // Giá trị khuyến mãi
+    private LocalDate ngayBatDau;        // Ngày bắt đầu khuyến mãi
+    private boolean conHoatDong;         // Trạng thái hoạt động
+    private int soLuong;                 // Số lượng khuyến mãi
+    private LocalDate ngayKetThuc;       // Ngày kết thúc khuyến mãi
+    private String loaiKhachHangApDung;  // Loại khách hàng áp dụng
 
     // Constructor không tham số
     public KhuyenMai() {
     }
 
-    // Constructor 1 tham so maKhuyenMai
-    public KhuyenMai(String maKhuyenMai)
-    {
-    	this.maKhuyenMai= maKhuyenMai;
+    // Constructor 1 tham số maKhuyenMai
+    public KhuyenMai(String maKhuyenMai) {
+        this.maKhuyenMai = maKhuyenMai;
     }
 
     // Constructor đầy đủ
-    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayTao, boolean conHoatDong,
-			int soLuong, LocalDate ngayHetHan, String dieuKienApDung) {
-        super();
+    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayBatDau, boolean conHoatDong,
+                     int soLuong, LocalDate ngayKetThuc, String loaiKhachHangApDung) {
         this.maKhuyenMai = maKhuyenMai;
         this.tenKhuyenMai = tenKhuyenMai;
         this.giaTri = giaTri;
-        this.ngayTao = ngayTao;
+        this.ngayBatDau = ngayBatDau;
         this.conHoatDong = conHoatDong;
         this.soLuong = soLuong;
-        this.ngayHetHan = ngayHetHan;
-        this.dieuKienApDung = dieuKienApDung;
+        this.ngayKetThuc = ngayKetThuc;
+        this.loaiKhachHangApDung = loaiKhachHangApDung;
     }
 
     // Getters and Setters
@@ -67,15 +66,15 @@ public class KhuyenMai {
         this.giaTri = giaTri;
     }
 
-    public LocalDate getNgayTao() {
-        return ngayTao;
+    public LocalDate getNgayBatDau() {
+        return ngayBatDau;
     }
 
-    public void setNgayTao(LocalDate ngayTao) {
-        this.ngayTao = ngayTao;
+    public void setNgayBatDau(LocalDate ngayBatDau) {
+        this.ngayBatDau = ngayBatDau;
     }
 
-    public boolean getConHoatDong() {
+    public boolean isConHoatDong() {
         return conHoatDong;
     }
 
@@ -94,23 +93,23 @@ public class KhuyenMai {
         this.soLuong = soLuong;
     }
 
-    public LocalDate getNgayHetHan() {
-        return ngayHetHan;
+    public LocalDate getNgayKetThuc() {
+        return ngayKetThuc;
     }
 
-    public void setNgayHetHan(LocalDate ngayHetHan) {
-        if (ngayHetHan == null || ngayHetHan.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Ngày hết hạn phải lớn hơn hoặc bằng ngày hiện tại");
+    public void setNgayKetThuc(LocalDate ngayKetThuc) {
+        if (ngayKetThuc == null || ngayKetThuc.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Ngày kết thúc phải lớn hơn hoặc bằng ngày hiện tại");
         }
-        this.ngayHetHan = ngayHetHan;
+        this.ngayKetThuc = ngayKetThuc;
     }
 
-    public String getDieuKienApDung() {
-        return dieuKienApDung;
+    public String getLoaiKhachHangApDung() {
+        return loaiKhachHangApDung;
     }
 
-    public void setDieuKienApDung(String dieuKienApDung) {
-        this.dieuKienApDung = dieuKienApDung;
+    public void setLoaiKhachHangApDung(String loaiKhachHangApDung) {
+        this.loaiKhachHangApDung = loaiKhachHangApDung;
     }
 
     // Override equals and hashCode
@@ -128,19 +127,17 @@ public class KhuyenMai {
     }
 
     // toString method
-
     @Override
     public String toString() {
         return "KhuyenMai{" +
                 "maKhuyenMai='" + maKhuyenMai + '\'' +
                 ", tenKhuyenMai='" + tenKhuyenMai + '\'' +
                 ", giaTri=" + giaTri +
-                ", ngayTao=" + ngayTao +
+                ", ngayBatDau=" + ngayBatDau +
                 ", conHoatDong=" + conHoatDong +
                 ", soLuong=" + soLuong +
-                ", ngayHetHan=" + ngayHetHan +
-                ", dieuKienApDung='" + dieuKienApDung + '\'' +
+                ", ngayKetThuc=" + ngayKetThuc +
+                ", loaiKhachHangApDung='" + loaiKhachHangApDung + '\'' +
                 '}';
     }
 }
-

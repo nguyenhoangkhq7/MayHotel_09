@@ -1,76 +1,76 @@
 /*
     *MayHotel  day creative: 10/1/2024
     version: 2023.2  IntelliJ IDEA
-    author: Tô Hoàng Thành  */
-    /*
-       *class description:
-            write description right here   
-     */
-
+    author: Tô Hoàng Thành
+*/
+/*
+   *class description:
+        Class TaiKhoan đại diện cho thông tin tài khoản bao gồm tên tài khoản và mật khẩu.
+*/
 
 package entity;
-
 
 import java.util.Objects;
 
 public class TaiKhoan {
-    private String tenDangNhap;
+    private String tenTaiKhoan;
     private String matKhau;
 
-    public TaiKhoan(String tenDangNhap, String matKhau) {
-//        setTenDangNhap(tenDangNhap);
-//        setMatKhau(matKhau);
-        this.tenDangNhap = tenDangNhap;
-        this.matKhau = matKhau;
+    // Constructor with validation
+    public TaiKhoan(String tenTaiKhoan, String matKhau) {
+        setTenTaiKhoan(tenTaiKhoan);
+        setMatKhau(matKhau);
     }
 
-    public String getTenDangNhap() {
-        return tenDangNhap;
+    // Getter and setter for tenTaiKhoan
+    public String getTenTaiKhoan() {
+        return tenTaiKhoan;
     }
 
-    public void setTenDangNhap(String tenDangNhap) {
-        if (tenDangNhap == null || tenDangNhap.isEmpty()) {
-            throw new IllegalArgumentException("Tên đăng nhập không được rỗng");
+    public void setTenTaiKhoan(String tenTaiKhoan) {
+        if (tenTaiKhoan == null || tenTaiKhoan.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên tài khoản không được rỗng");
         }
-        this.tenDangNhap = tenDangNhap;
+        this.tenTaiKhoan = tenTaiKhoan.trim();
     }
 
+    // Getter and setter for matKhau
     public String getMatKhau() {
         return matKhau;
     }
 
     public void setMatKhau(String matKhau) {
-        if (matKhau == null || matKhau.isEmpty()) {
+        if (matKhau == null || matKhau.trim().isEmpty()) {
             throw new IllegalArgumentException("Mật khẩu không được rỗng");
         }
 
-        if (!matKhau.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8}$")) {
-            throw new IllegalArgumentException("Mật khẩu phải có đúng 8 ký tự bao gồm cả chữ và số");
+        // Improved password validation (minimum 8 characters, at least one letter and one number)
+        if (!matKhau.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự, bao gồm cả chữ và số");
         }
         this.matKhau = matKhau;
     }
 
-
+    // Override hashCode() and equals() based on tenTaiKhoan
     @Override
     public int hashCode() {
-        return Objects.hash(tenDangNhap);
+        return Objects.hash(tenTaiKhoan);
     }
-
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true; 
-        if (obj == null || getClass() != obj.getClass()) return false; 
-        TaiKhoan taiKhoan = (TaiKhoan) obj; // Ép kiểu đối tượng
-        return Objects.equals(tenDangNhap, taiKhoan.tenDangNhap); 
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        TaiKhoan taiKhoan = (TaiKhoan) obj;
+        return Objects.equals(tenTaiKhoan, taiKhoan.tenTaiKhoan);
     }
 
-
+    // Override toString() to hide the password and only show the username
     @Override
     public String toString() {
         return "TaiKhoan { " +
-                "tenDangNhap='" + tenDangNhap + '\'' +
-                ", matKhau='" + matKhau + '\'' +
+                "tenTaiKhoan='" + tenTaiKhoan + '\'' +
+                ", matKhau='********'" + // Password is hidden for security
                 " }";
     }
 }

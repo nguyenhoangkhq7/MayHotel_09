@@ -12,13 +12,13 @@ public class DonDatPhong {
     private KhachHang khachHang;
     private double tongTien;
     private String moTa;
+    private LocalDate ngayTraPhong;
     private LocalDate ngayNhanPhong;
-    private LocalDate ngayTra;
 
     public DonDatPhong(String maDon, LocalDate ngayTao, String phuongThucThanhToan,
                        String trangThaiDonDatPhong, boolean trangThaiDatCoc,
                        NhanVien nhanVien, KhachHang khachHang, double tongTien,
-                       String moTa, LocalDate ngayNhanPhong, LocalDate ngayTra) {
+                       String moTa, LocalDate ngayTraPhong, LocalDate ngayNhanPhong) {
         this.maDon = maDon;
         this.ngayTao = ngayTao;
         this.phuongThucThanhToan = phuongThucThanhToan;
@@ -28,8 +28,8 @@ public class DonDatPhong {
         this.khachHang = khachHang;
         this.tongTien = tongTien;
         this.moTa = moTa;
+        this.ngayTraPhong = ngayTraPhong;
         this.ngayNhanPhong = ngayNhanPhong;
-        this.ngayTra = ngayTra;
     }
 
     public DonDatPhong(String maDon) {
@@ -113,20 +113,20 @@ public class DonDatPhong {
         this.moTa = moTa;
     }
 
+    public LocalDate getNgayTraPhong() {
+        return ngayTraPhong;
+    }
+
+    public void setNgayTraPhong(LocalDate ngayTraPhong) {
+        this.ngayTraPhong = ngayTraPhong;
+    }
+
     public LocalDate getNgayNhanPhong() {
         return ngayNhanPhong;
     }
 
     public void setNgayNhanPhong(LocalDate ngayNhanPhong) {
         this.ngayNhanPhong = ngayNhanPhong;
-    }
-
-    public LocalDate getNgayTra() {
-        return ngayTra;
-    }
-
-    public void setNgayTra(LocalDate ngayTra) {
-        this.ngayTra = ngayTra;
     }
 
     @Override
@@ -141,9 +141,8 @@ public class DonDatPhong {
                 ", khachHang=" + khachHang +
                 ", tongTien=" + tongTien +
                 ", moTa='" + moTa + '\'' +
+                ", ngayTraPhong=" + ngayTraPhong +
                 ", ngayNhanPhong=" + ngayNhanPhong +
-                ", ngayTra=" + ngayTra +
                 '}';
     }
-
 }

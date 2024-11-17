@@ -478,6 +478,13 @@ public class ThemDichVuGUI extends JPanel {
           }
       }
   	}
+<<<<<<< HEAD
   
+=======
+
+	public static void main(String[] args) {
+		new ThemDichVuGUI(new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong().get(0));
+	}
+>>>>>>> df79f594d0b6ee09f87ac783adc24f17a6bf1a15
 }
 
