@@ -191,25 +191,4 @@ public class PhongDAL {
         }
         return n > 0;
     }
-
-
-    // Xóa phòng khỏi cơ sở dữ liệu
-    public boolean xoaPhong(String maPhong) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "DELETE FROM Phong WHERE maPhong = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, maPhong);
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return n > 0;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new PhongDAL().getAllPhongByMaLoaiPhong("LP001"));
-    }
 }

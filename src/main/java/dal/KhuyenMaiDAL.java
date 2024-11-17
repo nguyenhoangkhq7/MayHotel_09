@@ -130,10 +130,9 @@ public class KhuyenMaiDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "DELETE FROM KhuyenMai WHERE maKhuyenMai = ?";
+            String sql = "UPDATE KhuyenMai SET conHoatDong = 0 WHERE maKhuyenMai = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maKhuyenMai);
-
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

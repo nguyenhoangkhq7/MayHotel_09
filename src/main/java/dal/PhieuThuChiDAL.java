@@ -208,7 +208,7 @@ public class PhieuThuChiDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "DELETE FROM PhieuThuChi WHERE maPhieu = ?";
+            String sql = "UPDATE PhieuThuChi SET conHoatDong = 0 WHERE maPhieu = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maPhieuThuChi);
             n = stmt.executeUpdate();
@@ -219,4 +219,5 @@ public class PhieuThuChiDAL {
         }
         return n > 0;
     }
+
 }

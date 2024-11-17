@@ -116,22 +116,6 @@ public class KhachHangDAL {
         return n > 0;
     }
 
-    // Xóa khách hàng khỏi cơ sở dữ liệu
-    public boolean xoaKhachHang(String maKH) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "DELETE FROM KhachHang WHERE maKH = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, maKH);
-
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return n > 0;
-    }
     private void closeConnection() {
         try {
             if (con != null && !con.isClosed()) {

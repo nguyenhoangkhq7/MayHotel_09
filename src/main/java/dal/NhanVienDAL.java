@@ -132,25 +132,6 @@ public class NhanVienDAL {
         return n > 0;
     }
 
-
-    // Xóa nhân viên theo mã nhân viên
-    public boolean xoaNhanVien(String maNV) {
-        int n = 0;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "DELETE FROM NhanVien WHERE maNV = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, maNV);
-            n = stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
-        return n > 0;
-    }
-
     // Đóng kết nối
     private void closeConnection() {
         try {

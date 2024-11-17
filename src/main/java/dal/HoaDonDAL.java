@@ -143,10 +143,6 @@ public class HoaDonDAL {
         return lastMaHD;
     }
 
-
-    // Thêm một hóa đơn mới vào cơ sở dữ liệu
-   
-
     // Sửa thông tin hóa đơn trong cơ sở dữ liệu
     public boolean suaHoaDon(String maHoaDon, HoaDon hoaDon) {
         int n = 0;
