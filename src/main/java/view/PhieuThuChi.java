@@ -417,7 +417,8 @@ panel_8.setBackground(new Color(255, 255, 255));
 
 		            NhanVienDAL  dal = new NhanVienDAL();
 		            NhanVien nv = new NhanVien();
-		            nv = dal.getNhanVienTheoTen(tenNV);
+		            ///////can fix
+		            nv = dal.getNhanVienTheoMa(tenNV);
 		            String maNV = nv.getMaNV();
 		            // Cập nhật các trường nhập liệu
 		            String soTienfm = formatSoTien(soTien);
@@ -567,7 +568,7 @@ panel_8.setBackground(new Color(255, 255, 255));
 		            PhieuThuChiDAL phieuThuChiDAL = new PhieuThuChiDAL();
 
 		            // Gọi phương thức hủy phiếu thu chi
-		            boolean success = phieuThuChiDAL.huyPhieuThuChi(maPhieu);
+		            boolean success = phieuThuChiDAL.xoaPhieuThuChi(maPhieu);
 
 		            if (success) {
 		                JOptionPane.showMessageDialog(null, "Phiếu thu chi đã được hủy thành công!");
@@ -928,14 +929,14 @@ panel_8.setBackground(new Color(255, 255, 255));
         phieuThuChiMoi.setMaPhieu(dal.layMaPhieuTiepTheo()); // Lấy mã phiếu mới
         phieuThuChiMoi.setLoaiPhieu(comboBox_loaiphieu.getSelectedItem().toString());
         phieuThuChiMoi.setMoTa(moTa);
-        phieuThuChiMoi.setNgayTao(LocalDate.now()); // Hoặc lấy ngày từ date chooser
+        phieuThuChiMoi.setNgayLap(LocalDate.now()); // Hoặc lấy ngày từ date chooser
         phieuThuChiMoi.setSoTien(Double.parseDouble(soTien));
-        phieuThuChiMoi.setPhuongThuc(phuongThuc);
+        phieuThuChiMoi.setPhuongThucThanhToan(phuongThuc);
         phieuThuChiMoi.setConHoatDong(true); // Mới tạo nên sẽ là true
         phieuThuChiMoi.setNhanVien(nhanVien);
 
         // Thay đổi trạng thái phiếu thu chi hiện tại
-        boolean isHuySuccess = dal.huyPhieuThuChi(maPhieu);
+        boolean isHuySuccess = dal.xoaPhieuThuChi(maPhieu);
         
         if (isHuySuccess) {
             // Thêm phiếu thu chi mới

@@ -434,7 +434,7 @@ public class ThemDichVuGUI extends JPanel {
         } else {
             JOptionPane.showMessageDialog(this, "Thêm chi tiết không thành công.");
         }
-        boolean result_2 = dalDV.suaDichVu(dichVu.getMaDichVu(), new DichVu(dichVu.getMaDichVu(),dichVu.getDonGia(),dichVu.getTenDichVu() ,dichVu.getSoLuongTon()-soLuongDat, dichVu.getMoTa(),dichVu.getNgayTao(),dichVu.isConHoatDong(), dichVu.getDonVi()));
+        boolean result_2 = dalDV.suaDichVu(new DichVu(dichVu.getMaDichVu(),dichVu.getDonGia(),dichVu.getTenDichVu() ,dichVu.getSoLuongTon()-soLuongDat,dichVu.isConHoatDong(), dichVu.getDonVi()));
         if (result_2) {
             JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ thành công!");
         } else {
@@ -478,13 +478,6 @@ public class ThemDichVuGUI extends JPanel {
           }
       }
   	}
-<<<<<<< HEAD
-  
-=======
 
-	public static void main(String[] args) {
-		new ThemDichVuGUI(new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong().get(0));
-	}
->>>>>>> df79f594d0b6ee09f87ac783adc24f17a6bf1a15
 }
 

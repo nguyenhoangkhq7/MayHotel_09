@@ -33,10 +33,10 @@ public class PhieuThuChiBUS {
 			 Object[][] data = new Object[1][8]; // Chỉ có một phiếu thu chi được tìm thấy
 	           data[0][0] = phieuThuChi.getMaPhieu();
 	           data[0][1] = phieuThuChi.getNhanVien().getHoten(); // Lấy tên nhân viên
-	           data[0][2] = phieuThuChi.getNgayTao();
+	           data[0][2] = phieuThuChi.getNgayLap();
 	           data[0][3] = phieuThuChi.getLoaiPhieu();
 	           data[0][4] = phieuThuChi.isConHoatDong() ? "Còn hoạt động" : "Đã hủy";
-	           data[0][5] = phieuThuChi.getPhuongThuc();
+	           data[0][5] = phieuThuChi.getPhuongThucThanhToan();
 
 	        // Gán giá trị đã định dạng vào data
 	           data[0][6] = df.format(phieuThuChi.getSoTien());
@@ -60,10 +60,10 @@ public class PhieuThuChiBUS {
 	        PhieuThuChi phieuThuChi = dsPhieuThuChi.get(i);
 	        data[i][0] = phieuThuChi.getMaPhieu();          // Mã phiếu thu chi
 	        data[i][1] = phieuThuChi.getNhanVien().getHoten(); // Tên nhân viên
-	        data[i][2] = phieuThuChi.getNgayTao();          // Ngày tạo
+	        data[i][2] = phieuThuChi.getNgayLap();          // Ngày tạo
 	        data[i][3] = phieuThuChi.getLoaiPhieu();        // Loại phiếu
 	        data[i][4] = phieuThuChi.isConHoatDong()? "Còn hoạt động" : "Đã hủy";     // Trạng thái
-	        data[i][5] = phieuThuChi.getPhuongThuc();       // Phương thức
+	        data[i][5] = phieuThuChi.getPhuongThucThanhToan();       // Phương thức
 	      
 
 		        // Gán giá trị đã định dạng vào data

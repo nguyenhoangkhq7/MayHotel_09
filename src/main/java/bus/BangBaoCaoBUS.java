@@ -19,19 +19,18 @@ public class BangBaoCaoBUS {
 	public double tinhTienPhong(ChiTiet_DonDatPhong_Phong ctdddpp) {
 	    // Lấy thông tin giá phòng và chiết khấu
 	    double donGia = ctdddpp.getPhong().getLoaiPhong().getDonGia();
-	    double chietKhauPhong = ctdddpp.getPhong().getLoaiPhong().getChietKhau(); // Phần trăm chiết khấu của loại phòng
 	    double chietKhauCTDDPP = ctdddpp.getChietKhau(); // Chiết khấu cụ thể cho chi tiết đơn đặt phòng
 
 	    // Tính số ngày ở, đảm bảo tối thiểu là 1
-	    long soNgayO = Math.max(ChronoUnit.DAYS.between(ctdddpp.getNgayNhanPhong(), ctdddpp.getNgayTra()), 1);
+	    long soNgayO = Math.max(ChronoUnit.DAYS.between(ctdddpp.getNgayNhanPhong(), ctdddpp.getNgayTraPhong()), 1);
 
 	    // Tính tiền phòng
 	    double tienPhong = donGia * soNgayO; // Tiền phòng chưa chiết khấu
-	    tienPhong -= tienPhong * (chietKhauPhong / 100); // Áp dụng chiết khấu của loại phòng
 	    tienPhong -= tienPhong * (chietKhauCTDDPP / 100); // Áp dụng chiết khấu của chi tiết đơn đặt phòng
 
 	    return tienPhong;
 	}
+	
 	public Object[][] layDuLieuBang(LocalDate startDate, LocalDate endDate) {
 	    // Lấy danh sách hóa đơn trong khoảng thời gian
 	    ArrayList<HoaDon> dsHoaDon = new HoaDonDAL().getHoaDonByDateRange(startDate, endDate);
@@ -42,7 +41,6 @@ public class BangBaoCaoBUS {
 	    double tongDoanhThu = 0; // Tổng doanh thu
 	    double tongDoanhThuRong = 0; // Tổng doanh thu ròng
 
-	    double vat = 0; // VAT (nếu cần tính toán riêng)
 	    double doanhThuPhong = 0; // Doanh thu phòng
 	    double tienNganHang = 0;
 	    double tienMat = 0;
