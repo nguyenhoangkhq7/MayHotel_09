@@ -1,44 +1,31 @@
 package view;
 
-import java.awt.EventQueue;
 
-
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
-import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 
-public class BaoCao extends JPanel {
+public class BaoCaoPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
     private JPanel content; // Khai báo JPanel con
 
 
-	public BaoCao() {
+	public BaoCaoPanel() {
 	     setLayout(new BorderLayout());
 			
 	 	
@@ -174,7 +161,7 @@ public class BaoCao extends JPanel {
     
     // Phương thức showBangBaoCao, được cập nhật để truyền tham chiếu
     private void showBangBaoCao() {
-        BangBaoCao bangBaoCaoPanel = new BangBaoCao(this); // Truyền 'this' để có thể gọi lại BaoCao
+        BangBaoCaoPanel bangBaoCaoPanel = new BangBaoCaoPanel(this); // Truyền 'this' để có thể gọi lại BaoCao
         contentPane.removeAll(); 
         contentPane.add(bangBaoCaoPanel, BorderLayout.CENTER);  	  	  
         contentPane.revalidate(); 
@@ -183,7 +170,7 @@ public class BaoCao extends JPanel {
 	
 	 // Phương thức để hiển thị PhieuThuChi
     private void showPhieuThuChi() {
-        PhieuThuChi phieuThuChi = new PhieuThuChi(this); // Tạo đối tượng PhieuThuChi
+        PhieuThuChiPanel phieuThuChi = new PhieuThuChiPanel(this); // Tạo đối tượng PhieuThuChi
         contentPane.removeAll(); // Xóa tất cả các thành phần hiện có trong contentPane
         contentPane.add(phieuThuChi, BorderLayout.CENTER); // Thêm contentPane của PhieuThuChi vào
         contentPane.revalidate(); // Cập nhật lại layout

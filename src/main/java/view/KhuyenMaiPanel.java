@@ -9,11 +9,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 
 import javax.swing.table.DefaultTableModel;
 
-public class KhuyenMai2 extends JPanel {
+public class KhuyenMaiPanel extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -70,7 +70,7 @@ public class KhuyenMai2 extends JPanel {
 	private JDateChooser txtNgayHetHan;
 	private JTextField txtTenKM;
 
-    public KhuyenMai2() {
+    public KhuyenMaiPanel() {
     	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(255, 255, 255));
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -90,7 +90,7 @@ public class KhuyenMai2 extends JPanel {
         JPanel pnlThongTin = new JPanel();
         pnlThongTin.setBackground(new Color(255, 255, 255));
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin khuyến mãi", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
+                "Thiết lập thông tin khuyến mãi", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
        
         add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
@@ -252,7 +252,7 @@ public class KhuyenMai2 extends JPanel {
         JPanel pnlBang = new JPanel();
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
+                "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
         
@@ -408,7 +408,7 @@ public class KhuyenMai2 extends JPanel {
             try {
                 JFrame frame = new JFrame("Quản lí khuyến mãi");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new KhuyenMai2());
+                frame.setContentPane(new KhuyenMaiPanel());
                 frame.pack();
                 frame.setSize(800, 600);
                 frame.setVisible(true);

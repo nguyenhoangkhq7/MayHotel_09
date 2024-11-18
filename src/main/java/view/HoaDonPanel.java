@@ -5,36 +5,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 
-import bus.HoaDonBUS;
-import bus.PhieuThuChiBUS;
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 import dal.DonDatPhongDAL;
 import dal.HoaDonDAL;
-import dal.KhachHangDAL;
 import dal.KhuyenMaiDAL;
 import dal.NhanVienDAL;
-import dal.PhongDAL;
 import entity.DonDatPhong;
 import entity.HoaDon;
-import entity.KhachHang;
 import entity.KhuyenMai;
-import entity.LoaiKhachHang;
 import entity.NhanVien;
-import entity.Phong;
 
 import javax.swing.table.DefaultTableModel;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Locale;
 
-public class HoaDon2 extends JPanel {
+public class HoaDonPanel extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -96,7 +86,7 @@ public class HoaDon2 extends JPanel {
 	private JComboBox<String> cboTrangThai2;
 
 
-    public HoaDon2() {
+    public HoaDonPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
         
@@ -120,7 +110,7 @@ public class HoaDon2 extends JPanel {
         JPanel pnlThongTin = new JPanel();
         pnlThongTin.setBackground(new Color(255, 255, 255));
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Hóa Đơn", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                "Hóa Đơn", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
 
@@ -232,7 +222,7 @@ public class HoaDon2 extends JPanel {
         pnlBang = new JPanel();
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin hóa đơn", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                "Thiết lập thông tin hóa đơn", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
 
@@ -249,7 +239,7 @@ public class HoaDon2 extends JPanel {
         pnlCT.setPreferredSize(new Dimension(900, 600));
         mainPanel.add(pnlCT, BorderLayout.EAST);
         pnlCT.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin chi tiết hóa đơn", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                "Thiết lập thông tin chi tiết hóa đơn", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         
      // Tạo JPanel cho phần form
         JPanel panelForm = new JPanel();
@@ -594,7 +584,7 @@ public class HoaDon2 extends JPanel {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Quản lý Hóa Đơn");
-        HoaDon2 panel = new HoaDon2();
+        HoaDonPanel panel = new HoaDonPanel();
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

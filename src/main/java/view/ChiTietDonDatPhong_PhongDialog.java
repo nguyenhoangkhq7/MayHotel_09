@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ChiTietDonDatPhong_PhongGUI extends JDialog {
+public class ChiTietDonDatPhong_PhongDialog extends JDialog {
 
     private JTextField txtTenKhachHang;
     private JTextField txtSoDienThoai;
@@ -20,7 +20,7 @@ public class ChiTietDonDatPhong_PhongGUI extends JDialog {
     private JTable bangDichVu;
     private ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet;
 
-    public ChiTietDonDatPhong_PhongGUI(JPanel parent, ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet) {
+    public ChiTietDonDatPhong_PhongDialog(JPanel parent, ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet) {
         this.danhSachChiTiet = danhSachChiTiet;
         setLayout(new BorderLayout());
         showHeader();

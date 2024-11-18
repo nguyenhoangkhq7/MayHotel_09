@@ -5,33 +5,23 @@ import java.awt.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
-import dal.DichVuDAL;
-import dal.LoaiPhongDAL;
-import dal.PhongDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.ChiTiet_DonDatPhong_Phong_DichVu;
-import entity.DonDatPhong;
-import entity.LoaiPhong;
-import entity.Phong;
-import entity.DichVu;
 import utils.UIHelpers;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
-import com.toedter.calendar.JDateChooser;
 
-public class TraPhong extends JPanel {
+public class TraPhongPanel extends JPanel {
 	private JTextField txtMaDDP;
 	private JTextField txtMaPhong;
 	private JTextField txtMaKhuyenMai;
@@ -67,7 +57,7 @@ public class TraPhong extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public TraPhong(ChiTiet_DonDatPhong_Phong chiTiet, ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList) {
+	public TraPhongPanel(ChiTiet_DonDatPhong_Phong chiTiet, ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(new Color(255, 255, 255));
 		setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -86,7 +76,7 @@ public class TraPhong extends JPanel {
 		JPanel pnlThongTin = new JPanel();
 		pnlThongTin.setBackground(new Color(255, 255, 255));
 		pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-				"Thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+				"Thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
 
 		add(pnlThongTin);
 		pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
@@ -186,7 +176,7 @@ public class TraPhong extends JPanel {
         JPanel pnlBang = new JPanel();
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Danh sách dịch vụ đã sử dụng", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                "Danh sách dịch vụ đã sử dụng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
 
@@ -223,7 +213,7 @@ public class TraPhong extends JPanel {
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(new Color(255, 255, 255));
         panel_2.setBorder(
-                new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Tổng thanh toán", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Tổng thanh toán", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(panel_2);
         panel_2.setLayout(new FlowLayout());
         
@@ -239,7 +229,7 @@ public class TraPhong extends JPanel {
         JPanel panel_3 = new JPanel();
         panel_3.setBackground(new Color(255, 255, 255));
         panel_3.setBorder(
-                new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(panel_3);
         panel_3.setLayout(new FlowLayout());
         
@@ -387,7 +377,7 @@ public class TraPhong extends JPanel {
 
 				chiTietList.add(ctddppdv);
 
-				frame.setContentPane(new TraPhong(cT_DDP_P, chiTietList));
+				frame.setContentPane(new TraPhongPanel(cT_DDP_P, chiTietList));
 				frame.pack();
 				frame.setSize(1920, 1080);
 				frame.setVisible(true);

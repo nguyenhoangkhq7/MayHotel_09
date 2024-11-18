@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.ScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,9 +20,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 import javax.swing.SwingConstants;
-import javax.swing.JSpinner;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -35,7 +33,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 
-public class ThongKeDoanhThu extends JFrame {
+public class ThongKeDoanhThuPanel extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -47,7 +45,7 @@ public class ThongKeDoanhThu extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ThongKeDoanhThu frame = new ThongKeDoanhThu();
+					ThongKeDoanhThuPanel frame = new ThongKeDoanhThuPanel();
 					frame.setVisible(true);
 			        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  // Đặt JFrame ở trạng thái toàn màn hình
 				} catch (Exception e) {
@@ -94,7 +92,7 @@ public class ThongKeDoanhThu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ThongKeDoanhThu() {
+	public ThongKeDoanhThuPanel() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1080);
 		contentPane = new JPanel();
@@ -123,7 +121,7 @@ public class ThongKeDoanhThu extends JFrame {
 		JButton btninbaocao = new JButton("Bộ lọc");
 		btninbaocao.setForeground(new Color(243, 125, 0));
 		btninbaocao.setBackground(Color.WHITE);
-        btninbaocao.setBorder(new LineBorder(CONSTRAINTS.ORANGE, 2));
+        btninbaocao.setBorder(new LineBorder(CommonConstants.ORANGE, 2));
 		btninbaocao.setFocusPainted(false);
 		btninbaocao.setToolTipText("bấm vào để chọn cách lọc");
 		btninbaocao.setFont(new Font("Times New Roman", Font.BOLD, 20));

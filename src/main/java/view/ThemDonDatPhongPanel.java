@@ -12,15 +12,12 @@ package view;
 
 import bus.DonDatPhongBUS;
 import com.toedter.calendar.JDateChooser;
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 import dal.*;
 import entity.*;
 import utils.UIHelpers;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +29,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
+public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
 // Local variable
     private JButton btnReset,btnClose, btnChonPhong, btnCheckThongTinKhachHang, btnDatPhong;
     private JDateChooser jdcCheckIn, jdcCheckout;
@@ -45,7 +42,7 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
     JCheckBox chkTrangThaiDatCoc;
     ArrayList<Phong> dsPhong = new ArrayList<>();
 
-    public ThemDonDatPhongGUI() {
+    public ThemDonDatPhongPanel() {
         this.setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         add(showHeader(), BorderLayout.NORTH);
@@ -335,7 +332,7 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         jtfTongThoiGianO.setEditable(false);
         boxContain.add(boxContain1);
 
-        boxContain.add(Box.createVerticalStrut(CONSTRAINTS.VERTICAL_STRUT));
+        boxContain.add(Box.createVerticalStrut(CommonConstants.VERTICAL_STRUT));
         boxContain.add(UIHelpers.create_Title_Panel("Chi tiết phòng"));
 
         Box boxContain2 = Box.createHorizontalBox();
@@ -347,7 +344,7 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         UIHelpers.set_Button_Blue_Style(btnChonPhong);
         boxContain.add(boxContain2);
 
-        boxContain.add(Box.createVerticalStrut(CONSTRAINTS.VERTICAL_STRUT));
+        boxContain.add(Box.createVerticalStrut(CommonConstants.VERTICAL_STRUT));
         boxContain.add(UIHelpers.create_Title_Panel("Thông tin khách hàng"));
 
         Box boxContain3 = Box.createHorizontalBox();
@@ -356,7 +353,7 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         boxContain3.add(btnCheckThongTinKhachHang = new JButton("Check"));
         UIHelpers.set_Button_Blue_Style(btnCheckThongTinKhachHang);
         boxContain.add(boxContain3);
-        boxContain.add(Box.createVerticalStrut(CONSTRAINTS.VERTICAL_STRUT));
+        boxContain.add(Box.createVerticalStrut(CommonConstants.VERTICAL_STRUT));
 
         Box boxContain4 = Box.createHorizontalBox();
         boxContain4.add(UIHelpers.create_Form_Label_JTextField("Họ tên", jtfHoTen = new JTextField()));
@@ -365,13 +362,13 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         boxContain4.add(Box.createHorizontalStrut(20));
         boxContain4.add(UIHelpers.create_Form_Label_JTextField("Email", jtfEmail = new JTextField()));
         boxContain.add(boxContain4);
-        boxContain.add(Box.createVerticalStrut(CONSTRAINTS.VERTICAL_STRUT));
+        boxContain.add(Box.createVerticalStrut(CommonConstants.VERTICAL_STRUT));
 
         Box boxContain5 = Box.createHorizontalBox();
         boxContain5.add(UIHelpers.create_Form_Label_JTextArea("Mô tả", jtaMoTa = new JTextArea()));
         boxContain.add(boxContain5);
 
-        boxContain.add(Box.createVerticalStrut(CONSTRAINTS.VERTICAL_STRUT));
+        boxContain.add(Box.createVerticalStrut(CommonConstants.VERTICAL_STRUT));
         boxContain.add(UIHelpers.create_Title_Panel("Dịch vụ"));
 
 //        Checkbox dich vụ
@@ -390,11 +387,11 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
 
     public JPanel showHeader() {
         JPanel jpnHeader = new JPanel(new GridLayout(1,2));
-        jpnHeader.setBackground(CONSTRAINTS.BACKGROUND);
+        jpnHeader.setBackground(CommonConstants.BACKGROUND);
 
         JLabel lblSubTitle = new JLabel("Đặt phòng");
         JLabel lblTitle = new JLabel("Thêm đơn đặt phòng");
-        lblSubTitle.setFont(new Font("Arial", Font.ITALIC, CONSTRAINTS.TEXT_SIZE)); lblSubTitle.setForeground(Color.WHITE);
+        lblSubTitle.setFont(new Font("Arial", Font.ITALIC, CommonConstants.TEXT_SIZE)); lblSubTitle.setForeground(Color.WHITE);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 30)); lblTitle.setForeground(Color.WHITE);
 
         JPanel jpn1 = new JPanel(new FlowLayout(FlowLayout.LEFT)); jpn1.add(lblSubTitle);
@@ -404,8 +401,8 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
         headerLeft.add(jpn2);
 
         JPanel headerRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        btnReset = new JButton("Reset"); btnReset.setFont(new Font("Arial", Font.BOLD, CONSTRAINTS.TEXT_SIZE));
-        btnClose = new JButton("Close"); btnClose.setFont(new Font("Arial", Font.BOLD, CONSTRAINTS.TEXT_SIZE));
+        btnReset = new JButton("Reset"); btnReset.setFont(new Font("Arial", Font.BOLD, CommonConstants.TEXT_SIZE));
+        btnClose = new JButton("Close"); btnClose.setFont(new Font("Arial", Font.BOLD, CommonConstants.TEXT_SIZE));
         headerRight.add(btnReset); UIHelpers.set_Button_Orange_Outline_Style(btnReset);
         headerRight.add(btnClose); UIHelpers.set_Button_Orange_Outline_Style(btnClose);
 
@@ -423,7 +420,7 @@ public class ThemDonDatPhongGUI extends JPanel implements ActionListener {
 
 
     public static void main(String[] args) {
-        new ThemDonDatPhongGUI();
+        new ThemDonDatPhongPanel();
     }
 
 

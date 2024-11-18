@@ -1,16 +1,14 @@
 package view;
 
-import java.awt.EventQueue;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import dal.DichVuDAL;
@@ -25,7 +23,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
@@ -41,7 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 
-public class ThemDichVuGUI extends JPanel {
+public class ThemDichVuPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -61,9 +58,9 @@ public class ThemDichVuGUI extends JPanel {
 	        frame.setSize(1920,1080);
 	        frame.setVisible(true);
 	        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	        frame.add(new ThemDichVuGUI(new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong().get(0)));
+	        frame.add(new ThemDichVuPanel(new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong().get(0)));
 	    }
-	public ThemDichVuGUI(ChiTiet_DonDatPhong_Phong chitietphong) {
+	public ThemDichVuPanel(ChiTiet_DonDatPhong_Phong chitietphong) {
         this.chitietphong = chitietphong; // Gán tham số cho thuộc tính
 
    	 setLayout(new BorderLayout());
@@ -93,7 +90,7 @@ public class ThemDichVuGUI extends JPanel {
 		JButton btnNewButton_1 = new JButton("Thoát");
 		btnNewButton_1.setForeground(new Color(243, 125, 0));
 		btnNewButton_1.setBackground(Color.WHITE);
-		btnNewButton_1.setBorder(new LineBorder(CONSTRAINTS.ORANGE, 2));
+		btnNewButton_1.setBorder(new LineBorder(CommonConstants.ORANGE, 2));
 		btnNewButton_1.setFocusPainted(false);
 		btnNewButton_1.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Đặt con trỏ chuột thành dạng tay
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
@@ -183,7 +180,7 @@ public class ThemDichVuGUI extends JPanel {
 		JLabel lblNewLabel_2 = new JLabel("Dịch vụ");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setIcon(new ImageIcon(ThemDichVuGUI.class.getResource("/icon/icondichvu.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_2.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/icondichvu.png"))); // Đường dẫn tới icon của bạn
 		lblNewLabel_2.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 
 		 comboBox = new JComboBox();
@@ -194,7 +191,7 @@ public class ThemDichVuGUI extends JPanel {
 		JLabel lblNewLabel_3 = new JLabel("Số lượng tồn");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3.setIcon(new ImageIcon(ThemDichVuGUI.class.getResource("/icon/tonkho.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_3.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/tonkho.png"))); // Đường dẫn tới icon của bạn
 		lblNewLabel_3.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 		textField = new JTextField();
@@ -214,7 +211,7 @@ public class ThemDichVuGUI extends JPanel {
 		JLabel lblNewLabel_4 = new JLabel("Số lượng đặt");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_4.setIcon(new ImageIcon(ThemDichVuGUI.class.getResource("/icon/soluongdat.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_4.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/soluongdat.png"))); // Đường dẫn tới icon của bạn
 		lblNewLabel_4.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 	 comboBox_1 = new JComboBox();
@@ -225,7 +222,7 @@ public class ThemDichVuGUI extends JPanel {
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_5.setForeground(new Color(0, 0, 0));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5.setIcon(new ImageIcon(ThemDichVuGUI.class.getResource("/icon/time.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_5.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/time.png"))); // Đường dẫn tới icon của bạn
 		lblNewLabel_5.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 		textField_1 = new JTextField();
@@ -242,7 +239,7 @@ public class ThemDichVuGUI extends JPanel {
 		JLabel lblNewLabel_6 = new JLabel("Mô tả");
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_6.setIcon(new ImageIcon(ThemDichVuGUI.class.getResource("/icon/ghichu.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_6.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/ghichu.png"))); // Đường dẫn tới icon của bạn
 		lblNewLabel_6.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 		 textArea = new JTextArea();
@@ -305,7 +302,7 @@ public class ThemDichVuGUI extends JPanel {
 		);
 		panel_4.setLayout(gl_panel_4);
 		
-		JLabel hinhminhhoa2 = new JLabel(new ImageIcon(ThemDichVuGUI.class.getResource("/icon/hinhminhhoa2.jpg")));
+		JLabel hinhminhhoa2 = new JLabel(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/hinhminhhoa2.jpg")));
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -319,7 +316,7 @@ public class ThemDichVuGUI extends JPanel {
 		
 		JLabel hinhminhhoa1 = new JLabel("");
 		hinhminhhoa1.setHorizontalAlignment(SwingConstants.CENTER);
-		hinhminhhoa1.setIcon(new ImageIcon(ThemDichVuGUI.class.getResource("/icon/hinhminhhoa1.jpg")));
+		hinhminhhoa1.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/hinhminhhoa1.jpg")));
 		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
