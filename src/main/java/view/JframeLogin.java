@@ -182,7 +182,7 @@ public class JframeLogin extends JFrame {
                 String SUrl, SUser, SPass;
                 SUrl = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false";
                 SUser = "sa";
-                SPass = "123456";
+                SPass = "Thaibao123";
                 int notFound = 0;
                 try {
                     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

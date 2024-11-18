@@ -13,12 +13,9 @@ public class ConnectDB {
 	}
 
 	public void connect() throws SQLException {
-		String url = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false";
+		String url = "jdbc:sqlserver://localhost:1433;databasename=QuanLyKS;encrypt=false";
 		String user = "sa";
 		String password = "Thaibao123"; // đổi thành pass word của mọi ng vào
-		
-		String password = "sapassword"; // đổi thành pass word của mọi ng vào
-
 
 
 		con = DriverManager.getConnection(url, user, password);
@@ -32,7 +29,7 @@ public class ConnectDB {
 				con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
+			}	
 		}
 	}
 	public static Connection getConnection() {
