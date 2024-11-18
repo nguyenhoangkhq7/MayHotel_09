@@ -6,23 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import com.toedter.calendar.JDateChooser;
-import constraints.CONSTRAINTS;
-import dal.HoaDonDAL;
+
+import constant.CommonConstants;
 import dal.KhachHangDAL;
-import entity.HoaDon;
 import entity.KhachHang;
 import entity.LoaiKhachHang;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class KH2 extends JPanel {
+public class KhachHangPanel extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -54,7 +49,7 @@ public class KH2 extends JPanel {
 	DefaultTableModel model = new DefaultTableModel();
 	private JButton btnLuu;
 
-    public KH2() {
+    public KhachHangPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -72,7 +67,7 @@ public class KH2 extends JPanel {
         JPanel pnlThongTin = new JPanel();
         pnlThongTin.setBackground(Color.WHITE);
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin khách hàng", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                "Thiết lập thông tin khách hàng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
 
         add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
@@ -173,7 +168,7 @@ public class KH2 extends JPanel {
         JPanel pnlBang = new JPanel();
         pnlBang.setBackground(Color.WHITE);
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Danh sách khách hàng", TitledBorder.LEADING, TitledBorder.TOP, null, CONSTRAINTS.ORANGE));
+                "Danh sách khách hàng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
 
@@ -423,7 +418,7 @@ public class KH2 extends JPanel {
             try {
                 JFrame frame = new JFrame("Quản lí khách hàng");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new KH2());
+                frame.setContentPane(new KhachHangPanel());
                 frame.pack();
                 frame.setSize(1920, 1080);
                 frame.setVisible(true);

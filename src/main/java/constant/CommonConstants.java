@@ -8,11 +8,11 @@
      */
 
 
-package constraints;
+package constant;
 
 import java.awt.*;
 
-public class CONSTRAINTS {
+public class CommonConstants {
     public static final Color ORANGE = new Color(243,156,18,255);
     public static final Color BLUE = new Color(1,60,196,255);
 

@@ -20,8 +20,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import view.JframeLogin;
-
 // nơi chứa các giao diện khác
 public class MainGUI extends JFrame {
 	private JPanel jpnMain;
@@ -95,7 +93,7 @@ public class MainGUI extends JFrame {
 //Sự kiện nút đăng xuất		
 		btnDangXuat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JframeLogin loginFrame = new JframeLogin();
+				LoginGUI loginFrame = new LoginGUI();
 				loginFrame.setVisible(true);
 		        loginFrame.setLocationRelativeTo(null);
 
@@ -128,12 +126,12 @@ public class MainGUI extends JFrame {
 		jpnMain.add(jpnContent, BorderLayout.CENTER);
 
 //		các gui
-		JPanel themDonDatPhongGUI = new ThemDonDatPhongGUI();
-		JPanel donDatPhongGUI = new DonDatPhongGUI();
-		JPanel manHinHChinh = new ManHinhChinh();
-		JPanel hoaDonGUI = new HoaDon2();
-		JPanel khachHangGUI = new KH2();
-		JPanel baoCaoGUI = new BaoCao();
+		JPanel themDonDatPhongGUI = new ThemDonDatPhongPanel();
+		JPanel donDatPhongGUI = new DonDatPhongPanel();
+		JPanel manHinHChinh = new ManHinhChinhPanel();
+		JPanel hoaDonGUI = new HoaDonPanel();
+		JPanel khachHangGUI = new KhachHangPanel();
+		JPanel baoCaoGUI = new BaoCaoPanel();
 
 		jpnContent.add(manHinHChinh, "Màn hình chính");
 		jpnContent.add(donDatPhongGUI, "Đơn đặt phòng");
@@ -176,7 +174,7 @@ public class MainGUI extends JFrame {
 
 
 
-		DonDatPhongGUI.btnDatPhong.addActionListener(new ActionListener() {
+		DonDatPhongPanel.btnDatPhong.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(jpnContent, "Thêm đơn đặt phòng");

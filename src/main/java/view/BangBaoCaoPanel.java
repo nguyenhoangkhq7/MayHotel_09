@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.GroupLayout;
@@ -22,7 +21,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.ListSelectionModel;
@@ -35,12 +34,8 @@ import bus.BangBaoCaoBUS;
 import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.print.*;
 
-public class BangBaoCao extends JPanel {
+public class BangBaoCaoPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JTable table;
@@ -50,7 +45,7 @@ public class BangBaoCao extends JPanel {
      private JLabel lbngaythongke;
     private BangBaoCaoBUS bangBaoCaoBUS;
 
-    public BangBaoCao(BaoCao baoCaoFrame) {
+    public BangBaoCaoPanel(BaoCaoPanel baoCaoFrame) {
 	     setLayout(new BorderLayout());
 		
 	
@@ -73,7 +68,7 @@ public class BangBaoCao extends JPanel {
 		JButton btninbaocao = new JButton("In báo cáo");
 		btninbaocao.setForeground(new Color(243, 125, 0));
 		btninbaocao.setBackground(Color.WHITE);
-        btninbaocao.setBorder(new LineBorder(CONSTRAINTS.ORANGE, 2));
+        btninbaocao.setBorder(new LineBorder(CommonConstants.ORANGE, 2));
 		btninbaocao.setFocusPainted(false);
 		btninbaocao.setToolTipText("bấm vào để in báo cáo ra file pdf");
 		btninbaocao.setFont(new Font("Times New Roman", Font.BOLD, 20));

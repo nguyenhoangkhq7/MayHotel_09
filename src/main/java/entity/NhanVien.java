@@ -81,9 +81,9 @@ public class NhanVien {
     }
 
     public void setSoCanCuoc(String soCanCuoc) {
-        if (!soCanCuoc.matches("\\d{12}")) {
-            throw new IllegalArgumentException("Căn cước công dân không hợp lệ");
-        }
+//        if (!soCanCuoc.matches("\\d{12}")) {
+//            throw new IllegalArgumentException("Căn cước công dân không hợp lệ");
+//        }
         this.soCanCuoc = soCanCuoc;
     }
 
@@ -108,9 +108,9 @@ public class NhanVien {
     }
 
     public void setEmail(String email) {
-        if (email == null || !email.matches("^[\\w]+@gmail\\.com$")) {
-            throw new IllegalArgumentException("Email không hợp lệ");
-        }
+//        if (email == null || !email.matches("^[\\w]+@gmail\\.com$")) {
+//            throw new IllegalArgumentException("Email không hợp lệ");
+//        }
         this.email = email;
     }
 

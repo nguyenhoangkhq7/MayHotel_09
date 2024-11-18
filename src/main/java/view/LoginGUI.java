@@ -10,7 +10,6 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -26,7 +25,7 @@ import java.sql.Statement;
 import java.awt.FlowLayout;
 import java.util.prefs.Preferences;
 
-public class JframeLogin extends JFrame {
+public class LoginGUI extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -42,7 +41,7 @@ public class JframeLogin extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    JframeLogin frame = new JframeLogin();
+                    LoginGUI frame = new LoginGUI();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -54,8 +53,8 @@ public class JframeLogin extends JFrame {
     /**
      * Create the frame.
      */
-    public JframeLogin() {
-        prefs = Preferences.userNodeForPackage(JframeLogin.class);
+    public LoginGUI() {
+        prefs = Preferences.userNodeForPackage(LoginGUI.class);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -75,7 +74,7 @@ public class JframeLogin extends JFrame {
         panelIconLogin.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         
         JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setIcon(new ImageIcon(JframeLogin.class.getResource("/icon/1.jpg")));
+        lblNewLabel.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/1.jpg")));
         panelIconLogin.add(lblNewLabel);
         
         JPanel panelLogin = new JPanel();
@@ -105,7 +104,7 @@ public class JframeLogin extends JFrame {
         
         JLabel lblIconUser = new JLabel("");
         lblIconUser.setHorizontalAlignment(SwingConstants.CENTER);
-        lblIconUser.setIcon(new ImageIcon(JframeLogin.class.getResource("/icon/icons8_user_20px_1.png")));
+        lblIconUser.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/icons8_user_20px_1.png")));
         lblIconUser.setBounds(480, 220, 56, 50);
         panelLogin.add(lblIconUser);
         
@@ -123,7 +122,7 @@ public class JframeLogin extends JFrame {
         
         JLabel disable = new JLabel("");
         disable.setHorizontalAlignment(SwingConstants.CENTER);
-        disable.setIcon(new ImageIcon(JframeLogin.class.getResource("/icon/icons8_invisible_20px_1.png")));
+        disable.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/icons8_invisible_20px_1.png")));
         disable.setBounds(480, 327, 49, 37);
         panelLogin.add(disable);
         
@@ -137,7 +136,7 @@ public class JframeLogin extends JFrame {
                 show.setEnabled(false);
             }
         });
-        show.setIcon(new ImageIcon(JframeLogin.class.getResource("/icon/icons8_eye_20px_1.png")));
+        show.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/icons8_eye_20px_1.png")));
         show.setHorizontalAlignment(SwingConstants.CENTER);
         show.setBounds(480, 327, 49, 37);
         panelLogin.add(show);

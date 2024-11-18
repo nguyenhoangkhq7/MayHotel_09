@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 
-public class ManHinhChinh extends JPanel {
+public class ManHinhChinhPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jpnMain;
@@ -21,7 +21,7 @@ public class ManHinhChinh extends JPanel {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ManHinhChinh frame = new ManHinhChinh();
+					ManHinhChinhPanel frame = new ManHinhChinhPanel();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -33,7 +33,7 @@ public class ManHinhChinh extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public ManHinhChinh() {
+	public ManHinhChinhPanel() {
 		jpnMain = new JPanel();
 		jpnMain.setBorder(new EmptyBorder(0, 0, 0, 0));
 
@@ -55,6 +55,6 @@ public class ManHinhChinh extends JPanel {
 		
 	}
     public static void main2(String[] args) {
-		new ManHinhChinh ();
+		new ManHinhChinhPanel();
     }
 }

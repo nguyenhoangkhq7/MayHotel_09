@@ -3,11 +3,9 @@ package view;
 import java.awt.Color;
 import java.awt.EventQueue;
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
+
 import com.toedter.calendar.JDateChooser;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import dal.PhongDAL;
 import entity.Phong;
 
-public class ChuyenPhong extends JPanel {
+public class ChuyenPhongPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JComboBox<String> comboBox;
@@ -25,7 +23,7 @@ public class ChuyenPhong extends JPanel {
     private JButton btnChuyenPhong, btnTinhTien;
     private JDateChooser jdcNgayNhan, jdcNgayTra;
 
-    public ChuyenPhong(String currentRoom) {
+    public ChuyenPhongPanel(String currentRoom) {
         setLayout(null);
         
         initializeComponents(currentRoom);
@@ -157,7 +155,7 @@ public class ChuyenPhong extends JPanel {
         JFrame frame = new JFrame("Chuyển Phòng");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 600, 400);
-        frame.setContentPane(new ChuyenPhong(currentRoom));
+        frame.setContentPane(new ChuyenPhongPanel(currentRoom));
         frame.setVisible(true);
     }
 

@@ -43,11 +43,11 @@ public class TaiKhoan {
         if (matKhau == null || matKhau.trim().isEmpty()) {
             throw new IllegalArgumentException("Mật khẩu không được rỗng");
         }
-
-        // Improved password validation (minimum 8 characters, at least one letter and one number)
-        if (!matKhau.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
-            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự, bao gồm cả chữ và số");
-        }
+//
+//        // Improved password validation (minimum 8 characters, at least one letter and one number)
+//        if (!matKhau.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+//            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự, bao gồm cả chữ và số");
+//        }
         this.matKhau = matKhau;
     }
 

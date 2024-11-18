@@ -16,24 +16,21 @@ import javax.swing.text.*;           // Cung cấp AbstractDocument và Document
 import java.awt.event.ActionEvent; // Để sử dụng ActionEvent
 import java.awt.event.ActionListener; // Để sử dụng ActionListener
 import java.awt.event.FocusAdapter;  // Cho FocusAdapter (xử lý sự kiện khi JTextField được focus)
-import java.awt.event.FocusEvent;  
-import javax.swing.border.EmptyBorder;
+import java.awt.event.FocusEvent;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
-import javax.swing.event.*; // Thư viện cho các sự kiện
+
 import java.awt.event.*; // Thư viện cho các sự kiện như MouseListener, ActionListener
 import java.util.Date; // Thư viện cho kiểu dữ liệu Date
-import java.sql.*; // Thư viện cho JDBC và kết nối cơ sở dữ liệu (nếu bạn cần)
-import com.toedter.calendar.JDateChooser;
 
 
 import bus.PhieuThuChiBUS;
 
 import java.util.Calendar;
-import java.util.List;
-import constraints.CONSTRAINTS;
+
+import constant.CommonConstants;
 import dal.NhanVienDAL;
 import dal.PhieuThuChiDAL;
 import entity.NhanVien;
@@ -41,16 +38,11 @@ import entity.NhanVien;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
-import javax.swing.text.DocumentFilter.FilterBypass;
 
-public class PhieuThuChi extends JPanel {
+public class PhieuThuChiPanel extends JPanel {
 
     private JComboBox<String> cboNhanVien;
     private JComboBox comboBox_loaiphieu;
@@ -79,7 +71,7 @@ public class PhieuThuChi extends JPanel {
     
 
 
-    public PhieuThuChi(BaoCao baoCaoFrame) {
+    public PhieuThuChiPanel(BaoCaoPanel baoCaoFrame) {
 
     	 setLayout(new BorderLayout());
  		
@@ -151,7 +143,7 @@ public class PhieuThuChi extends JPanel {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
         panel_1.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin phiếu thu chi", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
+                "Thiết lập thông tin phiếu thu chi", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(
@@ -183,7 +175,7 @@ public class PhieuThuChi extends JPanel {
 		panel_6.setLayout(new BorderLayout(0, 0));
 		panel_6.setBackground(new Color(255, 255, 255));
 		panel_6.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-	                "Thiết lập bảng thông tin thu chi", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
+	                "Thiết lập bảng thông tin thu chi", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
 		panel_6.setLayout(new BorderLayout());
 		
 		JPanel panel_7 = new JPanel();
@@ -867,8 +859,8 @@ panel_8.setBackground(new Color(255, 255, 255));
 		
 		}
     
-    public PhieuThuChi(String maPhieu, String loaiPhieu, String moTa, LocalDate ngayTao, double soTien,
-			String phuongThuc, boolean conHoatDong, NhanVien nhanVien) {
+    public PhieuThuChiPanel(String maPhieu, String loaiPhieu, String moTa, LocalDate ngayTao, double soTien,
+							String phuongThuc, boolean conHoatDong, NhanVien nhanVien) {
 		// TODO Auto-generated constructor stub
 	}
     private String formatSoTien(String soTien) {

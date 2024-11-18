@@ -2,18 +2,15 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Locale;
 
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import com.toedter.calendar.JDateChooser;
 
-import constraints.CONSTRAINTS;
+import constant.CommonConstants;
 
 import javax.swing.table.DefaultTableModel;
 
-public class QL_Phong extends JPanel {
+public class PhongPanel extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -55,7 +52,7 @@ public class QL_Phong extends JPanel {
 	private JButton btnLamLai;
 	private JButton btnLuu;
 
-    public QL_Phong() {
+    public PhongPanel() {
     	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(255, 255, 255));
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,7 +70,7 @@ public class QL_Phong extends JPanel {
         JPanel pnlThongTin = new JPanel();
         pnlThongTin.setBackground(new Color(255, 255, 255));
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
+                "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
        
         add(pnlThongTin);
         pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
@@ -233,7 +230,7 @@ public class QL_Phong extends JPanel {
         JPanel pnlBang = new JPanel();
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Chi tết quản lý phòng", TitledBorder.LEADING, TitledBorder.TOP, null,CONSTRAINTS.ORANGE));
+                "Chi tết quản lý phòng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
 
@@ -302,7 +299,7 @@ public class QL_Phong extends JPanel {
             try {
                 JFrame frame = new JFrame("Quản lí phòng");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new QL_Phong());
+                frame.setContentPane(new PhongPanel());
                 frame.pack();
                 frame.setSize(800, 600);
                 frame.setVisible(true);

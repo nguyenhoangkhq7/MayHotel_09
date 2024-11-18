@@ -76,20 +76,24 @@ public class BangBaoCaoBUS {
 	    
 	    // Lặp qua danh sách hóa đơn để tính toán
 	    for (HoaDon hoaDon : dsHoaDon) {
-	        if (hoaDon.getTrangThai()) { // Kiểm tra trạng thái hóa đơn
-	            soHoaDon++; // Tăng số hóa đơn
-	            tongDoanhThuRong += hoaDon.getThanhTien(); // Giả sử getThanhTien() trả về tổng tiền của hóa đơn
+	    	if (hoaDon.getTrangThai()) { // Kiểm tra trạng thái hóa đơn
+	    	    soHoaDon++; // Tăng số hóa đơn
+	    	    tongDoanhThuRong += hoaDon.getThanhTien(); // Giả sử getThanhTien() trả về tổng tiền của hóa đơn
 
-	            double giaTriKhuyenMai = hoaDon.getKhuyenMai().getGiaTri(); // Lấy giá trị khuyến mãi
-	            double tienKhuyenMai = hoaDon.getThanhTien() / (1 - (giaTriKhuyenMai / 100)) - hoaDon.getThanhTien(); 
-	            khuyenMai += tienKhuyenMai;
+	    	    double giaTriKhuyenMai = 0; // Giá trị mặc định nếu không có khuyến mãi
+	    	    if (hoaDon.getKhuyenMai() != null) {
+	    	        giaTriKhuyenMai = hoaDon.getKhuyenMai().getGiaTri();
+	    	    }
 
-	            // Kiểm tra phương thức thanh toán
-	            if (hoaDon.getDonDatPhong().getPhuongThucThanhToan().equals("Credit Card")) {
-	                tienNganHang += hoaDon.getThanhTien();
-	            } else {
-	                tienMat += hoaDon.getThanhTien();
-	            }
+	    	    double tienKhuyenMai = hoaDon.getThanhTien() / (1 - (giaTriKhuyenMai / 100)) - hoaDon.getThanhTien(); 
+	    	    khuyenMai += tienKhuyenMai;
+
+	    	    // Kiểm tra phương thức thanh toán
+	    	    if (hoaDon.getDonDatPhong().getPhuongThucThanhToan().equals("Credit Card")) {
+	    	        tienNganHang += hoaDon.getThanhTien();
+	    	    } else {
+	    	        tienMat += hoaDon.getThanhTien();
+	    	    }
 
 	            // Tính số phòng được thuê từ chi tiết đơn đặt phòng
                 ChiTiet_DonDatPhong_PhongDAL chiTietDAL = new ChiTiet_DonDatPhong_PhongDAL();
@@ -182,8 +186,8 @@ public class BangBaoCaoBUS {
 	        BangBaoCaoBUS bangBaoCaoBUS = new BangBaoCaoBUS();
 	        
 	        // Đặt khoảng thời gian cho báo cáo
-	        LocalDate startDate = LocalDate.of(2024, 10, 12); // Thay đổi theo ngày bắt đầu
-	        LocalDate endDate = LocalDate.of(2024, 10, 12); // Thay đổi theo ngày kết thúc
+	        LocalDate startDate = LocalDate.of(2024, 10, 10); // Thay đổi theo ngày bắt đầu
+	        LocalDate endDate = LocalDate.of(2024, 10, 10); // Thay đổi theo ngày kết thúc
 	        
 	        // Gọi phương thức để lấy dữ liệu báo cáo
 	        Object[][] duLieuBang = bangBaoCaoBUS.layDuLieuBang(startDate, endDate);

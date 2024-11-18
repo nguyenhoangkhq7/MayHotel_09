@@ -38,7 +38,6 @@ public class KhachHang {
     }
 
     public KhachHang() {
-		super();
 	}
 	// Getter và Setter cho các thuộc tính
     public String getMaKH() {
