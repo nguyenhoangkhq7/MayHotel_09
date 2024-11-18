@@ -52,8 +52,6 @@ public class DonDatPhongDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return dsDonDatPhong;
     }
@@ -64,7 +62,7 @@ public class DonDatPhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO DonDatPhong (maDon, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong, trangThaiDatCoc, maNV, maKH, tongTien, moTa, ngayNhanPhong, ngayTra) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO DonDatPhong (maDon, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong, trangThaiDatCoc, maNV, maKH, tongTien, moTa, ngayTraPhong, ngayNhanPhong) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, donDatPhong.getMaDon());
             stmt.setDate(2, java.sql.Date.valueOf(donDatPhong.getNgayTao()));
@@ -81,9 +79,7 @@ public class DonDatPhongDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+        } 
         return n > 0;
     }
 
@@ -93,7 +89,7 @@ public class DonDatPhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE DonDatPhong SET ngayTao = ?, phuongThucThanhToan = ?, trangThaiDonDatPhong = ?, trangThaiDatCoc = ?, maNV = ?, maKH = ?, tongTien = ?, moTa = ?, ngayNhanPhong = ?, ngayTra = ? WHERE maDon = ?";
+            String sql = "UPDATE DonDatPhong SET ngayTao = ?, phuongThucThanhToan = ?, trangThaiDonDatPhong = ?, trangThaiDatCoc = ?, maNV = ?, maKH = ?, tongTien = ?, moTa = ?,  ngayTraPhong = ?, ngayNhanPhong = ? WHERE maDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setDate(1, java.sql.Date.valueOf(donDatPhong.getNgayTao()));
             stmt.setString(2, donDatPhong.getPhuongThucThanhToan());
@@ -110,8 +106,6 @@ public class DonDatPhongDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return n > 0;
     }
@@ -131,9 +125,7 @@ public class DonDatPhongDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+        } 
 
         return lastOrder;
     }
@@ -152,8 +144,6 @@ public class DonDatPhongDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return n > 0;
     }
@@ -178,7 +168,7 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
-                LocalDate ngayTraPhong = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
+                LocalDate ngayTraPhong = rs.getDate("ngayTraPhong") != null ? rs.getDate("ngayTraPhong").toLocalDate() : null;
 
                 LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
 
@@ -190,31 +180,8 @@ public class DonDatPhongDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+        } 
         return donDatPhong;
     }
-    
-    // Đóng kết nối
-    private void closeConnection() {
-        try {
-            if (con != null && !con.isClosed()) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public static void main(String[] args) {
-        Connection con = null;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            System.out.println(new DonDatPhongDAL().getAllDonDatPhong());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

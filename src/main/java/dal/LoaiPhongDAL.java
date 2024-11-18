@@ -133,34 +133,14 @@ public class LoaiPhongDAL {
     public static void main(String[] args) {
         LoaiPhongDAL dal = new LoaiPhongDAL();
 
-        // Thêm loại phòng mới
-        LoaiPhong loaiPhong1 = new LoaiPhong("LP01", "Phòng Đơn", 2, 500000);
-        if (dal.themLoaiPhong(loaiPhong1)) {
-            System.out.println("Thêm loại phòng thành công");
-        }
 
         // Lấy tất cả loại phòng
-        ArrayList<LoaiPhong> loaiPhongs = dal.getAllLoaiPhong();
-        for (LoaiPhong lp : loaiPhongs) {
-            System.out.println(lp);
-        }
-
-        // Lấy loại phòng theo mã
+//        ArrayList<LoaiPhong> loaiPhongs = dal.getAllLoaiPhong();
+//        for (LoaiPhong lp : loaiPhongs) {
+//            System.out.println(lp);
+//        }
         LoaiPhong loaiPhong = dal.getLoaiPhongTheoMa("LP01");
-        if (loaiPhong != null) {
-            System.out.println("Loại phòng tìm được: " + loaiPhong);
-        }
+        System.out.println(loaiPhong);
 
-        // Cập nhật loại phòng
-        loaiPhong.setTenLoaiPhong("Phòng Đôi");
-        loaiPhong.setSucChua(4);
-        if (dal.capNhatLoaiPhong(loaiPhong)) {
-            System.out.println("Cập nhật loại phòng thành công");
-        }
-
-        // Xóa loại phòng
-        if (dal.xoaLoaiPhong("LP01")) {
-            System.out.println("Xóa loại phòng thành công");
-        }
     }
 }

@@ -24,7 +24,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
 
     public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMa(String maCT_DDP_P) {
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
-        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE cT_DDP_P = ?";
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P = ?";
         
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {

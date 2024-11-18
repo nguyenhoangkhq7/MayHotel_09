@@ -52,7 +52,7 @@ public class HoaDonDAL {
                     khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(maKhuyenMai);
                 }
                 
-                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(rs.getString("maDon"));
+                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(rs.getString("maDonDatPhong"));
                 
                 // Tạo đối tượng HoaDon
                 HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);
@@ -61,9 +61,7 @@ public class HoaDonDAL {
             
         } catch (SQLException e) {
             e.printStackTrace(); // Log lỗi hoặc xử lý ngoại lệ
-        } finally {
-            closeConnection();
-        }
+        } 
         return dsHoaDon;
     }
  // Thêm một hóa đơn mới vào cơ sở dữ liệu
@@ -72,7 +70,7 @@ public class HoaDonDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO HoaDon (maHoaDon, trangThai, thanhTien, maNV, maKM, maDon, ngayTao) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO HoaDon (maHoaDon, trangThai, thanhTien, maNV, maKhuyenMai, maDonDatPhong, ngayTao) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
 
             // Thiết lập các tham số cho câu lệnh SQL
@@ -88,8 +86,6 @@ public class HoaDonDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection(); // Đóng kết nối sau khi thực hiện
         }
         return n > 0; // Trả về true nếu thành công
     }
@@ -149,7 +145,7 @@ public class HoaDonDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE HoaDon SET trangThai = ?, thanhTien = ?, maNV = ?, maKM = ?, maDon = ?, ngayTao = ? WHERE maHoaDon = ?";
+            String sql = "UPDATE HoaDon SET trangThai = ?, thanhTien = ?, maNV = ?, maKhuyenMai = ?, maDonDatPhong = ?, ngayTao = ? WHERE maHoaDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setBoolean(1, hoaDon.getTrangThai());
             stmt.setDouble(2, hoaDon.getThanhTien());
@@ -197,30 +193,37 @@ public class HoaDonDAL {
                 boolean trangThai = rs.getBoolean("trangThai");
                 double thanhTien = rs.getDouble("thanhTien");
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString("maNV"));
-                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString("maKM"));
-                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(rs.getString("maDon"));
+                KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa(rs.getString("maKhuyenMai"));
+                DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa(rs.getString("maDonDatPhong"));
 
                 hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+        } 
         return hoaDon;
     }
     
-    // Đóng kết nối
-    private void closeConnection() {
-        try {
-            if (con != null && !con.isClosed()) {
-                con.close();
+   
+    public static void main(String[] args) {
+        HoaDonDAL hoaDonDAL = new HoaDonDAL();
+        
+        // Định nghĩa khoảng ngày để tìm hóa đơn
+        LocalDate startDate = LocalDate.of(2024, 10, 10); // Ngày bắt đầu
+        LocalDate endDate = LocalDate.of(2024, 10, 10); // Ngày kết thúc
+        
+        // Gọi phương thức getHoaDonByDateRange
+        ArrayList<HoaDon> hoaDons = hoaDonDAL.getHoaDonByDateRange(startDate, endDate);
+        
+        // In kết quả ra console
+        if (hoaDons.isEmpty()) {
+            System.out.println("Không có hóa đơn nào trong khoảng thời gian này.");
+        } else {
+            System.out.println("Danh sách hóa đơn từ " + startDate + " đến " + endDate + ":");
+            for (HoaDon hoaDon : hoaDons) {
+                System.out.println(hoaDon);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
-    public static void main(String[] args) {
-		System.out.println(new HoaDonDAL().getAllHoaDon());
-	}
+
 }

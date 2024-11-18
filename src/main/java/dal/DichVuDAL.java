@@ -102,4 +102,11 @@ public class DichVuDAL {
         }
         return n > 0;
     }
+    public static void main(String[] args) {
+		DichVuDAL dal = new DichVuDAL();
+		ArrayList<DichVu> ds = dal.getAllDichVu();
+		for(DichVu dv : ds) {
+			System.out.println(dv);
+		}
+	}
 }

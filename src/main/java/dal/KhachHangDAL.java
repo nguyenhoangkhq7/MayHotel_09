@@ -8,12 +8,12 @@ import entity.KhachHang;
 import entity.LoaiKhachHang;
 
 public class KhachHangDAL {
-    private Connection con;
+	 public ArrayList<KhachHang> dsKhachHang;
+	    private Connection con;
 
-    public KhachHangDAL() {
-        // Không lưu trữ danh sách khách hàng trong DAL
-    }
-
+	    public KhachHangDAL() {
+	        dsKhachHang = new ArrayList<>();
+	    }
     // Lấy tất cả khách hàng từ cơ sở dữ liệu
     public ArrayList<KhachHang> getAllKhachHang() {
         ArrayList<KhachHang> dsKhachHang = new ArrayList<>();
@@ -116,16 +116,13 @@ public class KhachHangDAL {
         return n > 0;
     }
 
-    private void closeConnection() {
-        try {
-            if (con != null && !con.isClosed()) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+   
     public static void main(String[] args) {
-		
+		KhachHangDAL dal = new KhachHangDAL();
+        ArrayList<KhachHang> khs = new ArrayList<>();
+		khs = dal.getAllKhachHang();
+		for(KhachHang kh : khs) {
+			System.out.println(kh);;
+		}
 	}
 }

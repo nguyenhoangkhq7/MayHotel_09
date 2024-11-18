@@ -34,7 +34,7 @@ public class PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM Phong WHERE maLoaiPhong = ?";
+            String sql = "SELECT * FROM Phong WHERE loaiPhong = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maLoaiPhong);
             ResultSet rs = stmt.executeQuery();
@@ -52,8 +52,6 @@ public class PhongDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return dsPhongTheoLoai;
     }
@@ -79,22 +77,10 @@ public class PhongDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection(); // Đảm bảo đóng kết nối
-        }
+        } 
         return phong;
     }
 
-
-    private void closeConnection() {
-        try {
-            if (con != null && !con.isClosed()) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public ArrayList<Phong> getAllPhong() {
         ArrayList<Phong> dsPhong = new ArrayList<>();
@@ -171,7 +157,7 @@ public class PhongDAL {
     }
 
     // Sửa thông tin phòng trong cơ sở dữ liệu
-    public boolean suaPhong(String maPhong, Phong phong) {
+    public boolean suaPhong(Phong phong) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
@@ -183,12 +169,26 @@ public class PhongDAL {
             stmt.setBoolean(3, phong.isTrangThaiPhong());
             stmt.setString(4, phong.getMoTa());
             stmt.setString(5, phong.getTang());
-            stmt.setString(6, maPhong);
+            stmt.setString(6, phong.getMaPhong());
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return n > 0;
+    }
+    public static void main(String[] args) {
+        PhongDAL dal = new PhongDAL();
+
+
+        // Lấy tất cả loại phòng
+        ArrayList<Phong> phongs = dal.getAllPhong();
+        for (Phong p : phongs) {
+            System.out.println(p);
+        }
+//        Phong phong = dal.getPhongTheoTenPhong("Phòng Delux King 1");
+//        System.out.println(phong);
+
+
     }
 }

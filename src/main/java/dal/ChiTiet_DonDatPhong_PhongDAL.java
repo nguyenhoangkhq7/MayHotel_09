@@ -120,7 +120,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "SELECT * FROM CT_DonDatPhong_Phong WHERE maCT_DonDatPhong_Phong = ?"; // Updated table name
+            String sql = "SELECT * FROM CT_DonDatPhong_Phong WHERE maCT_DDP_P = ?"; // Updated table name
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maCT_DDP_P);
             ResultSet rs = stmt.executeQuery();
@@ -175,7 +175,7 @@ public class ChiTiet_DonDatPhong_PhongDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "UPDATE CT_DonDatPhong_Phong SET maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ?, ngayTra = ?, laPhongChuyen = ?, chietKhau = ? WHERE maCT_DDP_P = ?"; // Updated table name
+            String sql = "UPDATE CT_DonDatPhong_Phong SET maDonDatPhong = ?, maPhong = ?, ngayNhanPhong = ?, ngayTraPhong = ?, laPhongChuyen = ?, chietKhau = ? WHERE maCT_DDP_P = ?"; // Updated table name
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(2, chiTiet.getPhong().getMaPhong());
@@ -209,13 +209,11 @@ public class ChiTiet_DonDatPhong_PhongDAL {
     }
     
     public static void main(String[] args) {
-        Connection con = null;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            System.out.println(new ChiTiet_DonDatPhong_PhongDAL().getAllChiTietDonDatPhongPhong());
-        } catch (Exception e) {
-            e.printStackTrace();
+        ChiTiet_DonDatPhong_PhongDAL dal = new ChiTiet_DonDatPhong_PhongDAL();
+        ArrayList<ChiTiet_DonDatPhong_Phong> cts = dal.getChiTietDonDatPhongPhongTheoMaDDP("DDP000001");
+        for(ChiTiet_DonDatPhong_Phong ct  : cts) {
+        	System.out.println(ct);
         }
+        
     }
 }

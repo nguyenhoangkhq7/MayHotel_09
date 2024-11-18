@@ -8,13 +8,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class KhuyenMaiDAL {
+	 public ArrayList<KhuyenMai> dsKhuyenMai;
+	    Connection con;
 
-    private Connection con;
-
-    // Constructor
-    public KhuyenMaiDAL() {
-        // Không cần khởi tạo gì trong constructor
-    }
+	    public KhuyenMaiDAL() {
+	        dsKhuyenMai = new ArrayList<>();
+	    }
 
     // Lấy tất cả khuyến mãi từ cơ sở dữ liệu
     public ArrayList<KhuyenMai> getAllKhuyenMai() {
@@ -140,16 +139,6 @@ public class KhuyenMaiDAL {
         return n > 0;
     }
 
-    // Đóng kết nối sau khi thực hiện các thao tác
-    private void closeConnection() {
-        try {
-            if (con != null && !con.isClosed()) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void main(String[] args) {
         KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL();

@@ -32,9 +32,7 @@ public class TaiKhoanDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+        } 
         return taiKhoan;
     }
 
@@ -52,29 +50,17 @@ public class TaiKhoanDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
-        }
+        } 
         return n > 0;
     }
 
-    // Đóng kết nối với cơ sở dữ liệu
-    private void closeConnection() {
-        try {
-            if (con != null && !con.isClosed()) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+  
     public static void main(String[] args) {
         // Đây là nơi bạn có thể thử nghiệm với các phương thức
         TaiKhoanDAL taiKhoanDAL = new TaiKhoanDAL();
 
         // Lấy tài khoản theo tên
-        TaiKhoan taiKhoanLayDuoc = taiKhoanDAL.getTaiKhoanTheoTen("admin");
+        TaiKhoan taiKhoanLayDuoc = taiKhoanDAL.getTaiKhoanTheoTen("NV001");
         System.out.println("Tài khoản lấy được: " + taiKhoanLayDuoc);
 
 
