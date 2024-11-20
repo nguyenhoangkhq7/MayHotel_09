@@ -79,6 +79,37 @@ public class NhanVienDAL {
         }
         return nhanVien;
     }
+    // Lấy nhân viên theo tên tài khoản
+    public NhanVien getNhanVienTheoTenTaiKhoan(String tenTaiKhoan) {
+        NhanVien nhanVien = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM NhanVien WHERE tenTaiKhoan = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenTaiKhoan);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String maNV = rs.getString("maNV");
+                String hoten = rs.getString("hoTen");
+                String soDienThoai = rs.getString("soDienThoai");
+                String soCanCuoc = rs.getString("soCanCuoc");
+                boolean conHoatDong = rs.getBoolean("conHoatDong");
+                String email = rs.getString("email");
+                String diaChi = rs.getString("diaChi");
+                String vaiTro = rs.getString("vaiTro");
+
+                TaiKhoan taiKhoan = new TaiKhoanDAL().getTaiKhoanTheoTen(tenTaiKhoan);
+
+                // Tạo đối tượng NhanVien từ dữ liệu truy vấn
+                nhanVien = new NhanVien(maNV, hoten, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, taiKhoan);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nhanVien;
+    }
 
 
     // Thêm nhân viên mới vào cơ sở dữ liệu
@@ -104,6 +135,7 @@ public class NhanVienDAL {
         } 
         return n > 0;
     }
+
     // Sửa thông tin nhân viên theo mã nhân viên
     public boolean suaNhanVien(NhanVien nhanVien) {
         int n = 0;
@@ -130,10 +162,6 @@ public class NhanVienDAL {
 
    public static void main(String[] args) {
 	NhanVienDAL dal = new NhanVienDAL();
-//	ArrayList<NhanVien>  dsNhanVien = dal.getAllNhanVien();
-//for (NhanVien nv : dsNhanVien) {
-//	System.out.println(nv);
-//}
 	NhanVien nv = dal.getNhanVienTheoMa("NV001");
 	System.out.println(nv);
 		

@@ -34,7 +34,7 @@ public class TaiKhoanBUS {
 
     // Cập nhật tài khoản
     public boolean suaTaiKhoan(String tenTaiKhoan, String matKhauMoi) {
-        boolean result = taiKhoanDAL.suaTaiKhoan(tenTaiKhoan, matKhauMoi);
+        boolean result = taiKhoanDAL.suaTaiKhoan(new TaiKhoan(tenTaiKhoan, matKhauMoi));
         if (result) {
             // Cập nhật trong danh sách tạm thời
             TaiKhoan taiKhoan = getTaiKhoanTheoMa(tenTaiKhoan);
@@ -46,14 +46,14 @@ public class TaiKhoanBUS {
     }
 
     // Xóa tài khoản
-    public boolean xoaTaiKhoan(String tenTaiKhoan) {
-        boolean result = taiKhoanDAL.xoaTaiKhoan(tenTaiKhoan);
-        if (result) {
-            // Xóa khỏi danh sách tạm thời
-            dsTaiKhoan.removeIf(tk -> tk.getTenTaiKhoan().equals(tenTaiKhoan));
-        }
-        return result;
-    }
+//    public boolean xoaTaiKhoan(String tenTaiKhoan) {
+//        boolean result = taiKhoanDAL.xoaTaiKhoan(tenTaiKhoan);
+//        if (result) {
+//            // Xóa khỏi danh sách tạm thời
+//            dsTaiKhoan.removeIf(tk -> tk.getTenTaiKhoan().equals(tenTaiKhoan));
+//        }
+//        return result;
+//    }
 
     // Tìm tài khoản theo tên đăng nhập
     public TaiKhoan getTaiKhoanTheoMa(String tenTaiKhoan) {
@@ -62,7 +62,7 @@ public class TaiKhoanBUS {
                 return taiKhoan;
             }
         }
-        return taiKhoanDAL.getTaiKhoanTheoMa(tenTaiKhoan); // Nếu không tìm thấy trong bộ nhớ thì tìm từ cơ sở dữ liệu
+        return taiKhoanDAL.getTaiKhoanTheoTen(tenTaiKhoan); // Nếu không tìm thấy trong bộ nhớ thì tìm từ cơ sở dữ liệu
     }
 
     // Tải tất cả tài khoản từ cơ sở dữ liệu vào danh sách tạm thời

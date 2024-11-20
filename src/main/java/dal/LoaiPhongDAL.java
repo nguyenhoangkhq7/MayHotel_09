@@ -36,6 +36,25 @@ public class LoaiPhongDAL {
         }
         return dsLoaiPhong;
     }
+    // Lấy mã loại phòng theo tên loại phòng
+    public String getMaLoaiPhongTheoTen(String tenLoaiPhong) {
+        String maLoaiPhong = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT maLoaiPhong FROM LoaiPhong WHERE tenLoaiPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenLoaiPhong);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                maLoaiPhong = rs.getString(1); // Lấy giá trị cột maLoaiPhong
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maLoaiPhong;
+    }
 
     // Lấy loại phòng theo mã loại phòng
     public LoaiPhong getLoaiPhongTheoMa(String maLoaiPhong) {

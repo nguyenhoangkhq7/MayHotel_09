@@ -219,7 +219,7 @@ public class KhachHangPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				deleteCustomer();
+//				deleteCustomer();
 				
 			}
 		});
@@ -350,23 +350,23 @@ public class KhachHangPanel extends JPanel {
                 return null; // Hoặc có thể xử lý lỗi nếu cần
         }
     }
-    private void deleteCustomer() {
-        int selectedRow = table_CTHD.getSelectedRow();
-        if (selectedRow != -1) {
-            String maKH = model.getValueAt(selectedRow, 0).toString();
-            // Call to DAL method to delete customer in the database
-            KhachHangDAL khachHangDAL = new KhachHangDAL();
-            boolean isDeleted = khachHangDAL.xoaKhachHang(maKH);
-            if (isDeleted) {
-                model.removeRow(selectedRow);
-                JOptionPane.showMessageDialog(null, "Xóa khách hàng thành công!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Lỗi khi xóa khách hàng.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng để xóa.");
-        }
-    }
+//    private void deleteCustomer() {
+//        int selectedRow = table_CTHD.getSelectedRow();
+//        if (selectedRow != -1) {
+//            String maKH = model.getValueAt(selectedRow, 0).toString();
+//            // Call to DAL method to delete customer in the database
+//            KhachHangDAL khachHangDAL = new KhachHangDAL();
+//            boolean isDeleted = khachHangDAL.xoaKhachHang(maKH);
+//            if (isDeleted) {
+//                model.removeRow(selectedRow);
+//                JOptionPane.showMessageDialog(null, "Xóa khách hàng thành công!");
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Lỗi khi xóa khách hàng.");
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng để xóa.");
+//        }
+//    }
     private void searchCustomer(String keyword) {
         // Kiểm tra nếu từ khóa tìm kiếm là rỗng
         if (keyword.isEmpty()) {

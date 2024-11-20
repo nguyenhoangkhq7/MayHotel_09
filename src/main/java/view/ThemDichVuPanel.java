@@ -431,7 +431,7 @@ public class ThemDichVuPanel extends JPanel {
         } else {
             JOptionPane.showMessageDialog(this, "Thêm chi tiết không thành công.");
         }
-        boolean result_2 = dalDV.suaDichVu(dichVu.getMaDichVu(), new DichVu(dichVu.getMaDichVu(),dichVu.getDonGia(),dichVu.getTenDichVu() ,dichVu.getSoLuongTon()-soLuongDat,dichVu.isConHoatDong(), dichVu.getDonVi()));
+        boolean result_2 = dalDV.suaDichVu(new DichVu(dichVu.getMaDichVu(),dichVu.getDonGia(),dichVu.getTenDichVu() ,dichVu.getSoLuongTon()-soLuongDat,dichVu.isConHoatDong(), dichVu.getDonVi()));
         if (result_2) {
             JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ thành công!");
         } else {

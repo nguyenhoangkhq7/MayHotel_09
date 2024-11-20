@@ -15,7 +15,7 @@ import com.toedter.calendar.JDateChooser;
 import constant.CommonConstants;
 import dal.*;
 import entity.*;
-import utils.UIHelpers;
+import custom.UIHelpers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,6 +41,10 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
     JPanel mainRightPanel;
     JCheckBox chkTrangThaiDatCoc;
     ArrayList<Phong> dsPhong = new ArrayList<>();
+    KhachHangDAL khachHangDAL = new KhachHangDAL();
+    DonDatPhongDAL donDatPhongDAL = new DonDatPhongDAL();
+    PhongDAL phongDAL = new PhongDAL();
+    LoaiPhongDAL loaiPhongDAL = new LoaiPhongDAL();
 
     public ThemDonDatPhongPanel() {
         this.setLayout(new BorderLayout());
@@ -82,7 +86,8 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
                 }
             }
         });
-
+        // lấy tất cả phòng tuwf loại phòng ban đầu
+        updateSoPhong();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -126,8 +131,8 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
             ddp.setPhuongThucThanhToan(phuongThucThanhToan);
             ddp.setTrangThaiDatCoc(trangThaiDatCoc); // Hoặc true nếu có đặt cọc
             ddp.setNhanVien(App.nhanVienDangTruc);
-            if(new KhachHangDAL().checkKhachHang(soDienThoai)) {
-                ddp.setKhachHang(new KhachHangDAL().getKhachHangTheoSoDienThoai(soDienThoai)); // Tạo đối tượng khách hàng
+            if(khachHangDAL.checkKhachHangTonTaiTheoSDT(soDienThoai)) {
+                ddp.setKhachHang(khachHangDAL.getKhachHangTheoSoDienThoai(soDienThoai)); // Tạo đối tượng khách hàng
             } else {
                 KhachHang khachHang = new KhachHang();
                 khachHang.setMaKH(soDienThoai); // Giả sử mã khách hàng là số điện thoại
@@ -138,7 +143,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
                 khachHang.setTienTichLuy(0); // Thiết lập tiền tích lũy ban đầu
                 khachHang.setLoaiKhachHang(LoaiKhachHang.NGUOIMOI); // Hoặc giá trị phù hợp
                 ddp.setKhachHang(khachHang);
-                new KhachHangDAL().themKhachHang(khachHang);
+                khachHangDAL.themKhachHang(khachHang);
             }
             double tongTien = 0;
             for(Phong p : dsPhong) {
@@ -147,10 +152,10 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
             ddp.setTongTien(tongTien); // Tạm thời gán 0, cần tính toán tổng tiền
             ddp.setMoTa(moTa);
             ddp.setNgayNhanPhong(tgCheckin);
-            ddp.setNgayTra(tgCheckout);
+            ddp.setNgayTraPhong(tgCheckout);
 
             // 4. Lưu đơn đặt phòng vào cơ sở dữ liệu
-            boolean isSuccess = new DonDatPhongDAL().themDonDatPhong(ddp);
+            boolean isSuccess = donDatPhongDAL.themDonDatPhong(ddp);
 
             // 5. Cập nhật giao diện
             if (isSuccess) {
@@ -163,7 +168,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
 
         else if(o.equals(btnCheckThongTinKhachHang)) {
             String soDienThoai = jtfSoDienThoai.getText();
-            KhachHang khachHang = new KhachHangDAL().getKhachHangTheoSoDienThoai(soDienThoai);
+            KhachHang khachHang = khachHangDAL.getKhachHangTheoSoDienThoai(soDienThoai);
             if(khachHang!=null) {
                 jtfHoTen.setText(khachHang.getHoTen());
                 jtfCCCD.setText(khachHang.getSoCanCuoc());
@@ -174,7 +179,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
             String loaiPhong = cboLoaiPhong.getSelectedItem().toString();
             String soPhong = cboSoPhong.getSelectedItem().toString();
 
-            dsPhong.add(new PhongDAL().getPhongTheoTenPhong(soPhong)); // lấy phòng bỏ vào danh sách
+            dsPhong.add(phongDAL.getPhongTheoTenPhong(soPhong)); // lấy phòng bỏ vào danh sách
 
             // Thêm phòng mới vào danh sách
             listDanhSachPhongPanel.add(UIHelpers.create_Phong_Da_Them(soPhong, loaiPhong));
@@ -217,7 +222,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
 
 
     public void themLoaiPhongCbo() {
-        ArrayList<LoaiPhong> dsLoaiPhong = new LoaiPhongDAL().getAllLoaiPhong();
+        ArrayList<LoaiPhong> dsLoaiPhong = loaiPhongDAL.getAllLoaiPhong();
         for(LoaiPhong lp : dsLoaiPhong) {
             cboLoaiPhong.addItem(lp.getTenLoaiPhong());
         }
@@ -228,11 +233,11 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
         cboSoPhong.removeAllItems();
 
         // Lấy loại phòng được chọn
-        String loaiPhong = new LoaiPhongDAL().getMaLoaiPhongByTen((String) cboLoaiPhong.getSelectedItem());
+        String loaiPhong = loaiPhongDAL.getMaLoaiPhongTheoTen((String) cboLoaiPhong.getSelectedItem());
         // Kiểm tra nếu loại phòng không null
         if (loaiPhong != null) {
             // Lấy danh sách phòng dựa trên loại phòng được chọn
-            ArrayList<Phong> dsPhong = new PhongDAL().getAllPhongByMaLoaiPhong(loaiPhong);
+            ArrayList<Phong> dsPhong = phongDAL.getAllPhongByMaLoaiPhong(loaiPhong);
             // Thêm các phòng vào cboSoPhong
             for (Phong p : dsPhong) {
                 cboSoPhong.addItem(p.getTenPhong());

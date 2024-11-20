@@ -18,7 +18,17 @@ import java.awt.*;
 
 // nơi chạy chương trình
 public class App {
+    public static NhanVien nhanVienDangTruc ;
     public static void main(String[] args) {
-        new MainGUI();
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    LoginGUI frame = new LoginGUI();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

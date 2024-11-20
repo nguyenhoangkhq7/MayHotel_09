@@ -14,7 +14,7 @@ import constant.CommonConstants;
 import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.DonDatPhongDAL;
 import entity.*;
-import utils.UIHelpers;
+import custom.UIHelpers;
 
 public class DonDatPhongPanel extends JPanel {
     // frame
@@ -39,73 +39,9 @@ public class DonDatPhongPanel extends JPanel {
         showContent();
 
         setVisible(true); // Đặt setVisible ở cuối
-        suKienTraCuu();
     }
 
 //Xử lý sự kiện
-public void suKienTraCuu() {
-    btnTraCuu.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Lấy dữ liệu từ các trường nhập liệu
-            LocalDate tuNgay = null;
-            if (jdcNgayDen.getDate() != null) {
-                tuNgay = jdcNgayDen.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            }
-
-            LocalDate denNgay = null;
-            if (jdcNgayDi.getDate() != null) {
-                denNgay = jdcNgayDi.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            }
-
-            String tang = cboTang.getSelectedItem() != null ? cboTang.getSelectedItem().toString() : "";
-            String trangThai = cboTrangThai.getSelectedItem() != null ? cboTrangThai.getSelectedItem().toString() : "";
-
-            // Lọc danh sách các đơn đặt phòng dựa trên điều kiện tìm kiếm
-            ArrayList<DonDatPhong> danhSachTimKiem = new DonDatPhongDAL().getAllDonDatPhong();
-            ArrayList<DonDatPhong> ketQuaTimKiem = new ArrayList<>();
-
-            for (DonDatPhong ddp : danhSachTimKiem) {
-                // Kiểm tra các điều kiện tìm kiếm
-                boolean thoaMan = true;
-
-                // Kiểm tra ngày nhận và ngày trả của đơn đặt phòng nằm giữa khoảng tuNgay và denNgay
-                if (tuNgay != null && denNgay != null) {
-                    if (ddp.getNgayNhanPhong().isAfter(denNgay) || ddp.getNgayTra().isBefore(tuNgay)) {
-                        thoaMan = false;
-                    }
-                } else if (tuNgay != null) {
-                    // Nếu chỉ có tuNgay: ngayTra phải sau hoặc bằng tuNgay
-                    if (ddp.getNgayTra().isBefore(tuNgay)) {
-                        thoaMan = false;
-                    }
-                } else if (denNgay != null) {
-                    // Nếu chỉ có denNgay: ngayNhanPhong phải trước hoặc bằng denNgay
-                    if (ddp.getNgayNhanPhong().isAfter(denNgay)) {
-                        thoaMan = false;
-                    }
-                }
-
-                // Kiểm tra tầng
-//                if (!tang.isEmpty() && !ddp.getPhong().getTang().equals(tang)) {
-//                    thoaMan = false;
-//                }
-
-                // Kiểm tra trạng thái
-                if (!trangThai.isEmpty() && !ddp.getTrangThaiDonDatPhong().equals(trangThai)) {
-                    thoaMan = false;
-                }
-
-                if (thoaMan) {
-                    ketQuaTimKiem.add(ddp);
-                }
-            }
-
-            // Cập nhật giao diện với kết quả tìm kiếm
-            showDanhSachTimKiem(ketQuaTimKiem);
-        }
-    });
-}
 
 
 
@@ -339,7 +275,7 @@ public void suKienTraCuu() {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String ngayNhanPhong = donDatPhong.getNgayNhanPhong().format(formatter);
-        String ngayTraPhong = donDatPhong.getNgayTra().format(formatter);
+        String ngayTraPhong = donDatPhong.getNgayTraPhong().format(formatter);
 
         // Tạo các label thông tin
         JLabel lblTenKhachHang = new JLabel("Tên khách hàng: " + tenKhachHang);

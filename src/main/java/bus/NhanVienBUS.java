@@ -47,12 +47,12 @@ public class NhanVienBUS {
     }
 
     // Xóa nhân viên và cập nhật danh sách bộ nhớ tạm
-    public boolean xoaNhanVien(String maNV) {
+    /*public boolean xoaNhanVien(String maNV) {
         boolean result = nhanVienDAL.xoaNhanVien(maNV);
         if (result) {
             // Xóa nhân viên từ bộ nhớ tạm
             dsNhanVien.removeIf(nv -> nv.getMaNV().equals(maNV));
         }
         return result;
-    }
+    }*/
 }

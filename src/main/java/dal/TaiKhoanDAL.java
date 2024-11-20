@@ -10,7 +10,28 @@ public class TaiKhoanDAL {
     private Connection con;
 
     public TaiKhoanDAL() {
-        // Không lưu trữ danh sách tài khoản trong DAL
+    }
+    // Lấy tất cả tài khoản từ cơ sở dữ liệu
+    public ArrayList<TaiKhoan> getAllTaiKhoan() {
+        ArrayList<TaiKhoan> dsTaiKhoan = new ArrayList<>();
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM TaiKhoan";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                TaiKhoan taiKhoan = new TaiKhoan(
+                        rs.getString(1),  // tenTaiKhoan
+                        rs.getString(2)   // matKhau
+                );
+                dsTaiKhoan.add(taiKhoan);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsTaiKhoan;
     }
 
     // Lấy tài khoản theo tên tài khoản
@@ -35,9 +56,26 @@ public class TaiKhoanDAL {
         } 
         return taiKhoan;
     }
+    // Thêm tài khoản mới vào cơ sở dữ liệu
+    public boolean themTaiKhoan(TaiKhoan taiKhoan) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "INSERT INTO TaiKhoan (tenTaiKhoan, matKhau) VALUES (?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, taiKhoan.getTenTaiKhoan());
+            stmt.setString(2, taiKhoan.getMatKhau()); // Đảm bảo mật khẩu đã được mã hóa nếu cần
+
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0;
+    }
 
     // Cập nhật tài khoản trong cơ sở dữ liệu
-    public boolean capNhatTaiKhoan(TaiKhoan taiKhoan) {
+    public boolean suaTaiKhoan(TaiKhoan taiKhoan) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();

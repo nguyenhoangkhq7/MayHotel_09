@@ -92,6 +92,53 @@ public class KhachHangDAL {
         }
         return n > 0;
     }
+    // Kiểm tra khách hàng có tồn tại theo số điện thoại
+    public boolean checkKhachHangTonTaiTheoSDT(String sdt) {
+        boolean tonTai = false;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT COUNT(*) FROM KhachHang WHERE soDienThoai = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, sdt);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1); // Lấy số lượng khách hàng tìm thấy
+                tonTai = count > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tonTai;
+    }
+    // Lấy khách hàng theo số điện thoại
+    public KhachHang getKhachHangTheoSoDienThoai(String soDienThoai) {
+        KhachHang khachHang = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM KhachHang WHERE soDienThoai = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, soDienThoai);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                khachHang = new KhachHang(
+                        rs.getString(1),  // maKH
+                        rs.getString(2),  // hoTen
+                        rs.getString(3),  // soDienThoai
+                        rs.getDouble(4),  // tienTichLuy
+                        rs.getString(5),  // soCanCuoc
+                        rs.getString(6),  // email
+                        LoaiKhachHang.valueOf(rs.getString(7))  // loaiKhachHang
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return khachHang;
+    }
 
     // Cập nhật khách hàng trong cơ sở dữ liệu
     public boolean capNhatKhachHang(KhachHang khachHang) {
@@ -116,7 +163,25 @@ public class KhachHangDAL {
         return n > 0;
     }
 
-   
+    // Lấy mã khách hàng cuối cùng trong cơ sở dữ liệu
+    public String getLastMaKH() {
+        String lastMaKH = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT maKH FROM KhachHang ORDER BY maKH DESC LIMIT 1"; // Lấy mã khách hàng mới nhất
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                lastMaKH = rs.getString(1); // Lấy giá trị cột maKH
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lastMaKH;
+    }
+
     public static void main(String[] args) {
 		KhachHangDAL dal = new KhachHangDAL();
         ArrayList<KhachHang> khs = new ArrayList<>();

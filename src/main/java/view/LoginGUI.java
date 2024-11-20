@@ -1,5 +1,8 @@
 package view;
 
+import dal.NhanVienDAL;
+import database.ConnectDB;
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,26 +36,9 @@ public class LoginGUI extends JFrame {
     private JPasswordField txtMatKhau;
     private JCheckBox chckbxRememberPassword;
     private Preferences prefs; 
+    NhanVienDAL nhanVienDAL = new NhanVienDAL();
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    LoginGUI frame = new LoginGUI();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
-    /**
-     * Create the frame.
-     */
     public LoginGUI() {
         prefs = Preferences.userNodeForPackage(LoginGUI.class);
 
@@ -74,7 +60,7 @@ public class LoginGUI extends JFrame {
         panelIconLogin.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         
         JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/1.jpg")));
+        lblNewLabel.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/1.jpg")));
         panelIconLogin.add(lblNewLabel);
         
         JPanel panelLogin = new JPanel();
@@ -104,7 +90,7 @@ public class LoginGUI extends JFrame {
         
         JLabel lblIconUser = new JLabel("");
         lblIconUser.setHorizontalAlignment(SwingConstants.CENTER);
-        lblIconUser.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/icons8_user_20px_1.png")));
+        lblIconUser.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/icons8_user_20px_1.png")));
         lblIconUser.setBounds(480, 220, 56, 50);
         panelLogin.add(lblIconUser);
         
@@ -122,7 +108,7 @@ public class LoginGUI extends JFrame {
         
         JLabel disable = new JLabel("");
         disable.setHorizontalAlignment(SwingConstants.CENTER);
-        disable.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/icons8_invisible_20px_1.png")));
+        disable.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/icons8_invisible_20px_1.png")));
         disable.setBounds(480, 327, 49, 37);
         panelLogin.add(disable);
         
@@ -136,7 +122,7 @@ public class LoginGUI extends JFrame {
                 show.setEnabled(false);
             }
         });
-        show.setIcon(new ImageIcon(LoginGUI.class.getResource("/icon/icons8_eye_20px_1.png")));
+        show.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/icons8_eye_20px_1.png")));
         show.setHorizontalAlignment(SwingConstants.CENTER);
         show.setBounds(480, 327, 49, 37);
         panelLogin.add(show);
@@ -177,15 +163,11 @@ public class LoginGUI extends JFrame {
         btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 20));
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String Username, Password, query, fname = null, passDb = null;
-                String SUrl, SUser, SPass;
-                SUrl = "jdbc:sqlserver://localhost:1433;databasename=QLKS;encrypt=false";
-                SUser = "sa";
-                SPass = "Thaibao123";
-                int notFound = 0;
+                String username, password, query, passDb = null;
+                int found = 0;
                 try {
-                    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
+                    ConnectDB.getInstance().connect();
+                    Connection con = ConnectDB.getConnection();
                     Statement st = con.createStatement();
                     if ("".equals(txtTaiKhoan.getText())) {
                         JOptionPane.showMessageDialog(new JFrame(), "Tên đăng nhập không được rỗng", "Error",
@@ -193,28 +175,32 @@ public class LoginGUI extends JFrame {
                     } else if ("".equals(txtMatKhau.getText())) {
                         JOptionPane.showMessageDialog(new JFrame(), "Mật khẩu không được rỗng", "Error",
                                 JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        Username = txtTaiKhoan.getText();
-                        Password = txtMatKhau.getText();
+                    } else { // kiểm tra đúng hay chưa
+                        username = txtTaiKhoan.getText();
+                        password = txtMatKhau.getText();
                         
-                        query = "SELECT * FROM TaiKhoan WHERE tenTaiKhoan= '" + Username + "'";
+                        query = "SELECT * FROM TaiKhoan WHERE tenTaiKhoan= '" + username + "'";
                         
                         ResultSet rs = st.executeQuery(query);
+
                         while (rs.next()) {
                             passDb = rs.getString("matKhau");
-                            fname = rs.getString("tenTaiKhoan");
-                            notFound = 1;
+                            if(passDb.equals(username)) {
+                                found = 1;
+                                break;
+                            }
                         }
-                        if (notFound == 1 && Password.equals(passDb)) {
+                        if (found == 1) {
                             MainGUI MainFrame = new MainGUI();
-                            MainFrame.setUser(fname);
+                            MainFrame.setUser(username);
                             MainFrame.setVisible(true);
                             MainFrame.pack();
                             MainFrame.setLocationRelativeTo(null);
-                            
+                            App.nhanVienDangTruc = nhanVienDAL.getNhanVienTheoTenTaiKhoan(username);
+
                             if (chckbxRememberPassword.isSelected()) {
-                                prefs.put("savedUsername", Username);
-                                prefs.put("savedPassword", Password);
+                                prefs.put("savedUsername", username);
+                                prefs.put("savedPassword", password);
                                 JOptionPane.showMessageDialog(null, "Thông tin đăng nhập đã được ghi nhớ");
                             } else {
                                 prefs.remove("savedUsername");

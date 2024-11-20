@@ -46,14 +46,4 @@ public class KhachHang_BUS {
         }
         return success;
     }
-
-    // Xóa khách hàng và cập nhật danh sách trong bộ nhớ
-    public boolean xoaKhachHang(String maKH) {
-        boolean success = khachHangDAL.xoaKhachHang(maKH);
-        if (success) {
-            // Xóa khỏi bộ nhớ
-            dsKhachHang.removeIf(kh -> kh.getMaKH().equals(maKH));
-        }
-        return success;
-    }
 }

@@ -10,7 +10,7 @@ import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.ChiTiet_DonDatPhong_Phong_DichVu;
-import utils.UIHelpers;
+import custom.UIHelpers;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
@@ -170,7 +170,7 @@ public class TraPhongPanel extends JPanel {
           txtTenPhong.setText(chiTiet.getPhong().getTenPhong());
           txtDonGia.setText(String.valueOf(chiTiet.getPhong().getLoaiPhong().getDonGia()));
           jdcNgayNhan.setDate(java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
-          jdcNgayTra.setDate(java.sql.Date.valueOf(chiTiet.getNgayTra()));
+          jdcNgayTra.setDate(java.sql.Date.valueOf(chiTiet.getNgayTraPhong()));
  
 
         JPanel pnlBang = new JPanel();
