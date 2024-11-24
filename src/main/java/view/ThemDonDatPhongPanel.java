@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -70,8 +70,8 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
 
                 // Kiểm tra xem cả hai ngày có giá trị không
                 if (checkInDate != null && checkOutDate != null) {
-                    LocalDate tgCheckin = checkInDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate tgCheckout = checkOutDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    LocalDateTime tgCheckin = checkInDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    LocalDateTime tgCheckout = checkOutDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
                     // Tính số ngày giữa hai ngày
                     long tongThoiGianO = ChronoUnit.DAYS.between(tgCheckin, tgCheckout);
@@ -101,8 +101,8 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
         }
         else if (o.equals(btnDatPhong)) {
             // 1. Thu thập thông tin từ các trường nhập liệu
-            LocalDate tgCheckin = jdcCheckIn.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate tgCheckout = jdcCheckout.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDateTime tgCheckin = jdcCheckIn.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime tgCheckout = jdcCheckout.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
             long tongThoiGianO = ChronoUnit.DAYS.between(tgCheckin, tgCheckout);
             jtfTongThoiGianO.setText(String.valueOf(tongThoiGianO));
 
@@ -126,7 +126,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
             // 3. Tạo đối tượng đơn đặt phòng
             DonDatPhong ddp = new DonDatPhong();
             ddp.setMaDon(DonDatPhongBUS.generateOrderCode()); // Tạo mã đơn mới
-            ddp.setNgayTao(LocalDate.now()); // Ngày tạo đơn
+            ddp.setNgayTao(LocalDateTime.now()); // Ngày tạo đơn
             ddp.setTrangThaiDonDatPhong("Đặt trước"); // Cần xác định nếu có
             ddp.setPhuongThucThanhToan(phuongThucThanhToan);
             ddp.setTrangThaiDatCoc(trangThaiDatCoc); // Hoặc true nếu có đặt cọc

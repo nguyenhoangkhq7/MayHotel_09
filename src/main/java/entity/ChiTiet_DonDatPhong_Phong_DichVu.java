@@ -11,18 +11,19 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ChiTiet_DonDatPhong_Phong_DichVu {
     private String maCT_DDP_P_DV; // Mã chi tiết đơn đặt phòng - dịch vụ
     private int soLuongDat;       // Số lượng dịch vụ đặt
-    private LocalDate ngayTao;    // Ngày tạo đơn đặt dịch vụ
+    private LocalDateTime ngayTao;    // Ngày tạo đơn đặt dịch vụ
     private DichVu dichVu;        // Đối tượng dịch vụ
     private ChiTiet_DonDatPhong_Phong cT_DDP_P; // Đối tượng chi tiết đơn đặt phòng - phòng
     private String moTa;          // Mô tả
 
     // Constructor
-    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_P_DV, int soLuongDat, LocalDate ngayTao, DichVu dichVu, ChiTiet_DonDatPhong_Phong cT_DDP_P, String moTa) {
+    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_P_DV, int soLuongDat, LocalDateTime ngayTao, DichVu dichVu, ChiTiet_DonDatPhong_Phong cT_DDP_P, String moTa) {
         setMaCT_DDP_P_DV(maCT_DDP_P_DV);
         setSoLuongDat(soLuongDat);
         this.ngayTao = ngayTao;
@@ -61,12 +62,20 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
         this.soLuongDat = soLuongDat;
     }
 
-    public LocalDate getNgayTao() {
+    public LocalDateTime getNgayTao() {
         return ngayTao;
     }
 
-    public void setNgayTao(LocalDate ngayTao) {
+    public void setNgayTao(LocalDateTime ngayTao) {
         this.ngayTao = ngayTao;
+    }
+
+    public ChiTiet_DonDatPhong_Phong getcT_DDP_P() {
+        return cT_DDP_P;
+    }
+
+    public void setcT_DDP_P(ChiTiet_DonDatPhong_Phong cT_DDP_P) {
+        this.cT_DDP_P = cT_DDP_P;
     }
 
     public DichVu getDichVu() {

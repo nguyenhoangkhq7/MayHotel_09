@@ -1,13 +1,10 @@
 package dal;
 
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.time.LocalDate;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 import database.ConnectDB;
 import entity.NhanVien;
 import entity.PhieuThuChi;
@@ -48,7 +45,7 @@ public class PhieuThuChiDAL {
     }
 
     // Lấy danh sách phiếu thu chi theo khoảng thời gian
-    public ArrayList<PhieuThuChi> getPhieuThuChiByDateRange(LocalDate startDate, LocalDate endDate) {
+    public ArrayList<PhieuThuChi> getPhieuThuChiByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         ArrayList<PhieuThuChi> dsPhieuThuChi = new ArrayList<>();
 
         try {
@@ -56,15 +53,15 @@ public class PhieuThuChiDAL {
             con = ConnectDB.getConnection();
             String sql = "SELECT * FROM PhieuThuChi WHERE ngayLap BETWEEN ? AND ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setDate(1, Date.valueOf(startDate));
-            stmt.setDate(2, Date.valueOf(endDate));
+            stmt.setTimestamp(1, Timestamp.valueOf(startDate));
+            stmt.setTimestamp(2, Timestamp.valueOf(endDate));
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 String maPhieu = rs.getString(1);
                 String loaiPhieu = rs.getString(2);
                 String moTa = rs.getString(3);
-                LocalDate ngayLap = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
+                LocalDateTime ngayLap = rs.getTimestamp(4) != null ? rs.getTimestamp(4).toLocalDateTime() : null;
                 double soTien = rs.getDouble(5);
                 String phuongThucThanhToan = rs.getString(6);
                 boolean conHoatDong = rs.getBoolean(7);
@@ -91,7 +88,7 @@ public class PhieuThuChiDAL {
                 String maPhieu = rs.getString(1);
                 String loaiPhieu = rs.getString(2);
                 String moTa = rs.getString(3);
-                LocalDate ngayLap = rs.getDate(4) != null ? rs.getDate(4).toLocalDate() : null;
+                LocalDateTime ngayLap = rs.getTimestamp(4) != null ? rs.getTimestamp(4).toLocalDateTime() : null;
                 double soTien = rs.getDouble(5);
                 String phuongThucThanhToan = rs.getString(6);
                 boolean conHoatDong = rs.getBoolean(7);
@@ -117,7 +114,7 @@ public class PhieuThuChiDAL {
             stmt.setString(1, phieuThuChi.getMaPhieu());
             stmt.setString(2, phieuThuChi.getLoaiPhieu());
             stmt.setString(3, phieuThuChi.getMoTa());
-            stmt.setDate(4, Date.valueOf(phieuThuChi.getNgayLap()));
+            stmt.setTimestamp(4, Timestamp.valueOf(phieuThuChi.getNgayLap()));
             stmt.setDouble(5, phieuThuChi.getSoTien());
             stmt.setString(6, phieuThuChi.getPhuongThucThanhToan());
             stmt.setBoolean(7, phieuThuChi.isConHoatDong());
@@ -143,7 +140,7 @@ public class PhieuThuChiDAL {
             if (rs.next()) {
                 String loaiPhieu = rs.getString("loaiPhieu");
                 String moTa = rs.getString("moTa");
-                LocalDate ngayLap = rs.getDate("ngayLap").toLocalDate();
+                LocalDateTime ngayLap = rs.getTimestamp("ngayLap").toLocalDateTime();
                 double soTien = rs.getDouble("soTien");
                 String phuongThucThanhToan = rs.getString("phuongThucThanhToan");
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
@@ -169,7 +166,7 @@ public class PhieuThuChiDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, phieuThuChi.getLoaiPhieu());
             stmt.setString(2, phieuThuChi.getMoTa());
-            stmt.setDate(3, Date.valueOf(phieuThuChi.getNgayLap()));
+            stmt.setTimestamp(3, Timestamp.valueOf(phieuThuChi.getNgayLap()));
             stmt.setDouble(4, phieuThuChi.getSoTien());
             stmt.setString(5, phieuThuChi.getPhuongThucThanhToan());
             stmt.setBoolean(6, phieuThuChi.isConHoatDong());

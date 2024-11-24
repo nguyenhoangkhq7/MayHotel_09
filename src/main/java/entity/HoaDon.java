@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ public class HoaDon {
 	private NhanVien nhanVien;
 	private KhuyenMai khuyenMai;
 	private DonDatPhong donDatPhong;
-	private LocalDate ngayTao;
+	private LocalDateTime ngayTao;
 
 
 	// Constructor không tham số
@@ -20,7 +21,7 @@ public class HoaDon {
 	// Constructor đầy đủ
 
 
-	public HoaDon(String maHoaDon, boolean trangThai, double thanhTien, NhanVien nhanVien, KhuyenMai khuyenMai, DonDatPhong donDatPhong, LocalDate ngayTao) {
+	public HoaDon(String maHoaDon, boolean trangThai, double thanhTien, NhanVien nhanVien, KhuyenMai khuyenMai, DonDatPhong donDatPhong, LocalDateTime ngayTao) {
 		this.maHoaDon = maHoaDon;
 		this.trangThai = trangThai;
 		this.thanhTien = thanhTien;
@@ -55,11 +56,11 @@ public class HoaDon {
 		this.maHoaDon = maHoaDon;
 	}
 
-	public LocalDate getNgayTao() {
+	public LocalDateTime getNgayTao() {
 		return ngayTao;
 	}
 
-	public void setNgayTao(LocalDate ngayTao) {
+	public void setNgayTao(LocalDateTime ngayTao) {
 		this.ngayTao = ngayTao;
 	}
 

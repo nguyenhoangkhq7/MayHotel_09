@@ -12,19 +12,20 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ChiTiet_DonDatPhong_Phong {
     private String maCT_DDP_P;
     private DonDatPhong donDatPhong;
     private Phong phong;
-    private LocalDate ngayNhanPhong;
-    private LocalDate ngayTraPhong; // Đã đổi từ ngayTra sang ngayTraPhong
+    private LocalDateTime ngayNhanPhong;
+    private LocalDateTime ngayTraPhong; // Đã đổi từ ngayTra sang ngayTraPhong
     private boolean laPhongChuyen;
     private double chietKhau;
 
     // Constructor đầy đủ tham số
-    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P, DonDatPhong donDatPhong, Phong phong, LocalDate ngayNhanPhong, LocalDate ngayTraPhong, boolean laPhongChuyen, double chietKhau) {
+    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P, DonDatPhong donDatPhong, Phong phong, LocalDateTime ngayNhanPhong, LocalDateTime ngayTraPhong, boolean laPhongChuyen, double chietKhau) {
         this.maCT_DDP_P = maCT_DDP_P;
         this.donDatPhong = donDatPhong;
         this.phong = phong;
@@ -32,6 +33,46 @@ public class ChiTiet_DonDatPhong_Phong {
         this.laPhongChuyen = laPhongChuyen;
         this.ngayNhanPhong = ngayNhanPhong;
         this.chietKhau = chietKhau;
+    }
+
+    public String getMaCT_DDP_P() {
+        return maCT_DDP_P;
+    }
+
+    public void setMaCT_DDP_P(String maCT_DDP_P) {
+        this.maCT_DDP_P = maCT_DDP_P;
+    }
+
+    public DonDatPhong getDonDatPhong() {
+        return donDatPhong;
+    }
+
+    public void setDonDatPhong(DonDatPhong donDatPhong) {
+        this.donDatPhong = donDatPhong;
+    }
+
+    public Phong getPhong() {
+        return phong;
+    }
+
+    public void setPhong(Phong phong) {
+        this.phong = phong;
+    }
+
+    public LocalDateTime getNgayNhanPhong() {
+        return ngayNhanPhong;
+    }
+
+    public void setNgayNhanPhong(LocalDateTime ngayNhanPhong) {
+        this.ngayNhanPhong = ngayNhanPhong;
+    }
+
+    public LocalDateTime getNgayTraPhong() {
+        return ngayTraPhong;
+    }
+
+    public void setNgayTraPhong(LocalDateTime ngayTraPhong) {
+        this.ngayTraPhong = ngayTraPhong;
     }
 
     public boolean isLaPhongChuyen() {
@@ -48,63 +89,6 @@ public class ChiTiet_DonDatPhong_Phong {
 
     public void setChietKhau(double chietKhau) {
         this.chietKhau = chietKhau;
-    }
-
-    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P) {
-        this.maCT_DDP_P = maCT_DDP_P;
-    }
-
-    public ChiTiet_DonDatPhong_Phong() {
-    }
-
-    // Getter và Setter
-    public String getMaCT_DDP_P() {
-        return maCT_DDP_P;
-    }
-
-    public void setMaCT_DDP_P(String maCT_DDP_P) {
-        if (maCT_DDP_P.equals("")) {
-            throw new IllegalArgumentException("Mã đặt phòng không được rỗng");
-        }
-        this.maCT_DDP_P = maCT_DDP_P;
-    }
-
-    public LocalDate getNgayTraPhong() {
-        return ngayTraPhong;
-    }
-
-    public void setNgayTraPhong(LocalDate ngayTraPhong) {
-        this.ngayTraPhong = ngayTraPhong;
-    }
-
-    public DonDatPhong getDonDatPhong() {
-        return donDatPhong;
-    }
-
-    public void setDonDatPhong(DonDatPhong donDatPhong) {
-        if (donDatPhong == null) {
-            throw new IllegalArgumentException("Đơn đặt phòng không được null");
-        }
-        this.donDatPhong = donDatPhong;
-    }
-
-    public Phong getPhong() {
-        return phong;
-    }
-
-    public void setPhong(Phong phong) {
-        if (phong == null) {
-            throw new IllegalArgumentException("Phòng không được null");
-        }
-        this.phong = phong;
-    }
-
-    public LocalDate getNgayNhanPhong() {
-        return ngayNhanPhong;
-    }
-
-    public void setNgayNhanPhong(LocalDate ngayNhanPhong) {
-        this.ngayNhanPhong = ngayNhanPhong;
     }
 
     // Override phương thức equals và hashCode

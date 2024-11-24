@@ -9,7 +9,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JLabel;
@@ -197,8 +196,8 @@ public class BangBaoCaoPanel extends JPanel {
 		bangBaoCaoBUS = new BangBaoCaoBUS();
 		
 		// Xác định khoảng thời gian (có thể thay đổi theo yêu cầu)
-        LocalDate startDate = LocalDate.now(); // Ngày bắt đầu
-        LocalDate endDate = LocalDate.now();   // Ngày kết thúc
+        LocalDateTime startDate = LocalDateTime.now(); // Ngày bắt đầu
+        LocalDateTime endDate = LocalDateTime.now();   // Ngày kết thúc
 
 		Object[][] layDuLieuBang = bangBaoCaoBUS.layDuLieuBang(startDate, endDate);
 			

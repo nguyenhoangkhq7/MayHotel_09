@@ -10,8 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
+
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -24,20 +23,13 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
 import javax.swing.border.LineBorder;
-import javax.swing.border.EtchedBorder;
+
 import javax.swing.SwingConstants;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import javax.swing.border.TitledBorder;
-import javax.swing.UIManager;
-import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.JButton;
 
 
 public class FrmXuatHoaDon extends JFrame implements Printable,ActionListener {

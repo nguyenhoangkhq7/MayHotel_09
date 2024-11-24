@@ -1,7 +1,7 @@
 package bus;
 
 import java.text.DecimalFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
@@ -48,7 +48,7 @@ public class PhieuThuChiBUS {
 			return null;
 		}
 	}
-	public Object[][] layDuLieuBang(LocalDate startDate, LocalDate endDate) {
+	public Object[][] layDuLieuBang(LocalDateTime startDate, LocalDateTime endDate) {
 	    // Lấy danh sách phiếu thu chi từ DAL
 		
 	    ArrayList<PhieuThuChi> dsPhieuThuChi = new PhieuThuChiDAL().getPhieuThuChiByDateRange(startDate, endDate);

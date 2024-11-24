@@ -1,12 +1,7 @@
 package dal;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import database.ConnectDB;
@@ -21,7 +16,7 @@ public class HoaDonDAL {
         dsHoaDon = new ArrayList<>();
     }
 
-    public ArrayList<HoaDon> getHoaDonByDateRange(LocalDate startDate, LocalDate endDate) {
+    public ArrayList<HoaDon> getHoaDonByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         ArrayList<HoaDon> dsHoaDon = new ArrayList<>();
 
         try {
@@ -31,14 +26,14 @@ public class HoaDonDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             
             // Thiết lập tham số cho câu truy vấn
-            stmt.setDate(1, Date.valueOf(startDate));
-            stmt.setDate(2, Date.valueOf(endDate));
+            stmt.setTimestamp(1, Timestamp.valueOf(startDate));
+            stmt.setTimestamp(2, Timestamp.valueOf(endDate));
             ResultSet rs = stmt.executeQuery();
 
             // Lặp qua từng hàng kết quả
             while (rs.next()) {
                 String maHoaDon = rs.getString("maHoaDon");
-                LocalDate ngayTao = rs.getDate("ngayTao") != null ? rs.getDate("ngayTao").toLocalDate() : null;
+                LocalDateTime ngayTao = rs.getDate("ngayTao") != null ? rs.getTimestamp("ngayTao").toLocalDateTime() : null;
                 Boolean trangThai = rs.getBoolean("trangThai");
                 double thanhTien = rs.getDouble("thanhTien");
                 
@@ -80,7 +75,7 @@ public class HoaDonDAL {
             stmt.setString(4, hoaDon.getNhanVien().getMaNV()); // Mã nhân viên
             stmt.setString(5, hoaDon.getKhuyenMai() != null ? hoaDon.getKhuyenMai().getMaKhuyenMai() : null); // Mã khuyến mãi
             stmt.setString(6, hoaDon.getDonDatPhong() != null ? hoaDon.getDonDatPhong().getMaDon() : null); // Mã đơn đặt
-            stmt.setDate(7, Date.valueOf(hoaDon.getNgayTao())); // Ngày tạo
+            stmt.setTimestamp(7, Timestamp.valueOf(hoaDon.getNgayTao())); // Ngày tạo
 
             // Thực thi câu lệnh SQL
             n = stmt.executeUpdate();
@@ -101,9 +96,9 @@ public class HoaDonDAL {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String maHoaDon = rs.getString("maHoaDon");
-                LocalDate ngayTao = null;
+                LocalDateTime ngayTao = null;
                 if (rs.getDate("ngayTao") != null) { // Kiểm tra nếu giá trị không phải là null
-                    ngayTao = rs.getDate("ngayTao").toLocalDate();
+                    ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
                 }
 
                 Boolean trangThai = rs.getBoolean("trangThai");
@@ -152,7 +147,7 @@ public class HoaDonDAL {
             stmt.setString(3, hoaDon.getNhanVien().getMaNV());
             stmt.setString(4, hoaDon.getKhuyenMai() != null ? hoaDon.getKhuyenMai().getMaKhuyenMai() : null);
             stmt.setString(5, hoaDon.getDonDatPhong() != null ? hoaDon.getDonDatPhong().getMaDon() : null);
-            stmt.setDate(6, Date.valueOf(hoaDon.getNgayTao()));
+            stmt.setTimestamp(6, Timestamp.valueOf(hoaDon.getNgayTao()));
             stmt.setString(7, maHoaDon);
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -189,7 +184,7 @@ public class HoaDonDAL {
             stmt.setString(1, maHoaDon);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                LocalDate ngayTao = rs.getDate("ngayTao") != null ? rs.getDate("ngayTao").toLocalDate() : null;
+                LocalDateTime ngayTao = rs.getDate("ngayTao") != null ? rs.getTimestamp("ngayTao").toLocalDateTime() : null;
                 boolean trangThai = rs.getBoolean("trangThai");
                 double thanhTien = rs.getDouble("thanhTien");
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(rs.getString("maNV"));
@@ -209,8 +204,8 @@ public class HoaDonDAL {
         HoaDonDAL hoaDonDAL = new HoaDonDAL();
         
         // Định nghĩa khoảng ngày để tìm hóa đơn
-        LocalDate startDate = LocalDate.of(2024, 10, 10); // Ngày bắt đầu
-        LocalDate endDate = LocalDate.of(2024, 10, 10); // Ngày kết thúc
+        LocalDateTime startDate = LocalDateTime.of(2024, 10, 10, 5,3,2); // Ngày bắt đầu
+        LocalDateTime endDate = LocalDateTime.of(2024, 10, 10,5,3,2); // Ngày kết thúc
         
         // Gọi phương thức getHoaDonByDateRange
         ArrayList<HoaDon> hoaDons = hoaDonDAL.getHoaDonByDateRange(startDate, endDate);

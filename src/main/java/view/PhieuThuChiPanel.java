@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import javax.swing.text.*;           // Cung cấp AbstractDocument và DocumentFilter để ràng buộc nhập liệu
@@ -363,14 +363,12 @@ panel_8.setBackground(new Color(255, 255, 255));
          table_1 = new JTable();
         table_1.setBackground(new Color(240, 240, 240));
     	// Xác định khoảng thời gian (có thể thay đổi theo yêu cầu)
-        LocalDate startDate = LocalDate.now(); // Ngày bắt đầu
-        LocalDate endDate = LocalDate.now();   // Ngày kết thúc
+        LocalDateTime startDate = LocalDateTime.now(); // Ngày bắt đầu
+        LocalDateTime endDate = LocalDateTime.now();   // Ngày kết thúc
        
         
         PhieuThuChiBUS phieuThuChiBUS = new PhieuThuChiBUS();
 		Object[][] layDuLieuBang = phieuThuChiBUS.layDuLieuBang(startDate, endDate);
-			
-		
         table_1.setModel(new DefaultTableModel(layDuLieuBang,
                 new String[]{"Mã phiếu thu chi", "Tên nhân viên", "Ngày tạo", "Loại phiếu", "Trạng thái", "Phương thức", "Số tiền", "Mô tả"}) {
             boolean[] columnEditables = new boolean[]{false, false, false, false, false, false, false, false};
@@ -488,7 +486,7 @@ panel_8.setBackground(new Color(255, 255, 255));
                 }
 
                 // Lấy ngày từ dateChooser
-                LocalDate ngayTao = LocalDate.now();
+                LocalDateTime ngayTao = LocalDateTime.now();
 
                 double soTien;
                 
@@ -859,7 +857,7 @@ panel_8.setBackground(new Color(255, 255, 255));
 		
 		}
     
-    public PhieuThuChiPanel(String maPhieu, String loaiPhieu, String moTa, LocalDate ngayTao, double soTien,
+    public PhieuThuChiPanel(String maPhieu, String loaiPhieu, String moTa, LocalDateTime ngayTao, double soTien,
 							String phuongThuc, boolean conHoatDong, NhanVien nhanVien) {
 		// TODO Auto-generated constructor stub
 	}
@@ -921,7 +919,7 @@ panel_8.setBackground(new Color(255, 255, 255));
         phieuThuChiMoi.setMaPhieu(dal.layMaPhieuTiepTheo()); // Lấy mã phiếu mới
         phieuThuChiMoi.setLoaiPhieu(comboBox_loaiphieu.getSelectedItem().toString());
         phieuThuChiMoi.setMoTa(moTa);
-        phieuThuChiMoi.setNgayLap(LocalDate.now()); // Hoặc lấy ngày từ date chooser
+        phieuThuChiMoi.setNgayLap(LocalDateTime.now()); // Hoặc lấy ngày từ date chooser
         phieuThuChiMoi.setSoTien(Double.parseDouble(soTien));
         phieuThuChiMoi.setPhuongThucThanhToan(phuongThuc);
         phieuThuChiMoi.setConHoatDong(true); // Mới tạo nên sẽ là true
@@ -950,10 +948,10 @@ panel_8.setBackground(new Color(255, 255, 255));
 
 
 	private void updateTable() {
-        LocalDate startDate = dateChooser_1_1_1.getDate() != null ? 
-            dateChooser_1_1_1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
-        LocalDate endDate = dateChooser_1_1_1_1.getDate() != null ? 
-            dateChooser_1_1_1_1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
+        LocalDateTime startDate = dateChooser_1_1_1.getDate() != null ?
+            dateChooser_1_1_1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
+        LocalDateTime endDate = dateChooser_1_1_1_1.getDate() != null ?
+            dateChooser_1_1_1_1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
 
         // Kiểm tra ngày hợp lệ
         if (startDate != null && endDate != null && !startDate.isAfter(endDate)) {

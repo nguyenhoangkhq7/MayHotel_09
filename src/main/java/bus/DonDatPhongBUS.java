@@ -1,6 +1,7 @@
 package bus;
 
 import dal.DonDatPhongDAL;
+import entity.DonDatPhong;
 
 public class DonDatPhongBUS {
     public static String generateOrderCode() {
@@ -15,5 +16,10 @@ public class DonDatPhongBUS {
 
         // Tạo mã đơn mới theo định dạng "DDPXXXXXX"
         return String.format("DDP%06d", newOrderNumber); // Định dạng thành 6 chữ số
+    }
+
+    public static boolean checkDenHan(DonDatPhong donDatPhong) {
+
+        return true;
     }
 }

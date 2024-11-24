@@ -1,10 +1,11 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class DonDatPhong {
     private String maDon;
-    private LocalDate ngayTao;
+    private LocalDateTime ngayTao;
     private String phuongThucThanhToan;
     private String trangThaiDonDatPhong;
     private boolean trangThaiDatCoc;
@@ -12,13 +13,13 @@ public class DonDatPhong {
     private KhachHang khachHang;
     private double tongTien;
     private String moTa;
-    private LocalDate ngayTraPhong;
-    private LocalDate ngayNhanPhong;
+    private LocalDateTime ngayTraPhong;
+    private LocalDateTime ngayNhanPhong;
 
-    public DonDatPhong(String maDon, LocalDate ngayTao, String phuongThucThanhToan,
+    public DonDatPhong(String maDon, LocalDateTime ngayTao, String phuongThucThanhToan,
                        String trangThaiDonDatPhong, boolean trangThaiDatCoc,
                        NhanVien nhanVien, KhachHang khachHang, double tongTien,
-                       String moTa, LocalDate ngayTraPhong, LocalDate ngayNhanPhong) {
+                       String moTa, LocalDateTime ngayTraPhong, LocalDateTime ngayNhanPhong) {
         this.maDon = maDon;
         this.ngayTao = ngayTao;
         this.phuongThucThanhToan = phuongThucThanhToan;
@@ -49,13 +50,6 @@ public class DonDatPhong {
         this.maDon = maDon;
     }
 
-    public LocalDate getNgayTao() {
-        return ngayTao;
-    }
-
-    public void setNgayTao(LocalDate ngayTao) {
-        this.ngayTao = ngayTao;
-    }
 
     public String getPhuongThucThanhToan() {
         return phuongThucThanhToan;
@@ -113,19 +107,27 @@ public class DonDatPhong {
         this.moTa = moTa;
     }
 
-    public LocalDate getNgayTraPhong() {
+    public LocalDateTime getNgayTao() {
+        return ngayTao;
+    }
+
+    public void setNgayTao(LocalDateTime ngayTao) {
+        this.ngayTao = ngayTao;
+    }
+
+    public LocalDateTime getNgayTraPhong() {
         return ngayTraPhong;
     }
 
-    public void setNgayTraPhong(LocalDate ngayTraPhong) {
+    public void setNgayTraPhong(LocalDateTime ngayTraPhong) {
         this.ngayTraPhong = ngayTraPhong;
     }
 
-    public LocalDate getNgayNhanPhong() {
+    public LocalDateTime getNgayNhanPhong() {
         return ngayNhanPhong;
     }
 
-    public void setNgayNhanPhong(LocalDate ngayNhanPhong) {
+    public void setNgayNhanPhong(LocalDateTime ngayNhanPhong) {
         this.ngayNhanPhong = ngayNhanPhong;
     }
 

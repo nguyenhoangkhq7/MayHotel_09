@@ -1,13 +1,14 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class PhieuThuChi {
     private String maPhieu; // Mã phiếu
     private String loaiPhieu; // Loại phiếu (Thu hoặc Chi)
     private String moTa; // Mô tả về phiếu
-    private LocalDate ngayLap; // Ngày lập phiếu
+    private LocalDateTime ngayLap; // Ngày lập phiếu
     private double soTien; // Số tiền trong phiếu
     private String phuongThucThanhToan; // Phương thức thanh toán (tiền mặt, chuyển khoản...)
     private boolean conHoatDong; // Trạng thái hoạt động của phiếu (còn hoạt động hay không)
@@ -22,7 +23,7 @@ public class PhieuThuChi {
     public PhieuThuChi() {}
 
     // Constructor đầy đủ
-    public PhieuThuChi(String maPhieu, String loaiPhieu, String moTa, LocalDate ngayLap, double soTien,
+    public PhieuThuChi(String maPhieu, String loaiPhieu, String moTa, LocalDateTime ngayLap, double soTien,
                        String phuongThucThanhToan, boolean conHoatDong, NhanVien nhanVien) {
         this.maPhieu = maPhieu;
         this.loaiPhieu = loaiPhieu;
@@ -65,11 +66,11 @@ public class PhieuThuChi {
         this.moTa = moTa;
     }
 
-    public LocalDate getNgayLap() {
+    public LocalDateTime getNgayLap() {
         return ngayLap;
     }
 
-    public void setNgayLap(LocalDate ngayLap) {
+    public void setNgayLap(LocalDateTime ngayLap) {
         this.ngayLap = ngayLap;
     }
 

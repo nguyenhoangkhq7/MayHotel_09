@@ -1,7 +1,7 @@
 package bus;
 
 import java.text.DecimalFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class BangBaoCaoBUS {
 	    return tienPhong;
 	}
 	
-	public Object[][] layDuLieuBang(LocalDate startDate, LocalDate endDate) {
+	public Object[][] layDuLieuBang(LocalDateTime startDate, LocalDateTime endDate) {
 	    // Lấy danh sách hóa đơn trong khoảng thời gian
 	    ArrayList<HoaDon> dsHoaDon = new HoaDonDAL().getHoaDonByDateRange(startDate, endDate);
 
@@ -186,8 +186,8 @@ public class BangBaoCaoBUS {
 	        BangBaoCaoBUS bangBaoCaoBUS = new BangBaoCaoBUS();
 	        
 	        // Đặt khoảng thời gian cho báo cáo
-	        LocalDate startDate = LocalDate.of(2024, 10, 10); // Thay đổi theo ngày bắt đầu
-	        LocalDate endDate = LocalDate.of(2024, 10, 10); // Thay đổi theo ngày kết thúc
+		   LocalDateTime startDate = LocalDateTime.of(2024, 10, 10, 5,3,2); // Ngày bắt đầu
+		   LocalDateTime endDate = LocalDateTime.of(2024, 10, 10,5,3,2); // Ngày kết thúc
 	        
 	        // Gọi phương thức để lấy dữ liệu báo cáo
 	        Object[][] duLieuBang = bangBaoCaoBUS.layDuLieuBang(startDate, endDate);

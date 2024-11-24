@@ -1,7 +1,7 @@
 package bus;
 
 import java.text.DecimalFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import dal.HoaDonDAL;
@@ -35,7 +35,7 @@ public class HoaDonBUS {
     }
 
     // Lấy dữ liệu hóa đơn theo khoảng thời gian
-    public Object[][] layDuLieuBang(LocalDate startDate, LocalDate endDate) {
+    public Object[][] layDuLieuBang(LocalDateTime startDate, LocalDateTime endDate) {
         ArrayList<HoaDon> dsHoaDon = hoaDonDAL.getHoaDonByDateRange(startDate, endDate);
 
         // Khởi tạo mảng hai chiều với kích thước bằng với số lượng hóa đơn

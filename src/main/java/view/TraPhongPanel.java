@@ -169,8 +169,8 @@ public class TraPhongPanel extends JPanel {
           txtMaPhong.setText(chiTiet.getPhong().getMaPhong());
           txtTenPhong.setText(chiTiet.getPhong().getTenPhong());
           txtDonGia.setText(String.valueOf(chiTiet.getPhong().getLoaiPhong().getDonGia()));
-          jdcNgayNhan.setDate(java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
-          jdcNgayTra.setDate(java.sql.Date.valueOf(chiTiet.getNgayTraPhong()));
+          jdcNgayNhan.setDate(java.sql.Date.valueOf(chiTiet.getNgayNhanPhong().toLocalDate()));
+          jdcNgayTra.setDate(java.sql.Date.valueOf(chiTiet.getNgayTraPhong().toLocalDate()));
  
 
         JPanel pnlBang = new JPanel();

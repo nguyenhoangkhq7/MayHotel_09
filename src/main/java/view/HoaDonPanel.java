@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.border.TitledBorder;
@@ -531,7 +531,7 @@ public class HoaDonPanel extends JPanel {
             NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa((String) cboNhanVien.getSelectedItem());
             KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa((String) cboKhuyenMai.getSelectedItem());
             DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa((String) cboDonDatPhong.getSelectedItem());
-            LocalDate ngayTao = LocalDate.now();
+            LocalDateTime ngayTao = LocalDateTime.now();
 
             // Tạo đối tượng hóa đơn
             HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);

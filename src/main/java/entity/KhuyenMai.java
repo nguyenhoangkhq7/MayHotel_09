@@ -1,13 +1,14 @@
 package entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class KhuyenMai {
     private String maKhuyenMai;          // Mã khuyến mãi
     private String tenKhuyenMai;         // Tên khuyến mãi
     private double giaTri;               // Giá trị khuyến mãi
-    private LocalDate ngayBatDau;        // Ngày bắt đầu khuyến mãi
+    private LocalDateTime ngayBatDau;        // Ngày bắt đầu khuyến mãi
     private boolean conHoatDong;         // Trạng thái hoạt động
     private int soLuong;                 // Số lượng khuyến mãi
     private LocalDate ngayKetThuc;       // Ngày kết thúc khuyến mãi
@@ -23,7 +24,7 @@ public class KhuyenMai {
     }
 
     // Constructor đầy đủ
-    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDate ngayBatDau, boolean conHoatDong,
+    public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDateTime ngayBatDau, boolean conHoatDong,
                      int soLuong, LocalDate ngayKetThuc, String loaiKhachHangApDung) {
         this.maKhuyenMai = maKhuyenMai;
         this.tenKhuyenMai = tenKhuyenMai;
@@ -66,11 +67,11 @@ public class KhuyenMai {
         this.giaTri = giaTri;
     }
 
-    public LocalDate getNgayBatDau() {
+    public LocalDateTime getNgayBatDau() {
         return ngayBatDau;
     }
 
-    public void setNgayBatDau(LocalDate ngayBatDau) {
+    public void setNgayBatDau(LocalDateTime ngayBatDau) {
         this.ngayBatDau = ngayBatDau;
     }
 

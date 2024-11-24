@@ -1,6 +1,6 @@
 package view;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -229,7 +229,7 @@ public class ThemDichVuPanel extends JPanel {
 		textField_1.setColumns(10);
 		textField_1.setEditable(false); // Đảm bảo trường này có thể chỉnh sửa
 		 // Lấy ngày hiện tại
-	    LocalDate currentDate = LocalDate.now();
+	    LocalDateTime currentDate = LocalDateTime.now();
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	    String formattedDate = currentDate.format(formatter);
 	    
@@ -421,7 +421,7 @@ public class ThemDichVuPanel extends JPanel {
         DichVuDAL dalDV = new DichVuDAL();
         dichVu = dalDV.getDichVuTheoMa(maDichVu);
         
-        ChiTiet_DonDatPhong_Phong_DichVu chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, LocalDate.now(), dichVu, chitietphong, moTa);
+        ChiTiet_DonDatPhong_Phong_DichVu chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, LocalDateTime.now(), dichVu, chitietphong, moTa);
         // Gọi phương thức thêm chi tiết
         ChiTiet_DonDatPhong_Phong_DichVuDAL dalCTDV = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
         boolean result = dalCTDV.themChiTiet(chiTiet);

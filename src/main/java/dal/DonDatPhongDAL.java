@@ -82,6 +82,22 @@ public class DonDatPhongDAL {
         } 
         return n > 0;
     }
+    // Cập nhật trạng thái đơn đặt phòng theo mã đơn
+    public boolean suaTrangThaiDonDatPhong(String maDon, String trangThaiMoi) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "UPDATE DonDatPhong SET trangThaiDonDatPhong = ? WHERE maDon = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, trangThaiMoi); // Trạng thái mới
+            stmt.setString(2, maDon);       // Mã đơn cần thay đổi trạng thái
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0; // Trả về true nếu cập nhật thành công
+    }
 
     // Cập nhật thông tin đơn đặt phòng
     public boolean suaDonDatPhong(DonDatPhong donDatPhong) {
