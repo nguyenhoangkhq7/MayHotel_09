@@ -60,7 +60,7 @@ public class LoginGUI extends JFrame {
         panelIconLogin.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         
         JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/1.jpg")));
+        lblNewLabel.setIcon(new ImageIcon("src/main/java/icon/1.jpg"));
         panelIconLogin.add(lblNewLabel);
         
         JPanel panelLogin = new JPanel();
@@ -90,7 +90,7 @@ public class LoginGUI extends JFrame {
         
         JLabel lblIconUser = new JLabel("");
         lblIconUser.setHorizontalAlignment(SwingConstants.CENTER);
-        lblIconUser.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/icons8_user_20px_1.png")));
+        lblIconUser.setIcon(new ImageIcon("src/main/java/icon/icons8_user_20px_1.png"));
         lblIconUser.setBounds(480, 220, 56, 50);
         panelLogin.add(lblIconUser);
         
@@ -108,7 +108,7 @@ public class LoginGUI extends JFrame {
         
         JLabel disable = new JLabel("");
         disable.setHorizontalAlignment(SwingConstants.CENTER);
-        disable.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/icons8_invisible_20px_1.png")));
+        disable.setIcon(new ImageIcon("src/main/java/icon/icons8_invisible_20px_1.png"));
         disable.setBounds(480, 327, 49, 37);
         panelLogin.add(disable);
         
@@ -122,7 +122,7 @@ public class LoginGUI extends JFrame {
                 show.setEnabled(false);
             }
         });
-        show.setIcon(new ImageIcon(LoginGUI.class.getResource("src/main/java/icon/icons8_eye_20px_1.png")));
+        show.setIcon(new ImageIcon("src/main/java/icon/icons8_eye_20px_1.png"));
         show.setHorizontalAlignment(SwingConstants.CENTER);
         show.setBounds(480, 327, 49, 37);
         panelLogin.add(show);
@@ -185,7 +185,7 @@ public class LoginGUI extends JFrame {
 
                         while (rs.next()) {
                             passDb = rs.getString("matKhau");
-                            if(passDb.equals(username)) {
+                            if(passDb.equals(password)) {
                                 found = 1;
                                 break;
                             }
