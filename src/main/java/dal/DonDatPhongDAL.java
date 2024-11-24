@@ -40,7 +40,7 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
-                LocalDate ngayTraPhong = rs.getDate("ngayTra") != null ? rs.getDate("ngayTra").toLocalDate() : null;
+                LocalDate ngayTraPhong = rs.getDate("ngayTraPhong") != null ? rs.getDate("ngayTraPhong").toLocalDate() : null;
                 LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
 
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(maNV);
