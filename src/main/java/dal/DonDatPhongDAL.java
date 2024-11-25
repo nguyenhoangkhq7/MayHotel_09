@@ -1,11 +1,8 @@
 package dal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import database.ConnectDB;
@@ -32,7 +29,7 @@ public class DonDatPhongDAL {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 String maDon = rs.getString("maDon");
-                LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+                LocalDateTime ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
                 String phuongThucThanhToan = rs.getString("phuongThucThanhToan");
                 String trangThaiDonDatPhong = rs.getString("trangThaiDonDatPhong");
                 boolean trangThaiDatCoc = rs.getBoolean("trangThaiDatCoc");
@@ -40,8 +37,8 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
-                LocalDate ngayTraPhong = rs.getDate("ngayTraPhong") != null ? rs.getDate("ngayTraPhong").toLocalDate() : null;
-                LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
+                LocalDateTime ngayTraPhong = rs.getTimestamp("ngayTraPhong") != null ? rs.getTimestamp("ngayTraPhong").toLocalDateTime() : null;
+                LocalDateTime ngayNhanPhong = rs.getTimestamp("ngayNhanPhong") != null ? rs.getTimestamp("ngayNhanPhong").toLocalDateTime() : null;
 
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(maNV);
                 KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(maKH);
@@ -65,7 +62,7 @@ public class DonDatPhongDAL {
             String sql = "INSERT INTO DonDatPhong (maDon, ngayTao, phuongThucThanhToan, trangThaiDonDatPhong, trangThaiDatCoc, maNV, maKH, tongTien, moTa, ngayTraPhong, ngayNhanPhong) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, donDatPhong.getMaDon());
-            stmt.setDate(2, java.sql.Date.valueOf(donDatPhong.getNgayTao()));
+            stmt.setTimestamp(2, Timestamp.valueOf(donDatPhong.getNgayTao()));
             stmt.setString(3, donDatPhong.getPhuongThucThanhToan());
             stmt.setString(4, donDatPhong.getTrangThaiDonDatPhong());
             stmt.setBoolean(5, donDatPhong.isTrangThaiDatCoc());
@@ -73,8 +70,8 @@ public class DonDatPhongDAL {
             stmt.setString(7, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(8, donDatPhong.getTongTien());
             stmt.setString(9, donDatPhong.getMoTa());
-            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayTraPhong()));
-            stmt.setDate(11, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
+            stmt.setTimestamp(10, Timestamp.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setTimestamp(11, Timestamp.valueOf(donDatPhong.getNgayNhanPhong()));
             
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -107,7 +104,7 @@ public class DonDatPhongDAL {
             con = ConnectDB.getConnection();
             String sql = "UPDATE DonDatPhong SET ngayTao = ?, phuongThucThanhToan = ?, trangThaiDonDatPhong = ?, trangThaiDatCoc = ?, maNV = ?, maKH = ?, tongTien = ?, moTa = ?,  ngayTraPhong = ?, ngayNhanPhong = ? WHERE maDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setDate(1, java.sql.Date.valueOf(donDatPhong.getNgayTao()));
+            stmt.setTimestamp(1, Timestamp.valueOf(donDatPhong.getNgayTao()));
             stmt.setString(2, donDatPhong.getPhuongThucThanhToan());
             stmt.setString(3, donDatPhong.getTrangThaiDonDatPhong());
             stmt.setBoolean(4, donDatPhong.isTrangThaiDatCoc());
@@ -115,8 +112,8 @@ public class DonDatPhongDAL {
             stmt.setString(6, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(7, donDatPhong.getTongTien());
             stmt.setString(8, donDatPhong.getMoTa());
-            stmt.setDate(9, java.sql.Date.valueOf(donDatPhong.getNgayTraPhong()));
-            stmt.setDate(10, java.sql.Date.valueOf(donDatPhong.getNgayNhanPhong()));
+            stmt.setTimestamp(9, Timestamp.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setTimestamp(10, Timestamp.valueOf(donDatPhong.getNgayNhanPhong()));
             
             stmt.setString(11, donDatPhong.getMaDon());
             n = stmt.executeUpdate();
@@ -176,7 +173,7 @@ public class DonDatPhongDAL {
             stmt.setString(1, maDon);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                LocalDate ngayTao = rs.getDate("ngayTao").toLocalDate();
+                LocalDateTime ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
                 String phuongThucThanhToan = rs.getString("phuongThucThanhToan");
                 String trangThaiDonDatPhong = rs.getString("trangThaiDonDatPhong");
                 boolean trangThaiDatCoc = rs.getBoolean("trangThaiDatCoc");
@@ -184,9 +181,9 @@ public class DonDatPhongDAL {
                 String maKH = rs.getString("maKH");
                 double tongTien = rs.getDouble("tongTien");
                 String moTa = rs.getString("moTa");
-                LocalDate ngayTraPhong = rs.getDate("ngayTraPhong") != null ? rs.getDate("ngayTraPhong").toLocalDate() : null;
+                LocalDateTime ngayTraPhong = rs.getTimestamp("ngayTraPhong") != null ? rs.getTimestamp("ngayTraPhong").toLocalDateTime() : null;
 
-                LocalDate ngayNhanPhong = rs.getDate("ngayNhanPhong") != null ? rs.getDate("ngayNhanPhong").toLocalDate() : null;
+                LocalDateTime ngayNhanPhong = rs.getTimestamp("ngayNhanPhong") != null ? rs.getTimestamp("ngayNhanPhong").toLocalDateTime() : null;
 
                 NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa(maNV);
                 KhachHang khachHang = new KhachHangDAL().getKhachHangTheoMa(maKH);

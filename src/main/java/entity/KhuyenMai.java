@@ -11,7 +11,7 @@ public class KhuyenMai {
     private LocalDateTime ngayBatDau;        // Ngày bắt đầu khuyến mãi
     private boolean conHoatDong;         // Trạng thái hoạt động
     private int soLuong;                 // Số lượng khuyến mãi
-    private LocalDate ngayKetThuc;       // Ngày kết thúc khuyến mãi
+    private LocalDateTime ngayKetThuc;       // Ngày kết thúc khuyến mãi
     private String loaiKhachHangApDung;  // Loại khách hàng áp dụng
 
     // Constructor không tham số
@@ -25,7 +25,7 @@ public class KhuyenMai {
 
     // Constructor đầy đủ
     public KhuyenMai(String maKhuyenMai, String tenKhuyenMai, double giaTri, LocalDateTime ngayBatDau, boolean conHoatDong,
-                     int soLuong, LocalDate ngayKetThuc, String loaiKhachHangApDung) {
+                     int soLuong, LocalDateTime ngayKetThuc, String loaiKhachHangApDung) {
         this.maKhuyenMai = maKhuyenMai;
         this.tenKhuyenMai = tenKhuyenMai;
         this.giaTri = giaTri;
@@ -94,12 +94,12 @@ public class KhuyenMai {
         this.soLuong = soLuong;
     }
 
-    public LocalDate getNgayKetThuc() {
+    public LocalDateTime getNgayKetThuc() {
         return ngayKetThuc;
     }
 
-    public void setNgayKetThuc(LocalDate ngayKetThuc) {
-        if (ngayKetThuc == null || ngayKetThuc.isBefore(LocalDate.now())) {
+    public void setNgayKetThuc(LocalDateTime ngayKetThuc) {
+        if (ngayKetThuc == null || ngayKetThuc.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Ngày kết thúc phải lớn hơn hoặc bằng ngày hiện tại");
         }
         this.ngayKetThuc = ngayKetThuc;

@@ -4,7 +4,7 @@ import entity.ChiTiet_DonDatPhong_Phong_DichVu;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.DichVu;
 import java.sql.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import database.ConnectDB;
 
@@ -35,7 +35,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
                 while (rs.next()) {
                     String maCT_DDP_P_DV = rs.getString(1);
                     int soLuongDat = rs.getInt(2);
-                    LocalDate ngayTao = rs.getDate(3).toLocalDate();
+                    LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
                     String maDichVu = rs.getString(4);
                     String moTa = rs.getString(6);
 
@@ -63,7 +63,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
             while (rs.next()) {
                 String maCT_DDP_P_DV = rs.getString(1);
                 int soLuongDat = rs.getInt(2);
-                LocalDate ngayTao = rs.getDate(3).toLocalDate();
+                LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
                 String maDichVu = rs.getString(4);
                 String maCT_DDP_P = rs.getString(5);
                 String moTa = rs.getString(6);
@@ -91,7 +91,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
 
             if (rs.next()) {
                 int soLuongDat = rs.getInt(2);
-                LocalDate ngayTao = rs.getDate(3).toLocalDate();
+                LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
                 String maDichVu = rs.getString(4);
                 String maCT_DDP_P = rs.getString(5);
                 String moTa = rs.getString(6);
@@ -160,7 +160,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
 
             stmt.setString(1, chiTiet.getMaCT_DDP_P_DV());
             stmt.setInt(2, chiTiet.getSoLuongDat());
-            stmt.setDate(3, Date.valueOf(chiTiet.getNgayTao()));
+            stmt.setTimestamp(3, Timestamp.valueOf(chiTiet.getNgayTao()));
             stmt.setString(4, chiTiet.getDichVu().getMaDichVu());
             stmt.setString(5, chiTiet.getCT_DDP_P().getMaCT_DDP_P());
             stmt.setString(6, chiTiet.getMoTa());
@@ -184,7 +184,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
                 while (rs.next()) {
                     String maCT_DDP_P_DV = rs.getString(1);
                     int soLuongDat = rs.getInt(2);
-                    LocalDate ngayTao = rs.getDate(3).toLocalDate();
+                    LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
                     String maDichVu = rs.getString(4);
                     String moTa = rs.getString(6);
 
@@ -210,7 +210,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setInt(1, chiTiet.getSoLuongDat());
-            stmt.setDate(2, Date.valueOf(chiTiet.getNgayTao()));
+            stmt.setTimestamp(2, Timestamp.valueOf(chiTiet.getNgayTao()));
             stmt.setString(3, chiTiet.getDichVu().getMaDichVu());
             stmt.setString(4, chiTiet.getCT_DDP_P().getMaCT_DDP_P());
             stmt.setString(5, chiTiet.getMoTa());

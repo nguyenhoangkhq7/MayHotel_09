@@ -352,16 +352,6 @@ public class DonDatPhongPanel extends JPanel {
 
         LocalDateTime ngayHienTai = LocalDateTime.now();
 
-        // Kiểm tra ngày tạo so với hiện tại có nhỏ hơn 1 ngày không
-        long soNgay = ChronoUnit.DAYS.between(donDatPhong.getNgayTao(), ngayHienTai);
-        System.out.println(donDatPhong.getNgayTao());
-        System.out.println(ngayHienTai);
-        System.out.println(soNgay);
-        if (soNgay < 1) {
-            System.out.println("Ngày tạo nhỏ hơn 1 ngày so với hiện tại.");
-        } else {
-            System.out.println("Ngày tạo lớn hơn hoặc bằng 1 ngày so với hiện tại.");
-        }
 //        boolean checkDenHan =
 
         // Thiết lập các nút và màu nền dựa trên trạng thái đặt cọc

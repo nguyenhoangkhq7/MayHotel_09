@@ -4,7 +4,7 @@ import entity.KhuyenMai;
 import database.ConnectDB;
 
 import java.sql.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class KhuyenMaiDAL {
@@ -29,14 +29,14 @@ public class KhuyenMaiDAL {
                 String maKhuyenMai = rs.getString("maKhuyenMai");
                 String tenKhuyenMai = rs.getString("tenKhuyenMai");
                 double giaTri = rs.getDouble("giaTri");
-                Date ngayBatDau = rs.getDate("ngayBatDau");
+                LocalDateTime ngayBatDau = rs.getTimestamp("ngayBatDau").toLocalDateTime();
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 int soLuong = rs.getInt("soLuong");
-                Date ngayKetThuc = rs.getDate("ngayKetThuc");
+                LocalDateTime ngayKetThuc = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
                 String loaiKhachHangApDung = rs.getString("loaiKhachHangApDung");
 
-                KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayBatDau.toLocalDate(),
-                        conHoatDong, soLuong, ngayKetThuc.toLocalDate(), loaiKhachHangApDung);
+                KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayBatDau,
+                        conHoatDong, soLuong, ngayKetThuc, loaiKhachHangApDung);
                 dsKhuyenMai.add(khuyenMai);
             }
         } catch (SQLException e) {
@@ -59,14 +59,14 @@ public class KhuyenMaiDAL {
             if (rs.next()) {
                 String tenKhuyenMai = rs.getString("tenKhuyenMai");
                 double giaTri = rs.getDouble("giaTri");
-                Date ngayBatDau = rs.getDate("ngayBatDau");
+                LocalDateTime ngayBatDau = rs.getTimestamp("ngayBatDau").toLocalDateTime();
                 boolean conHoatDong = rs.getBoolean("conHoatDong");
                 int soLuong = rs.getInt("soLuong");
-                Date ngayKetThuc = rs.getDate("ngayKetThuc");
+                LocalDateTime ngayKetThuc = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
                 String loaiKhachHangApDung = rs.getString("loaiKhachHangApDung");
 
-                khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayBatDau.toLocalDate(),
-                        conHoatDong, soLuong, ngayKetThuc.toLocalDate(), loaiKhachHangApDung);
+                khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayBatDau,
+                        conHoatDong, soLuong, ngayKetThuc, loaiKhachHangApDung);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,10 +86,10 @@ public class KhuyenMaiDAL {
             stmt.setString(1, khuyenMai.getMaKhuyenMai());
             stmt.setString(2, khuyenMai.getTenKhuyenMai());
             stmt.setDouble(3, khuyenMai.getGiaTri());
-            stmt.setDate(4, Date.valueOf(khuyenMai.getNgayBatDau()));
+            stmt.setTimestamp(4, Timestamp.valueOf(khuyenMai.getNgayBatDau()));
             stmt.setBoolean(5, khuyenMai.isConHoatDong());
             stmt.setInt(6, khuyenMai.getSoLuong());
-            stmt.setDate(7, Date.valueOf(khuyenMai.getNgayKetThuc()));
+            stmt.setTimestamp(7, Timestamp.valueOf(khuyenMai.getNgayKetThuc()));
             stmt.setString(8, khuyenMai.getLoaiKhachHangApDung());
 
             n = stmt.executeUpdate();
@@ -109,10 +109,10 @@ public class KhuyenMaiDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khuyenMai.getTenKhuyenMai());
             stmt.setDouble(2, khuyenMai.getGiaTri());
-            stmt.setDate(3, Date.valueOf(khuyenMai.getNgayBatDau()));
+            stmt.setTimestamp(3, Timestamp.valueOf(khuyenMai.getNgayBatDau()));
             stmt.setBoolean(4, khuyenMai.isConHoatDong());
             stmt.setInt(5, khuyenMai.getSoLuong());
-            stmt.setDate(6, Date.valueOf(khuyenMai.getNgayKetThuc()));
+            stmt.setTimestamp(6, Timestamp.valueOf(khuyenMai.getNgayKetThuc()));
             stmt.setString(7, khuyenMai.getLoaiKhachHangApDung());
             stmt.setString(8, khuyenMai.getMaKhuyenMai());
 
@@ -141,36 +141,6 @@ public class KhuyenMaiDAL {
 
 
     public static void main(String[] args) {
-        KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL();
 
-        // Thêm khuyến mãi mới
-        KhuyenMai khuyenMai1 = new KhuyenMai("KM001", "Khuyến mãi Tết", 20, LocalDate.of(2024, 1, 1), true, 100, LocalDate.of(2024, 1, 31), "VIP");
-        if (khuyenMaiDAL.themKhuyenMai(khuyenMai1)) {
-            System.out.println("Thêm khuyến mãi thành công");
-        }
-
-        // Lấy tất cả khuyến mãi
-        ArrayList<KhuyenMai> dsKhuyenMai = khuyenMaiDAL.getAllKhuyenMai();
-        for (KhuyenMai km : dsKhuyenMai) {
-            System.out.println(km);
-        }
-
-        // Lấy khuyến mãi theo mã
-        KhuyenMai km = khuyenMaiDAL.getKhuyenMaiTheoMa("KM001");
-        if (km != null) {
-            System.out.println("Khuyến mãi tìm được: " + km);
-        }
-
-        // Cập nhật khuyến mãi
-        khuyenMai1.setTenKhuyenMai("Khuyến mãi Tết 2024");
-        khuyenMai1.setGiaTri(25);
-        if (khuyenMaiDAL.capNhatKhuyenMai(khuyenMai1)) {
-            System.out.println("Cập nhật khuyến mãi thành công");
-        }
-
-        // Xóa khuyến mãi
-        if (khuyenMaiDAL.xoaKhuyenMai("KM001")) {
-            System.out.println("Xóa khuyến mãi thành công");
-        }
     }
 }

@@ -11,7 +11,7 @@ import entity.DonDatPhong;
 import entity.Phong;
 
 import java.sql.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import database.ConnectDB;
 
@@ -38,9 +38,9 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             
             while (rs.next()) {
                 String maCT_DDP_P = rs.getString(1);
-                LocalDate ngayTra = rs.getDate(5).toLocalDate();
+                LocalDateTime ngayTra = rs.getTimestamp(5).toLocalDateTime();
                 String maPhong = rs.getString(3);
-                LocalDate ngayNhanPhong = rs.getDate(4).toLocalDate();
+                LocalDateTime ngayNhanPhong = rs.getTimestamp(4).toLocalDateTime();
                 boolean laPhongChuyen = rs.getBoolean(6);
                 double chietKhau = rs.getDouble(7);
 
@@ -74,20 +74,20 @@ public class ChiTiet_DonDatPhong_PhongDAL {
                 String maPhong = rs.getString(3);
                 
                 // Lấy ngày nhận phòng và ngày trả phòng với kiểm tra null
-                LocalDate ngayNhanPhong = null;
-                LocalDate ngayTra = null;
+                LocalDateTime ngayNhanPhong = null;
+                LocalDateTime ngayTra = null;
 
-                java.sql.Date sqlNgayNhanPhong = rs.getDate(4);
+                LocalDateTime sqlNgayNhanPhong = rs.getTimestamp(4).toLocalDateTime();
                 if (sqlNgayNhanPhong != null) {
-                    ngayNhanPhong = sqlNgayNhanPhong.toLocalDate();
+                    ngayNhanPhong = sqlNgayNhanPhong;
                 } else {
                     // Xử lý trường hợp ngày nhận phòng là null
                     // Ví dụ: gán giá trị mặc định hoặc ném một ngoại lệ
                 }
 
-                java.sql.Date sqlNgayTra = rs.getDate(5);
+                LocalDateTime sqlNgayTra = rs.getTimestamp(5).toLocalDateTime();
                 if (sqlNgayTra != null) {
-                    ngayTra = sqlNgayTra.toLocalDate();
+                    ngayTra = sqlNgayTra;
                 } else {
                     // Xử lý trường hợp ngày trả phòng là null
                     // Ví dụ: gán giá trị mặc định hoặc ném một ngoại lệ
@@ -127,8 +127,8 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             if (rs.next()) {
                 String maDonDatPhong = rs.getString(2);
                 String maPhong = rs.getString(3);
-                LocalDate ngayNhanPhong = rs.getDate(4).toLocalDate();
-                LocalDate ngayTra = rs.getDate(5).toLocalDate();
+                LocalDateTime ngayNhanPhong = rs.getTimestamp(4).toLocalDateTime();
+                LocalDateTime ngayTra = rs.getTimestamp(5).toLocalDateTime();
                 boolean laPhongChuyen = rs.getBoolean(6);
                 double chietKhau = rs.getDouble(7);
 
@@ -157,8 +157,8 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             stmt.setString(1, chiTiet.getMaCT_DDP_P());
             stmt.setString(2, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(3, chiTiet.getPhong().getMaPhong());
-            stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
-            stmt.setDate(5, java.sql.Date.valueOf(chiTiet.getNgayTraPhong()));
+            stmt.setTimestamp(5, Timestamp.valueOf(chiTiet.getNgayTraPhong()));
+            stmt.setTimestamp(4, Timestamp.valueOf(chiTiet.getNgayNhanPhong()));
             stmt.setBoolean(6, chiTiet.isLaPhongChuyen());
             stmt.setDouble(7, chiTiet.getChietKhau());
             n = stmt.executeUpdate();
@@ -179,8 +179,8 @@ public class ChiTiet_DonDatPhong_PhongDAL {
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(2, chiTiet.getPhong().getMaPhong());
-            stmt.setDate(3, java.sql.Date.valueOf(chiTiet.getNgayNhanPhong()));
-            stmt.setDate(4, java.sql.Date.valueOf(chiTiet.getNgayTraPhong()));
+            stmt.setTimestamp(3, Timestamp.valueOf(chiTiet.getNgayNhanPhong()));
+            stmt.setTimestamp(4, Timestamp.valueOf(chiTiet.getNgayTraPhong()));
             stmt.setBoolean(5, chiTiet.isLaPhongChuyen());
             stmt.setDouble(6, chiTiet.getChietKhau());
             stmt.setString(7, maCT_DDP_P);
