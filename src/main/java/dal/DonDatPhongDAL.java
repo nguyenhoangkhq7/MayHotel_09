@@ -1,7 +1,6 @@
 package dal;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -145,14 +144,14 @@ public class DonDatPhongDAL {
 
     // Xóa đơn đặt phòng theo mã đơn
     // Cập nhật trạng thái đơn đặt phòng thành "Đã hủy" theo mã đơn
-    public boolean xoaDonDatPhong(String maDon) {
+    public boolean huyDonDatPhong(String maDon) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
             String sql = "UPDATE DonDatPhong SET trangThaiDonDatPhong = ? WHERE maDon = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, "Da huy");  // Set trạng thái thành "Đã hủy"
+            stmt.setString(1, "Đã hủy");  // Set trạng thái thành "Đã hủy"
             stmt.setString(2, maDon);     // Điều kiện theo mã đơn
             n = stmt.executeUpdate();
         } catch (SQLException e) {

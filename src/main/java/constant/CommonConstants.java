@@ -20,9 +20,10 @@ public class CommonConstants {
     public static final Color BACKGROUND = new Color(69,96,117,255);
     public static final Color DAT_TRUOC_COLOR = new Color(60,141,188,255);
     public static final Color DANG_O_COLOR = new Color(0,166,90,255);
-    public static final Color DA_DAT_COC_COLOR = new Color(96,92,168,255);
+    public static final Color CO_PHONG_CHUYEN_COLOR = new Color(96,92,168,255);
     public static final Color SAP_CHECKIN_COLOR = new Color(243, 156, 18);
-    public static final Color DEN_HAN_COLOR = new Color(221,75,58,255);
+    public static final Color QUA_HAN_CHECKOUT_COLOR = new Color(221,75,58,255);
+    public static final Color QUA_HAN_CHECKIN_COLOR = new Color(255, 120, 104,255);
     public static final Dimension BUTTON_SIZE = new Dimension(125,45);
     public static final Dimension DATEPICKER_SIZE = new Dimension(350,350);
     public static final Dimension INPUT_SIZE = new Dimension(200,25);

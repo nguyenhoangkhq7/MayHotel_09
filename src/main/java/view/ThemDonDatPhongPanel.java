@@ -37,7 +37,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
     private JComboBox cboLoaiPhong, cboSoPhong, cboPhuongThucThanhToan;
     private JTextArea jtaMoTa;
     private JLabel lblTongSoPhong, lblTongThoiGianO, lblTongTien;
-    ArrayList<JPanel> listDanhSachPhongPanel = new ArrayList<>();
+    ArrayList<JPanel> listDanhSachPhongPanel;
     JPanel mainRightPanel;
     JCheckBox chkTrangThaiDatCoc;
     ArrayList<Phong> dsPhong = new ArrayList<>();
@@ -45,8 +45,11 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
     DonDatPhongDAL donDatPhongDAL = new DonDatPhongDAL();
     PhongDAL phongDAL = new PhongDAL();
     LoaiPhongDAL loaiPhongDAL = new LoaiPhongDAL();
-
+    private DonDatPhongBUS donDatPhongBUS;
     public ThemDonDatPhongPanel() {
+        listDanhSachPhongPanel = new ArrayList<>();
+        donDatPhongBUS = new DonDatPhongBUS();
+
         this.setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         add(showHeader(), BorderLayout.NORTH);
@@ -125,7 +128,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
 
             // 3. Tạo đối tượng đơn đặt phòng
             DonDatPhong ddp = new DonDatPhong();
-            ddp.setMaDon(DonDatPhongBUS.generateOrderCode()); // Tạo mã đơn mới
+            ddp.setMaDon(donDatPhongBUS.generateOrderCode()); // Tạo mã đơn mới
             ddp.setNgayTao(LocalDateTime.now()); // Ngày tạo đơn
             ddp.setTrangThaiDonDatPhong("Đặt trước"); // Cần xác định nếu có
             ddp.setPhuongThucThanhToan(phuongThucThanhToan);

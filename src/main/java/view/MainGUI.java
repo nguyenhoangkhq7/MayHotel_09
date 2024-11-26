@@ -127,7 +127,7 @@ public class MainGUI extends JFrame {
 
 //		các gui
 		JPanel themDonDatPhongGUI = new ThemDonDatPhongPanel();
-		JPanel donDatPhongGUI = new DonDatPhongPanel();
+		JPanel donDatPhongGUI = new QuanLyDonDatPhongPanel();
 		JPanel manHinHChinh = new ManHinhChinhPanel();
 		JPanel hoaDonGUI = new HoaDonPanel();
 		JPanel khachHangGUI = new KhachHangPanel();
@@ -174,7 +174,7 @@ public class MainGUI extends JFrame {
 
 
 
-		DonDatPhongPanel.btnDatPhong.addActionListener(new ActionListener() {
+		QuanLyDonDatPhongPanel.btnDatPhong.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(jpnContent, "Thêm đơn đặt phòng");

@@ -1,9 +1,11 @@
 package view;
 
+import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.ChiTiet_DonDatPhong_Phong_DichVu;
 import custom.UIHelpers;
+import entity.DonDatPhong;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,12 +21,11 @@ public class ChiTietDonDatPhong_PhongDialog extends JDialog {
     private JTextField txtLoaiKH;
     private JTable bangDichVu;
     private ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet;
-
-    public ChiTietDonDatPhong_PhongDialog(JPanel parent, ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet) {
-        this.danhSachChiTiet = danhSachChiTiet;
+    private ChiTiet_DonDatPhong_PhongDAL chiTietDonDatPhongPhongDAL = new ChiTiet_DonDatPhong_PhongDAL();
+    public ChiTietDonDatPhong_PhongDialog(DonDatPhong donDatPhong) {
+        this.danhSachChiTiet = chiTietDonDatPhongPhongDAL.getChiTietDonDatPhongPhongTheoMaDDP(donDatPhong.getMaDon());
         setLayout(new BorderLayout());
         showHeader();
-
         // Sử dụng BoxLayout cho mainPanel để sắp xếp các phần theo chiều dọc
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
