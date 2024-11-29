@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -34,6 +34,7 @@ import constant.CommonConstants;
 import dal.NhanVienDAL;
 import dal.PhieuThuChiDAL;
 import entity.NhanVien;
+import view.panel.BaoCaoPanel;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -42,7 +43,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
 
-public class PhieuThuChiPanel extends JPanel {
+public class QuanLyPhieuThuChiPanel extends JPanel {
 
     private JComboBox<String> cboNhanVien;
     private JComboBox comboBox_loaiphieu;
@@ -71,7 +72,7 @@ public class PhieuThuChiPanel extends JPanel {
     
 
 
-    public PhieuThuChiPanel(BaoCaoPanel baoCaoFrame) {
+    public QuanLyPhieuThuChiPanel(BaoCaoPanel baoCaoFrame) {
 
     	 setLayout(new BorderLayout());
  		
@@ -857,8 +858,8 @@ panel_8.setBackground(new Color(255, 255, 255));
 		
 		}
     
-    public PhieuThuChiPanel(String maPhieu, String loaiPhieu, String moTa, LocalDateTime ngayTao, double soTien,
-							String phuongThuc, boolean conHoatDong, NhanVien nhanVien) {
+    public QuanLyPhieuThuChiPanel(String maPhieu, String loaiPhieu, String moTa, LocalDateTime ngayTao, double soTien,
+								  String phuongThuc, boolean conHoatDong, NhanVien nhanVien) {
 		// TODO Auto-generated constructor stub
 	}
     private String formatSoTien(String soTien) {

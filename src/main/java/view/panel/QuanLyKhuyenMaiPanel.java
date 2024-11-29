@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ import constant.CommonConstants;
 
 import javax.swing.table.DefaultTableModel;
 
-public class KhuyenMaiPanel extends JPanel {
+public class QuanLyKhuyenMaiPanel extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -70,7 +70,7 @@ public class KhuyenMaiPanel extends JPanel {
 	private JDateChooser txtNgayHetHan;
 	private JTextField txtTenKM;
 
-    public KhuyenMaiPanel() {
+    public QuanLyKhuyenMaiPanel() {
     	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(new Color(255, 255, 255));
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -408,7 +408,7 @@ public class KhuyenMaiPanel extends JPanel {
             try {
                 JFrame frame = new JFrame("Quản lí khuyến mãi");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new KhuyenMaiPanel());
+                frame.setContentPane(new QuanLyKhuyenMaiPanel());
                 frame.pack();
                 frame.setSize(800, 600);
                 frame.setVisible(true);

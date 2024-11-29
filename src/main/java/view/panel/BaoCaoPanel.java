@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 
 import javax.swing.JPanel;
@@ -170,7 +170,7 @@ public class BaoCaoPanel extends JPanel {
 	
 	 // Phương thức để hiển thị PhieuThuChi
     private void showPhieuThuChi() {
-        PhieuThuChiPanel phieuThuChi = new PhieuThuChiPanel(this); // Tạo đối tượng PhieuThuChi
+        QuanLyPhieuThuChiPanel phieuThuChi = new QuanLyPhieuThuChiPanel(this); // Tạo đối tượng PhieuThuChi
         contentPane.removeAll(); // Xóa tất cả các thành phần hiện có trong contentPane
         contentPane.add(phieuThuChi, BorderLayout.CENTER); // Thêm contentPane của PhieuThuChi vào
         contentPane.revalidate(); // Cập nhật lại layout

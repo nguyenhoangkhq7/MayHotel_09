@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ import javax.swing.table.TableRowSorter;
 
 import java.util.ArrayList;
 
-public class KhachHangPanel extends JPanel {
+public class QuanLyKhachHangPanel extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -49,7 +49,7 @@ public class KhachHangPanel extends JPanel {
 	DefaultTableModel model = new DefaultTableModel();
 	private JButton btnLuu;
 
-    public KhachHangPanel() {
+    public QuanLyKhachHangPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
         setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -418,7 +418,7 @@ public class KhachHangPanel extends JPanel {
             try {
                 JFrame frame = new JFrame("Quản lí khách hàng");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setContentPane(new KhachHangPanel());
+                frame.setContentPane(new QuanLyKhachHangPanel());
                 frame.pack();
                 frame.setSize(1920, 1080);
                 frame.setVisible(true);

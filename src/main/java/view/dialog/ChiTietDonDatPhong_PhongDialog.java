@@ -1,4 +1,4 @@
-package view;
+package view.dialog;
 
 import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
@@ -85,7 +85,7 @@ public class ChiTietDonDatPhong_PhongDialog extends JDialog {
 
     private void showRoomDetails(ChiTiet_DonDatPhong_Phong ct) {
         // Lấy thông tin dịch vụ từ danh sách dịch vụ của đối tượng ChiTiet_DonDatPhong_Phong
-        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dichVuList = new ChiTiet_DonDatPhong_Phong_DichVuDAL().getDSChiTietDonDatPhongPhongDichVuTheoMaCT_DDP_P(ct.getMaCT_DDP_P());
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dichVuList = new ChiTiet_DonDatPhong_Phong_DichVuDAL().getDSChiTietDonDatPhongPhongDichVuTheoMaDonDatPhongMaPhong(ct.getDonDatPhong().getMaDon(), ct.getPhong().getMaPhong());
         String[][] services = new String[dichVuList.size()][4];
         for (int i = 0; i < dichVuList.size(); i++) {
             ChiTiet_DonDatPhong_Phong_DichVu dv = dichVuList.get(i);

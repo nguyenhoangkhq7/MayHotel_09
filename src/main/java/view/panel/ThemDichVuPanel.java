@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,10 +10,8 @@ import javax.swing.border.LineBorder;
 
 import constant.CommonConstants;
 import dal.ChiTiet_DonDatPhong_PhongDAL;
-import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import dal.DichVuDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
-import entity.ChiTiet_DonDatPhong_Phong_DichVu;
 import entity.DichVu;
 
 import java.awt.BorderLayout;
@@ -21,7 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -329,7 +326,7 @@ public class ThemDichVuPanel extends JPanel {
 		);
 		panel_2.setLayout(gl_panel_2);
 		
-		JLabel lblNewLabel = new JLabel(chitietphong.getMaCT_DDP_P());
+		JLabel lblNewLabel = new JLabel(chitietphong.getDonDatPhong().getMaDon());
 		lblNewLabel.setForeground(new Color(255, 128, 64));
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
@@ -364,7 +361,7 @@ public class ThemDichVuPanel extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                themChiTiet();
+//                themChiTiet();
                 
                 loadComboBoxDichVu();
 
@@ -410,35 +407,60 @@ public class ThemDichVuPanel extends JPanel {
 		panel_1.setLayout(gl_panel_1);
 		
 	}
-	private void themChiTiet() {
-        // Lấy dữ liệu từ các trường nhập liệu
-		ChiTiet_DonDatPhong_Phong_DichVuDAL dal = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
-		 String maCT_DDP_P_DV = dal.getNextMaCT_DDP_P_DV();
-		 int soLuongDat = (Integer) comboBox_1.getSelectedItem(); // Lấy số lượng đặt từ comboBox
-		    String maDichVu = (String) comboBox.getSelectedItem(); // Lấy mã dịch vụ từ comboBox
-		    String moTa = textArea.getText(); // Lấy mô tả từ JTextArea
-        DichVu dichVu = new DichVu();
-        DichVuDAL dalDV = new DichVuDAL();
-        dichVu = dalDV.getDichVuTheoMa(maDichVu);
-        
-        ChiTiet_DonDatPhong_Phong_DichVu chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, LocalDateTime.now(), dichVu, chitietphong, moTa);
-        // Gọi phương thức thêm chi tiết
-        ChiTiet_DonDatPhong_Phong_DichVuDAL dalCTDV = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
-        boolean result = dalCTDV.themChiTiet(chiTiet);
-        // Thông báo kết quả
-        if (result) {
-            JOptionPane.showMessageDialog(this, "Thêm chi tiết thành công!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Thêm chi tiết không thành công.");
-        }
-        boolean result_2 = dalDV.suaDichVu(new DichVu(dichVu.getMaDichVu(),dichVu.getDonGia(),dichVu.getTenDichVu() ,dichVu.getSoLuongTon()-soLuongDat,dichVu.isConHoatDong(), dichVu.getDonVi()));
-        if (result_2) {
-            JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ thành công!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ không thành công.");
-        }
-	}
-	
+//	private void themChiTiet() {
+//		// Lấy dữ liệu từ các trường nhập liệu
+//		ChiTiet_DonDatPhong_Phong_DichVuDAL dal = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
+//		int soLuongDat = (Integer) comboBox_1.getSelectedItem(); // Lấy số lượng đặt từ comboBox
+//		String maDichVu = (String) comboBox.getSelectedItem(); // Lấy mã dịch vụ từ comboBox
+//		String moTa = textArea.getText(); // Lấy mô tả từ JTextArea
+//
+//		// Lấy đối tượng DichVu từ mã dịch vụ
+//		DichVuDAL dalDV = new DichVuDAL();
+//		DichVu dichVu = dalDV.getDichVuTheoMa(maDichVu);
+//
+//		if (dichVu == null) {
+//			JOptionPane.showMessageDialog(this, "Dịch vụ không tồn tại.");
+//			return;
+//		}
+//
+//		// Lấy chi tiết phòng từ đối tượng đã có
+//		// (Giả sử `chitietphong` là một đối tượng hợp lệ, nếu chưa có cần khởi tạo hoặc lấy từ đâu đó)
+//		ChiTiet_DonDatPhong_Phong chiTietPhong = getChiTietPhong(); // Phương thức lấy chi tiết phòng hiện tại
+//
+//		// Tạo đối tượng ChiTiet_DonDatPhong_Phong_DichVu
+//		ChiTiet_DonDatPhong_Phong_DichVu chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(
+//				soLuongDat, LocalDateTime.now(), dichVu, chiTietPhong, moTa
+//		);
+//
+//		// Gọi phương thức thêm chi tiết vào cơ sở dữ liệu
+//		boolean result = dal.themChiTiet(chiTiet);
+//
+//		// Thông báo kết quả thêm chi tiết dịch vụ
+//		if (result) {
+//			JOptionPane.showMessageDialog(this, "Thêm chi tiết dịch vụ thành công!");
+//		} else {
+//			JOptionPane.showMessageDialog(this, "Thêm chi tiết dịch vụ không thành công.");
+//		}
+//
+//		// Cập nhật số lượng tồn của dịch vụ
+//		boolean result_2 = dalDV.suaDichVu(new DichVu(
+//				dichVu.getMaDichVu(),
+//				dichVu.getDonGia(),
+//				dichVu.getTenDichVu(),
+//				dichVu.getSoLuongTon() - soLuongDat,
+//				dichVu.isConHoatDong(),
+//				dichVu.getDonVi()
+//		));
+//
+//		// Thông báo kết quả cập nhật dịch vụ
+//		if (result_2) {
+//			JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ thành công!");
+//		} else {
+//			JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ không thành công.");
+//		}
+//	}
+
+
 	private void loadComboBoxDichVu() {
 	    comboBox.removeAllItems(); // Xóa tất cả các mục hiện có
 

@@ -1,7 +1,6 @@
 
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -32,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 
-public class FrmXuatHoaDon extends JFrame implements Printable,ActionListener {
+public class FrmXuatHoaDonThamKhao extends JFrame implements Printable,ActionListener {
 
 	private static JPanel contentPane;
 	public static JTable table_CTHDin;
@@ -76,7 +75,7 @@ public class FrmXuatHoaDon extends JFrame implements Printable,ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FrmXuatHoaDon frame = new FrmXuatHoaDon();
+					FrmXuatHoaDonThamKhao frame = new FrmXuatHoaDonThamKhao();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -88,7 +87,7 @@ public class FrmXuatHoaDon extends JFrame implements Printable,ActionListener {
 	
 
 	
-	public FrmXuatHoaDon() {
+	public FrmXuatHoaDonThamKhao() {
 		setTitle("HÓA ĐƠN NHÀ THUỐC HẠNH PHÚC");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(Frame.MAXIMIZED_BOTH);

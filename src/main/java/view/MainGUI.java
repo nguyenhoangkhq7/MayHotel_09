@@ -9,6 +9,8 @@
 
 
 package view;
+import view.panel.*;
+
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -116,7 +118,6 @@ public class MainGUI extends JFrame {
 		addOtherJPanel();
 
 		setBounds(100, 100, 1440, 900);
-		
     }
 
 	public void addOtherJPanel() {
@@ -129,8 +130,8 @@ public class MainGUI extends JFrame {
 		JPanel themDonDatPhongGUI = new ThemDonDatPhongPanel();
 		JPanel donDatPhongGUI = new QuanLyDonDatPhongPanel();
 		JPanel manHinHChinh = new ManHinhChinhPanel();
-		JPanel hoaDonGUI = new HoaDonPanel();
-		JPanel khachHangGUI = new KhachHangPanel();
+		JPanel hoaDonGUI = new QuanLyHoaDonPanel();
+		JPanel khachHangGUI = new QuanLyKhachHangPanel();
 		JPanel baoCaoGUI = new BaoCaoPanel();
 
 		jpnContent.add(manHinHChinh, "Màn hình chính");

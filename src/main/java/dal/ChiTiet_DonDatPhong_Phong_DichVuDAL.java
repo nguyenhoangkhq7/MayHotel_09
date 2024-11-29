@@ -1,19 +1,18 @@
 package dal;
 
 import entity.ChiTiet_DonDatPhong_Phong_DichVu;
-import entity.ChiTiet_DonDatPhong_Phong;
 import entity.DichVu;
+import entity.ChiTiet_DonDatPhong_Phong;
+import database.ConnectDB;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import database.ConnectDB;
 
 public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
-    private ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dsChiTiet;
     private Connection con;
 
     public ChiTiet_DonDatPhong_Phong_DichVuDAL() {
-        dsChiTiet = new ArrayList<>();
     }
 
     // Helper method to handle connection and setup
@@ -22,229 +21,138 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
         return ConnectDB.getConnection();
     }
 
-    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMa(String maCT_DDP_P) {
-        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
-        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P = ?";
-        
-        try (Connection con = getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
-            
-            pstmt.setString(1, maCT_DDP_P);
-            
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    String maCT_DDP_P_DV = rs.getString(1);
-                    int soLuongDat = rs.getInt(2);
-                    LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
-                    String maDichVu = rs.getString(4);
-                    String moTa = rs.getString(6);
-
-                    DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
-                    ChiTiet_DonDatPhong_Phong cT_DDP_P = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maCT_DDP_P);
-
-                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, ngayTao, dichVu, cT_DDP_P, moTa));
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error fetching records by CT DDP P: " + e.getMessage());
-        }
-        
-        return chiTietList;
-    }
-    
-    // Get all ChiTiet_DonDatPhong_Phong_DichVu records
+    // Get all ChiTiet records
     public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getAllChiTietDonDatPhongPhongDichVu() {
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
         String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu";
+
         try (Connection con = getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                String maCT_DDP_P_DV = rs.getString(1);
-                int soLuongDat = rs.getInt(2);
-                LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
-                String maDichVu = rs.getString(4);
-                String maCT_DDP_P = rs.getString(5);
-                String moTa = rs.getString(6);
+                String maDonDatPhong = rs.getString("maDonDatPhong");
+                String maPhong = rs.getString("maPhong");
+                String maDichVu = rs.getString("maDichVu");
+                int soLuongDat = rs.getInt("soLuongDat");
+                LocalDateTime ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
+                String moTa = rs.getString("moTa");
 
+                // Lấy đối tượng DichVu và ChiTiet_DonDatPhong_Phong từ các mã
                 DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
-                ChiTiet_DonDatPhong_Phong cT_DDP_P = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maCT_DDP_P);
+                ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maDonDatPhong, maPhong);
 
-                chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, ngayTao, dichVu, cT_DDP_P, moTa));
+                // Thêm vào danh sách kết quả
+                chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(soLuongDat, ngayTao, dichVu, chiTiet.getDonDatPhong(), chiTiet.getPhong(), moTa));
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching all records: " + e.getMessage());
+            System.err.println("Lỗi: " + e.getMessage());
         }
+
         return chiTietList;
     }
 
-    // Fetch by ID
-    public ChiTiet_DonDatPhong_Phong_DichVu getChiTietDonDatPhongPhongDichVuTheoMa(String maCT_DDP_P_DV) {
-        ChiTiet_DonDatPhong_Phong_DichVu chiTiet = null;
-        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P_DV = ?";
-        try (Connection con = getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setString(1, maCT_DDP_P_DV);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                int soLuongDat = rs.getInt(2);
-                LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
-                String maDichVu = rs.getString(4);
-                String maCT_DDP_P = rs.getString(5);
-                String moTa = rs.getString(6);
-
-                DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
-                ChiTiet_DonDatPhong_Phong cT_DDP_P = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maCT_DDP_P);
-
-                chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, ngayTao, dichVu, cT_DDP_P, moTa);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error fetching record by ID: " + e.getMessage());
-        }
-        return chiTiet;
-    }
-
-    public String getNextMaCT_DDP_P_DV() {
-        String sql = "SELECT MAX(maCT_DDP_P_DV) FROM CT_DonDatPhong_Phong_DichVu";
-        String nextMa = "CTDDP_DV001"; // Giá trị mặc định, nếu không có mã nào trong DB
-        Connection con = null; // Khai báo biến kết nối
-        try {
-            ConnectDB.getInstance().connect(); // kết nối đến cơ sở dữ liệu
-            con = ConnectDB.getConnection(); // lấy kết nối
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            
-            if (rs.next()) {
-                String maxMa = rs.getString(1);
-                // Chỉ lấy phần số từ mã
-                if (maxMa != null) {
-                    // Tách phần số ra khỏi chuỗi mà không sử dụng dấu gạch dưới
-                    String numberPart = maxMa.replaceAll("[^0-9]", ""); // Lấy phần số
-                    if (!numberPart.isEmpty()) {
-                        try {
-                            int nextId = Integer.parseInt(numberPart) + 1; // Lấy phần số và tăng thêm 1
-                            // Định dạng lại mã theo định dạng CTDDP_DV001
-                            nextMa = "CTDDP_DV" + String.format("%03d", nextId); // Không có dấu gạch dưới
-                        } catch (NumberFormatException e) {
-                            System.err.println("Error parsing number from ID: " + maxMa);
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error fetching next CT DDP P DV ID: " + e.getMessage());
-        } finally {
-            // Đảm bảo đóng kết nối
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException e) {
-                    System.err.println("Error closing connection: " + e.getMessage());
-                }
-            }
-        }
-        return nextMa;
-    }
-
-
-
-	
-    // Insert new record
-    public boolean themChiTiet(ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
-        String sql = "INSERT INTO CT_DonDatPhong_Phong_DichVu VALUES(?, ?, ?, ?, ?, ?)";
-        try (Connection con = getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setString(1, chiTiet.getMaCT_DDP_P_DV());
-            stmt.setInt(2, chiTiet.getSoLuongDat());
-            stmt.setTimestamp(3, Timestamp.valueOf(chiTiet.getNgayTao()));
-            stmt.setString(4, chiTiet.getDichVu().getMaDichVu());
-            stmt.setString(5, chiTiet.getCT_DDP_P().getMaCT_DDP_P());
-            stmt.setString(6, chiTiet.getMoTa());
-
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error inserting record: " + e.getMessage());
-            return false;
-        }
-    }
-    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMaCT_DDP_P(String maCT_DDP_P) {
+    // Get ChiTiet by maDonDatPhong, maPhong, maDichVu
+    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMa(String maDonDatPhong, String maPhong, String maDichVu) {
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
-        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE cT_DDP_P = ?";
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maDonDatPhong = ? AND maPhong = ? AND maDichVu = ?";
 
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
-            pstmt.setString(1, maCT_DDP_P);
+            pstmt.setString(1, maDonDatPhong);
+            pstmt.setString(2, maPhong);
+            pstmt.setString(3, maDichVu);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    String maCT_DDP_P_DV = rs.getString(1);
-                    int soLuongDat = rs.getInt(2);
-                    LocalDateTime ngayTao = rs.getTimestamp(3).toLocalDateTime();
-                    String maDichVu = rs.getString(4);
-                    String moTa = rs.getString(6);
+                    int soLuongDat = rs.getInt("soLuongDat");
+                    LocalDateTime ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
+                    String moTa = rs.getString("moTa");
 
                     // Lấy đối tượng DichVu và ChiTiet_DonDatPhong_Phong từ DAL
                     DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
-                    ChiTiet_DonDatPhong_Phong cT_DDP_P = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maCT_DDP_P);
+                    ChiTiet_DonDatPhong_Phong chiTietDonDatPhongPhong = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maDonDatPhong, maPhong);
 
                     // Thêm chi tiết vào danh sách
-                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(maCT_DDP_P_DV, soLuongDat, ngayTao, dichVu, cT_DDP_P, moTa));
+                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(soLuongDat, ngayTao, dichVu, chiTietDonDatPhongPhong.getDonDatPhong(), chiTietDonDatPhongPhong.getPhong(), moTa));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching records by CT DDP P ID: " + e.getMessage());
+            System.err.println("Lỗi: " + e.getMessage());
+        }
+
+        return chiTietList;
+    }
+    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMaDonDatPhongMaPhong(String maDonDatPhong, String maPhong) {
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maDonDatPhong = ? AND maPhong = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            pstmt.setString(1, maDonDatPhong);
+            pstmt.setString(2, maPhong);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int soLuongDat = rs.getInt("soLuongDat");
+                    LocalDateTime ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
+                    String moTa = rs.getString("moTa");
+                    String maDichVu = rs.getString("maDichVu");
+                    // Lấy đối tượng DichVu và ChiTiet_DonDatPhong_Phong từ DAL
+                    DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
+                    ChiTiet_DonDatPhong_Phong chiTietDonDatPhongPhong = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maDonDatPhong, maPhong);
+
+                    // Thêm chi tiết vào danh sách
+                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(soLuongDat, ngayTao, dichVu, chiTietDonDatPhongPhong.getDonDatPhong(), chiTietDonDatPhongPhong.getPhong(), moTa));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi: " + e.getMessage());
         }
 
         return chiTietList;
     }
 
-    // Update record
-    public boolean suaChiTiet(String maCT_DDP_P_DV, ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
-        String sql = "UPDATE CT_DonDatPhong_Phong_DichVu SET soLuongDat = ?, ngayTao = ?, maDichVu = ?, cT_DDP_P = ?, moTa = ? WHERE maCT_DDP_P_DV = ?";
+    // Insert new record
+    public boolean themChiTiet(ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
+        String sql = "INSERT INTO CT_DonDatPhong_Phong_DichVu (soLuongDat, ngayTao, maDichVu, maDonDatPhong, maPhong, moTa) VALUES(?, ?, ?, ?, ?, ?)";
+
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setInt(1, chiTiet.getSoLuongDat());
             stmt.setTimestamp(2, Timestamp.valueOf(chiTiet.getNgayTao()));
             stmt.setString(3, chiTiet.getDichVu().getMaDichVu());
-            stmt.setString(4, chiTiet.getCT_DDP_P().getMaCT_DDP_P());
-            stmt.setString(5, chiTiet.getMoTa());
-            stmt.setString(6, maCT_DDP_P_DV);
+            stmt.setString(4, chiTiet.getDonDatPhong().getMaDon());
+            stmt.setString(5, chiTiet.getPhong().getMaPhong());
+            stmt.setString(6, chiTiet.getMoTa());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error updating record: " + e.getMessage());
+            System.err.println("Lỗi: " + e.getMessage());
             return false;
         }
     }
 
-    // Delete record
-    public boolean xoaChiTiet(String maCT_DDP_P_DV) {
-        String sql = "DELETE FROM CT_DonDatPhong_Phong_DichVu WHERE maCT_DDP_P_DV = ?";
+    // Update ChiTiet
+    public boolean suaChiTiet(String maDonDatPhong, String maPhong, String maDichVu, ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
+        String sql = "UPDATE CT_DonDatPhong_Phong_DichVu SET soLuongDat = ?, moTa = ? WHERE maDonDatPhong = ? AND maPhong = ? AND maDichVu = ?";
+
         try (Connection con = getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
-            stmt.setString(1, maCT_DDP_P_DV);
+            stmt.setInt(1, chiTiet.getSoLuongDat());
+            stmt.setString(2, chiTiet.getMoTa());
+            stmt.setString(3, maDonDatPhong);
+            stmt.setString(4, maPhong);
+            stmt.setString(5, maDichVu);
+
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error deleting record: " + e.getMessage());
+            System.err.println("Lỗi: " + e.getMessage());
             return false;
         }
-    }
-
-    // Test main method
-    public static void main(String[] args) {
-ChiTiet_DonDatPhong_Phong_DichVuDAL dal = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
-        
-        // Kiểm tra giá trị trả về từ hàm getNextMaCT_DDP_P_DV
-        String nextMa = dal.getNextMaCT_DDP_P_DV();
-        System.out.println("Mã tiếp theo: " + nextMa);
-        
-     
     }
 }

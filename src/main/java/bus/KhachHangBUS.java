@@ -6,16 +6,29 @@ import entity.KhachHang;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KhachHang_BUS {
+public class KhachHangBUS {
     private KhachHangDAL khachHangDAL;
     private List<KhachHang> dsKhachHang;
 
-    public KhachHang_BUS() {
+    public KhachHangBUS() {
         khachHangDAL = new KhachHangDAL();
         dsKhachHang = new ArrayList<>();
     }
 
-    // Lấy tất cả khách hàng (có thể lấy từ bộ nhớ nếu có, hoặc từ cơ sở dữ liệu nếu chưa)
+    public String generateCustomerCode() {
+        String lastOrder = new KhachHangDAL().getLastKH(); // Lấy mã đơn cuối cùng
+        int newOrderNumber = 1; // Mặc định bắt đầu từ 1 nếu không có mã đơn nào
+
+        if (lastOrder != null) {
+            // Tách phần số từ mã đơn
+            String numberPart = lastOrder.substring(3); // Bỏ qua "DDP"
+            newOrderNumber = Integer.parseInt(numberPart) + 1; // Tăng số lên 1
+        }
+
+        // Tạo mã đơn mới theo định dạng "DDPXXXXXX"
+        return String.format("KH%06d", newOrderNumber); // Định dạng thành 6 chữ số
+    }
+
     public List<KhachHang> getAllKhachHang() {
         if (dsKhachHang.isEmpty()) {
             dsKhachHang = khachHangDAL.getAllKhachHang();
@@ -45,5 +58,9 @@ public class KhachHang_BUS {
             }
         }
         return success;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new KhachHangBUS().generateCustomerCode());
     }
 }

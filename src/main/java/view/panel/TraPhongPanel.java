@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +11,7 @@ import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.ChiTiet_DonDatPhong_Phong_DichVu;
 import custom.UIHelpers;
+import view.MainGUI;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
@@ -362,28 +363,4 @@ public class TraPhongPanel extends JPanel {
 		}
 	}
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(() -> {
-			try {
-				JFrame frame = new JFrame("Trả Phòng");
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-				ChiTiet_DonDatPhong_Phong cT_DDP_P = new ChiTiet_DonDatPhong_PhongDAL()
-						.getChiTietDonDatPhongPhongTheoMa("CTDDPP003");
-
-				ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
-				ChiTiet_DonDatPhong_Phong_DichVu ctddppdv = new ChiTiet_DonDatPhong_Phong_DichVuDAL()
-						.getChiTietDonDatPhongPhongDichVuTheoMa("CTDDP_DV001");
-
-				chiTietList.add(ctddppdv);
-
-				frame.setContentPane(new TraPhongPanel(cT_DDP_P, chiTietList));
-				frame.pack();
-				frame.setSize(1920, 1080);
-				frame.setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
 }
