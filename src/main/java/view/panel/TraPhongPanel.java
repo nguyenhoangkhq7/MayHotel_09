@@ -6,11 +6,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 import constant.CommonConstants;
-import dal.ChiTiet_DonDatPhong_PhongDAL;
-import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.ChiTiet_DonDatPhong_Phong_DichVu;
-import custom.UIHelpers;
+import entity.NhanVien;
+import helper.UIHelpers;
 import view.MainGUI;
 
 import javax.swing.table.DefaultTableModel;
@@ -240,7 +239,7 @@ public class TraPhongPanel extends JPanel {
         		JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnClose);
                 currentFrame.setVisible(false); 
            
-                MainGUI mainGUI = new MainGUI();
+                MainGUI mainGUI = new MainGUI( new NhanVien());
                 JFrame frame = new JFrame("Màn hình chính");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.getContentPane().add(mainGUI);
@@ -269,7 +268,7 @@ public class TraPhongPanel extends JPanel {
             		JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnTraPhong);
                     currentFrame.setVisible(false);
                     JOptionPane.showMessageDialog(null, "Trả phòng thành công!");
-                    MainGUI mainGUI = new MainGUI();
+                    MainGUI mainGUI = new MainGUI(new NhanVien());
                     JFrame frame = new JFrame("Thêm đơn đặt phòng");
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     frame.getContentPane().add(mainGUI);

@@ -34,7 +34,6 @@ import constant.CommonConstants;
 import dal.NhanVienDAL;
 import dal.PhieuThuChiDAL;
 import entity.NhanVien;
-import view.panel.BaoCaoPanel;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -72,7 +71,7 @@ public class QuanLyPhieuThuChiPanel extends JPanel {
     
 
 
-    public QuanLyPhieuThuChiPanel(BaoCaoPanel baoCaoFrame) {
+    public QuanLyPhieuThuChiPanel(BaoCao baoCaoFrame) {
 
     	 setLayout(new BorderLayout());
  		

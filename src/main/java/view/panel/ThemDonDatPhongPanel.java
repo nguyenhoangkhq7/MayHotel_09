@@ -16,7 +16,7 @@ import constant.CommonConstants;
 import dal.LoaiPhongDAL;
 import dal.PhongDAL;
 import entity.*;
-import custom.UIHelpers;
+import helper.UIHelpers;
 import view.component.PhongDonDatPhongPanel;
 
 import javax.swing.*;
@@ -52,8 +52,14 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
     JPanel jpnHeader, jpnContainContent;
     Box boxContainDanhSachPhong;
 
+    NhanVien nhanVienDangTruc;
 
-    public ThemDonDatPhongPanel() {
+    public NhanVien getNhanVienDangTruc() {
+        return nhanVienDangTruc;
+    }
+
+    public ThemDonDatPhongPanel(NhanVien nhanVienDangTruc) {
+        this.nhanVienDangTruc = nhanVienDangTruc;
         this.setLayout(new BorderLayout());
 //        setBackground(Color.WHITE);
 //      thêm header
@@ -230,7 +236,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
         jtfTongThoiGianO.setText(String.valueOf(themDonDatPhongBUS.tongThoiGianO(dateCheckin, dateCheckout)));
 
         // thêm đơn đặt phòng
-        boolean isSuccess = themDonDatPhongBUS.themDonDatPhong(dateCheckin, dateCheckout, loaiPhong, soPhong, soDienThoai, hoTen, cccd, email, moTa, phuongThucThanhToan, trangThaiDatCoc, dsPhong);
+        boolean isSuccess = themDonDatPhongBUS.themDonDatPhong(this.nhanVienDangTruc ,dateCheckin, dateCheckout, loaiPhong, soPhong, soDienThoai, hoTen, cccd, email, moTa, phuongThucThanhToan, trangThaiDatCoc, dsPhong);
 
         // Cập nhật giao diện
         if (isSuccess) {
@@ -375,7 +381,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(new ThemDonDatPhongPanel());
+        frame.add(new ThemDonDatPhongPanel(new NhanVien()));
     }
 
 

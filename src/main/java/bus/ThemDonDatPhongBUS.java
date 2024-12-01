@@ -10,13 +10,12 @@
 
 package bus;
 
+import com.sun.tools.javac.Main;
 import dal.KhachHangDAL;
 import dal.PhongDAL;
-import entity.DonDatPhong;
-import entity.KhachHang;
-import entity.LoaiKhachHang;
-import entity.Phong;
+import entity.*;
 import view.App;
+import view.MainGUI;
 
 import javax.swing.*;
 import java.time.Duration;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ThemDonDatPhongBUS {
-
 
     public ThemDonDatPhongBUS() {
     }
@@ -60,7 +58,7 @@ public class ThemDonDatPhongBUS {
         long tongThoiGianO = ChronoUnit.DAYS.between(tgCheckin, tgCheckout);
         return tongThoiGianO;
     }
-    public boolean themDonDatPhong(Date dateCheckin, Date dateCheckout, String loaiPhong, String soPhong, String soDienThoai, String hoTen, String cccd, String email, String moTa, String phuongThucThanhToan, boolean trangThaiDatCoc, ArrayList<Phong> danhSacPhong) {
+    public boolean themDonDatPhong(NhanVien nhanVienDangTruc, Date dateCheckin, Date dateCheckout, String loaiPhong, String soPhong, String soDienThoai, String hoTen, String cccd, String email, String moTa, String phuongThucThanhToan, boolean trangThaiDatCoc, ArrayList<Phong> danhSacPhong) {
         DonDatPhongBUS donDatPhongBUS = new DonDatPhongBUS();
         KhachHangDAL khachHangDAL = new KhachHangDAL();
         KhachHangBUS khachHangBUS = new KhachHangBUS();
@@ -92,7 +90,7 @@ public class ThemDonDatPhongBUS {
         ddp.setTrangThaiDonDatPhong("Đặt trước");
         ddp.setPhuongThucThanhToan(phuongThucThanhToan);
         ddp.setTrangThaiDatCoc(trangThaiDatCoc);
-        ddp.setNhanVien(App.nhanVienDangTruc);
+        ddp.setNhanVien(nhanVienDangTruc);
         ddp.setMoTa(moTa!=null ? moTa : "");
         ddp.setNgayNhanPhong(localDateTimeCheckin);
         ddp.setNgayTraPhong(localDateTimeCheckout);

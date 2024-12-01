@@ -25,6 +25,7 @@ public class CommonConstants {
     public static final Color QUA_HAN_CHECKOUT_COLOR = new Color(221,75,58,255);
     public static final Color QUA_HAN_CHECKIN_COLOR = new Color(255, 120, 104,255);
     public static final Dimension BUTTON_SIZE = new Dimension(125,45);
+    public static final Dimension MENU_ITEM_SIZE = new Dimension(250,45);
     public static final Dimension DATEPICKER_SIZE = new Dimension(350,350);
     public static final Dimension INPUT_SIZE = new Dimension(200,25);
     public static final Dimension TEXTAREA_SIZE = new Dimension(300,60);
