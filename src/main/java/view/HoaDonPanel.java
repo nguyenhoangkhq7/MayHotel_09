@@ -74,12 +74,13 @@ public class HoaDonPanel extends JPanel {
 	private JTextField txtmaDon;
 	private JTextField txtmaHoaDon;
 	private JTextField txtthanhTien;
-	private JComboBox<String> cboTrangThai;
+
 	private JTextField txtmaNV;
 	private JComboBox<String> comboBox;
 	JComboBox<String> cboNhanVien = new JComboBox<String>();
 	JComboBox<String> cboDonDatPhong = new JComboBox<String>();
 	JComboBox<String> cboKhuyenMai = new JComboBox<String>();
+	JComboBox<String> cboTrangThai = new JComboBox<String>(); // Khởi tạo
 	private JTextField txtmaHD;
 	private JTextField txtTrangThai;
 	private JTextField txtThanhTien2;
@@ -89,11 +90,11 @@ public class HoaDonPanel extends JPanel {
     public HoaDonPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
-        
-        loadDonDatPhongOptions();
-        
-        loadNhanVienOptions();
-        loadKhuyenMaiOptions();
+//        
+//        loadDonDatPhongOptions();
+//        
+//        loadNhanVienOptions();
+//        loadKhuyenMaiOptions();
         
         // Title Panel
         JPanel pnlTieuDe = new JPanel();
@@ -143,22 +144,22 @@ public class HoaDonPanel extends JPanel {
         panelForm.add(txtthanhTien);
         txtthanhTien.setColumns(10);
 
-        JLabel lbTrangThai = new JLabel("Trạng Thái Hóa Đơn:");
+        JLabel lbTrangThai = new JLabel("Trạng thái hóa đơn:");
         lbTrangThai.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbTrangThai.setBounds(10, 151, 50, 14);
         panelForm.add(lbTrangThai);
-        cboTrangThai = new JComboBox<String>();
+
         cboTrangThai.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboTrangThai.setBounds(145, 154, 205, 20);
         cboTrangThai.addItem("Đã Thanh Toán");
         cboTrangThai.addItem("Chưa Thanh Toán");
         panelForm.add(cboTrangThai);
+
         
         JLabel lbDonDatPhong = new JLabel("Mã Đơn Đặt Phòng");
         lbDonDatPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
         panelForm.add(lbDonDatPhong);
         cboDonDatPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
         cboDonDatPhong.setBounds(145, 154, 205, 20);
+        cboDonDatPhong.addItem("P001");
         panelForm.add(cboDonDatPhong);
         
         
@@ -169,6 +170,7 @@ public class HoaDonPanel extends JPanel {
         
         cboNhanVien.setFont(new Font("Tahoma", Font.BOLD, 13));
         cboNhanVien.setBounds(145, 154, 205, 20);
+        cboNhanVien.addItem("NV01");
         panelForm.add(cboNhanVien);
         
         JLabel lbKhuyenMai = new JLabel("Mã Khuyến Mãi:");
@@ -178,12 +180,12 @@ public class HoaDonPanel extends JPanel {
         
         cboKhuyenMai.setFont(new Font("Tahoma", Font.BOLD, 13));
         cboKhuyenMai.setBounds(145, 154, 205, 20);
+        cboKhuyenMai.addItem("KM01");
         panelForm.add(cboKhuyenMai);
         
         JLabel null1 = new JLabel();
         panelForm.add(null1);
-        JLabel null2 = new JLabel();
-        panelForm.add(null2);
+        
         
 
         
@@ -197,17 +199,17 @@ public class HoaDonPanel extends JPanel {
         panel_2.setLayout(new FlowLayout());
 
         btnThem = new JButton("THÊM");
-        btnThem.setBackground(new Color(0, 255, 0));
+        btnThem.setBackground(new Color(0, 204, 204));
         btnThem.setFont(new Font("Tahoma", Font.BOLD, 19));
         panel_2.add(btnThem);
 
         btnSua = new JButton("SỬA");
-        btnSua.setBackground(new Color(255, 255, 0));
+        btnSua.setBackground(new Color(0, 204, 204));
         btnSua.setFont(new Font("Tahoma", Font.BOLD, 19));
         panel_2.add(btnSua);
 
         btnXoa = new JButton("XÓA");
-        btnXoa.setBackground(new Color(255, 0, 0));
+        btnXoa.setBackground(new Color(0, 204, 204));
         btnXoa.setFont(new Font("Tahoma", Font.BOLD, 19));
         panel_2.add(btnXoa);
 
@@ -268,74 +270,74 @@ public class HoaDonPanel extends JPanel {
 //        txtMaKM.setColumns(10);
 
         // Tên KM
-        JLabel lbMaHĐ = new JLabel("Mã Hóa Đơn:");
-        lbMaHĐ.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbMaHĐ);
-
-        txtmaHD = new JTextField("");
-        txtmaHD.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        panelForm.add(txtmaHD);
-        txtmaHD.setColumns(10);
-
-        // Giá trị
-        JLabel lbTrangThai2 = new JLabel("Trạng Thái Hóa Đơn:");
-        lbTrangThai2.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbTrangThai2.setBounds(10, 151, 50, 14);
-        panelForm.add(lbTrangThai2);
-        cboTrangThai2 = new JComboBox<String>();
-        cboTrangThai2.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboTrangThai2.setBounds(145, 154, 205, 20);
-        cboTrangThai2.addItem("Đã Thanh Toán");
-        cboTrangThai2.addItem("Chưa Thanh Toán");
-        cboTrangThai2.setEnabled(false);
-        panelForm.add(cboTrangThai);
-
-        // Số lượng
-        JLabel lbThanhTien = new JLabel("ThanhTien:");
-        lbThanhTien.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbThanhTien);
-
-        txtThanhTien2 = new JTextField();
-        txtThanhTien2.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(txtThanhTien2);
-        txtThanhTien2.setColumns(10);
-
-        // Trạng Thái Khuyến Mãi
-        
-
-        // Khách hàng áp dụng
-        JLabel lbAD = new JLabel("Khách hàng áp dụng :");
-        lbAD.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(lbAD);
-
-        cboAD = new JComboBox<String>();
-        cboAD.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboAD.addItem("VIP");
-        cboAD.addItem("Regular");
-        panelForm.add(cboAD);
-
-        // Ngày tạo khuyến mãi
-        JLabel lblNgayTao = new JLabel("Ngày tạo khuyến mãi");
-        lblNgayTao.setFont(new Font("Times New Roman", Font.BOLD, 12));
-        panelForm.add(lblNgayTao);
-
-        txtNgayTao = new JDateChooser();
-        txtNgayTao.setDateFormatString("dd/MM/yyyy");
-        panelForm.add(txtNgayTao);
-
-        // Ngày hết hạn khuyến mãi
-        JLabel lblNgayHetHan = new JLabel("Ngày hết hạn khuyến mãi");
-        lblNgayHetHan.setFont(new Font("Times New Roman", Font.BOLD, 12));
-        panelForm.add(lblNgayHetHan);
-
-        txtNgayHetHan = new JDateChooser();
-        txtNgayHetHan.setDateFormatString("dd/MM/yyyy");
-        panelForm.add(txtNgayHetHan);
-        
-        JButton btnXuatHoaDon = new JButton("Xuất Hóa Đơn");
-        btnXuatHoaDon.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panelForm.add(btnXuatHoaDon);
-        btnXuatHoaDon.setPreferredSize(new Dimension(400, 20)); // Thay đổi kích thước theo ý muốn
+//        JLabel lbMaHĐ = new JLabel("Mã Hóa Đơn:");
+//        lbMaHĐ.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        panelForm.add(lbMaHĐ);
+//
+//        txtmaHD = new JTextField("");
+//        txtmaHD.setFont(new Font("Tahoma", Font.PLAIN, 13));
+//        panelForm.add(txtmaHD);
+//        txtmaHD.setColumns(10);
+//
+//        // Giá trị
+//        JLabel lbTrangThai2 = new JLabel("Trạng Thái Hóa Đơn:");
+//        lbTrangThai2.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        lbTrangThai2.setBounds(10, 151, 50, 14);
+//        panelForm.add(lbTrangThai2);
+//        cboTrangThai2 = new JComboBox<String>();
+//        cboTrangThai2.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        cboTrangThai2.setBounds(145, 154, 205, 20);
+//        cboTrangThai2.addItem("Đã Thanh Toán");
+//        cboTrangThai2.addItem("Chưa Thanh Toán");
+//        cboTrangThai2.setEnabled(false);
+//        panelForm.add(cboTrangThai);
+//
+//        // Số lượng
+//        JLabel lbThanhTien = new JLabel("ThanhTien:");
+//        lbThanhTien.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        panelForm.add(lbThanhTien);
+//
+//        txtThanhTien2 = new JTextField();
+//        txtThanhTien2.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        panelForm.add(txtThanhTien2);
+//        txtThanhTien2.setColumns(10);
+//
+//        // Trạng Thái Khuyến Mãi
+//        
+//
+//        // Khách hàng áp dụng
+//        JLabel lbAD = new JLabel("Khách hàng áp dụng :");
+//        lbAD.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        panelForm.add(lbAD);
+//
+//        cboAD = new JComboBox<String>();
+//        cboAD.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        cboAD.addItem("VIP");
+//        cboAD.addItem("Regular");
+//        panelForm.add(cboAD);
+//
+//        // Ngày tạo khuyến mãi
+//        JLabel lblNgayTao = new JLabel("Ngày tạo khuyến mãi");
+//        lblNgayTao.setFont(new Font("Times New Roman", Font.BOLD, 12));
+//        panelForm.add(lblNgayTao);
+//
+//        txtNgayTao = new JDateChooser();
+//        txtNgayTao.setDateFormatString("dd/MM/yyyy");
+//        panelForm.add(txtNgayTao);
+//
+//        // Ngày hết hạn khuyến mãi
+//        JLabel lblNgayHetHan = new JLabel("Ngày hết hạn khuyến mãi");
+//        lblNgayHetHan.setFont(new Font("Times New Roman", Font.BOLD, 12));
+//        panelForm.add(lblNgayHetHan);
+//
+//        txtNgayHetHan = new JDateChooser();
+//        txtNgayHetHan.setDateFormatString("dd/MM/yyyy");
+//        panelForm.add(txtNgayHetHan);
+//        
+//        JButton btnXuatHoaDon = new JButton("Xuất Hóa Đơn");
+//        btnXuatHoaDon.setFont(new Font("Tahoma", Font.BOLD, 13));
+//        panelForm.add(btnXuatHoaDon);
+//        btnXuatHoaDon.setPreferredSize(new Dimension(400, 20)); // Thay đổi kích thước theo ý muốn
 
 
         // Thêm panelForm vào pnlCT
@@ -432,132 +434,132 @@ public class HoaDonPanel extends JPanel {
         
         table_CTHD = new JTable(model);
         scrDSHD.setViewportView(table_CTHD);
-        btnThem.addActionListener(new ActionListener() {
+//        btnThem.addActionListener(new ActionListener() {
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				themHoaDon();
-				
-			}
-		});
-        hienThiDuLieu();
+
+//			public void actionPerformed(ActionEvent e) {
+//				themHoaDon();
+//				
+//			}
+//		});
+//        hienThiDuLieu();
         // Thêm hành động cho nút tìm kiếm
 
     }
-    public void hienThiDuLieu() {
-    	ArrayList<HoaDon> dsHoaDon;
-    	dsHoaDon = new HoaDonDAL().getAllHoaDon();
-    	for (HoaDon hd : dsHoaDon) {
-            Object[] row = {
-                hd.getMaHoaDon(),
-                hd.getTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
-                hd.getThanhTien(),
-                hd.getNhanVien() != null ? hd.getNhanVien().getMaNV() : "Không có nhân viên",
-                hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKhuyenMai() : "Không có khuyến mãi",
-                hd.getDonDatPhong() != null ? hd.getDonDatPhong().getMaDon() : "Không có đơn đặt phòng",
-                hd.getNgayTao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            };
-            model.addRow(row);
-        }
-    }
-    private void loadNhanVienOptions() {
-        // Assuming you have a NhanVienDAL class to handle the database operations
-        NhanVienDAL nhanVienDAL = new NhanVienDAL(); // Create an instance of the DAL
-        ArrayList<NhanVien> dsNhanVien = nhanVienDAL.getAllNhanVien(); // Get all employees from the DAL
-
-        // Clear existing items in the combo box (optional, if you want to refresh it)
-        cboNhanVien.removeAllItems();
-
-        // Add each NhanVien object to the combo box
-        for (NhanVien nhanVien : dsNhanVien) {
-            cboNhanVien.addItem(nhanVien.getMaNV()); // Assuming getMaNV() returns the employee ID
-        }
-    }
-    private void loadKhuyenMaiOptions() {
-        // Assuming you have a NhanVienDAL class to handle the database operations
-        KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL(); // Create an instance of the DAL
-        ArrayList<KhuyenMai> dskhuyenMai = khuyenMaiDAL.getAllKhuyenMai(); // Get all employees from the DAL
-
-        // Clear existing items in the combo box (optional, if you want to refresh it)
-        cboKhuyenMai.removeAllItems();
-
-        // Add each NhanVien object to the combo box
-        for (KhuyenMai khuyenMai : dskhuyenMai) {
-            cboNhanVien.addItem(khuyenMai.getMaKhuyenMai()); // Assuming getMaNV() returns the employee ID
-        }
-    }
-    private void loadDonDatPhongOptions() {
-        // Assuming you have a NhanVienDAL class to handle the database operations
-        DonDatPhongDAL donDatPhongDAL = new DonDatPhongDAL(); // Create an instance of the DAL
-        ArrayList<DonDatPhong> dsDonDatPhong = donDatPhongDAL.getAllDonDatPhong(); // Get all employees from the DAL
-
-        // Clear existing items in the combo box (optional, if you want to refresh it)
-        cboNhanVien.removeAllItems();
-
-        // Add each NhanVien object to the combo box
-        for (DonDatPhong donDatPhong : dsDonDatPhong) {
-            cboDonDatPhong.addItem(donDatPhong.getMaDon()); // Assuming getMaNV() returns the employee ID
-        }
-    }
-
-
- // Inside the HoaDon2 class (or relevant class)
-    private String generateNewMaHD(String lastMaHD) {
-        // Assuming the invoice code is of the format "HD000001", "HD000002", etc.
-        if (lastMaHD == null || lastMaHD.isEmpty()) {
-            return "HD000001"; // Start with a default code if there is no last code.
-        }
-        
-        // Extract the numeric part from the last invoice code
-        String numericPart = lastMaHD.substring(2); // Skip the "HD" prefix
-        int newNumber = Integer.parseInt(numericPart) + 1; // Increment the number
-
-        // Format the new number to maintain the same length
-        return String.format("HD%06d", newNumber); // Format to "HDxxxxxx"
-    }
-
-    private void themHoaDon() {
-        try {
-            HoaDonDAL hoaDonDAL = new HoaDonDAL();
-            String lastMaHD = hoaDonDAL.getLastMaHD();
-            String newMaHD = generateNewMaHD(lastMaHD);
-
-            // Lấy thông tin từ giao diện người dùng
-            String maHoaDon = newMaHD; // Sử dụng mã hóa đơn mới được tạo
-            double thanhTien = Double.parseDouble(txtthanhTien.getText());
-            boolean trangThai = cboTrangThai.getSelectedItem().equals("Đã thanh toán");
-
-            // Lấy các đối tượng liên quan
-            NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa((String) cboNhanVien.getSelectedItem());
-            KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa((String) cboKhuyenMai.getSelectedItem());
-            DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa((String) cboDonDatPhong.getSelectedItem());
-            LocalDateTime ngayTao = LocalDateTime.now();
-
-            // Tạo đối tượng hóa đơn
-            HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);
-            
-            // Thêm hóa đơn vào cơ sở dữ liệu
-            boolean isSuccess = hoaDonDAL.themHoaDon(hoaDon);
-            if (isSuccess) {
-                model.addRow(new Object[]{
-                    maHoaDon,
-                    thanhTien,
-                    trangThai,
-                    nhanVien.getHoten(), // Lấy tên nhân viên
-                    khuyenMai != null ? khuyenMai.getMaKhuyenMai() : null, // Kiểm tra khuyến mãi
-                    donDatPhong.getMaDon(), // Mã đơn đặt phòng
-                    ngayTao
-                });
-                clearFields(); // Gọi phương thức xóa các trường
-                JOptionPane.showMessageDialog(null, "Thêm hóa đơn thành công!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Lỗi khi thêm hóa đơn.");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi xảy ra: " + ex.getMessage());
-        }
-    }
+//    public void hienThiDuLieu() {
+//    	ArrayList<HoaDon> dsHoaDon;
+//    	dsHoaDon = new HoaDonDAL().getAllHoaDon();
+//    	for (HoaDon hd : dsHoaDon) {
+//            Object[] row = {
+//                hd.getMaHoaDon(),
+//                hd.getTrangThai() ? "Đã thanh toán" : "Chưa thanh toán",
+//                hd.getThanhTien(),
+//                hd.getNhanVien() != null ? hd.getNhanVien().getMaNV() : "Không có nhân viên",
+//                hd.getKhuyenMai() != null ? hd.getKhuyenMai().getMaKhuyenMai() : "Không có khuyến mãi",
+//                hd.getDonDatPhong() != null ? hd.getDonDatPhong().getMaDon() : "Không có đơn đặt phòng",
+//                hd.getNgayTao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+//            };
+//            model.addRow(row);
+//        }
+//    }
+//    private void loadNhanVienOptions() {
+//        // Assuming you have a NhanVienDAL class to handle the database operations
+//        NhanVienDAL nhanVienDAL = new NhanVienDAL(); // Create an instance of the DAL
+//        ArrayList<NhanVien> dsNhanVien = nhanVienDAL.getAllNhanVien(); // Get all employees from the DAL
+//
+//        // Clear existing items in the combo box (optional, if you want to refresh it)
+//        cboNhanVien.removeAllItems();
+//
+//        // Add each NhanVien object to the combo box
+//        for (NhanVien nhanVien : dsNhanVien) {
+//            cboNhanVien.addItem(nhanVien.getMaNV()); // Assuming getMaNV() returns the employee ID
+//        }
+//    }
+//    private void loadKhuyenMaiOptions() {
+//        // Assuming you have a NhanVienDAL class to handle the database operations
+//        KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL(); // Create an instance of the DAL
+//        ArrayList<KhuyenMai> dskhuyenMai = khuyenMaiDAL.getAllKhuyenMai(); // Get all employees from the DAL
+//
+//        // Clear existing items in the combo box (optional, if you want to refresh it)
+//        cboKhuyenMai.removeAllItems();
+//
+//        // Add each NhanVien object to the combo box
+//        for (KhuyenMai khuyenMai : dskhuyenMai) {
+//            cboNhanVien.addItem(khuyenMai.getMaKhuyenMai()); // Assuming getMaNV() returns the employee ID
+//        }
+//    }
+//    private void loadDonDatPhongOptions() {
+//        // Assuming you have a NhanVienDAL class to handle the database operations
+//        DonDatPhongDAL donDatPhongDAL = new DonDatPhongDAL(); // Create an instance of the DAL
+//        ArrayList<DonDatPhong> dsDonDatPhong = donDatPhongDAL.getAllDonDatPhong(); // Get all employees from the DAL
+//
+//        // Clear existing items in the combo box (optional, if you want to refresh it)
+//        cboNhanVien.removeAllItems();
+//
+//        // Add each NhanVien object to the combo box
+//        for (DonDatPhong donDatPhong : dsDonDatPhong) {
+//            cboDonDatPhong.addItem(donDatPhong.getMaDon()); // Assuming getMaNV() returns the employee ID
+//        }
+//    }
+//
+//
+// // Inside the HoaDon2 class (or relevant class)
+//    private String generateNewMaHD(String lastMaHD) {
+//        // Assuming the invoice code is of the format "HD000001", "HD000002", etc.
+//        if (lastMaHD == null || lastMaHD.isEmpty()) {
+//            return "HD000001"; // Start with a default code if there is no last code.
+//        }
+//        
+//        // Extract the numeric part from the last invoice code
+//        String numericPart = lastMaHD.substring(2); // Skip the "HD" prefix
+//        int newNumber = Integer.parseInt(numericPart) + 1; // Increment the number
+//
+//        // Format the new number to maintain the same length
+//        return String.format("HD%06d", newNumber); // Format to "HDxxxxxx"
+//    }
+//
+//    private void themHoaDon() {
+//        try {
+//            HoaDonDAL hoaDonDAL = new HoaDonDAL();
+//            String lastMaHD = hoaDonDAL.getLastMaHD();
+//            String newMaHD = generateNewMaHD(lastMaHD);
+//
+//            // Lấy thông tin từ giao diện người dùng
+//            String maHoaDon = newMaHD; // Sử dụng mã hóa đơn mới được tạo
+//            double thanhTien = Double.parseDouble(txtthanhTien.getText());
+//            boolean trangThai = cboTrangThai.getSelectedItem().equals("Đã thanh toán");
+//
+//            // Lấy các đối tượng liên quan
+//            NhanVien nhanVien = new NhanVienDAL().getNhanVienTheoMa((String) cboNhanVien.getSelectedItem());
+//            KhuyenMai khuyenMai = new KhuyenMaiDAL().getKhuyenMaiTheoMa((String) cboKhuyenMai.getSelectedItem());
+//            DonDatPhong donDatPhong = new DonDatPhongDAL().getDonDatPhongTheoMa((String) cboDonDatPhong.getSelectedItem());
+//            LocalDateTime ngayTao = LocalDateTime.now();
+//
+//            // Tạo đối tượng hóa đơn
+//            HoaDon hoaDon = new HoaDon(maHoaDon, trangThai, thanhTien, nhanVien, khuyenMai, donDatPhong, ngayTao);
+//            
+//            // Thêm hóa đơn vào cơ sở dữ liệu
+//            boolean isSuccess = hoaDonDAL.themHoaDon(hoaDon);
+//            if (isSuccess) {
+//                model.addRow(new Object[]{
+//                    maHoaDon,
+//                    thanhTien,
+//                    trangThai,
+//                    nhanVien.getHoten(), // Lấy tên nhân viên
+//                    khuyenMai != null ? khuyenMai.getMaKhuyenMai() : null, // Kiểm tra khuyến mãi
+//                    donDatPhong.getMaDon(), // Mã đơn đặt phòng
+//                    ngayTao
+//                });
+//                clearFields(); // Gọi phương thức xóa các trường
+//                JOptionPane.showMessageDialog(null, "Thêm hóa đơn thành công!");
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Lỗi khi thêm hóa đơn.");
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Lỗi xảy ra: " + ex.getMessage());
+//        }
+//    }
 
 
     private void updateTable() {
