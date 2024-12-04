@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 
 import java.util.ArrayList;
 
-public class HoaDonPanel extends JPanel {
+public class QuanLyHoaDonPanel extends JPanel {
 
     private JTextField txtMaKH;
     private JTextField txtTenKH;
@@ -87,7 +87,7 @@ public class HoaDonPanel extends JPanel {
 	private JComboBox<String> cboTrangThai2;
 
 
-    public HoaDonPanel() {
+    public QuanLyHoaDonPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(Color.WHITE);
 //        
@@ -586,7 +586,7 @@ public class HoaDonPanel extends JPanel {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Quản lý Hóa Đơn");
-        HoaDonPanel panel = new HoaDonPanel();
+        QuanLyHoaDonPanel panel = new QuanLyHoaDonPanel();
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

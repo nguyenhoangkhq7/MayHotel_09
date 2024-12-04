@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +7,8 @@ import com.toedter.calendar.JDateChooser;
 import constant.CommonConstants;
 import dal.DonDatPhongDAL;
 import entity.*;
-import custom.UIHelpers;
+import helper.UIHelpers;
+import view.component.DonDatPhongPanel;
 
 public class QuanLyDonDatPhongPanel extends JPanel {
     // frame

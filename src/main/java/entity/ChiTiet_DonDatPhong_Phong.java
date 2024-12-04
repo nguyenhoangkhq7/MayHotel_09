@@ -16,17 +16,15 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ChiTiet_DonDatPhong_Phong {
-    private String maCT_DDP_P;
     private DonDatPhong donDatPhong;
     private Phong phong;
     private LocalDateTime ngayNhanPhong;
-    private LocalDateTime ngayTraPhong; // Đã đổi từ ngayTra sang ngayTraPhong
+    private LocalDateTime ngayTraPhong;
     private boolean laPhongChuyen;
     private double chietKhau;
 
     // Constructor đầy đủ tham số
-    public ChiTiet_DonDatPhong_Phong(String maCT_DDP_P, DonDatPhong donDatPhong, Phong phong, LocalDateTime ngayNhanPhong, LocalDateTime ngayTraPhong, boolean laPhongChuyen, double chietKhau) {
-        this.maCT_DDP_P = maCT_DDP_P;
+    public ChiTiet_DonDatPhong_Phong(DonDatPhong donDatPhong, Phong phong, LocalDateTime ngayNhanPhong, LocalDateTime ngayTraPhong, boolean laPhongChuyen, double chietKhau) {
         this.donDatPhong = donDatPhong;
         this.phong = phong;
         this.ngayTraPhong = ngayTraPhong;
@@ -35,12 +33,7 @@ public class ChiTiet_DonDatPhong_Phong {
         this.chietKhau = chietKhau;
     }
 
-    public String getMaCT_DDP_P() {
-        return maCT_DDP_P;
-    }
-
-    public void setMaCT_DDP_P(String maCT_DDP_P) {
-        this.maCT_DDP_P = maCT_DDP_P;
+    public ChiTiet_DonDatPhong_Phong() {
     }
 
     public DonDatPhong getDonDatPhong() {
@@ -92,24 +85,26 @@ public class ChiTiet_DonDatPhong_Phong {
     }
 
     // Override phương thức equals và hashCode
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ChiTiet_DonDatPhong_Phong that)) return false;
-        return Objects.equals(maCT_DDP_P, that.maCT_DDP_P);
+        return Objects.equals(donDatPhong, that.donDatPhong) && Objects.equals(phong, that.phong);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(maCT_DDP_P);
+        return Objects.hash(donDatPhong, phong);
     }
 
     // Override phương thức toString
+
     @Override
     public String toString() {
         return "ChiTiet_DonDatPhong_Phong{" +
-                "maCT_DDP_P='" + maCT_DDP_P + '\'' +
-                ", donDatPhong=" + donDatPhong +
+                "donDatPhong=" + donDatPhong +
                 ", phong=" + phong +
                 ", ngayNhanPhong=" + ngayNhanPhong +
                 ", ngayTraPhong=" + ngayTraPhong +

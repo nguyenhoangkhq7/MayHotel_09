@@ -101,11 +101,11 @@ public class BangBaoCaoBUS {
                 soPhongDuocThue += chiTietList.size();
                 ///
                 ChiTiet_DonDatPhong_Phong_DichVuDAL dichVuDAL = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
-                for (ChiTiet_DonDatPhong_Phong chiTiet : chiTietList) {
-                	doanhThuPhong += tinhTienPhong(chiTiet);
+                for (ChiTiet_DonDatPhong_Phong ct : chiTietList) {
+                	doanhThuPhong += tinhTienPhong(ct);
                 	
                 	// Cập nhật số lượng theo loại phòng
-                    String loaiPhong = chiTiet.getPhong().getLoaiPhong().getTenLoaiPhong(); // Giả sử có phương thức getTen()
+                    String loaiPhong = ct.getPhong().getLoaiPhong().getTenLoaiPhong(); // Giả sử có phương thức getTen()
                     switch (loaiPhong) {
                         case "Delux King":
                             soLoaiDeluxKing++;
@@ -129,7 +129,7 @@ public class BangBaoCaoBUS {
                             break;
                     }
                     
-                    ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> danhSachDichVu = dichVuDAL.getDSChiTietDonDatPhongPhongDichVuTheoMa(chiTiet.getMaCT_DDP_P());
+                    ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> danhSachDichVu = new ChiTiet_DonDatPhong_Phong_DichVuDAL().getDSChiTietDonDatPhongPhongDichVuTheoMaDonDatPhongMaPhong(ct.getDonDatPhong().getMaDon(), ct.getPhong().getMaPhong());;
                     
                     for (ChiTiet_DonDatPhong_Phong_DichVu ctDV : danhSachDichVu) {
                         double tienDichVu = ctDV.getSoLuongDat() * ctDV.getDichVu().getDonGia();

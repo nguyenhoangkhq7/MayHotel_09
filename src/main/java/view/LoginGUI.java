@@ -2,6 +2,7 @@ package view;
 
 import dal.NhanVienDAL;
 import database.ConnectDB;
+import entity.NhanVien;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -21,10 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.awt.FlowLayout;
 import java.util.prefs.Preferences;
 
@@ -35,9 +33,7 @@ public class LoginGUI extends JFrame {
     private JTextField txtTaiKhoan;
     private JPasswordField txtMatKhau;
     private JCheckBox chckbxRememberPassword;
-    private Preferences prefs; 
-    NhanVienDAL nhanVienDAL = new NhanVienDAL();
-
+    private Preferences prefs;
 
     public LoginGUI() {
         prefs = Preferences.userNodeForPackage(LoginGUI.class);
@@ -155,7 +151,7 @@ public class LoginGUI extends JFrame {
         panelLogin.add(txtMatKhau);
 
         if (!txtTaiKhoan.getText().isEmpty() && !txtMatKhau.getText().isEmpty()) {
-            chckbxRememberPassword.setSelected(true);
+            chckbxRememberPassword.setSelected(false);
         }
 
         JButton btnLogin = new JButton("Đăng nhập");
@@ -168,7 +164,6 @@ public class LoginGUI extends JFrame {
                 try {
                     ConnectDB.getInstance().connect();
                     Connection con = ConnectDB.getConnection();
-                    Statement st = con.createStatement();
                     if ("".equals(txtTaiKhoan.getText())) {
                         JOptionPane.showMessageDialog(new JFrame(), "Tên đăng nhập không được rỗng", "Error",
                                 JOptionPane.ERROR_MESSAGE);
@@ -178,26 +173,26 @@ public class LoginGUI extends JFrame {
                     } else { // kiểm tra đúng hay chưa
                         username = txtTaiKhoan.getText();
                         password = txtMatKhau.getText();
-                        
-                        query = "SELECT * FROM TaiKhoan WHERE tenTaiKhoan= '" + username + "'";
-                        
-                        ResultSet rs = st.executeQuery(query);
 
-                        while (rs.next()) {
+                        query = "SELECT * FROM TaiKhoan WHERE tenTaiKhoan = ?";
+                        PreparedStatement pstmt = con.prepareStatement(query);
+                        pstmt.setString(1, username);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        if (rs.next()) {
                             passDb = rs.getString("matKhau");
-                            if(passDb.equals(password)) {
+                            if (passDb != null && passDb.equals(password)) {
                                 found = 1;
-                                break;
                             }
                         }
-                        if (found == 1) {
-                            MainGUI MainFrame = new MainGUI();
-                            MainFrame.setUser(username);
-                            MainFrame.setVisible(true);
-                            MainFrame.pack();
-                            MainFrame.setLocationRelativeTo(null);
-                            App.nhanVienDangTruc = nhanVienDAL.getNhanVienTheoTenTaiKhoan(username);
 
+                        if (found == 1) {
+                            NhanVienDAL nhanVienDAL = new NhanVienDAL();
+                            NhanVien nhanVienDangTruc = nhanVienDAL.getNhanVienTheoTenTaiKhoan(username);
+                            MainGUI mainGUI = new MainGUI(nhanVienDangTruc);
+                            mainGUI.setVisible(true);
+                            mainGUI.pack();
+                            mainGUI.setLocationRelativeTo(null);
                             if (chckbxRememberPassword.isSelected()) {
                                 prefs.put("savedUsername", username);
                                 prefs.put("savedPassword", password);
@@ -213,6 +208,7 @@ public class LoginGUI extends JFrame {
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Lỗi kết nối cơ sở dữ liệu");
+                    ex.printStackTrace();
                 }
             }
         });

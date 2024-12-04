@@ -14,6 +14,27 @@ public class KhachHangDAL {
 	    public KhachHangDAL() {
 	        dsKhachHang = new ArrayList<>();
 	    }
+
+
+    public String getLastKH() {
+        String lastOrder = null;
+
+        String query = "SELECT MAX(maKH) FROM KhachHang"; // Truy vấn để lấy mã đơn lớn nhất
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                lastOrder = rs.getString(1); // Lấy mã đơn lớn nhất
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lastOrder;
+    }
     // Lấy tất cả khách hàng từ cơ sở dữ liệu
     public ArrayList<KhachHang> getAllKhachHang() {
         ArrayList<KhachHang> dsKhachHang = new ArrayList<>();

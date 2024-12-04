@@ -18,7 +18,6 @@ import java.awt.*;
 
 // nơi chạy chương trình
 public class App {
-    public static NhanVien nhanVienDangTruc ;
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {

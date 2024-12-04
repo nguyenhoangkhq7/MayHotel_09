@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DonDatPhongBUS {
-    private DonDatPhongDAL donDatPhongDAL = new DonDatPhongDAL();
-    private ChiTiet_DonDatPhong_PhongDAL chiTietDonDatPhongPhongDAL = new ChiTiet_DonDatPhong_PhongDAL();
     public String generateOrderCode() {
         String lastOrder = new DonDatPhongDAL().getLastDDP(); // Lấy mã đơn cuối cùng
         int newOrderNumber = 1; // Mặc định bắt đầu từ 1 nếu không có mã đơn nào
@@ -27,6 +25,7 @@ public class DonDatPhongBUS {
     }
 
     public boolean checkCoPhongChuyen(DonDatPhong donDatPhong) {
+        ChiTiet_DonDatPhong_PhongDAL chiTietDonDatPhongPhongDAL = new ChiTiet_DonDatPhong_PhongDAL();
         ArrayList<ChiTiet_DonDatPhong_Phong> dsChiTietDDPPhong = chiTietDonDatPhongPhongDAL.getChiTietDonDatPhongPhongTheoMaDDP(donDatPhong.getMaDon());
         for(ChiTiet_DonDatPhong_Phong ct : dsChiTietDDPPhong) {
             if(ct.isLaPhongChuyen()) {
@@ -65,5 +64,6 @@ public class DonDatPhongBUS {
 //        LocalDateTime hienTai = LocalDateTime.of(2024,11,26,6,0);
 //        LocalDateTime ngayNhanPhong = LocalDateTime.of(2024,11,26,4,0);
 //        System.out.println(Duration.between(hienTai, ngayNhanPhong).toHours());
+        System.out.println(new DonDatPhongBUS().generateOrderCode());
     }
 }

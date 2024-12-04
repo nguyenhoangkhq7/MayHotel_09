@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 import java.awt.Font;
 import java.awt.Graphics;
@@ -34,7 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
 import java.awt.Cursor;
 
-public class BangBaoCaoPanel extends JPanel {
+public class BangBaoCao extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JTable table;
@@ -44,7 +44,7 @@ public class BangBaoCaoPanel extends JPanel {
      private JLabel lbngaythongke;
     private BangBaoCaoBUS bangBaoCaoBUS;
 
-    public BangBaoCaoPanel(BaoCaoPanel baoCaoFrame) {
+    public BangBaoCao(BaoCao baoCaoFrame) {
 	     setLayout(new BorderLayout());
 		
 	

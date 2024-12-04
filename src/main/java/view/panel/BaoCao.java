@@ -1,4 +1,4 @@
-package view;
+package view.panel;
 
 
 import javax.swing.JPanel;
@@ -18,14 +18,14 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.Color;
 import java.awt.Cursor;
 
-public class BaoCaoPanel extends JPanel {
+public class BaoCao extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
     private JPanel content; // Khai báo JPanel con
 
 
-	public BaoCaoPanel() {
+	public BaoCao() {
 	     setLayout(new BorderLayout());
 			
 	 	
@@ -161,16 +161,16 @@ public class BaoCaoPanel extends JPanel {
     
     // Phương thức showBangBaoCao, được cập nhật để truyền tham chiếu
     private void showBangBaoCao() {
-        BangBaoCaoPanel bangBaoCaoPanel = new BangBaoCaoPanel(this); // Truyền 'this' để có thể gọi lại BaoCao
+        BangBaoCao bangBaoCao = new BangBaoCao(this); // Truyền 'this' để có thể gọi lại BaoCao
         contentPane.removeAll(); 
-        contentPane.add(bangBaoCaoPanel, BorderLayout.CENTER);  	  	  
+        contentPane.add(bangBaoCao, BorderLayout.CENTER);
         contentPane.revalidate(); 
         contentPane.repaint(); 
     }
 	
 	 // Phương thức để hiển thị PhieuThuChi
     private void showPhieuThuChi() {
-        PhieuThuChiPanel phieuThuChi = new PhieuThuChiPanel(this); // Tạo đối tượng PhieuThuChi
+        QuanLyPhieuThuChiPanel phieuThuChi = new QuanLyPhieuThuChiPanel(this); // Tạo đối tượng PhieuThuChi
         contentPane.removeAll(); // Xóa tất cả các thành phần hiện có trong contentPane
         contentPane.add(phieuThuChi, BorderLayout.CENTER); // Thêm contentPane của PhieuThuChi vào
         contentPane.revalidate(); // Cập nhật lại layout

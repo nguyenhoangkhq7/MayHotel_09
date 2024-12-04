@@ -15,40 +15,25 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ChiTiet_DonDatPhong_Phong_DichVu {
-    private String maCT_DDP_P_DV; // Mã chi tiết đơn đặt phòng - dịch vụ
-    private int soLuongDat;       // Số lượng dịch vụ đặt
-    private LocalDateTime ngayTao;    // Ngày tạo đơn đặt dịch vụ
-    private DichVu dichVu;        // Đối tượng dịch vụ
-    private ChiTiet_DonDatPhong_Phong cT_DDP_P; // Đối tượng chi tiết đơn đặt phòng - phòng
-    private String moTa;          // Mô tả
+    private int soLuongDat;
+    private LocalDateTime ngayTao;
+    private DichVu dichVu;
+    private DonDatPhong donDatPhong;
+    private Phong phong;
+    private String moTa;
 
     // Constructor
-    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_P_DV, int soLuongDat, LocalDateTime ngayTao, DichVu dichVu, ChiTiet_DonDatPhong_Phong cT_DDP_P, String moTa) {
-        setMaCT_DDP_P_DV(maCT_DDP_P_DV);
-        setSoLuongDat(soLuongDat);
+
+    public ChiTiet_DonDatPhong_Phong_DichVu(int soLuongDat, LocalDateTime ngayTao, DichVu dichVu, DonDatPhong donDatPhong, Phong phong, String moTa) {
+        this.soLuongDat = soLuongDat;
         this.ngayTao = ngayTao;
-        setDichVu(dichVu);
-        setCT_DDP_P(cT_DDP_P);
+        this.dichVu = dichVu;
+        this.donDatPhong = donDatPhong;
+        this.phong = phong;
         this.moTa = moTa;
     }
 
-    public ChiTiet_DonDatPhong_Phong_DichVu(String maCT_DDP_P_DV) {
-        this.maCT_DDP_P_DV = maCT_DDP_P_DV;
-    }
-
     public ChiTiet_DonDatPhong_Phong_DichVu() {
-    }
-
-    // Getters and Setters
-    public String getMaCT_DDP_P_DV() {
-        return maCT_DDP_P_DV;
-    }
-
-    public void setMaCT_DDP_P_DV(String maCT_DDP_P_DV) {
-        if (maCT_DDP_P_DV == null || maCT_DDP_P_DV.isEmpty()) {
-            throw new IllegalArgumentException("Mã chi tiết đơn đặt phòng - dịch vụ không được rỗng");
-        }
-        this.maCT_DDP_P_DV = maCT_DDP_P_DV;
     }
 
     public int getSoLuongDat() {
@@ -56,9 +41,6 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
     }
 
     public void setSoLuongDat(int soLuongDat) {
-        if (soLuongDat <= 0) {
-            throw new IllegalArgumentException("Số lượng đặt phải lớn hơn 0");
-        }
         this.soLuongDat = soLuongDat;
     }
 
@@ -70,34 +52,28 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
         this.ngayTao = ngayTao;
     }
 
-    public ChiTiet_DonDatPhong_Phong getcT_DDP_P() {
-        return cT_DDP_P;
-    }
-
-    public void setcT_DDP_P(ChiTiet_DonDatPhong_Phong cT_DDP_P) {
-        this.cT_DDP_P = cT_DDP_P;
-    }
-
     public DichVu getDichVu() {
         return dichVu;
     }
 
     public void setDichVu(DichVu dichVu) {
-        if (dichVu == null) {
-            throw new IllegalArgumentException("Dịch vụ không được null");
-        }
         this.dichVu = dichVu;
     }
 
-    public ChiTiet_DonDatPhong_Phong getCT_DDP_P() {
-        return cT_DDP_P;
+    public DonDatPhong getDonDatPhong() {
+        return donDatPhong;
     }
 
-    public void setCT_DDP_P(ChiTiet_DonDatPhong_Phong cT_DDP_P) {
-        if (cT_DDP_P == null) {
-            throw new IllegalArgumentException("Chi tiết đơn đặt phòng - phòng không được null");
-        }
-        this.cT_DDP_P = cT_DDP_P;
+    public void setDonDatPhong(DonDatPhong donDatPhong) {
+        this.donDatPhong = donDatPhong;
+    }
+
+    public Phong getPhong() {
+        return phong;
+    }
+
+    public void setPhong(Phong phong) {
+        this.phong = phong;
     }
 
     public String getMoTa() {
@@ -108,28 +84,26 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
         this.moTa = moTa;
     }
 
-    // Override equals and hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ChiTiet_DonDatPhong_Phong_DichVu that)) return false;
-        return Objects.equals(maCT_DDP_P_DV, that.maCT_DDP_P_DV);
+        return Objects.equals(dichVu, that.dichVu) && Objects.equals(donDatPhong, that.donDatPhong) && Objects.equals(phong, that.phong);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(maCT_DDP_P_DV);
+        return Objects.hash(dichVu, donDatPhong, phong);
     }
 
-    // Override toString method
     @Override
     public String toString() {
         return "ChiTiet_DonDatPhong_Phong_DichVu{" +
-                "maCT_DDP_P_DV='" + maCT_DDP_P_DV + '\'' +
-                ", soLuongDat=" + soLuongDat +
+                "soLuongDat=" + soLuongDat +
                 ", ngayTao=" + ngayTao +
                 ", dichVu=" + dichVu +
-                ", cT_DDP_P=" + cT_DDP_P +
+                ", donDatPhong=" + donDatPhong +
+                ", phong=" + phong +
                 ", moTa='" + moTa + '\'' +
                 '}';
     }

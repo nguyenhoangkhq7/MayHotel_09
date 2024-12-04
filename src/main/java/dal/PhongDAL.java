@@ -28,6 +28,27 @@ public class PhongDAL {
         dsPhong = new ArrayList<>();
     }
 
+    // Lấy LoaiPhong từ mã phòng
+    public LoaiPhong getLoaiPhongTheoMaPhong(String maPhong) {
+        LoaiPhong loaiPhong = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT loaiPhong FROM Phong WHERE maPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maPhong);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String maLoaiPhong = rs.getString("loaiPhong");
+                loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(maLoaiPhong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return loaiPhong;
+    }
+
     // Lấy tất cả phòng theo mã loại phòng
     public ArrayList<Phong> getAllPhongByMaLoaiPhong(String maLoaiPhong) {
         ArrayList<Phong> dsPhongTheoLoai = new ArrayList<>();

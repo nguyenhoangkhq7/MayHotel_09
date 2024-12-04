@@ -8,12 +8,14 @@
      */
 
 
-package view;
+package view.component;
 
 import bus.DonDatPhongBUS;
 import constant.CommonConstants;
 import dal.DonDatPhongDAL;
 import entity.DonDatPhong;
+import view.dialog.ChiTietDonDatPhong_PhongDialog;
+import view.panel.QuanLyDonDatPhongPanel;
 
 import javax.swing.*;
 import java.awt.*;
