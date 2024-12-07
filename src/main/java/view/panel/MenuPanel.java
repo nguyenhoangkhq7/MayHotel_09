@@ -29,9 +29,13 @@ public class MenuPanel extends JPanel {
     private CardLayout cardLayout;  // CardLayout để quản lý các panel
     private JPanel jpnContain;  // Panel chính chứa các thẻ
     private ArrayList<JLabel> menuItems = new ArrayList<>();
-    public MenuPanel(MainGUI mainGUI, NhanVien nhanVienDangTruc) {
+    
+    public NhanVien getNhanVienDangTruc() {
+		return nhanVienDangTruc;
+	}
+	public MenuPanel(MainGUI mainGUI) {
         this.mainGUI = mainGUI;
-        this.nhanVienDangTruc = nhanVienDangTruc;
+        this.nhanVienDangTruc = mainGUI.getNhanVienDangTruc();
         this.setBackground(CommonConstants.BACKGROUND);
         this.setLayout(new BorderLayout());
 

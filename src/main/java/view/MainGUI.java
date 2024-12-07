@@ -22,7 +22,7 @@ public class MainGUI extends JFrame {
 	public MainGUI(NhanVien nhanVienDangTruc) {
 		this.nhanVienDangTruc = nhanVienDangTruc;
 		setupMainFrame();
-		this.add(new MenuPanel(this ,this.nhanVienDangTruc), BorderLayout.WEST);
+		this.add(new MenuPanel(this), BorderLayout.WEST);
 	}
 
 	private void setupMainFrame() {
