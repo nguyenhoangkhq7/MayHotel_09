@@ -29,6 +29,23 @@ public class MenuPanel extends JPanel {
     private CardLayout cardLayout;  // CardLayout để quản lý các panel
     private JPanel jpnContain;  // Panel chính chứa các thẻ
     private ArrayList<JLabel> menuItems = new ArrayList<>();
+
+    public CardLayout getCardLayout() {
+        return cardLayout;
+    }
+
+    public NhanVien getNhanVienDangTruc() {
+        return nhanVienDangTruc;
+    }
+
+    public JPanel getJpnContain() {
+        return jpnContain;
+    }
+
+    public MainGUI getMainGUI() {
+        return mainGUI;
+    }
+
     public MenuPanel(MainGUI mainGUI, NhanVien nhanVienDangTruc) {
         this.mainGUI = mainGUI;
         this.nhanVienDangTruc = nhanVienDangTruc;
@@ -41,7 +58,7 @@ public class MenuPanel extends JPanel {
 
         // Tạo và thêm các panel con vào jpnContain
         addPanelToCardLayout("Màn hình chính", new ManHinhChinhPanel());
-        addPanelToCardLayout("Đơn đặt phòng", new QuanLyDonDatPhongPanel());
+        addPanelToCardLayout("Đơn đặt phòng", new QuanLyDonDatPhongPanel(this));
         addPanelToCardLayout("Hóa đơn", new QuanLyHoaDonPanel());
         addPanelToCardLayout("Khách hàng", new QuanLyKhachHangPanel());
 //        addPanelToCardLayout("Báo cáo", new BangBaoCao()); // Giả sử có BangBaoCao Panel
@@ -224,7 +241,6 @@ public class MenuPanel extends JPanel {
 
     // Hàm cập nhật hiệu ứng menu sau khi click
     private void updateMenuEffectAfterClick(JLabel clickedLabel) {
-            System.out.println(clickedLabel.getText());
         for (JLabel menuItem : menuItems) {
             if (menuItem.getText().equals(clickedLabel.getText())) {
                 // Đổi màu menu được chọn
