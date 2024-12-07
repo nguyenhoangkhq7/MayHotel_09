@@ -152,7 +152,7 @@ public class NhanVienDAL {
             stmt.setString(6, nhanVien.getDiaChi());
             stmt.setString(7, nhanVien.getVaiTro());
             stmt.setString(8, nhanVien.getTaiKhoan().getTenTaiKhoan());
-            stmt.setString(10, nhanVien.getMaNV());  // You need the employee ID to identify which record to update
+            stmt.setString(9, nhanVien.getMaNV());  // You need the employee ID to identify which record to update
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
