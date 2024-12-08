@@ -23,7 +23,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ThemNhanVienDialog extends JDialog {
-	// Khai báo các thành phần giao diện
 	private JTextField txtMaNV;
 	private JTextField txtHoTen;
 	private JTextField txtEmail;
@@ -46,6 +45,11 @@ public class ThemNhanVienDialog extends JDialog {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(10, 2, 10, 10));
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		panel.add(new JLabel("Vai Trò:"));
+		cboVaiTro = new JComboBox<>(new String[] { "","Quản lý", "Nhân viên" });
+		cboVaiTro.setSelectedIndex(0);
+		panel.add(cboVaiTro);
 
 		panel.add(new JLabel("Mã Nhân Viên:"));
 		txtMaNV = new JTextField(); 
@@ -76,11 +80,6 @@ public class ThemNhanVienDialog extends JDialog {
 		panel.add(new JLabel("Địa Chỉ:"));
 		txtDiaChi = new JTextField();
 		panel.add(txtDiaChi);
-
-		panel.add(new JLabel("Vai Trò:"));
-		cboVaiTro = new JComboBox<>(new String[] { "","Quản lý", "Nhân viên" });
-		cboVaiTro.setSelectedIndex(0);
-		panel.add(cboVaiTro);
 
 		panel.add(new JLabel("Tên Tài Khoản:"));
 		txtTenTaiKhoan = new JTextField();
@@ -117,34 +116,26 @@ public class ThemNhanVienDialog extends JDialog {
 			}
 		});
 
-//		cboVaiTro.addActionListener(new ActionListener() {
-//		    @Override
-//		    public void actionPerformed(ActionEvent e) {
-//		        String vaiTro = (String) cboVaiTro.getSelectedItem();
-//		        if (vaiTro != null && !vaiTro.equals("")) {
-//		            String prefix = vaiTro.equals("Quản lý") ? "QL" : "NV";
-//		            // Chỉ tạo mã mới nếu prefix khác "" và sự kiện được kích hoạt
-//		            if (txtMaNV.getText().isEmpty()) {
-//		                String maNV = generateMaNV(prefix);
-//		                txtMaNV.setText(maNV);
-//		            }
-//		        }
-//		    }
-//		});
 		cboVaiTro.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        try {
-		            // Gọi lại generateMaNV để đảm bảo kết nối được sử dụng đúng cách
 		            String vaiTro = (String) cboVaiTro.getSelectedItem();
-		            if (vaiTro != null) {
-		                String prefix = vaiTro.equals("Quản lý") ? "QL" : "NV";
-		                String maNV = generateMaNV(prefix);
-		                txtMaNV.setText(maNV);
-		                txtTenTaiKhoan.setText(maNV);
+		            
+		            if (vaiTro == null || vaiTro.isEmpty()) {
+		                txtMaNV.setText("");
+		                txtTenTaiKhoan.setText("");
+		                return;
 		            }
+
+		            String prefix = vaiTro.equalsIgnoreCase("Quản lý") ? "QL" : "NV";
+		            
+		            String maNV = generateMaNV(prefix);
+		            
+		            txtMaNV.setText(maNV);
+		            txtTenTaiKhoan.setText(maNV);
 		        } catch (Exception ex) {
-		            ex.printStackTrace();
+		            ex.printStackTrace(); // In lỗi ra console để debug
 		            JOptionPane.showMessageDialog(null, "Lỗi xảy ra: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
 		        }
 		    }
@@ -175,8 +166,6 @@ public class ThemNhanVienDialog extends JDialog {
 				
 					boolean isHoatDong = "Có".equals(hoatDong);
 					TaiKhoan taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
-
-					// Tạo đối tượng DichVu
 					NhanVien nhanVien = new NhanVien (maNV, tenNV, soDienThoai, soCanCuoc, isHoatDong, email, diaChi, vaiTro, taiKhoan);
 
 					TaiKhoanDAL taiKhoanDAL = new TaiKhoanDAL();
@@ -205,28 +194,6 @@ public class ThemNhanVienDialog extends JDialog {
 	}
 
 
-//	private String generateMaNV(String prefix) {
-//	    int newNumber = 1; // Giá trị mặc định
-//
-//	    try (Connection con = ConnectDB.getConnection();
-//	         PreparedStatement stmt = con.prepareStatement(
-//	             "SELECT MAX(CAST(SUBSTRING(MaNV, 3, LEN(MaNV) - 2) AS INT)) FROM NhanVien WHERE MaNV LIKE ?")) {
-//
-//	        stmt.setString(1, prefix + "%");
-//	        try (ResultSet rs = stmt.executeQuery()) {
-//	            if (rs.next()) {
-//	                int maxNumber = rs.getInt(1);
-//	                if (maxNumber != 0) {
-//	                    newNumber = maxNumber + 1;
-//	                }
-//	            }
-//	        }
-//	    } catch (SQLException ex) {
-//	        ex.printStackTrace();
-//	    }
-//
-//	    return prefix + String.format("%03d", newNumber);
-//	}
 	
 	private String generateMaNV(String prefix) {
 	    int newNumber = 1; // Giá trị mặc định

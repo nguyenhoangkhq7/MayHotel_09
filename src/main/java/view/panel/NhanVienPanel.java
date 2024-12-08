@@ -57,13 +57,7 @@ public class NhanVienPanel extends JPanel {
 	private DefaultTableModel tableModel;
 	private JTextField txtMaNV;
 	private JTextField txtHoTen;
-	private JTextField txtEmail;
 	private JTextField txtSDT;
-	private JTextField txtDiaChi;
-	private JTextField txtTenTaiKhoan;
-	private JTextField txtSoCanCuoc;
-	private JPasswordField txtMatKhau;
-	private JTextField txtTim;
 	private JComboBox<String> cboVaiTro;
 	private JButton btnSua;
 	private JPanel panelForm;
@@ -93,13 +87,13 @@ public class NhanVienPanel extends JPanel {
 		lblTieuDeTrang.setPreferredSize(new Dimension(600, 60));
 		pnlTieuDe.add(lblTieuDeTrang);
 
-		JPanel pnlThongTin = new JPanel();
-		pnlThongTin.setBackground(new Color(255, 255, 255));
-		pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Thông tin dịch vụ",
+		JPanel pnlBoLoc = new JPanel();
+		pnlBoLoc.setBackground(new Color(255, 255, 255));
+		pnlBoLoc.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Bộ lọc nhân viên",
 				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
 
-		add(pnlThongTin);
-		pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
+		add(pnlBoLoc);
+		pnlBoLoc.setLayout(new GridLayout(1, 1, 0, 0));
 
 		panelForm = new JPanel();
 		panelForm.setLayout(new GridLayout(3, 3, 10, 10));
@@ -108,9 +102,8 @@ public class NhanVienPanel extends JPanel {
 		lbMaNV.setFont(new Font("Tahoma", Font.BOLD, 13));
 		panelForm.add(lbMaNV);
 
-		txtMaNV = new JTextField("NV*****");
+		txtMaNV = new JTextField();
 		txtMaNV.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		txtMaNV.setEditable(false);
 		panelForm.add(txtMaNV);
 
 		JLabel lbHoTen = new JLabel("Họ tên:");
@@ -119,7 +112,6 @@ public class NhanVienPanel extends JPanel {
 
 		txtHoTen = new JTextField();
 		txtHoTen.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtHoTen.setEditable(false);
 		panelForm.add(txtHoTen);
 
 		JLabel lbSDT = new JLabel("Số điện thoại:");
@@ -128,17 +120,8 @@ public class NhanVienPanel extends JPanel {
 
 		txtSDT = new JTextField();
 		txtSDT.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtSDT.setEditable(false);
 		panelForm.add(txtSDT);
 
-		JLabel lbSoCanCuoc = new JLabel("Số căn cước:");
-		lbSoCanCuoc.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbSoCanCuoc);
-
-		txtSoCanCuoc = new JTextField();
-		txtSoCanCuoc.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtSoCanCuoc.setEditable(false);
-		panelForm.add(txtSoCanCuoc);
 
 		JLabel lbConHoatDong = new JLabel("ConHoatDong:");
 		lbConHoatDong.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -146,27 +129,12 @@ public class NhanVienPanel extends JPanel {
 
 		cboHoatDong = new JComboBox<>();
 		cboHoatDong.setFont(new Font("Tahoma", Font.BOLD, 13));
+		cboHoatDong.addItem("");
 		cboHoatDong.addItem("Có");
 		cboHoatDong.addItem("Không");
 		panelForm.add(cboHoatDong);
 
-		JLabel lbEmail = new JLabel("Email:");
-		lbEmail.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbEmail);
 
-		txtEmail = new JTextField();
-		txtEmail.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtEmail.setEditable(false);
-		panelForm.add(txtEmail);
-
-		JLabel lbDiaChi = new JLabel("Địa chỉ:");
-		lbEmail.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbDiaChi);
-
-		txtDiaChi = new JTextField();
-		txtDiaChi.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtDiaChi.setEditable(false);
-		panelForm.add(txtDiaChi);
 
 		JLabel lbVaiTro = new JLabel("Vai trò:");
 		lbVaiTro.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -174,27 +142,10 @@ public class NhanVienPanel extends JPanel {
 
 		cboVaiTro = new JComboBox<>();
 		cboVaiTro.setFont(new Font("Tahoma", Font.BOLD, 13));
+		cboVaiTro.addItem("");
 		cboVaiTro.addItem("Nhân viên");
 		cboVaiTro.addItem("Quản lý");
 		panelForm.add(cboVaiTro);
-
-		JLabel lbTaiKhoan = new JLabel("Tài khoản:");
-		lbTaiKhoan.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbTaiKhoan);
-
-		txtTenTaiKhoan = new JTextField();
-		txtTenTaiKhoan.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtTenTaiKhoan.setEditable(false);
-		panelForm.add(txtTenTaiKhoan);
-
-		JLabel lbMatKhau = new JLabel("Mật khẩu:");
-		lbMatKhau.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbMatKhau);
-
-		txtMatKhau = new JPasswordField();
-		txtMatKhau.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtMatKhau.setEditable(false);
-		panelForm.add(txtMatKhau);
 
 		JLabel lbNull1 = new JLabel();
 		panelForm.add(lbNull1);
@@ -202,7 +153,41 @@ public class NhanVienPanel extends JPanel {
 		JLabel lbNull2 = new JLabel();
 		panelForm.add(lbNull2);
 
-		pnlThongTin.add(panelForm);
+		pnlBoLoc.add(panelForm);
+		
+		JPanel panelChucNang = new JPanel();
+		panelChucNang.setBackground(new Color(255, 255, 255));
+		panelChucNang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
+		add(panelChucNang);
+		panelChucNang.setLayout(new FlowLayout());
+
+		btnThem = new JButton("Thêm");
+		btnThem.setBackground(new Color(243, 125, 0));
+		btnThem.setForeground(new Color(255, 255, 255));
+		btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panelChucNang.add(btnThem);
+
+		btnSua = new JButton("Sửa");
+		btnSua.setBackground(new Color(243, 125, 0));
+		btnSua.setForeground(new Color(255, 255, 255));
+		btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panelChucNang.add(btnSua);
+		
+		JButton btnTim = new JButton("Tìm");
+		btnTim.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnTim.setForeground(new Color(255, 255, 255));
+		btnTim.setBackground(new Color(253, 125, 0));
+		panelChucNang.add(btnTim);
+
+		JPanel pnlContainer = new JPanel();
+		pnlContainer.setLayout(new GridLayout(1, 2, 10, 0)); 
+		pnlContainer.setBackground(new Color(255, 255, 255));
+
+		pnlContainer.add(pnlBoLoc);
+		pnlContainer.add(panelChucNang);
+
+		add(pnlContainer);
 
 		JPanel pnlBang1 = new JPanel();
 		pnlBang1.setBackground(new Color(255, 255, 255));
@@ -214,27 +199,6 @@ public class NhanVienPanel extends JPanel {
 		JScrollPane scrDSNV = new JScrollPane();
 		pnlBang1.add(scrDSNV, BorderLayout.CENTER);
 
-		Box hBox = Box.createHorizontalBox();
-		JLabel lbTraCuu = new JLabel("Tra cứu:");
-		lbTraCuu.setFont(new Font("Tahoma", Font.BOLD, 13));
-
-		txtTim = new JTextField();
-		txtTim.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		txtTim.setPreferredSize(new Dimension(150, 20));
-		txtTim.setMaximumSize(new Dimension(150, 20));
-
-		JButton btnTim = new JButton("Tìm");
-		btnTim.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnTim.setForeground(new Color(255, 255, 255));
-		btnTim.setBackground(new Color(253, 125, 0));
-
-		hBox.add(lbTraCuu);
-		hBox.add(Box.createHorizontalStrut(10));
-		hBox.add(txtTim);
-		hBox.add(Box.createHorizontalStrut(10));
-		hBox.add(btnTim);
-
-		pnlBang1.add(hBox, BorderLayout.NORTH);
 
 		tableModel = new DefaultTableModel(new String[] { "Mã nhân viên", "Họ tên", "Số điện thoại", "Số căn cước",
 				"Còn hoạt động", "Email", "Địa chỉ", "Vai trò", "Tên tài khoản" }, 0);
@@ -251,42 +215,45 @@ public class NhanVienPanel extends JPanel {
 
 		scrDSNV.setViewportView(scrollPane);
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(255, 255, 255));
-		panel_3.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng",
-				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
-		add(panel_3);
-		panel_3.setLayout(new FlowLayout());
-
-		btnThem = new JButton("Thêm");
-		btnThem.setBackground(new Color(243, 125, 0));
-		btnThem.setForeground(new Color(255, 255, 255));
-		btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panel_3.add(btnThem);
-
-		btnSua = new JButton("Sửa");
-		btnSua.setBackground(new Color(243, 125, 0));
-		btnSua.setForeground(new Color(255, 255, 255));
-		btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panel_3.add(btnSua);
-		
+				
 		//Sự kiện cho btnTim
-				TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-				table_2.setRowSorter(sorter);
+		btnTim.addActionListener(e -> {
+		
+		    String maNV = txtMaNV.getText().trim();
+		    String hoTen = txtHoTen.getText().trim();
+		    String sdt = txtSDT.getText().trim();
+		    String hoatDong = cboHoatDong.getSelectedItem().toString();
+		    String vaiTro = cboVaiTro.getSelectedItem().toString();
 
-				btnTim.addActionListener(e -> {
-					String keyword = txtTim.getText().trim();
-					if (keyword.isEmpty()) {
-						sorter.setRowFilter(null);
-					} else {
-						try {
+		    List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
-							sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword));
-						} catch (PatternSyntaxException ex) {
-							JOptionPane.showMessageDialog(null, "Từ khóa không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-						}
-					}
-				});
+		    if (!maNV.isEmpty()) {
+		        filters.add(RowFilter.regexFilter("(?i)" + maNV, 0)); 
+		    }
+		    if (!hoTen.isEmpty()) {
+		        filters.add(RowFilter.regexFilter("(?i)" + hoTen, 1)); 
+		    }
+		    if (!sdt.isEmpty()) {
+		        filters.add(RowFilter.regexFilter("(?i)" + sdt, 2)); 
+		    }
+		    if (!hoatDong.isEmpty()) {
+		        filters.add(RowFilter.regexFilter("(?i)" + hoatDong, 4)); 
+		    }
+		    if (!vaiTro.isEmpty()) {
+		        filters.add(RowFilter.regexFilter("(?i)" + vaiTro, 7)); 
+		    }
+
+		
+		    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+		    table_2.setRowSorter(sorter);
+
+		    if (filters.isEmpty()) {
+		        sorter.setRowFilter(null);
+		    } else {
+		        sorter.setRowFilter(RowFilter.andFilter(filters)); 
+		    }
+		});
+
 		// Sự kiện btnThem
 
 		btnThem.addMouseListener(new MouseAdapter() {
@@ -304,7 +271,6 @@ public class NhanVienPanel extends JPanel {
 				// Kiểm tra xem có dòng nào được chọn trong bảng không
 				int selectedRow = table_2.getSelectedRow();
 				if (selectedRow != -1) {
-					// Lấy thông tin từ bảng vào các trường text của SuaNhanVienDialog
 					String maNV = table_2.getValueAt(selectedRow, 0).toString();
 					String tenNhanVien = table_2.getValueAt(selectedRow, 1).toString();
 					String soDienThoai = table_2.getValueAt(selectedRow, 2).toString();
@@ -315,12 +281,11 @@ public class NhanVienPanel extends JPanel {
 					String diaChi = table_2.getValueAt(selectedRow, 6).toString();
 					String vaiTro = table_2.getValueAt(selectedRow, 7).toString();
 					TaiKhoan taiKhoan = (TaiKhoan) table_2.getValueAt(selectedRow, 8);
-					// Tạo đối tượng DichVu và truyền vào dialog
+					
 					NhanVien nhanVien = new NhanVien(maNV, tenNhanVien, soDienThoai, soCanCuoc, conHoatDong, email, diaChi, vaiTro, taiKhoan);
 					
 					SuaNhanVienDialog suaDialog = new SuaNhanVienDialog(NhanVienPanel.this, nhanVien);
 					suaDialog.setVisible(true);
-					quayVeTrangThaiBanDau();
 				} else {
 					JOptionPane.showMessageDialog(NhanVienPanel.this, "Vui lòng chọn nhân viên để sửa!", "Lỗi",
 							JOptionPane.ERROR_MESSAGE);
@@ -330,7 +295,7 @@ public class NhanVienPanel extends JPanel {
 	}
 
 	public String getNextMaNhanVien() {
-		String nextMaNV = "NV001"; // Giá trị mặc định nếu chưa có dữ liệu
+		String nextMaNV = "NV001"; 
 		try {
 			ConnectDB.getInstance().connect();
 			Connection con = ConnectDB.getConnection();
@@ -357,7 +322,7 @@ public class NhanVienPanel extends JPanel {
 
 		// Cập nhật dữ liệu cho bảng
 		DefaultTableModel model = (DefaultTableModel) table_2.getModel();
-		model.setRowCount(0); // Xóa các hàng cũ
+		model.setRowCount(0);
 
 		for (NhanVien nv : danhSachNhanVien) {
 			model.addRow(new Object[] { nv.getMaNV(), nv.getHoten(), nv.getSoDienThoai(), nv.getSoCanCuoc(),
@@ -365,43 +330,13 @@ public class NhanVienPanel extends JPanel {
 		}
 
 	}
-	private void quayVeTrangThaiBanDau() {
-		txtMaNV.setText("");
-		txtHoTen.setText("");
-		txtSDT.setText("");
-		txtSoCanCuoc.setText("");
-		cboHoatDong.setSelectedIndex(0);
-		txtEmail.setText("");
-		txtDiaChi.setText("");
-		cboVaiTro.setSelectedIndex(0);
-		txtTenTaiKhoan.setText("");
-		txtMatKhau.setText("");
-
-		txtMaNV.setEditable(false);
-		txtHoTen.setEditable(false);
-		txtSDT.setEditable(false);
-		txtSoCanCuoc.setEditable(false);
-		cboHoatDong.setEnabled(false);
-		txtEmail.setEditable(false);
-		txtDiaChi.setEditable(false);
-		cboVaiTro.setEnabled(false);
-		txtTenTaiKhoan.setEditable(false);
-		txtMatKhau.setEditable(false);
-
-		
-		
-		btnSua.setVisible(true);
-		btnThem.setVisible(true);
-	}
 
 	private void loadNhanVienToTable() {
-		NhanVienDAL nhanVienDAL = new NhanVienDAL(); // Giả sử đây là lớp chứa hàm getAllDichVu()
-		ArrayList<NhanVien> dsNhanVien = nhanVienDAL.getAllNhanVien(); // Lấy danh sách dịch vụ từ cơ sở dữ liệu
+		NhanVienDAL nhanVienDAL = new NhanVienDAL(); 
+		ArrayList<NhanVien> dsNhanVien = nhanVienDAL.getAllNhanVien(); 
 
-		// Xóa dữ liệu cũ trên bảng (nếu có)
 		tableModel.setRowCount(0);
 
-		// Duyệt qua danh sách dịch vụ và thêm vào TableModel
 		for (NhanVien nhanVien : dsNhanVien) {
 			Object[] rowData = { nhanVien.getMaNV(), nhanVien.getHoten(), nhanVien.getSoDienThoai(),
 					nhanVien.getSoCanCuoc(), nhanVien.isConHoatDong() ? "Có" : "Không", nhanVien.getEmail(),

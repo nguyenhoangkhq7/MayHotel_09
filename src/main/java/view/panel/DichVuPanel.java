@@ -53,11 +53,7 @@ public class DichVuPanel extends JPanel {
 	private JTable table_2;
 	private DefaultTableModel tableModel;
 	private JTextField txtMaDV;
-	private JTextField txtDonGia;
-	private JTextField txtDonVi;
 	private JTextField txtTenDV;
-	private JTextField txtSoLuong;
-	private JTextField txtTim;
 	private JButton btnSua;
 	private JPanel panelForm;
 	private JComboBox<String> cboHoatDong;
@@ -92,14 +88,14 @@ public class DichVuPanel extends JPanel {
 		lblTieuDeTrang.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
 		lblTieuDeTrang.setPreferredSize(new Dimension(600, 60));
 		pnlTieuDe.add(lblTieuDeTrang);
-
-		JPanel pnlThongTin = new JPanel();
-		pnlThongTin.setBackground(new Color(255, 255, 255));
-		pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Thông tin dịch vụ",
+		
+		JPanel pnlBoLoc = new JPanel();
+		pnlBoLoc.setBackground(new Color(255, 255, 255));
+		pnlBoLoc.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Bộ lọc dịch vụ",
 				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
 
-		add(pnlThongTin);
-		pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
+		add(pnlBoLoc);
+		pnlBoLoc.setLayout(new GridLayout(1, 1, 0, 0));
 
 		panelForm = new JPanel();
 		panelForm.setLayout(new GridLayout(3, 3, 10, 10));
@@ -108,19 +104,9 @@ public class DichVuPanel extends JPanel {
 		lbMaDV.setFont(new Font("Tahoma", Font.BOLD, 13));
 		panelForm.add(lbMaDV);
 
-		txtMaDV = new JTextField("DV*****");
+		txtMaDV = new JTextField();
 		txtMaDV.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		txtMaDV.setEditable(false);
 		panelForm.add(txtMaDV);
-
-		JLabel lbDonGia = new JLabel("Đơn giá:");
-		lbDonGia.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbDonGia);
-
-		txtDonGia = new JTextField();
-		txtDonGia.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtDonGia.setEditable(false);
-		panelForm.add(txtDonGia);
 
 		JLabel lbTenDV = new JLabel("Tên dịch vụ:");
 		lbTenDV.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -128,17 +114,8 @@ public class DichVuPanel extends JPanel {
 
 		txtTenDV = new JTextField();
 		txtTenDV.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtTenDV.setEditable(false);
 		panelForm.add(txtTenDV);
 
-		JLabel lbSoLuong = new JLabel("Số lượng:");
-		lbSoLuong.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbSoLuong);
-
-		txtSoLuong = new JTextField();
-		txtSoLuong.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtSoLuong.setEditable(false);
-		panelForm.add(txtSoLuong);
 
 		JLabel lbConHoatDong = new JLabel("ConHoatDong:");
 		lbConHoatDong.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -146,20 +123,65 @@ public class DichVuPanel extends JPanel {
 
 		cboHoatDong = new JComboBox<>();
 		cboHoatDong.setFont(new Font("Tahoma", Font.BOLD, 13));
+		cboHoatDong.addItem("");
 		cboHoatDong.addItem("Có");
 		cboHoatDong.addItem("Không");
 		panelForm.add(cboHoatDong);
 
-		JLabel lbDonVi = new JLabel("Đơn vị:");
-		lbDonVi.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelForm.add(lbDonVi);
 
-		txtDonVi = new JTextField();
-		txtDonVi.setFont(new Font("Dialog", Font.BOLD, 13));
-		txtDonVi.setEditable(false);
-		panelForm.add(txtDonVi);
+		pnlBoLoc.add(panelForm);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(255, 255, 255));
+		panel_3.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng",
+				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
+		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
 
-		pnlThongTin.add(panelForm);
+		JPanel panelTop = new JPanel();
+		panelTop.setLayout(new FlowLayout()); 
+		panelTop.setBackground(new Color(255, 255, 255));
+
+		btnThem = new JButton("Thêm");
+		btnThem.setBackground(new Color(243, 125, 0));
+		btnThem.setForeground(new Color(255, 255, 255));
+		btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panelTop.add(btnThem);
+
+		btnSua = new JButton("Sửa");
+		btnSua.setBackground(new Color(243, 125, 0));
+		btnSua.setForeground(new Color(255, 255, 255));
+		btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
+		if(menuPanel.getNhanVienDangTruc().getVaiTro().equals("Nhân viên"))
+		{
+			btnThem.setEnabled(false);
+			btnSua.setEnabled(false);
+			
+		}
+		panelTop.add(btnSua);
+		
+		JButton btnTim = new JButton("Tìm");
+		btnTim.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnTim.setForeground(new Color(255, 255, 255));
+		btnTim.setBackground(new Color(253, 125, 0));
+		panelTop.add(btnTim);
+
+		panel_3.add(panelTop);
+		
+
+		add(panel_3);
+		
+
+		// Tạo một JPanel chứa cả pnlBoLoc và panel_3
+		JPanel pnlContainer = new JPanel();
+		pnlContainer.setLayout(new GridLayout(1, 2, 10, 0)); 
+		pnlContainer.setBackground(new Color(255, 255, 255));
+
+		pnlContainer.add(pnlBoLoc);
+		pnlContainer.add(panel_3);
+
+		add(pnlContainer);
+
+	
 
 		JPanel pnlBang1 = new JPanel();
 		pnlBang1.setBackground(new Color(255, 255, 255));
@@ -171,28 +193,7 @@ public class DichVuPanel extends JPanel {
 		JScrollPane scrDSNV = new JScrollPane();
 		pnlBang1.add(scrDSNV, BorderLayout.CENTER);
 
-		Box hBox = Box.createHorizontalBox();
-		JLabel lbTraCuu = new JLabel("Tra cứu:");
-		lbTraCuu.setFont(new Font("Tahoma", Font.BOLD, 13));
-
-		txtTim = new JTextField();
-		txtTim.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		txtTim.setPreferredSize(new Dimension(150, 20));
-		txtTim.setMaximumSize(new Dimension(150, 20));
-
-		JButton btnTim = new JButton("Tìm");
-		btnTim.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnTim.setForeground(new Color(255, 255, 255));
-		btnTim.setBackground(new Color(253, 125, 0));
-
-		hBox.add(lbTraCuu);
-		hBox.add(Box.createHorizontalStrut(10));
-		hBox.add(txtTim);
-		hBox.add(Box.createHorizontalStrut(10));
-		hBox.add(btnTim);
-
-		pnlBang1.add(hBox, BorderLayout.NORTH);
-
+	
 		tableModel = new DefaultTableModel(
 				new String[] { "Mã Dịch Vụ", "Đơn Giá", "Tên Dịch Vụ", "Số Lượng Tồn", "Còn Hoạt Động", "Đơn Vị" }, 0);
 		table_2 = new JTable(tableModel);
@@ -209,87 +210,66 @@ public class DichVuPanel extends JPanel {
 
 		loadDichVuToTable();
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(255, 255, 255));
-		panel_3.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng",
-				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
-		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS)); // Thêm BoxLayout để phân chia theo chiều dọc
-
-		// Tạo panel con cho các nút ở hàng trên
-		JPanel panelTop = new JPanel();
-		panelTop.setLayout(new FlowLayout()); // Layout cho hàng trên
-		panelTop.setBackground(new Color(255, 255, 255));
-
-		// Tạo các nút và thêm vào panelTop
-		btnThem = new JButton("Thêm");
-		btnThem.setBackground(new Color(243, 125, 0));
-		btnThem.setForeground(new Color(255, 255, 255));
-		btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
-		if(menuPanel.getNhanVienDangTruc().getVaiTro().equals("Nhân viên"))
-		{
-			btnThem.setEnabled(false);
-		}
-		panelTop.add(btnThem);
-
-		btnSua = new JButton("Sửa");
-		btnSua.setBackground(new Color(243, 125, 0));
-		btnSua.setForeground(new Color(255, 255, 255));
-		btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
-		if(menuPanel.getNhanVienDangTruc().getVaiTro().equals("Nhân viên"))
-		{
-			btnSua.setEnabled(false);
-		}
-		panelTop.add(btnSua);
-
-		// Thêm panelTop vào panel_3
-		panel_3.add(panelTop);
-		// Thêm panel_3 vào frame hoặc container chính của bạn
-		add(panel_3);
-
 //Sự kiện cho click row
-		table_2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int selectedRow = table_2.getSelectedRow(); // Lấy dòng được chọn từ bảng
-				if (selectedRow != -1) { // Kiểm tra nếu có dòng được chọn
-					// Chuyển đổi chỉ số dòng từ bảng sang mô hình
-					int modelRow = table_2.convertRowIndexToModel(selectedRow);
-
-					// Lấy dữ liệu từ mô hình dựa trên chỉ số thực
-					String maDV = Objects.toString(tableModel.getValueAt(modelRow, 0), "");
-					String donGia = Objects.toString(tableModel.getValueAt(modelRow, 1), "");
-					String tenDV = Objects.toString(tableModel.getValueAt(modelRow, 2), "");
-					String soLuong = Objects.toString(tableModel.getValueAt(modelRow, 3), "");
-					String hoatDong = Objects.toString(tableModel.getValueAt(modelRow, 4), "");
-					String donVi = Objects.toString(tableModel.getValueAt(modelRow, 5), "");
-
-					// Hiển thị dữ liệu trong các JTextField và JComboBox
-					txtMaDV.setText(maDV);
-					txtTenDV.setText(tenDV);
-					txtDonGia.setText(donGia);
-					txtSoLuong.setText(soLuong);
-					cboHoatDong.setSelectedItem(hoatDong);
-					txtDonVi.setText(donVi);
-				}
-			}
-		});
+//		table_2.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				int selectedRow = table_2.getSelectedRow(); // Lấy dòng được chọn từ bảng
+//				if (selectedRow != -1) { // Kiểm tra nếu có dòng được chọn
+//					// Chuyển đổi chỉ số dòng từ bảng sang mô hình
+//					int modelRow = table_2.convertRowIndexToModel(selectedRow);
+//
+//					// Lấy dữ liệu từ mô hình dựa trên chỉ số thực
+//					String maDV = Objects.toString(tableModel.getValueAt(modelRow, 0), "");
+//					String donGia = Objects.toString(tableModel.getValueAt(modelRow, 1), "");
+//					String tenDV = Objects.toString(tableModel.getValueAt(modelRow, 2), "");
+//					String soLuong = Objects.toString(tableModel.getValueAt(modelRow, 3), "");
+//					String hoatDong = Objects.toString(tableModel.getValueAt(modelRow, 4), "");
+//					String donVi = Objects.toString(tableModel.getValueAt(modelRow, 5), "");
+//
+//					// Hiển thị dữ liệu trong các JTextField và JComboBox
+//					txtMaDV.setText(maDV);
+//					txtTenDV.setText(tenDV);
+//					txtDonGia.setText(donGia);
+//					txtSoLuong.setText(soLuong);
+//					cboHoatDong.setSelectedItem(hoatDong);
+//					txtDonVi.setText(donVi);
+//				}
+//			}
+//		});
 //Sự kiện cho btnTim
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
 		table_2.setRowSorter(sorter);
 
 		btnTim.addActionListener(e -> {
-			String keyword = txtTim.getText().trim();
-			if (keyword.isEmpty()) {
-				sorter.setRowFilter(null);
-			} else {
-				try {
+		    String maDV = txtMaDV.getText().trim();       // Lấy dữ liệu từ txtMaDV
+		    String tenDV = txtTenDV.getText().trim();     // Lấy dữ liệu từ txtTenDV
+		    String hoatDong = cboHoatDong.getSelectedItem().toString(); // Lấy dữ liệu từ JComboBox
 
-					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword));
-				} catch (PatternSyntaxException ex) {
-					JOptionPane.showMessageDialog(null, "Từ khóa không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-				}
-			}
+		    List<RowFilter<Object, Object>> filters = new ArrayList<>();
+		    try {
+		        // Tạo các bộ lọc nếu có dữ liệu nhập
+		        if (!maDV.isEmpty()) {
+		            filters.add(RowFilter.regexFilter("(?i)" + maDV, 0)); // Cột 0: Mã DV
+		        }
+		        if (!tenDV.isEmpty()) {
+		            filters.add(RowFilter.regexFilter("(?i)" + tenDV, 2)); // Cột 1: Tên DV
+		        }
+		        if (!hoatDong.equals("Không chọn")) {
+		            filters.add(RowFilter.regexFilter(hoatDong, 4)); // Cột 2: Hoạt động
+		        }
+
+		        // Kết hợp tất cả các bộ lọc
+		        if (filters.isEmpty()) {
+		            sorter.setRowFilter(null); // Không lọc nếu không có điều kiện nào
+		        } else {
+		            sorter.setRowFilter(RowFilter.andFilter(filters)); // Áp dụng lọc
+		        }
+		    } catch (PatternSyntaxException ex) {
+		        JOptionPane.showMessageDialog(null, "Lỗi trong từ khóa tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		    }
 		});
+
 //Sự kiện thêm
 		btnThem.addActionListener(e -> {
 		    String nextMaDV = getNextMaDichVu();
@@ -316,7 +296,6 @@ public class DichVuPanel extends JPanel {
 					DichVu dichVu = new DichVu(maDichVu, donGia, tenDichVu, soLuongTon, conHoatDong, donVi);
 					SuaDichVuDialog suaDialog = new SuaDichVuDialog(DichVuPanel.this, dichVu);
 					suaDialog.setVisible(true);
-					quayVeTrangThaiBanDau();
 				} else {
 					JOptionPane.showMessageDialog(DichVuPanel.this, "Vui lòng chọn dịch vụ để sửa!", "Lỗi",
 							JOptionPane.ERROR_MESSAGE);
@@ -378,30 +357,23 @@ public class DichVuPanel extends JPanel {
 
 	}
 
-	private void quayVeTrangThaiBanDau() {
-		txtMaDV.setText("");
-		txtTenDV.setText("");
-		txtDonGia.setText("");
-		txtSoLuong.setText("");
-		cboHoatDong.setSelectedIndex(0);
-		txtDonVi.setText("");
-
-		txtMaDV.setEditable(false);
-		txtTenDV.setEditable(false);
-		txtDonGia.setEditable(false);
-		txtSoLuong.setEditable(false);
-		cboHoatDong.setEnabled(false);
-		txtDonVi.setEditable(false);
-		btnSua.setVisible(true);
-		btnThem.setVisible(true);
-	}
+//	private void quayVeTrangThaiBanDau() {
+//		txtMaDV.setText("");
+//		txtTenDV.setText("");
+//		cboHoatDong.setSelectedIndex(0);
+//		
+//		txtMaDV.setEditable(false);
+//		txtTenDV.setEditable(false);
+//		cboHoatDong.setEnabled(false);
+//
+//	}
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
 				JFrame frame = new JFrame("Dịch vụ");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				frame.setContentPane(new DichVuPanel(new MenuPanel(new MainGUI(new NhanVienDAL().getNhanVienTheoMa("NV001")))));
+				frame.setContentPane(new DichVuPanel(new MenuPanel(new MainGUI(new NhanVienDAL().getNhanVienTheoMa("QL001")))));
 				frame.pack();
 				frame.setSize(1920, 1080);
 				frame.setVisible(true);

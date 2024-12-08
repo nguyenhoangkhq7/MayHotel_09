@@ -30,33 +30,27 @@ public class SuaDichVuDialog extends JDialog {
         panel.setLayout(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Mã Dịch Vụ
         panel.add(new JLabel("Mã Dịch Vụ:"));
         txtMaDV = new JTextField(dichVu.getMaDichVu());
         txtMaDV.setEditable(false); // Không cho chỉnh sửa mã dịch vụ
         panel.add(txtMaDV);
 
-        // Tên Dịch Vụ
         panel.add(new JLabel("Tên Dịch Vụ:"));
         txtTenDV = new JTextField(dichVu.getTenDichVu());
         panel.add(txtTenDV);
 
-        // Đơn Giá
         panel.add(new JLabel("Đơn Giá:"));
         txtDonGia = new JTextField(String.valueOf(dichVu.getDonGia()));
         panel.add(txtDonGia);
 
-        // Đơn Vị
         panel.add(new JLabel("Đơn Vị:"));
         txtDonVi = new JTextField(dichVu.getDonVi());
         panel.add(txtDonVi);
 
-        // Số Lượng
         panel.add(new JLabel("Số Lượng:"));
         txtSoLuong = new JTextField(String.valueOf(dichVu.getSoLuongTon()));
         panel.add(txtSoLuong);
 
-        // Hoạt Động
         panel.add(new JLabel("Hoạt Động:"));
         cboHoatDong = new JComboBox<>(new String[]{"Có", "Không"});
         cboHoatDong.setSelectedItem(dichVu.isConHoatDong() ? "Có" : "Không");
@@ -75,12 +69,10 @@ public class SuaDichVuDialog extends JDialog {
         buttonPanel.add(btnLuu);
         buttonPanel.add(btnHuyBo);
 
-        // Add panels to dialog
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(panel, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        // Action Listeners
         btnLuu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,10 +92,8 @@ public class SuaDichVuDialog extends JDialog {
                     int sl = Integer.parseInt(soLuong);
                     boolean isHoatDong = "Có".equals(hoatDong);
 
-                    // Tạo đối tượng DichVu mới với thông tin đã thay đổi
                     DichVu updatedDichVu = new DichVu(dichVu.getMaDichVu(), gia, tenDV, sl, isHoatDong, donVi);
 
-                    // Gọi hàm sửa dịch vụ
                     DichVuDAL dichVuDAL = new DichVuDAL();
                     boolean isSuccess = dichVuDAL.suaDichVu(updatedDichVu);
 
