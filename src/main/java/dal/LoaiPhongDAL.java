@@ -55,6 +55,49 @@ public class LoaiPhongDAL {
         }
         return maLoaiPhong;
     }
+    public ArrayList<String> getAllMaLoaiPhong() {
+        ArrayList<String> dsMaLoaiPhong = new ArrayList<>();
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT maLoaiPhong FROM LoaiPhong";  // Truy vấn chỉ lấy maLoaiPhong
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                // Thêm mã loại phòng vào danh sách
+                dsMaLoaiPhong.add(rs.getString("maLoaiPhong"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsMaLoaiPhong;
+    }
+
+ // Lấy loại phòng theo tên loại phòng
+    public LoaiPhong getLoaiPhongTheoTen(String tenLoaiPhong) {
+        LoaiPhong loaiPhong = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM LoaiPhong WHERE tenLoaiPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenLoaiPhong);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                loaiPhong = new LoaiPhong(
+                        rs.getString(1),  // maLoaiPhong
+                        rs.getString(2),  // tenLoaiPhong
+                        rs.getInt(3),     // sucChua
+                        rs.getDouble(4)   // donGia
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return loaiPhong;
+    }
 
     // Lấy loại phòng theo mã loại phòng
     public LoaiPhong getLoaiPhongTheoMa(String maLoaiPhong) {

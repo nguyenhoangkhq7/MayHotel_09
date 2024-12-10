@@ -2,6 +2,7 @@ package bus;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
@@ -16,61 +17,63 @@ import entity.PhieuThuChi;
 
 
 public class PhieuThuChiBUS {
-	
-	    private PhieuThuChiDAL phieuThuChiDAL = new PhieuThuChiDAL();
-	   private DecimalFormat df = new DecimalFormat("#,##0.00"); // Định dạng: 222221313.13
-	    public boolean themPhieuThuChi(PhieuThuChi phieuChi) {
-	        return phieuThuChiDAL.themPhieuThuChi(phieuChi);
-	    }
-	
-
-	public Object[][] layDuLieuBangTim(String maPhieu) {
-	    // Lấy danh sách phiếu thu chi từ DAL
-		 PhieuThuChiDAL phieuThuChiDAL = new PhieuThuChiDAL(); // Khởi tạo lớp DAL
-		 PhieuThuChi phieuThuChi = new PhieuThuChi();
-		   phieuThuChi = phieuThuChiDAL.getPhieuThuChiTheoMa(maPhieu); // Gọi phương thức lấy phiếu thu chi
-		if (phieuThuChi != null) {
-			 Object[][] data = new Object[1][8]; // Chỉ có một phiếu thu chi được tìm thấy
-	           data[0][0] = phieuThuChi.getMaPhieu();
-	           data[0][1] = phieuThuChi.getNhanVien().getHoten(); // Lấy tên nhân viên
-	           data[0][2] = phieuThuChi.getNgayLap();
-	           data[0][3] = phieuThuChi.getLoaiPhieu();
-	           data[0][4] = phieuThuChi.isConHoatDong() ? "Còn hoạt động" : "Đã hủy";
-	           data[0][5] = phieuThuChi.getPhuongThucThanhToan();
-
-	        // Gán giá trị đã định dạng vào data
-	           data[0][6] = df.format(phieuThuChi.getSoTien());
-	           data[0][7] = phieuThuChi.getMoTa();
-	           
-		    return data; // Trả về mảng dữ liệu
-		}
-		else {
-			return null;
-		}
+	public boolean them(PhieuThuChi phieuThuChi) {
+		PhieuThuChiDAL dal = new PhieuThuChiDAL();
+		return dal.themPhieuThuChi(phieuThuChi);
 	}
-	public Object[][] layDuLieuBang(LocalDateTime startDate, LocalDateTime endDate) {
-	    // Lấy danh sách phiếu thu chi từ DAL
-		
-	    ArrayList<PhieuThuChi> dsPhieuThuChi = new PhieuThuChiDAL().getPhieuThuChiByDateRange(startDate, endDate);
+	public boolean xoaPhieuThuChi(String maPhieuThuChi) {
+		PhieuThuChiDAL phieuThuChiDAL = new PhieuThuChiDAL();
+		return phieuThuChiDAL.xoaPhieuThuChi(maPhieuThuChi);
+	}
+	public Object[][] layDuLieuBang(LocalDateTime startDate, LocalDateTime endDate,
+									String maPhieu, String trangThai, String loaiPhieu, String phuongThuc) {
+		ArrayList<PhieuThuChi> dsPhieuThuChi = new PhieuThuChiDAL().getPhieuThuChiByDateRange(startDate, endDate);
+		ArrayList<PhieuThuChi> ketQua = new ArrayList<>();
+		for (PhieuThuChi phieu : dsPhieuThuChi) {
+			if (maPhieu != null && !maPhieu.trim().isEmpty() && !phieu.getMaPhieu().contains(maPhieu)) {
+				continue;
+			}
+			String trangThaiPhieu = phieu.isConHoatDong() ? "Còn hoạt động" : "Đã hủy";
+			if (trangThai != null && !trangThai.trim().isEmpty() && !trangThaiPhieu.equalsIgnoreCase(trangThai)) {
+				continue;
+			}
+			if (loaiPhieu != null && !loaiPhieu.trim().isEmpty() && !phieu.getLoaiPhieu().equalsIgnoreCase(loaiPhieu)) {
+				continue;
+			}
+			if (phuongThuc != null && !phuongThuc.trim().isEmpty() && !phieu.getPhuongThucThanhToan().equalsIgnoreCase(phuongThuc)) {
+				continue;}
+			ketQua.add(phieu);
+		}
+		Object[][] data = new Object[ketQua.size()][8]; // 8 cột tương ứng với các thuộc tính
+		for (int i = 0; i < ketQua.size(); i++) {
+			PhieuThuChi phieu = ketQua.get(i);
+			data[i][0] = phieu.getMaPhieu();                                // Mã phiếu thu chi
+			data[i][1] = phieu.getNhanVien().getMaNV();                    // Tên nhân viên
+			data[i][2] = phieu.getNgayLap();                                // Ngày tạo
+			data[i][3] = phieu.getLoaiPhieu();                              // Loại phiếu
+			data[i][4] = phieu.isConHoatDong() ? "Còn hoạt động" : "Đã hủy"; // Trạng thái
+			data[i][5] = phieu.getPhuongThucThanhToan();                    // Phương thức
+			data[i][6] = new DecimalFormat("#,###").format(phieu.getSoTien()); // Số tiền (định dạng)
+			data[i][7] = phieu.getMoTa();                                   // Mô tả
+		}
+		return data; // Trả về mảng dữ liệu
+	}
 
-	    // Khởi tạo mảng hai chiều với kích thước bằng với số lượng phiếu thu chi
-	    Object[][] data = new Object[dsPhieuThuChi.size()][8]; // 8 cột tương ứng với các thuộc tính của PhieuThuChi
-
-	    for (int i = 0; i < dsPhieuThuChi.size(); i++) {
-	        PhieuThuChi phieuThuChi = dsPhieuThuChi.get(i);
-	        data[i][0] = phieuThuChi.getMaPhieu();          // Mã phiếu thu chi
-	        data[i][1] = phieuThuChi.getNhanVien().getHoten(); // Tên nhân viên
-	        data[i][2] = phieuThuChi.getNgayLap();          // Ngày tạo
-	        data[i][3] = phieuThuChi.getLoaiPhieu();        // Loại phiếu
-	        data[i][4] = phieuThuChi.isConHoatDong()? "Còn hoạt động" : "Đã hủy";     // Trạng thái
-	        data[i][5] = phieuThuChi.getPhuongThucThanhToan();       // Phương thức
-	      
-
-		        // Gán giá trị đã định dạng vào data
-		           data[i][6] = df.format(phieuThuChi.getSoTien());
-	        data[i][7] = phieuThuChi.getMoTa();             // Mô tả
-	    }
-
-	    return data; // Trả về mảng dữ liệu
+	public static void main(String[] args) {
+		PhieuThuChiBUS phieuThuChiBUS = new PhieuThuChiBUS();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime startDate = LocalDateTime.parse("2024-12-09 00:00", formatter);
+		LocalDateTime endDate = LocalDateTime.parse("2024-12-09 23:59", formatter);
+		String maPhieu = "";  // Mã phiếu
+		String trangThai = "";  // Trạng thái
+		String loaiPhieu = "";  // Loại phiếu
+		String phuongThuc = "";  // Phương thức thanh toán
+		Object[][] data = phieuThuChiBUS.layDuLieuBang(startDate, endDate, maPhieu, trangThai, loaiPhieu, phuongThuc);
+		for (Object[] row : data) {
+			for (Object column : row) {
+				System.out.print(column + "\t");
+			}
+			System.out.println();
+		}
 	}
 }

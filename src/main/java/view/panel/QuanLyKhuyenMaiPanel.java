@@ -1,77 +1,84 @@
 package view.panel;
 
 import javax.swing.*;
+import javax.swing.RowFilter.Entry;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 
+import dal.HoaDonDAL;
+import dal.KhuyenMaiDAL;
+import entity.*;
+import view.dialog.SuaDichVuDialog;
+import view.dialog.SuaKhuyenMaiDiaLog;
+import view.dialog.ThemHoaDonDiaLog;
+import view.dialog.ThemKhuyenMaiDiaLog;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import constant.CommonConstants;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.text.JTextComponent;
 
 public class QuanLyKhuyenMaiPanel extends JPanel {
 
-    private JTextField txtMaKH;
-    private JTextField txtTenKH;
-    private JTextField txtDiaChi;
-    private JTextField txtSDT;
-    private JTextField txtCCCD;
-    private JTextField txtEmail;
-    private JTextField txtDTL;
+    private JTextField txtMaKhuyenMai,txtTenKhuyenMai,txtLoaiKhachHang;
+
+
     private JTable table_1;
     private JComboBox<String> cboLoaiKhachHang;
     private JButton btnThem;
     private JButton btnSua;
-    private ButtonGroup buttonGroupTK;
-    private ButtonGroup buttonGroupGT;
-    private JLabel lblLoi;
-    private JLabel lblLoi_Ten;
-    private JLabel lblLoi_SDT;
-    private JLabel lblLoi_Email;
-    private JLabel lblLoi_CCCD;
 	private JPanel panelForm;
-	private JPanel panelDetail_KH;
 	private JTextField txtCMND;
 	private JComboBox<String> cboLoaiKhach;
 	private JTextField txtTienTichLuy;
 	private JTextField txtTim;
-	private JTextField txtMaPhong;
-	private JTextField txtTenPhong;
-	private JComboBox<String> cboLoaiPhong;
-	private JComboBox<String> cboTrangThaiPhong;
-	private JTextField txtMoTa;
-	private JComboBox<String> cboTang;
-	private JPanel panel_DSSP;
-	private Container panel_CTKM;
-	private JComboBox cbbTimKiemSP;
-	private JLabel lblTimKiemSP;
 	private DefaultTableModel tablemodel;
 	private JTable table_SP;
 	private JButton btnTimKiem;
 	private JButton btnLamMoi;
-	private JRadioButton rdMa;
-	private JRadioButton rdTen;
-	private JRadioButton rdPhanTram;
-	private JRadioButton rdTrangThai;
-	private ButtonGroup gr1;
-	private ButtonGroup gr2;
-	private JDateChooser txtTimStartDate;
-	private JDateChooser txtTimEndDate;
 	private JTextField txtMaKM;
 	private JTextField txtGiaTri;
 	private JTextField txtSoLuong;
-	private JComboBox<String> cboTrangThaiKM;
 	private JComboBox<String> cboAD;
-	private JDateChooser txtNgayTao;
-	private JDateChooser txtNgayHetHan;
+	private JDateChooser txtNgayKetThuc;
 	private JTextField txtTenKM;
+	private JTextField txtGiaTriKM;
+	private JComboBox cboHoatDong;
+	private JTextField txtLoaiKH;
+	private DefaultTableModel tableModel;
+	private JButton btnXoa;
+	private JDateChooser txtBatDau;
 
     public QuanLyKhuyenMaiPanel() {
-    	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    	setLayout(new BorderLayout());
         setBackground(new Color(255, 255, 255));
         setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -79,7 +86,7 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
 
         JPanel pnlTieuDe = new JPanel();
         pnlTieuDe.setBackground(new Color(255, 255, 255));
-        add(pnlTieuDe);
+        
         pnlTieuDe.setLayout(new FlowLayout());
 
         JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ KHUYẾN MÃI");
@@ -93,147 +100,58 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
                 "Thiết lập thông tin khuyến mãi", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
        
         add(pnlThongTin);
-        pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
+        pnlThongTin.setLayout(new BorderLayout());
         
         panelForm = new JPanel();
-        panelForm.setLayout(new GridLayout(8,1,10,10));
-        //Ma KM
-        JLabel lbMaKM = new JLabel("Mã KM:");
-        lbMaKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbMaKM.setBounds(10, 21, 50, 14);
-        panelForm.add(lbMaKM);
-
-        txtMaKM = new JTextField("KH******");
-        txtMaKM.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        txtMaKM.setEditable(false);
-        txtMaKM.setBounds(145, 18, 205, 20);
-        panelForm.add(txtMaKM);
-        txtMaKM.setColumns(10);
+        panelForm.setLayout(new GridLayout(3,2,10,10));
+        
         //Ten KM
         
-        JLabel lbTenKM = new JLabel("Tên KM:");
-        lbTenKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbTenKM.setBounds(10, 21, 50, 14);
-        panelForm.add(lbTenKM);
+        JLabel lbMaKM = new JLabel("Mã Khuyến Mãi:");
+		lbMaKM.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panelForm.add(lbMaKM);
 
-        txtTenKM = new JTextField("");
-        txtTenKM.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        txtTenKM.setEditable(true);
-        txtTenKM.setBounds(145, 18, 205, 20);
-        panelForm.add(txtTenKM);
-        txtTenKM.setColumns(10);
-        
-        
-        JLabel lbGiaTri = new JLabel("Giá trị:");
-        lbGiaTri.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbGiaTri.setBounds(10, 100, 50, 14);
-        panelForm.add(lbGiaTri);
-        
-        txtGiaTri = new JTextField();
-        txtGiaTri.setFont(new Font("Tahoma", Font.BOLD, 13));
-        txtGiaTri.setBounds(145, 97, 205, 20);
-        panelForm.add(txtGiaTri);
-        txtGiaTri.setColumns(10);
-        
-        JLabel lbSoLuong = new JLabel("Số lượng:");
-        lbSoLuong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbSoLuong.setBounds(10, 100, 50, 14);
-        panelForm.add(lbSoLuong);
-        
-        txtSoLuong = new JTextField();
-        txtSoLuong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        txtSoLuong.setBounds(145, 97, 205, 20);
-        panelForm.add(txtSoLuong);
-        txtSoLuong.setColumns(10);
+		txtMaKhuyenMai = new JTextField();
+		txtMaKhuyenMai.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		panelForm.add(txtMaKhuyenMai);
 
+//		JLabel lbNgayBatDau = new JLabel("Ngày Tạo:");
+//		lbNgayBatDau.setFont(new Font("Tahoma", Font.BOLD, 13)); // Đặt font chữ cho JLabel
+//        panelForm.add(lbNgayBatDau); // Thêm JLabel vào panel
+//
+//        // Tạo JDateChooser cho ngày tạo
+//        txtBatDau = new JDateChooser();
+//        txtBatDau.setDateFormatString("dd/MM/yyyy"); // Đặt định dạng ngày
+//        panelForm.add(txtBatDau); // Thêm JDateChooser vào panel
         
         
+        JLabel lbConHoatDong = new JLabel("ConHoatDong:");
+		lbConHoatDong.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panelForm.add(lbConHoatDong);
         
-        
-        JLabel lbTrangThaiKM = new JLabel("Trạng Thái Khuyến Mãi:");
-        lbTrangThaiKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbTrangThaiKM.setBounds(10, 151, 50, 14);
-        panelForm.add(lbTrangThaiKM);
-        cboTrangThaiKM = new JComboBox<String>();
-        cboTrangThaiKM.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboTrangThaiKM.setBounds(145, 154, 205, 20);
-        cboTrangThaiKM.addItem("Còn");
-        cboTrangThaiKM.addItem("Hết hạn");
-        panelForm.add(cboTrangThaiKM);
-        
-        JLabel lbAD = new JLabel("Khách hàng áp dụng :");
-        lbAD.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbAD.setBounds(10, 151, 50, 14);
-        panelForm.add(lbAD);
-        cboAD = new JComboBox<String>();
-        cboAD.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboAD.setBounds(145, 154, 205, 20);
-        cboAD.addItem("VIP");
-        cboAD.addItem("Regular");
-        panelForm.add(cboAD);
-        
-        JLabel lblNgayTao = new JLabel("Ngày tạo khuyến mãi");
-        lblNgayTao.setFont(new Font("Times New Roman", Font.BOLD, 12));
-        panelForm.add(lblNgayTao);
-
-        txtNgayTao = new JDateChooser();
-        txtNgayTao.setDateFormatString("dd/MM/yyyy");
-        panelForm.add(txtNgayTao);
+		cboHoatDong = new JComboBox<>();
+		cboHoatDong.setFont(new Font("Tahoma", Font.BOLD, 13));
+		cboHoatDong.addItem("");
+		cboHoatDong.addItem("Có");
+		cboHoatDong.addItem("Không");
+		panelForm.add(cboHoatDong);
 		
-     // Ngày hết hạn khuyến mãi
-        JLabel lblNgayHetHan = new JLabel("Ngày hết hạn khuyến mãi");
-        lblNgayHetHan.setFont(new Font("Times New Roman", Font.BOLD, 12));
-        panelForm.add(lblNgayHetHan);
+       
         
-        txtNgayHetHan = new JDateChooser();
-        txtNgayHetHan.setDateFormatString("dd/MM/yyyy");
-        panelForm.add(txtNgayHetHan);
-
-        
-
-        panel_DSSP = new JPanel();
-		panel_DSSP.setBorder(new TitledBorder(null, "Danh s\u00E1ch s\u1EA3n ph\u1EA9m", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-		panel_DSSP.setBackground(new Color(255, 255, 255));
-		panel_DSSP.setBounds(498, 22, 537, 255);
-		panel_DSSP.setLayout(new BorderLayout());
-
-		lblTimKiemSP = new JLabel("T\u00ECm ki\u1EBFm s\u1EA3n ph\u1EA9m");
-		lblTimKiemSP.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblTimKiemSP.setBounds(10, 20, 148, 15);
-		panel_DSSP.add(lblTimKiemSP , BorderLayout.NORTH);
-
-		cbbTimKiemSP = new JComboBox();
-		cbbTimKiemSP.setEditable(true);
-		cbbTimKiemSP.setBounds(131, 15, 396, 25);
-		panel_DSSP.add(cbbTimKiemSP);
-
-		JScrollPane scrDSSP;
-		String[] head = new String[] { "Mã sản phẩm", "Tên sản phẩm", "Chọn" };
-		tablemodel = new DefaultTableModel(head, 0);
-		table_SP = new JTable(tablemodel);
-		table_SP.setEnabled(false);
-
-		table_SP.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		table_SP.setBackground(new Color(204, 255, 255));
-		table_SP.setForeground(new Color(0, 0, 0));
-		add(scrDSSP = new JScrollPane(table_SP, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS), BorderLayout.CENTER);
-		scrDSSP.setBounds(10, 45, 920, 200);
-		panel_DSSP.add(scrDSSP,BorderLayout.CENTER);
-		scrDSSP.setPreferredSize(new Dimension(0, 250));
-        
-        
-        pnlThongTin.add(panelForm);
-        pnlThongTin.add(panel_DSSP);
-        
-        
+//        JLabel lbNgayKetThuc = new JLabel("Ngày Kết Thúc:");
+//        lbNgayKetThuc.setFont(new Font("Tahoma", Font.BOLD, 13)); // Đặt font chữ cho JLabel
+//        panelForm.add(lbNgayKetThuc); // Thêm JLabel vào panel
+//
+//        // Tạo JDateChooser cho ngày tạo
+//        JDateChooser txtNgayKetThuc = new JDateChooser();
+//        txtNgayKetThuc.setDateFormatString("dd/MM/yyyy"); // Đặt định dạng ngày
+//        panelForm.add(txtNgayKetThuc); // Thêm JDateChooser vào panel
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(new Color(255, 255, 255));
         panel_2.setBorder(
                 new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         add(panel_2);
-        panel_2.setLayout(new FlowLayout());
+        panel_2.setLayout(new GridLayout(2, 2, 10, 10));
 
         btnThem = new JButton("Thêm");
         btnThem.setBackground(new Color(0, 255, 255));
@@ -245,6 +163,20 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
         btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
         panel_2.add(btnSua);
         
+        btnXoa = new JButton("Xóa");
+        btnXoa.setBackground(new Color(0, 255, 255));
+        btnXoa.setFont(new Font("Tahoma", Font.BOLD, 13));
+        btnLamMoi = new JButton("Làm mới");
+        
+        btnLamMoi.setBackground(Color.LIGHT_GRAY);
+        btnLamMoi.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panel_2.add(btnLamMoi);
+        panel_2.add(btnXoa);
+        
+        
+        pnlThongTin.add(panelForm, BorderLayout.CENTER);
+        pnlThongTin.add(panel_2, BorderLayout.EAST);
+        pnlThongTin.add(pnlTieuDe,BorderLayout.NORTH);
         
 
         
@@ -260,136 +192,24 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
         JScrollPane scrDSKM = new JScrollPane();
         pnlBang.add(scrDSKM, BorderLayout.CENTER);
 
-        JPanel pnlTimKiemKM = new JPanel();
-        FlowLayout flowLayout = (FlowLayout) pnlTimKiemKM.getLayout();
-        flowLayout.setAlignment(FlowLayout.LEADING);
-        JPanel rpnlDeTimKiemKM = new JPanel();
-        pnlTimKiemKM.setBackground(new Color(240, 240, 240));
-        pnlBang.add(pnlTimKiemKM,BorderLayout.NORTH);
-        JPanel lpnlDeTimKiemKM = new JPanel();
-        pnlTimKiemKM.add(lpnlDeTimKiemKM);
-        pnlTimKiemKM.add(Box.createHorizontalStrut(50));
-        pnlTimKiemKM.add(rpnlDeTimKiemKM);
-        lpnlDeTimKiemKM.setLayout(new BoxLayout(lpnlDeTimKiemKM, BoxLayout.Y_AXIS));
-        
-        Box hBox1 = Box.createHorizontalBox();
-        Box hBox2 = Box.createHorizontalBox();
-        
-
-        JLabel lbTimTenKH = new JLabel("Mã phòng:");
-        lbTimTenKH.setFont(new Font("Tahoma", Font.BOLD, 13));
-        
-                JTextField txtTim_1 = new JTextField();
-                txtTim_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-                txtTim_1.setPreferredSize(new Dimension(465, 25));
-                txtTim_1.setMaximumSize(new Dimension(465, 25));
-                
-                hBox1.add(lbTimTenKH);
-                hBox1.add(Box.createHorizontalStrut(395));
-                hBox1.add(txtTim_1);
-                
-                //BOX2
-                JLabel lblTimTheo = new JLabel("Tìm theo:");
-                lblTimTheo.setFont(new Font("Tahoma", Font.BOLD, 13));
-                lblTimTheo.setBounds(20, 54, 99, 15);
-                hBox2.add(lblTimTheo);
-                hBox2.add(Box.createHorizontalStrut(400));
-                
-                rdMa = new JRadioButton("Mã khuyến mãi");
-                rdMa.setBackground(Color.WHITE);
-                rdMa.setBounds(172, 51, 116, 21);
-                hBox2.add(rdMa);
-		
-				rdTen = new JRadioButton("Tên khuyến mãi");
-				rdTen.setBackground(Color.WHITE);
-				rdTen.setBounds(290, 52, 134, 21);
-				hBox2.add(rdTen);
-				
-				rdPhanTram = new JRadioButton("Phần trăm khuyến mãi");
-				rdPhanTram.setBackground(Color.WHITE);
-				rdPhanTram.setBounds(426, 51, 164, 21);
-				hBox2.add(rdPhanTram);
-						
-				rdTrangThai = new JRadioButton("Trạng thái");
-				rdTrangThai.setBackground(Color.WHITE);
-				rdTrangThai.setBounds(592, 52, 91, 21);
-				hBox2.add(rdTrangThai);
-				
-				
-				gr2 = new ButtonGroup();
-				gr2.add(rdMa);
-				gr2.add(rdTen);
-				gr2.add(rdPhanTram);
-				gr2.add(rdTrangThai);
-								
-								
-        lpnlDeTimKiemKM.add(hBox1);
-        lpnlDeTimKiemKM.add(Box.createVerticalStrut(20));
-        lpnlDeTimKiemKM.add(hBox2);
-        
-        rpnlDeTimKiemKM.setLayout(new GridLayout(2,3,20,20));
-
-		
-
-		
-        
-        JLabel lblNgayBatDau = new JLabel("Ng\u00E0y b\u1EAFt \u0111\u1EA7u");
-		lblNgayBatDau.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblNgayBatDau.setBounds(729, 22, 84, 15);
-		rpnlDeTimKiemKM.add(lblNgayBatDau);
-
-		
-        
-        
-        txtTimStartDate = new JDateChooser();
-		txtTimStartDate.getCalendarButton().setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		txtTimStartDate.setLocale(new Locale("vi", "VN"));
-		txtTimStartDate.setForeground(Color.BLACK);
-		txtTimStartDate.setDateFormatString("dd/MM/yyyy");
-		txtTimStartDate.setBounds(834, 22, 140, 18);
-		rpnlDeTimKiemKM.add(txtTimStartDate);
-
-		
-        
-        btnTimKiem = new JButton("Tìm kiếm");
-        btnTimKiem.setBackground(new Color(0, 255, 255));
-        btnTimKiem.setFont(new Font("Tahoma", Font.BOLD, 13));
-        rpnlDeTimKiemKM.add(btnTimKiem);
-
-        btnLamMoi = new JButton("Làm mới");
-        btnLamMoi.setBackground(new Color(0, 255, 255));
-        btnLamMoi.setFont(new Font("Tahoma", Font.BOLD, 13));
-        rpnlDeTimKiemKM.add(btnLamMoi);
-        
-        JLabel lblNgayKetThuc = new JLabel("Ng\u00E0y k\u1EBFt th\u00FAc");
-		lblNgayKetThuc.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblNgayKetThuc.setBounds(729, 54, 84, 15);
-		rpnlDeTimKiemKM.add(lblNgayKetThuc);
-        txtTimEndDate = new JDateChooser();
-		txtTimEndDate.getCalendarButton().setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		txtTimEndDate.setLocale(new Locale("vi", "VN"));
-		txtTimEndDate.setForeground(Color.BLACK);
-		txtTimEndDate.setDateFormatString("dd/MM/yyyy");
-		txtTimEndDate.setBounds(834, 51, 140, 18);
-		rpnlDeTimKiemKM.add(txtTimEndDate);
-        
-        JLabel lbNull1 = new JLabel();
-        rpnlDeTimKiemKM.add(lbNull1);
-        
-        JLabel lbNull2 = new JLabel();
-        rpnlDeTimKiemKM.add(lbNull2);
+        Box hBox = Box.createHorizontalBox();
+        pnlBang.add(hBox, BorderLayout.NORTH);
         
         // Tạo JTable và cấu hình
-        JTable table_1 = new JTable();
-        table_1.setModel(new DefaultTableModel(new Object[][] {},
-                new String[]{"Mã KM", "Tên KM", "Khách Hàng Áp Dụng", "Ngày Tạo", "Ngày Hết Hạn"}) {
-            boolean[] columnEditables = new boolean[]{false, false, false, false, false};
+        table_1 = new JTable();
+        tableModel = new DefaultTableModel(
+				new String[] { "Mã Khuyến Mãi", "Tên Khuyến Mãi","Giá Trị", "Ngày Bắt Đầu", "Còn Hoạt Động", "Số lượng","Ngày kết thúc","Loại Khách Hàng áp dụng"}, 0);
+		table_1 = new JTable(tableModel);
+		JScrollPane scrollPane = new JScrollPane(table_1);
 
-            public boolean isCellEditable(int row, int column) {
-                return columnEditables[column];
-            }
-        });
+		table_1.setForeground(new Color(0, 0, 0));
+		table_1.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		table_1.setRowHeight(25);
+		table_1.setSelectionBackground(new Color(0, 204, 204));
+		table_1.setSelectionForeground(new Color(255, 255, 255));
+		table_1.setFillsViewportHeight(true);
 
+		scrDSKM.setViewportView(scrollPane);
         table_1.setForeground(new Color(0, 0, 0));
         table_1.setFont(new Font("Times New Roman", Font.PLAIN, 12));
         table_1.setRowHeight(25);
@@ -399,13 +219,415 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
 
         // Thêm JTable vào JScrollPane
         scrDSKM.setViewportView(table_1);
+        loadKhuyenMaiToTable();
+        add(pnlThongTin, BorderLayout.NORTH); // Thêm pnlThongTin vào vùng NORTH
+        add(pnlBang, BorderLayout.CENTER);
+        
 
-        // Tải dữ liệu vào bảng (thêm hàm loadDataToTable() ở đây nếu cần thiết)
+        table_1.addMouseListener(new MouseAdapter() {
+            
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			    int selectedRow = table_1.getSelectedRow(); // Lấy dòng được chọn từ bảng
+			    if (selectedRow != -1) { // Kiểm tra nếu có dòng được chọn
+			        int modelRow = table_1.convertRowIndexToModel(selectedRow); // Chuyển đổi chỉ số dòng từ bảng sang mô hình
+
+			        try {
+			            // Lấy dữ liệu từ mô hình
+			            String maKhuyenMai = getStringValueAt(modelRow, 0);
+			            String tenKhuyenMai = getStringValueAt(modelRow, 1);
+			            double giaTri = getDoubleValueAt(modelRow, 2, 0.0);
+			            String ngayBatDau = Objects.toString(tableModel.getValueAt(modelRow, 3), "");
+			            String hoatDong = Objects.toString(tableModel.getValueAt(modelRow, 4), "");
+			            int soLuong = getIntValueAt(modelRow, 5, 0);
+			            String ngayKetThucString = getStringValueAt(modelRow, 6);
+			            String loaiKhachHangApDung = getStringValueAt(modelRow, 7);
+			        } catch (Exception ex) {
+			            JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+			            ex.printStackTrace();
+			        }
+			    }
+			}
+
+
+
+        });
+
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+  		table_1.setRowSorter(sorter);
+  		
+  		btnThem.addActionListener(e -> {
+		    String nextMaKM = generateKhuyenMaiCode();
+		    ThemKhuyenMaiDiaLog themKhuyenMaiDiaLog = new ThemKhuyenMaiDiaLog(generateKhuyenMaiCode(), QuanLyKhuyenMaiPanel.this);
+		    themKhuyenMaiDiaLog.setVisible(true);
+		});
+  		btnLamMoi.addActionListener(new ActionListener() {
+  		    @Override
+  		    public void actionPerformed(ActionEvent e) {
+  		        // Xóa trắng các JTextField
+  		        txtMaKhuyenMai.setText("");   // Xóa văn bản trong JTextField txtMaHD
+  		    }
+  		});
+  		
+  		
+  		btnXoa.addActionListener(e -> {
+  		    // Kiểm tra xem có dòng nào được chọn trong bảng không
+  		    int selectedRow = table_1.getSelectedRow();
+  		    if (selectedRow != -1) {
+  		        String maKM = table_1.getValueAt(selectedRow, 0).toString();
+  		        
+  		        // Hiển thị hộp thoại xác nhận xóa
+  		        int confirm = JOptionPane.showConfirmDialog(QuanLyKhuyenMaiPanel.this, 
+  		            "Bạn chắc chắn muốn xóa khuyến mãi " + maKM + "?", "Xác nhận xóa", 
+  		            JOptionPane.YES_NO_OPTION);
+
+  		        if (confirm == JOptionPane.YES_OPTION) {
+  		            // Nếu người dùng đồng ý, gọi phương thức xóa khuyến mãi
+  		            KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL();
+  		            boolean isSuccess = khuyenMaiDAL.xoaKhuyenMai(maKM);
+
+  		            if (isSuccess) {
+  		                // Nếu xóa thành công, hiển thị thông báo thành công
+  		                JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, 
+  		                    "Xóa khuyến mãi thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+  		                
+  		                // Cập nhật lại bảng sau khi xóa
+  		                capNhatTableKhuyenMai();
+  		                
+  		                // Nếu có JTextField tìm kiếm, cập nhật lại giá trị trong trường tìm kiếm
+  		                if (txtTim != null) {
+  		                    txtTim.setText("");  // Xóa nội dung tìm kiếm
+  		                }
+  		            } else {
+  		                // Nếu xóa thất bại, hiển thị thông báo lỗi
+  		                JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, 
+  		                    "Xóa khuyến mãi thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+  		            }
+  		        }
+  		    } else {
+  		        // Nếu không có dòng nào được chọn trong bảng, hiển thị thông báo lỗi
+  		        JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, 
+  		            "Vui lòng chọn khuyến mãi để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+  		    }
+  		});
+  		//Sửa
+  		btnSua.addActionListener(e -> {
+  		    // Kiểm tra xem có dòng nào được chọn trong bảng không
+  		    int selectedRow = table_1.getSelectedRow();
+  		    if (selectedRow != -1) {
+  		        try {
+  		            // Lấy thông tin từ bảng vào các trường text của SuaKhuyenMaiDialog
+  		            String maKhuyenMai = table_1.getValueAt(selectedRow, 0).toString();
+  		            String tenKhuyenMai = table_1.getValueAt(selectedRow, 1).toString();
+  		            double giaTri = Double.parseDouble(table_1.getValueAt(selectedRow, 2).toString());
+  		            String loaiKhachHang = table_1.getValueAt(selectedRow, 7).toString();
+  		            
+  		            // Kiểm tra và chuyển đổi số lượng
+  		            int soLuong = 0;
+  		            try {
+  		                soLuong = Integer.parseInt(table_1.getValueAt(selectedRow, 5).toString());
+  		            } catch (NumberFormatException ex) {
+  		                JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, "Số lượng không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+  		                return; // Dừng xử lý nếu có lỗi
+  		            }
+
+  		            String conHoatDongString = table_1.getValueAt(selectedRow, 4).toString();
+  		            boolean conHoatDong = "Có".equals(conHoatDongString);
+  		            
+  		            // Kiểm tra và chuyển đổi ngày bắt đầu và ngày kết thúc
+  		            LocalDateTime ngayBatDau = null, ngayKetThuc = null;
+  		            try {
+  		                ngayBatDau = LocalDateTime.parse(table_1.getValueAt(selectedRow, 3).toString());
+  		                ngayKetThuc = LocalDateTime.parse(table_1.getValueAt(selectedRow, 6).toString());
+  		            } catch (Exception ex) {
+  		                JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, "Ngày tháng không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+  		                return; // Dừng xử lý nếu có lỗi
+  		            }
+
+  		            // Tạo đối tượng KhuyenMai và truyền vào dialog
+  		            KhuyenMai khuyenMai = new KhuyenMai(
+  		                maKhuyenMai, 
+  		                tenKhuyenMai, 
+  		                giaTri, 
+  		                ngayBatDau, 
+  		                conHoatDong, 
+  		                soLuong, 
+  		                ngayKetThuc, 
+  		                loaiKhachHang
+  		            );
+
+  		            // Mở dialog sửa khuyến mãi
+  		            SuaKhuyenMaiDiaLog suaDialog = new SuaKhuyenMaiDiaLog(QuanLyKhuyenMaiPanel.this, khuyenMai);
+  		            suaDialog.setVisible(true);
+  		        } catch (Exception ex) {
+  		            // Xử lý bất kỳ ngoại lệ nào khác
+  		            JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, "Đã xảy ra lỗi khi xử lý dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+  		        }
+  		    } else {
+  		        JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, "Vui lòng chọn khuyến mãi để sửa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+  		    }
+  		});
+
+
+
+  		//MaKM
+  		txtMaKhuyenMai.addKeyListener(new KeyAdapter() {
+  		    public void keyReleased(KeyEvent e) {
+  		        String maKMKeyword = txtMaKhuyenMai.getText().trim(); // Lấy nội dung mã khuyến mãi từ txtMaKhuyenMai
+
+  		        // Tạo danh sách các bộ lọc
+  		        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+  		        // Lọc theo mã khuyến mãi (tìm bất kỳ ký tự nào có trong cột maKM)
+  		        if (!maKMKeyword.isEmpty()) {
+  		            filters.add(RowFilter.regexFilter("(?i)" + maKMKeyword, 0)); // Lọc theo mã khuyến mãi (cột 0)
+  		        }
+
+  		        // Áp dụng bộ lọc kết hợp
+  		        if (filters.isEmpty()) {
+  		            sorter.setRowFilter(null); // Nếu không có bộ lọc, hiển thị tất cả
+  		        } else {
+  		            RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+  		            sorter.setRowFilter(combinedFilter); // Áp dụng bộ lọc
+  		        }
+  		    }
+  		});
+  		
+  		cboHoatDong.addActionListener(e -> {
+  		    // Lấy giá trị từ các trường lọc
+  		    String maKMKeyword = txtMaKhuyenMai.getText().trim();  // Mã hóa đơn
+  		    String selectedTrangThai = (String) cboHoatDong.getSelectedItem();  // Trạng thái
+
+  		    // Tạo danh sách các bộ lọc
+  		    List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+  		    // Lọc theo mã hóa đơn (cột 0)
+  		    if (!maKMKeyword.isEmpty()) {
+  		        filters.add(RowFilter.regexFilter("(?i)" + maKMKeyword, 0));
+  		    }
+
+  		    // Lọc theo trạng thái (cột 2)
+  		    if (selectedTrangThai != null && !selectedTrangThai.isEmpty()) {
+  		        filters.add(RowFilter.regexFilter("(?i)" + selectedTrangThai, 4));
+  		    }
+
+  		    // Áp dụng bộ lọc kết hợp
+  		    if (filters.isEmpty()) {
+  		        sorter.setRowFilter(null); // Hiển thị tất cả nếu không có bộ lọc
+  		    } else {
+  		        RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+  		        sorter.setRowFilter(combinedFilter); // Áp dụng bộ lọc
+  		    }
+  		});
+  		
+  		//NgayBatDauKM
+  	// Thêm PropertyChangeListener vào JDateChooser
+  		
+  		
+//  		txtBatDau.addPropertyChangeListener("date", new PropertyChangeListener() {
+//  		    public void propertyChange(PropertyChangeEvent evt) {
+//  		        String maKMKeyword = txtMaKhuyenMai.getText().trim();
+//  		        Date selectedDate = txtBatDau.getDate();
+//
+//  		        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+//
+//  		        
+//
+//  		        if (selectedDate != null) {
+//  		            filters.add(new RowFilter<Object, Object>() {
+//  		                @Override
+//  		                public boolean include(Entry<? extends Object, ? extends Object> entry) {
+//  		                    Object rowValue = entry.getValue(3);
+//  		                    if (rowValue instanceof Date) {
+//  		                        Date rowDate = (Date) rowValue;
+//  		                        return isSameDay(rowDate, selectedDate);
+//  		                    }
+//  		                    return false;
+//  		                }
+//  		            });
+//  		        }
+//
+//  		        if (filters.isEmpty()) {
+//  		            sorter.setRowFilter(null);
+//  		        } else {
+//  		            RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+//  		            sorter.setRowFilter(combinedFilter);
+//  		        }
+//  		    }
+//
+//  		    private boolean isSameDay(Date date1, Date date2) {
+//  		        Calendar cal1 = Calendar.getInstance();
+//  		        cal1.setTime(date1);
+//  		        cal1.set(Calendar.HOUR_OF_DAY, 0);
+//  		        cal1.set(Calendar.MINUTE, 0);
+//  		        cal1.set(Calendar.SECOND, 0);
+//  		        cal1.set(Calendar.MILLISECOND, 0);
+//
+//  		        Calendar cal2 = Calendar.getInstance();
+//  		        cal2.setTime(date2);
+//  		        cal2.set(Calendar.HOUR_OF_DAY, 0);
+//  		        cal2.set(Calendar.MINUTE, 0);
+//  		        cal2.set(Calendar.SECOND, 0);
+//  		        cal2.set(Calendar.MILLISECOND, 0);
+//
+//  		        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+//  		               cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+//  		               cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+//  		    }
+//  		});
+
+
+
+
+  		
+
+
+
+
     }
+ // Lấy giá trị chuỗi từ bảng
+    private String getStringValueAt(int row, int column) {
+        Object value = tableModel.getValueAt(row, column);
+        return value != null ? value.toString().trim() : "";
+    }
+
+    // Lấy giá trị số nguyên từ bảng
+    private int getIntValueAt(int row, int column, int defaultValue) {
+        try {
+            Object value = tableModel.getValueAt(row, column);
+            return value != null && !value.toString().isEmpty() ? Integer.parseInt(value.toString()) : defaultValue;
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    // Lấy giá trị số thực từ bảng
+    private double getDoubleValueAt(int row, int column, double defaultValue) {
+        try {
+            Object value = tableModel.getValueAt(row, column);
+            return value != null && !value.toString().isEmpty() ? Double.parseDouble(value.toString()) : defaultValue;
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    // Lấy giá trị boolean từ bảng
+    private boolean getBooleanValueAt(int row, int column, boolean defaultValue) {
+        Object value = tableModel.getValueAt(row, column);
+        return value != null && Boolean.parseBoolean(value.toString());
+    }
+
+//     Phân tích chuỗi ngày giờ
+
+
+    private void loadKhuyenMaiToTable() {
+        // Khởi tạo lớp KhuyenMaiDAL để lấy dữ liệu
+        KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL(); // Giả sử đây là lớp chứa hàm getAllKhuyenMai()
+        ArrayList<KhuyenMai> dsKhuyenMai = khuyenMaiDAL.getAllKhuyenMai(); // Lấy danh sách khuyến mãi từ cơ sở dữ liệu
+
+        // Xóa dữ liệu cũ trên bảng (nếu có)
+        tableModel.setRowCount(0);
+
+        // Duyệt qua danh sách khuyến mãi và thêm vào TableModel
+        for (KhuyenMai khuyenMai : dsKhuyenMai) {
+            // Lấy các thông tin của khuyến mãi và chuẩn bị dữ liệu cho bảng
+            Object[] rowData = { 
+                khuyenMai.getMaKhuyenMai(),               // Mã khuyến mãi
+                khuyenMai.getTenKhuyenMai(),
+                khuyenMai.getGiaTri(),
+                khuyenMai.getNgayBatDau().toString(),     // Ngày bắt đầu
+                khuyenMai.isConHoatDong() ? "Có" : "Không", // Trạng thái hoạt động (Có/Không)
+                khuyenMai.getSoLuong(), 
+                khuyenMai.getNgayKetThuc().toString(),    // Ngày kết thúc
+                                  // Số lượng khuyến mãi
+                khuyenMai.getLoaiKhachHangApDung()        // Loại khách hàng áp dụng
+            };
+            // Thêm hàng vào mô hình bảng
+            tableModel.addRow(rowData);
+        }
+    }
+
+    public void capNhatTableKhuyenMai() {
+        // Lấy danh sách các khuyến mãi từ cơ sở dữ liệu
+        List<KhuyenMai> dsKhuyenMai = new KhuyenMaiDAL().getAllKhuyenMai();
+
+        // Cập nhật dữ liệu cho bảng
+        DefaultTableModel model = (DefaultTableModel) table_1.getModel();  // Giả sử table_1 là bảng khuyến mãi
+        model.setRowCount(0);  // Xóa các hàng cũ trong bảng
+
+        // Lặp qua danh sách khuyến mãi và thêm vào bảng
+        for (KhuyenMai km : dsKhuyenMai) {
+            // Kiểm tra null cho các đối tượng liên quan và lấy dữ liệu tương ứng
+            
+
+            // Thêm hàng vào bảng với dữ liệu của khuyến mãi
+            model.addRow(new Object[] { 
+                km.getMaKhuyenMai(), 
+                km.getTenKhuyenMai(), 
+                km.getGiaTri(),
+                km.getNgayBatDau(),
+                km.isConHoatDong() ? "Có" : "Không",
+                km.getSoLuong(),
+                km.getNgayKetThuc(), // Thêm Ngày Kết Thúc vào bảng
+                 // Thêm Số lượng vào bảng
+                km.getLoaiKhachHangApDung() // Thêm Loại Khách Hàng Áp Dụng vào bảng
+            });
+        }
+    }
+
+
+    private void quayVeTrangThaiBanDau() {
+        // Đặt lại các giá trị mặc định
+        txtMaKM.setText("");
+        txtTenKM.setText("");
+        txtGiaTriKM.setText("");
+        txtSoLuong.setText("");
+        txtLoaiKH.setText("");
+        
+        // Đặt lại các trường ngày tạo và ngày kết thúc
+        txtBatDau.setDate(null);
+        txtNgayKetThuc.setDate(null);
+        
+        // Đặt trạng thái ban đầu cho các trường nhập liệu
+        txtMaKM.setEditable(false);           // Không cho phép chỉnh sửa trường mã khuyến mãi
+        txtTenKM.setEditable(false);          // Không cho phép chỉnh sửa trường tên khuyến mãi
+        txtGiaTriKM.setEditable(false);       // Không cho phép chỉnh sửa trường giá trị khuyến mãi
+        txtSoLuong.setEditable(false);        // Không cho phép chỉnh sửa trường số lượng
+        txtLoaiKH.setEditable(false);         // Không cho phép chỉnh sửa trường loại khách hàng
+        
+        txtBatDau.setEnabled(false);         // Tắt trường ngày tạo
+        txtNgayKetThuc.setEnabled(false);    // Tắt trường ngày kết thúc
+        cboHoatDong.setEnabled(false);       // Tắt combo box "Hoạt Động"
+        
+        // Đặt trạng thái ban đầu cho các nút
+        btnSua.setVisible(true);              // Hiển thị nút sửa
+        btnThem.setVisible(true);             // Hiển thị nút thêm
+    }
+    public String generateKhuyenMaiCode() {
+        KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL(); // Đối tượng DAL để truy xuất dữ liệu
+        String lastKhuyenMaiCode = khuyenMaiDAL.getLastKhuyenMaiCode(); // Lấy mã khuyến mãi cuối cùng từ DB
+        int newKhuyenMaiNumber = 1; // Mặc định bắt đầu từ 1 nếu không có mã khuyến mãi nào
+
+        if (lastKhuyenMaiCode != null && lastKhuyenMaiCode.startsWith("KM")) {
+            try {
+                // Tách phần số từ mã khuyến mãi (bỏ tiền tố "KM")
+                String numberPart = lastKhuyenMaiCode.substring(2); // Lấy từ ký tự thứ 3 trở đi
+                newKhuyenMaiNumber = Integer.parseInt(numberPart) + 1; // Tăng số lên 1
+            } catch (NumberFormatException e) {
+                System.err.println("Lỗi: Mã khuyến mãi cuối cùng không hợp lệ - " + lastKhuyenMaiCode);
+            }
+        }
+
+        // Tạo mã khuyến mãi mới theo định dạng "KM00001"
+        return String.format("KM%05d", newKhuyenMaiNumber); // Định dạng thành 5 chữ số (KM00001, KM00002,...)
+    }
+
 
     public static void main(String[] args) {
     	EventQueue.invokeLater(() -> {
             try {
+            	
                 JFrame frame = new JFrame("Quản lí khuyến mãi");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setContentPane(new QuanLyKhuyenMaiPanel());

@@ -26,7 +26,7 @@ public class MainGUI extends JFrame {
 		setupMainFrame();
 		jpnContainContent = new JPanel(new BorderLayout());
 		this.add(jpnContainContent, BorderLayout.CENTER);
-		this.add(new MenuPanel(this ,this.nhanVienDangTruc), BorderLayout.WEST);
+		this.add(new MenuPanel(this), BorderLayout.WEST);
 	}
 
 	private void setupMainFrame() {
@@ -34,7 +34,6 @@ public class MainGUI extends JFrame {
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setSize(1920,1080);
-//		setBounds(100, 100, 1440, 900);
 	}
 
 	public static void main(String[] args) {

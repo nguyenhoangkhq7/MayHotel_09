@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class LoaiPhong {
@@ -15,6 +17,7 @@ public class LoaiPhong {
         setSucChua(sucChua);
         setDonGia(donGia);
     }
+    
 
     public LoaiPhong(String maLoaiPhong) {
         this(maLoaiPhong, null, 0, 0.0);
@@ -75,6 +78,24 @@ public class LoaiPhong {
     public int hashCode() {
         return Objects.hash(maLoaiPhong);
     }
+    public static LoaiPhong fromString(String str) {
+        // Danh sách các loại phòng có sẵn
+        List<LoaiPhong> loaiPhongList = Arrays.asList(
+            new LoaiPhong("Phòng đơn"),
+            new LoaiPhong("Phòng đôi"),
+            new LoaiPhong("Phòng gia đình")
+        );
+
+        for (LoaiPhong loaiPhong : loaiPhongList) {
+            if (loaiPhong.getTenLoaiPhong().equalsIgnoreCase(str)) {
+                return loaiPhong;
+            }
+        }
+        throw new IllegalArgumentException("Giá trị loại phòng không hợp lệ: " + str);
+    }
+
+
+   
 
     // toString
     @Override

@@ -46,9 +46,10 @@ public class MenuPanel extends JPanel {
         return mainGUI;
     }
 
-    public MenuPanel(MainGUI mainGUI, NhanVien nhanVienDangTruc) {
+    public MenuPanel(MainGUI mainGUI) {
+
         this.mainGUI = mainGUI;
-        this.nhanVienDangTruc = nhanVienDangTruc;
+        this.nhanVienDangTruc = mainGUI.getNhanVienDangTruc();
         this.setBackground(CommonConstants.BACKGROUND);
         this.setLayout(new BorderLayout());
 
@@ -64,10 +65,11 @@ public class MenuPanel extends JPanel {
 //        addPanelToCardLayout("Báo cáo", new BangBaoCao()); // Giả sử có BangBaoCao Panel
         addPanelToCardLayout("Khuyến mãi", new QuanLyKhuyenMaiPanel()); // Giả sử có QuanLyKhuyenMaiPanel
         addPanelToCardLayout("Phòng", new QuanLyPhongPanel());
-//        addPanelToCardLayout("Nhân viên", new QuanLyNhanVienPanel()); // Giả sử có QuanLyNhanVienPanel
-//        addPanelToCardLayout("Dịch vụ", new QuanLyDichVuPanel()); // Giả sử có QuanLyDichVuPanel
-//        addPanelToCardLayout("Phiếu thu chi", new QuanLyPhieuThuChiPanel()); // Giả sử có QuanLyPhieuThuChiPanel
-//        addPanelToCardLayout("Thống kê", new QuanLyThongKePanel()); // Giả sử có QuanLyThongKePanel
+        addPanelToCardLayout("Nhân viên", new QuanLyNhanVienPanel()); // Giả sử có QuanLyNhanVienPanel
+        addPanelToCardLayout("Dịch vụ", new QuanLyDichVuPanel(this)); // Giả sử có QuanLyDichVuPanel
+        addPanelToCardLayout("Phiếu thu chi", new QuanLyPhieuThuChiPanel(this)); // Giả sử có QuanLyPhieuThuChiPanel
+        addPanelToCardLayout("Báo cáo", new ThongKeBaoCaoPanel(this)); // Giả sử có QuanLyThongKePanel
+        addPanelToCardLayout("Thống kê", new ThongKeDoanhThuPanel()); // Giả sử có QuanLyThongKePanel
 
         // Thêm jpnContain vào trong BorderLayout.CENTER
         this.mainGUI.getJpnContainContent().add(jpnContain, BorderLayout.CENTER);
@@ -162,16 +164,16 @@ public class MenuPanel extends JPanel {
         lblManHinhChinh.setForeground(Color.BLUE); // Màu của menu được chọn
         lblManHinhChinh.setFont(lblManHinhChinh.getFont().deriveFont(Font.BOLD | Font.ITALIC)); // Chữ đậm
         lblDonDatPhong = addAndReturnMenuItem(boxContainMenuItem, "Đơn đặt phòng");
-        lblHoaDon = addAndReturnMenuItem(boxContainMenuItem, "Hóa đơn");
         lblKhachHang = addAndReturnMenuItem(boxContainMenuItem, "Khách hàng");
-        lblBaoCao = addAndReturnMenuItem(boxContainMenuItem, "Báo cáo");
-        lblKhuyenMai = addAndReturnMenuItem(boxContainMenuItem, "Khuyến mãi");
+        lblHoaDon = addAndReturnMenuItem(boxContainMenuItem, "Hóa đơn");
+        lblThuChi = addAndReturnMenuItem(boxContainMenuItem, "Phiếu thu chi");
         lblPhong = addAndReturnMenuItem(boxContainMenuItem, "Phòng");
+        lblKhuyenMai = addAndReturnMenuItem(boxContainMenuItem, "Khuyến mãi");
         if(!nhanVienDangTruc.getVaiTro().equals("Nhân viên")) {
             lblNhanVien = addAndReturnMenuItem(boxContainMenuItem, "Nhân viên");
         }
         lblDichVu = addAndReturnMenuItem(boxContainMenuItem, "Dịch vụ");
-        lblThuChi = addAndReturnMenuItem(boxContainMenuItem, "Phiếu thu chi");
+        lblBaoCao = addAndReturnMenuItem(boxContainMenuItem, "Báo cáo");
         lblThongKe = addAndReturnMenuItem(boxContainMenuItem, "Thống kê");
         this.add(boxContainMenuItem, BorderLayout.CENTER);
 
@@ -229,7 +231,18 @@ public class MenuPanel extends JPanel {
                     case "Phòng":
                         cardLayout.show(jpnContain, "Phòng");
                         break;
-                    // Nếu cần, thêm các panel khác bên dưới
+                    case "Dịch vụ":
+                        cardLayout.show(jpnContain, "Dịch vụ");
+                        break;
+                    case "Báo cáo":
+                        cardLayout.show(jpnContain, "Báo cáo");
+                        break;
+                    case "Thống kê":
+                        cardLayout.show(jpnContain, "Thống kê");
+                        break;
+                    case "Phiếu thu chi":
+                        cardLayout.show(jpnContain, "Phiếu thu chi");
+                        break;
                     default:
                         break;
                 }

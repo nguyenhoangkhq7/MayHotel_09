@@ -3,7 +3,7 @@ package view;
 import dal.NhanVienDAL;
 import database.ConnectDB;
 import entity.NhanVien;
-
+import view.dialog.QuenMatKhauDialog;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -214,5 +214,19 @@ public class LoginGUI extends JFrame {
         });
         btnLogin.setBounds(41, 465, 435, 42);
         panelLogin.add(btnLogin);
+        
+        JLabel lblQuenMatKhau = new JLabel("Quên mật khẩu");
+        lblQuenMatKhau.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                QuenMatKhauDialog quenMatKhau = new QuenMatKhauDialog(null);
+                quenMatKhau.setVisible(true); // Dialog đã tự căn giữa từ constructor.
+            }
+        });
+
+		lblQuenMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		lblQuenMatKhau.setForeground(new Color(199, 225, 255));
+		lblQuenMatKhau.setBounds(335, 402, 149, 23);
+		panelLogin.add(lblQuenMatKhau);
     }
 }

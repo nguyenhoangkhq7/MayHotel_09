@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import database.ConnectDB;
 import entity.KhachHang;
 import entity.LoaiKhachHang;
+import entity.Phong;
 
 public class KhachHangDAL {
 	 public ArrayList<KhachHang> dsKhachHang;
@@ -162,7 +163,7 @@ public class KhachHangDAL {
     }
 
     // Cập nhật khách hàng trong cơ sở dữ liệu
-    public boolean capNhatKhachHang(KhachHang khachHang) {
+    public boolean suaKhachHang(KhachHang khachHang) {
         int n = 0;
         try {
             ConnectDB.getInstance().connect();
@@ -183,25 +184,80 @@ public class KhachHangDAL {
         }
         return n > 0;
     }
-
-    // Lấy mã khách hàng cuối cùng trong cơ sở dữ liệu
-    public String getLastMaKH() {
-        String lastMaKH = null;
+    public boolean kiemTraTrungThongTin(KhachHang khachHang) {
+        boolean exists = false;
         try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "SELECT maKH FROM KhachHang ORDER BY maKH DESC LIMIT 1"; // Lấy mã khách hàng mới nhất
+            String sql = "SELECT COUNT(*) FROM KhachHang WHERE hoTen = ? AND soDienThoai = ? AND soCanCuoc = ? AND email = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+            stmt.setString(1, khachHang.getHoTen());
+            stmt.setString(2, khachHang.getSoDienThoai());
+            stmt.setString(3, khachHang.getSoCanCuoc());
+            stmt.setString(4, khachHang.getEmail());
 
-            if (rs.next()) {
-                lastMaKH = rs.getString(1); // Lấy giá trị cột maKH
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                exists = true; // Nếu có bản ghi trùng, set exists = true
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return lastMaKH;
+        return exists;
     }
+
+ // Xóa khách hàng theo mã khách hàng
+    public boolean xoaKhachHang(String maKH) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+
+            // Kiểm tra xem khách hàng có đơn đặt phòng nào không
+            String checkSQL = "SELECT COUNT(*) FROM DonDatPhong WHERE maKH = ?";
+            PreparedStatement checkStmt = con.prepareStatement(checkSQL);
+            checkStmt.setString(1, maKH);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next() && rs.getInt(1) > 0) {
+                // Nếu có đơn đặt phòng liên quan, không cho phép xóa
+                return false;
+            }
+
+            // Nếu không có đơn đặt phòng, tiến hành xóa khách hàng
+            String sql = "DELETE FROM KhachHang WHERE maKH = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maKH);
+
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0;
+    }
+
+
+    
+
+    // Lấy mã khách hàng cuối cùng trong cơ sở dữ liệu
+    public String getLastMaKH() {
+        String lastKHCode = null;
+
+        String query = "SELECT MAX(maKH) FROM KhachHang"; // Truy vấn để lấy mã phòng lớn nhất
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                lastKHCode = rs.getString(1); // Lấy mã phòng lớn nhất
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+
+        return lastKHCode;
+    }
+    
 
     public static void main(String[] args) {
 		KhachHangDAL dal = new KhachHangDAL();

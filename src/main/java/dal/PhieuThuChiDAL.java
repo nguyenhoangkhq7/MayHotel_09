@@ -72,7 +72,7 @@ public class PhieuThuChiDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return dsPhieuThuChi;
     }
 
@@ -99,7 +99,7 @@ public class PhieuThuChiDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return dsPhieuThuChi;
     }
 
@@ -109,7 +109,7 @@ public class PhieuThuChiDAL {
         try {
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            String sql = "INSERT INTO PhieuThuChi (maPhieu, loaiPhieu, moTa, ngayLap, soTien, phuongThuc, conHoatDong, maNV) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO PhieuThuChi (maPhieu, loaiPhieu, moTa, ngayLap, soTien, phuongThucThanhToan, conHoatDong, maNV) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, phieuThuChi.getMaPhieu());
             stmt.setString(2, phieuThuChi.getLoaiPhieu());
@@ -123,7 +123,7 @@ public class PhieuThuChiDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return n > 0;
     }
 
@@ -150,11 +150,11 @@ public class PhieuThuChiDAL {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return phieuThuChi;
     }
 
-    
+
 
     // Sửa phiếu thu chi
     public boolean suaPhieuThuChi(String maPhieuThuChi, PhieuThuChi phieuThuChi) {
@@ -176,7 +176,7 @@ public class PhieuThuChiDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return n > 0;
     }
 
@@ -192,19 +192,19 @@ public class PhieuThuChiDAL {
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
         return n > 0;
     }
     public static void main(String[] args) {
         // Tạo đối tượng của PhieuThuChiDAL
         PhieuThuChiDAL phieuThuChiDAL = new PhieuThuChiDAL();
-        
+
 //        // Gọi hàm để lấy mã phiếu tiếp theo
 //        String nextMaPhieu = phieuThuChiDAL.layMaPhieuTiepTheo();
 //        
 //        // In kết quả ra console
 //        System.out.println("Mã phiếu tiếp theo là: " + nextMaPhieu);
-     // Chỉ định khoảng thời gian (ví dụ: từ 2024-11-01 đến 2024-11-15)
+        // Chỉ định khoảng thời gian (ví dụ: từ 2024-11-01 đến 2024-11-15)
         LocalDate startDate = LocalDate.of(2024, 11, 1);
         LocalDate endDate = LocalDate.of(2024, 11, 15);
 

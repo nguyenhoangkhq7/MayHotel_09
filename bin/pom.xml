@@ -14,20 +14,24 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-<!--nơi chứa các thư viện-->
+    <!-- nơi chứa các thư viện -->
     <dependencies>
-        <dependency>
-		    <groupId>com.microsoft.sqlserver</groupId>
-		    <artifactId>mssql-jdbc</artifactId>
-		    <version>12.8.1.jre11</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.toedter/jcalendar -->
-		<dependency>
-		    <groupId>com.toedter</groupId>
-		    <artifactId>jcalendar</artifactId>
-		    <version>1.4</version>
-		</dependency>
+        
 
+
+        <!-- Thư viện Microsoft SQL Server JDBC -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>12.8.1.jre11</version>
+        </dependency>
+
+        <!-- Thư viện JCalendar -->
+        <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
+        </dependency>
     </dependencies>
-    
+
 </project>

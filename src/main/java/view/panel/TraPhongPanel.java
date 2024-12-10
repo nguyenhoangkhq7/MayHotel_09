@@ -361,5 +361,23 @@ public class TraPhongPanel extends JPanel {
 			model.addRow(new Object[] { maDichVu, tenDichVu, donGia, soLuong, thanhTien });
 		}
 	}
+	public static void main(String[] args) {
+        // Khởi tạo các đối tượng giả lập dữ liệu (có thể thay thế bằng dữ liệu thực tế)
+        ChiTiet_DonDatPhong_Phong chiTiet = new ChiTiet_DonDatPhong_Phong();
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
+
+        // Khởi tạo cửa sổ JFrame
+        JFrame frame = new JFrame("Quản lý trả phòng");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1200, 800);  // Kích thước cửa sổ
+        frame.setLocationRelativeTo(null);  // Đặt cửa sổ ở giữa màn hình
+
+        // Khởi tạo panel TraPhongPanel và thêm vào cửa sổ
+        TraPhongPanel traPhongPanel = new TraPhongPanel(chiTiet, chiTietList);
+        frame.getContentPane().add(traPhongPanel);
+
+        // Hiển thị cửa sổ
+        frame.setVisible(true);
+    }
 
 }

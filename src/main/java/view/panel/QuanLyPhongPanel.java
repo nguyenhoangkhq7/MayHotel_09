@@ -2,13 +2,39 @@ package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import constant.CommonConstants;
+import dal.DichVuDAL;
+import dal.LoaiPhongDAL;
+import dal.PhongDAL;
+import database.ConnectDB;
+import entity.DichVu;
+import entity.LoaiPhong;
+import entity.Phong;
+import view.dialog.SuaDichVuDialog;
+import view.dialog.SuaPhongDialong;
+import view.dialog.ThemDichVuDialog;
+import view.dialog.ThemPhongDiaLog;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class QuanLyPhongPanel extends JPanel {
 
@@ -16,7 +42,7 @@ public class QuanLyPhongPanel extends JPanel {
     private JTextField txtTenKH;
     private JTextField txtDiaChi;
     private JTextField txtSDT;
-    private JTextField txtCCCD;
+    private JTextField txtLoaiPhong;
     private JTextField txtEmail;
     private JTextField txtDTL;
     private JComboBox<String> cboLoaiKhachHang;
@@ -51,15 +77,20 @@ public class QuanLyPhongPanel extends JPanel {
 	private JButton btnXoa;
 	private JButton btnLamLai;
 	private JButton btnLuu;
+	private JTable table_1;
+	private DefaultTableModel tableModel;
+	private JTextField txtTang;
+	private JButton btnLamMoi;
+
 
     public QuanLyPhongPanel() {
-    	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    	setLayout(new BorderLayout());
         setBackground(new Color(255, 255, 255));
         setBorder(new EmptyBorder(5, 5, 5, 5));
 
         JPanel pnlTieuDe = new JPanel();
         pnlTieuDe.setBackground(new Color(255, 255, 255));
-        add(pnlTieuDe);
+        
         pnlTieuDe.setLayout(new FlowLayout());
 
         JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ PHÒNG");
@@ -73,35 +104,21 @@ public class QuanLyPhongPanel extends JPanel {
                 "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
        
         add(pnlThongTin);
-        pnlThongTin.setLayout(new GridLayout(1, 1, 0, 0));
+        pnlThongTin.setLayout(new BorderLayout());
         
         panelForm = new JPanel();
-        panelForm.setLayout(new GridLayout(3,2,10,10));
+        panelForm.setLayout(new GridLayout(3,3,10,10));
         
         JLabel lbMaPhong = new JLabel("Mã phòng:");
-        lbMaPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbMaPhong.setBounds(10, 21, 100, 14);
-        panelForm.add(lbMaPhong);
+		lbMaPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panelForm.add(lbMaPhong);
 
-        txtMaPhong = new JTextField("KH******");
-        txtMaPhong.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        txtMaPhong.setEditable(false);
-        txtMaPhong.setBounds(145, 18, 205, 20);
-        panelForm.add(txtMaPhong);
-        txtMaPhong.setColumns(10);
-        
-        JLabel lbLoaiPhong = new JLabel("Loại Phòng :");
-        lbLoaiPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbLoaiPhong.setBounds(10, 151, 105, 14);
-        panelForm.add(lbLoaiPhong);
-        cboLoaiPhong = new JComboBox<String>();
-        cboLoaiPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboLoaiPhong.setBounds(145, 154, 205, 20);
-        cboLoaiPhong.addItem("VIP");
-        cboLoaiPhong.addItem("Thường");
-        panelForm.add(cboLoaiPhong);
-        
-        JLabel lbTenPhong = new JLabel("Tên phòng:");
+		txtMaPhong = new JTextField("");
+		txtMaPhong.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		panelForm.add(txtMaPhong);
+		
+		
+		JLabel lbTenPhong = new JLabel("Tên phòng:");
         lbTenPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
         lbTenPhong.setBounds(10, 100, 136, 14);
         panelForm.add(lbTenPhong);
@@ -110,117 +127,86 @@ public class QuanLyPhongPanel extends JPanel {
         txtTenPhong.setFont(new Font("Dialog", Font.BOLD, 13));
         txtTenPhong.setBounds(145, 97, 205, 20);
         panelForm.add(txtTenPhong);
-        txtTenPhong.setColumns(10);
+        
+        JLabel lbLoaiPhong = new JLabel("Loại Phòng :");
+        lbLoaiPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
+        lbLoaiPhong.setBounds(10, 151, 105, 14);
+        panelForm.add(lbLoaiPhong);
+        txtLoaiPhong = new JTextField();
+        txtLoaiPhong.setFont(new Font("Dialog", Font.BOLD, 13));
+        txtLoaiPhong.setBounds(145, 97, 205, 20);
+        panelForm.add(txtLoaiPhong);
+        
 
-        
-        
-        
-        
         JLabel lbTrangThaiPhong = new JLabel("Trạng Thái Phòng :");
         lbTrangThaiPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
         lbTrangThaiPhong.setBounds(10, 151, 105, 14);
         panelForm.add(lbTrangThaiPhong);
-        cboTrangThaiPhong = new JComboBox<String>();
+        cboTrangThaiPhong = new JComboBox<>();
         cboTrangThaiPhong.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboTrangThaiPhong.setBounds(145, 154, 205, 20);
-        cboTrangThaiPhong.addItem("Đang ở");
+        cboTrangThaiPhong.addItem("");
         cboTrangThaiPhong.addItem("Trống");
+        cboTrangThaiPhong.addItem("Đang ở");
         panelForm.add(cboTrangThaiPhong);
-        
-        JLabel lbMoTa = new JLabel("Mô tả:");
-        lbMoTa.setFont(new Font("Tahoma", Font.BOLD, 13));
-        lbMoTa.setBounds(10, 100, 136, 14);
-        panelForm.add(lbMoTa);
-        
-        txtMoTa = new JTextField();
-        txtMoTa.setFont(new Font("Dialog", Font.BOLD, 13));
-        txtMoTa.setBounds(145, 97, 205, 20);
-        panelForm.add(txtMoTa);
-        txtMoTa.setColumns(10);
-        
+
         JLabel lbTang = new JLabel("Tầng :");
         lbTang.setFont(new Font("Tahoma", Font.BOLD, 13));
         lbTang.setBounds(10, 151, 105, 14);
         panelForm.add(lbTang);
-        cboTang = new JComboBox<String>();
+        
+        cboTang = new JComboBox<>();
         cboTang.setFont(new Font("Tahoma", Font.BOLD, 13));
-        cboTang.setBounds(145, 154, 205, 20);
-        cboTang.addItem("1");
-        cboTang.addItem("2");
-        cboTang.addItem("3");
-        cboTang.addItem("4");
-        cboTang.addItem("5");
+        cboTang.addItem("");
+        cboTang.addItem("Tầng 1");
+        cboTang.addItem("Tầng 2");
+        cboTang.addItem("Tầng 3");
+        cboTang.addItem("Tầng 4");
+        cboTang.addItem("Tầng 5");
         panelForm.add(cboTang);
+        
         
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(new Color(255, 255, 255));
-//        panel_2.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-//        panel_2.setLayout(new FlowLayout());
-
-//        btnThem = new JButton("Thêm");
-//        btnThem.setBackground(new Color(0, 255, 255));
-//        btnThem.setFont(new Font("Tahoma", Font.BOLD, 11));
-//        btnThem.setBorder(new EmptyBorder(10, 20, 10, 20)); // Khoảng cách trên và dưới, 20 pixel bên trái
-//        panel_2.add(btnThem);
-//
-//        panel_2.add(Box.createRigidArea(new Dimension(0, 10))); // Khoảng cách giữa các nút
-//
-//        btnSua = new JButton("Sửa");
-//        btnSua.setBackground(new Color(0, 255, 255));
-//        btnSua.setFont(new Font("Tahoma", Font.BOLD, 11));
-//        btnSua.setBorder(new EmptyBorder(10, 20, 10, 20)); // Khoảng cách trên và dưới, 20 pixel bên trái
-//        panel_2.add(btnSua);
-//
-//        panel_2.add(Box.createRigidArea(new Dimension(0, 10))); // Khoảng cách giữa các nút
-//
-//        btnXoa = new JButton("Xóa");
-//        btnXoa.setBackground(new Color(0, 255, 255));
-//        btnXoa.setFont(new Font("Tahoma", Font.BOLD, 11));
-//        btnXoa.setBorder(new EmptyBorder(10, 20, 10, 20)); // Khoảng cách trên và dưới, 20 pixel bên trái
-//        panel_2.add(btnXoa);
-//
-//        panel_2.add(Box.createRigidArea(new Dimension(0, 10))); // Khoảng cách giữa các nút
-//
-//        btnLamLai = new JButton("Làm lại");
-//        btnLamLai.setBackground(new Color(0, 255, 255));
-//        btnLamLai.setFont(new Font("Tahoma", Font.BOLD, 11));
-//        btnLamLai.setBorder(new EmptyBorder(10, 20, 10, 20)); // Khoảng cách trên và dưới, 20 pixel bên trái
-//        panel_2.add(btnLamLai);
-
-		
-        
-        
         pnlThongTin.add(panelForm);
         pnlThongTin.add(panel_2);
         
         
         JPanel panel_ThongTinLoaiPhong = new JPanel();
         panel_ThongTinLoaiPhong.setBackground(new Color(255, 255, 255));
-        panel_ThongTinLoaiPhong.setBorder(
-                new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-        add(panel_ThongTinLoaiPhong);
-        panel_ThongTinLoaiPhong.setLayout(new FlowLayout());
+        panel_ThongTinLoaiPhong.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
+        // Sử dụng GridLayout với 2 hàng và 2 cột
+        panel_ThongTinLoaiPhong.setLayout(new GridLayout(2, 2, 10, 10)); // 2 hàng, 2 cột, khoảng cách giữa các nút là 10px
+
+        // Tạo và thêm nút "Thêm"
         btnThem = new JButton("Thêm");
         btnThem.setBackground(new Color(0, 255, 255));
         btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
         panel_ThongTinLoaiPhong.add(btnThem);
 
+        // Tạo và thêm nút "Sửa"
         btnSua = new JButton("Sửa");
         btnSua.setBackground(new Color(0, 255, 255));
         btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
         panel_ThongTinLoaiPhong.add(btnSua);
-        
+
+        // Tạo và thêm nút "Xóa"
         btnXoa = new JButton("Xóa");
         btnXoa.setBackground(new Color(0, 255, 255));
         btnXoa.setFont(new Font("Tahoma", Font.BOLD, 13));
         panel_ThongTinLoaiPhong.add(btnXoa);
-        
-        btnLuu = new JButton("Lưu");
-        btnLuu.setBackground(new Color(0, 255, 255));
-        btnLuu.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panel_ThongTinLoaiPhong.add(btnLuu);
 
+        // Tạo và thêm nút "Làm mới"
+        btnLamMoi = new JButton("Làm mới");
+        btnLamMoi.setBackground(new Color(0, 255, 255));
+        btnLamMoi.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panel_ThongTinLoaiPhong.add(btnLamMoi);
+
+
+        pnlThongTin.add(panelForm, BorderLayout.CENTER);
+        pnlThongTin.add(panel_ThongTinLoaiPhong, BorderLayout.EAST);
+        pnlThongTin.add(pnlTieuDe,BorderLayout.NORTH);
+        
 
         
         
@@ -258,31 +244,32 @@ public class QuanLyPhongPanel extends JPanel {
         btnXemTatCa.setFont(new Font("Tahoma", Font.BOLD, 13));
         btnXemTatCa.setBackground(new Color(0, 255, 255));
 
-        // Thêm các thành phần vào Box ngang
-        hBox.add(lbTimTenKH);
-        hBox.add(Box.createHorizontalStrut(10));
-        hBox.add(txtTim);
-        hBox.add(Box.createHorizontalStrut(10));
-        hBox.add(btnTim);
-        hBox.add(Box.createHorizontalStrut(10));
-        hBox.add(btnXemTatCa);
+        
 
         // Thêm Box ngang vào vị trí phía trên (NORTH) của pnlBang
         pnlBang.add(hBox, BorderLayout.NORTH);
+        
+        add(pnlThongTin, BorderLayout.NORTH); // Thêm pnlThongTin vào vùng NORTH
+        add(pnlBang, BorderLayout.CENTER);
+        
+        
+        tableModel = new DefaultTableModel(
+				new String[] { "Mã Phòng", "Tên Phòng","Loại Phòng", "Trạng Thái Phòng", "Mô Tả", "Tầng"}, 0);
+		table_1 = new JTable(tableModel);
+		JScrollPane scrollPane = new JScrollPane(table_1);
 
-        // Tạo JTable và cấu hình
-        JTable table_1 = new JTable();
-        table_1.setModel(new DefaultTableModel(new Object[][] {},
-                new String[]{"Mã Phòng", "Tên Phòng", "Trạng Thái Phòng", "Mô Tả", "Tầng"}) {
-            boolean[] columnEditables = new boolean[]{false, false, false, false, false};
+		table_1.setForeground(new Color(0, 0, 0));
+		table_1.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		table_1.setRowHeight(25);
+		table_1.setSelectionBackground(new Color(0, 204, 204));
+		table_1.setSelectionForeground(new Color(255, 255, 255));
+		table_1.setFillsViewportHeight(true);
 
-            public boolean isCellEditable(int row, int column) {
-                return columnEditables[column];
-            }
-        });
+		scrDSKH.setViewportView(scrollPane);
+
 
         table_1.setForeground(new Color(0, 0, 0));
-        table_1.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        table_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
         table_1.setRowHeight(25);
         table_1.setSelectionBackground(new Color(0, 204, 204));
         table_1.setSelectionForeground(new Color(255, 255, 255));
@@ -290,9 +277,362 @@ public class QuanLyPhongPanel extends JPanel {
 
         // Thêm JTable vào JScrollPane
         scrDSKH.setViewportView(table_1);
+        loadDichVuToTable();
+        
+     // Thêm MouseListener cho nút Sửa
+     // Đăng ký MouseListener cho bảng
+        table_1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedRow = table_1.getSelectedRow(); // Lấy dòng được chọn từ bảng
+                if (selectedRow != -1) { // Kiểm tra nếu có dòng được chọn
+                    // Chuyển đổi chỉ số dòng từ bảng sang mô hình
+                    int modelRow = table_1.convertRowIndexToModel(selectedRow);
 
+                    // Lấy dữ liệu từ mô hình dựa trên chỉ số thực
+                    String maPhong = Objects.toString(tableModel.getValueAt(modelRow, 0), "");
+                    String tenPhong = Objects.toString(tableModel.getValueAt(modelRow, 1), "");
+                    String loaiPhong = Objects.toString(tableModel.getValueAt(modelRow, 2), "");
+                    String trangThaiPhong = Objects.toString(tableModel.getValueAt(modelRow, 3), "");
+                    String moTa = Objects.toString(tableModel.getValueAt(modelRow, 4), "");
+                    String tang = Objects.toString(tableModel.getValueAt(modelRow, 5), "");
+
+
+                }
+            }
+        });
+        btnLamMoi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Xóa nội dung của các trường JTextField
+                txtMaPhong.setText("");
+                txtLoaiPhong.setText("");
+                txtTenPhong.setText("");
+                cboTrangThaiPhong.setSelectedIndex(0); // Reset trạng thái về giá trị mặc định (ví dụ: "Tất cả")
+                cboTang.setSelectedIndex(0); // Reset tầng về giá trị mặc định (ví dụ: "Tất cả")
+            }
+        });
+        txtTenPhong.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Lấy giá trị nhập vào từ trường txtTenPhong
+                String keyword = txtTenPhong.getText().trim();
+
+                // Sử dụng TableRowSorter để lọc theo từ khóa
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+                table_1.setRowSorter(sorter);
+
+                // Kiểm tra nếu từ khóa trống, không lọc
+                if (keyword.isEmpty()) {
+                    sorter.setRowFilter(null);
+                } else {
+                    try {
+                        // Lọc chỉ theo cột "Tên phòng" (giả sử cột "Tên phòng" là cột thứ 1)
+                        RowFilter<DefaultTableModel, Object> rf = RowFilter.regexFilter("(?i)" + keyword, 1);  // 1 là chỉ số cột "Tên phòng"
+                        sorter.setRowFilter(rf); // Áp dụng bộ lọc vào sorter
+                    } catch (PatternSyntaxException ex) {
+                        JOptionPane.showMessageDialog(null, "Từ khóa không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+     // Sự kiện tìm kiếm tự động cho txtLoaiPhong
+        txtLoaiPhong.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Lấy giá trị nhập vào từ trường txtLoaiPhong
+                String keyword = txtLoaiPhong.getText().trim();
+
+                // Sử dụng TableRowSorter để lọc theo từ khóa
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+                table_1.setRowSorter(sorter);
+
+                // Kiểm tra nếu từ khóa trống, không lọc
+                if (keyword.isEmpty()) {
+                    sorter.setRowFilter(null); // Nếu từ khóa rỗng, không lọc
+                } else {
+                    try {
+                        // Thực hiện lọc dữ liệu trong bảng, chỉ lọc cột "Loại phòng" (giả sử là cột 2)
+                        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword, 2)); // 2 là chỉ số cột "Loại phòng"
+                    } catch (PatternSyntaxException ex) {
+                        JOptionPane.showMessageDialog(null, "Từ khóa không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
+     // Tạo TableRowSorter cho bảng
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+        table_1.setRowSorter(sorter);
+
+        // Thêm sự kiện KeyListener vào txtMaPhong để lọc khi người dùng nhập
+        txtMaPhong.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String maPhongKeyword = txtMaPhong.getText().trim(); // Lấy nội dung mã phòng từ txtMaPhong
+                String selectedTrangThai = (String) cboTrangThaiPhong.getSelectedItem(); // Lấy trạng thái phòng được chọn
+                String selectedTang = (String) cboTang.getSelectedItem(); // Lấy tầng được chọn
+
+                // Tạo danh sách các bộ lọc
+                List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+                // Lọc theo mã phòng (cột 0)
+                if (!maPhongKeyword.isEmpty()) {
+                    filters.add(RowFilter.regexFilter("(?i)^" + maPhongKeyword, 0));
+                }
+
+                // Lọc theo trạng thái phòng (cột 3)
+                if (selectedTrangThai != null && !selectedTrangThai.isEmpty()) {
+                    filters.add(RowFilter.regexFilter("(?i)" + selectedTrangThai, 3));
+                }
+
+                // Lọc theo tầng (cột 5)
+                if (selectedTang != null && !selectedTang.isEmpty()) {
+                    filters.add(RowFilter.regexFilter("(?i)" + selectedTang, 5));
+                }
+
+                // Áp dụng bộ lọc kết hợp
+                if (filters.isEmpty()) {
+                    sorter.setRowFilter(null); // Nếu không có bộ lọc, hiển thị tất cả
+                } else {
+                    RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+                    sorter.setRowFilter(combinedFilter);
+                }
+            }
+        });
+
+
+        
+
+      //Sự kiện cho btnTim
+      		
+
+      		btnTim.addActionListener(e -> {
+      			String keyword = txtTim.getText().trim();
+      			if (keyword.isEmpty()) {
+      				sorter.setRowFilter(null);
+      			} else {
+      				try {
+
+      					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + keyword));
+      				} catch (PatternSyntaxException ex) {
+      					JOptionPane.showMessageDialog(null, "Từ khóa không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+      				}
+      			}
+      		});
+      		//Trạng thái phòng
+      		cboTrangThaiPhong.addActionListener(e -> {
+      		    String selectedTrangThai = (String) cboTrangThaiPhong.getSelectedItem(); // Lấy trạng thái phòng được chọn
+      		    String maPhongKeyword = txtMaPhong.getText().trim(); // Lấy nội dung mã phòng từ txtMaPhong
+      		    String selectedTang = (String) cboTang.getSelectedItem(); // Lấy tầng được chọn
+
+      		    // Tạo danh sách các bộ lọc
+      		    List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+      		    // Lọc theo mã phòng
+      		    if (!maPhongKeyword.isEmpty()) {
+      		        filters.add(RowFilter.regexFilter("(?i)^" + maPhongKeyword, 0)); // Lọc theo mã phòng (cột 0)
+      		    }
+
+      		    // Lọc theo trạng thái phòng
+      		    if (selectedTrangThai != null && !selectedTrangThai.isEmpty()) {
+      		        filters.add(RowFilter.regexFilter("(?i)" + selectedTrangThai, 3)); // Lọc trạng thái phòng (cột 3)
+      		    }
+
+      		    // Lọc theo tầng
+      		    if (selectedTang != null && !selectedTang.isEmpty()) {
+      		        filters.add(RowFilter.regexFilter("(?i)" + selectedTang, 5)); // Lọc tầng (cột 5)
+      		    }
+
+      		    // Áp dụng bộ lọc kết hợp
+      		    if (filters.isEmpty()) {
+      		        sorter.setRowFilter(null); // Nếu không có bộ lọc, hiển thị tất cả
+      		    } else {
+      		        RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+      		        sorter.setRowFilter(combinedFilter);
+      		    }
+      		});
+      		
+
+
+      	// Sự kiện cho Tầng
+      		cboTang.addActionListener(e -> {
+      		    String selectedTang = (String) cboTang.getSelectedItem(); // Lấy tầng được chọn
+      		    String selectedTrangThai = (String) cboTrangThaiPhong.getSelectedItem(); // Lấy trạng thái phòng
+      		    String maPhongKeyword = txtMaPhong.getText().trim(); // Lấy nội dung mã phòng từ txtMaPhong
+
+      		    // Tạo danh sách các bộ lọc
+      		    List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+      		    // Lọc theo mã phòng
+      		    if (!maPhongKeyword.isEmpty()) {
+      		        filters.add(RowFilter.regexFilter("(?i)^" + maPhongKeyword, 0)); // Lọc theo mã phòng (cột 0)
+      		    }
+
+      		    // Lọc theo trạng thái phòng
+      		    if (selectedTrangThai != null && !selectedTrangThai.isEmpty()) {
+      		        filters.add(RowFilter.regexFilter("(?i)" + selectedTrangThai, 3)); // Lọc trạng thái phòng (cột 3)
+      		    }
+
+      		    // Lọc theo tầng
+      		    if (selectedTang != null && !selectedTang.isEmpty()) {
+      		        filters.add(RowFilter.regexFilter("(?i)" + selectedTang, 5)); // Lọc tầng (cột 5)
+      		    }
+
+      		    // Áp dụng bộ lọc kết hợp
+      		    if (filters.isEmpty()) {
+      		        sorter.setRowFilter(null); // Nếu không có bộ lọc, hiển thị tất cả
+      		    } else {
+      		        RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+      		        sorter.setRowFilter(combinedFilter);
+      		    }
+      		});
+
+      	// Sự kiện chuột cho btnXemTatCa
+      		btnXemTatCa.addMouseListener(new MouseAdapter() {
+      		    @Override
+      		    public void mouseClicked(MouseEvent e) {
+      		        sorter.setRowFilter(null); // Hiển thị toàn bộ dữ liệu
+      		        txtTim.setText(""); // Xóa nội dung trong trường tìm kiếm
+      		    }
+      		});
         // Tải dữ liệu vào bảng (thêm hàm loadDataToTable() ở đây nếu cần thiết)
+      		btnThem.addActionListener(e -> {
+    		    String nextMaPhong = generateRoomCode();
+    		    ThemPhongDiaLog themPhongDiaLog = new ThemPhongDiaLog(generateRoomCode(), QuanLyPhongPanel.this);
+    		    themPhongDiaLog.setVisible(true);
+    		});
+      		btnSua.addActionListener(e -> {
+      			
+				// Kiểm tra xem có dòng nào được chọn trong bảng không
+				int selectedRow = table_1.getSelectedRow();
+				if (selectedRow != -1) {
+					// Lấy thông tin từ bảng vào các trường text của SuaDichVuDialog
+					String maPhong = table_1.getValueAt(selectedRow, 0).toString();
+					String tenPhong = table_1.getValueAt(selectedRow, 1).toString();
+					LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(table_1.getValueAt(selectedRow, 2).toString());
+					String trangThaiPhongString = table_1.getValueAt(selectedRow, 3).toString();
+					boolean trangThaiPhong = "Trống".equals(trangThaiPhongString);
+					String moTa = table_1.getValueAt(selectedRow, 4).toString();
+					String tang = table_1.getValueAt(selectedRow, 5).toString();
+					// Tạo đối tượng DichVu và truyền vào dialog
+					Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
+					SuaPhongDialong suaDialog = new SuaPhongDialong(QuanLyPhongPanel.this, phong);
+					suaDialog.setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(QuanLyPhongPanel.this, "Vui lòng chọn phòng để sửa!", "Lỗi",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			
+		});
+      		btnXoa.addActionListener(e -> {
+      		    // Kiểm tra xem có dòng nào được chọn trong bảng không
+      		    int selectedRow = table_1.getSelectedRow();
+      		    if (selectedRow != -1) {
+      		        // Lấy thông tin từ bảng
+      		        String maPhong = table_1.getValueAt(selectedRow, 0).toString();
+      		        String tenPhong = table_1.getValueAt(selectedRow, 1).toString();
+      		        
+      		        // Hiển thị hộp thoại xác nhận xóa
+      		        int confirm = JOptionPane.showConfirmDialog(QuanLyPhongPanel.this, 
+      		            "Bạn chắc chắn muốn xóa phòng " + tenPhong + "?", "Xác nhận xóa", 
+      		            JOptionPane.YES_NO_OPTION);
+
+      		        if (confirm == JOptionPane.YES_OPTION) {
+      		            // Nếu người dùng đồng ý, gọi phương thức xóa phòng
+      		            PhongDAL phongDAL = new PhongDAL();
+      		            boolean isSuccess = phongDAL.xoaPhong(maPhong);
+
+      		            if (isSuccess) {
+      		                JOptionPane.showMessageDialog(QuanLyPhongPanel.this, "Xóa phòng thành công!", 
+      		                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+      		                // Cập nhật lại bảng sau khi xóa
+      		                capNhatTable();
+      		            } else {
+      		                JOptionPane.showMessageDialog(QuanLyPhongPanel.this, "Xóa phòng thất bại!", 
+      		                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+      		            }
+      		        }
+      		    } else {
+      		        JOptionPane.showMessageDialog(QuanLyPhongPanel.this, "Vui lòng chọn phòng để xóa!", 
+      		            "Lỗi", JOptionPane.ERROR_MESSAGE);
+      		    }
+      		});
+
+
+
     }
+    
+    public String generateRoomCode() {
+        String lastRoomCode = new PhongDAL().getLastRoomCode(); // Lấy mã phòng cuối cùng
+        int newRoomNumber = 1; // Mặc định bắt đầu từ 1 nếu không có mã phòng nào
+
+        if (lastRoomCode != null) {
+            // Tách phần số từ mã phòng
+            String numberPart = lastRoomCode.substring(1); // Bỏ qua ký tự 'P'
+            newRoomNumber = Integer.parseInt(numberPart) + 1; // Tăng số lên 1
+        }
+
+        // Tạo mã phòng mới theo định dạng "PXXX"
+        return String.format("P%03d", newRoomNumber); // Định dạng thành 3 chữ số
+    }
+    private void loadDichVuToTable() {
+        PhongDAL phongDAL = new PhongDAL(); // Giả sử đây là lớp chứa hàm 
+        ArrayList<Phong> dsPhong = phongDAL.getAllPhong(); // Lấy danh sách dịch vụ từ cơ sở dữ liệu
+
+        // Xóa dữ liệu cũ trên bảng (nếu có)
+        tableModel.setRowCount(0);
+
+        // Duyệt qua danh sách dịch vụ và thêm vào TableModel
+        for (Phong phong : dsPhong) {
+            // Lấy mã loại phòng thay vì đối tượng loại phòng
+            String maLoaiPhong = phong.getLoaiPhong().getMaLoaiPhong(); // Giả sử getLoaiPhong() trả về đối tượng LoaiPhong
+
+            Object[] rowData = { 
+                phong.getMaPhong(), 
+                phong.getTenPhong(), 
+                maLoaiPhong, // Chỉ hiển thị maLoaiPhong
+                phong.isTrangThaiPhong() ? "Trống" : "Đang ở", 
+                phong.getMoTa(),
+                phong.getTang() 
+            };
+            tableModel.addRow(rowData); // Thêm hàng vào mô hình bảng
+        }
+    }
+
+   
+    public void capNhatTable() {
+		List<Phong> dsPhong = new PhongDAL().getAllPhong();
+
+		// Cập nhật dữ liệu cho bảng
+		DefaultTableModel model = (DefaultTableModel) table_1.getModel();
+		model.setRowCount(0); // Xóa các hàng cũ
+
+		for (Phong p : dsPhong) {
+			
+			model.addRow(new Object[] { p.getMaPhong(), p.getTenPhong(), p.getLoaiPhong().getMaLoaiPhong(),
+					p.isTrangThaiPhong() ? "Trống" : "Đang ở", p.getMoTa(),p.getTang() });
+		}
+
+	}
+    
+    private void quayVeTrangThaiBanDau() {
+		txtMaPhong.setText("");
+		txtTenPhong.setText("");
+		txtLoaiPhong.setText("");
+		cboTrangThaiPhong.setSelectedIndex(0);
+		txtMoTa.setText("");
+		txtTang.setText("");
+
+		txtMaPhong.setEditable(false);
+		txtTenPhong.setEditable(false);
+		txtLoaiPhong.setEnabled(false);
+		cboTrangThaiPhong.setEnabled(false);
+		txtMoTa.setEnabled(false);
+		txtTang.setEnabled(false);
+		btnSua.setVisible(true);
+		btnThem.setVisible(true);
+	}
 
     public static void main(String[] args) {
     	EventQueue.invokeLater(() -> {

@@ -16,6 +16,7 @@ import entity.ChiTiet_DonDatPhong_Phong_DichVu;
 import helper.UIHelpers;
 import view.dialog.ChonDichVuDialog;
 import view.dialog.SuaDichVuDialog;
+import view.dialog.SuaDichVuDonDatPhongDialog;
 import view.panel.ThemDonDatPhongPanel;
 
 import javax.swing.*;
@@ -75,7 +76,7 @@ public class DichVuPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if(o.equals(btnSua)) {
-            SuaDichVuDialog dialog = new SuaDichVuDialog(themDonDatPhongPanel.getMenuPanel().getMainGUI(), themDonDatPhongPanel, chiTiet);
+            SuaDichVuDonDatPhongDialog dialog = new SuaDichVuDonDatPhongDialog(themDonDatPhongPanel.getMenuPanel().getMainGUI(), themDonDatPhongPanel, chiTiet);
             dialog.setVisible(true);
             this.repaint();
             this.revalidate();

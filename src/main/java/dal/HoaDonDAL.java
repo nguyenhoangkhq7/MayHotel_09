@@ -4,6 +4,8 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import database.ConnectDB;
 import entity.*;
 
@@ -116,23 +118,7 @@ public class HoaDonDAL {
         return dsHoaDon;
     }
  // Inside HoaDonDAL class
-    public String getLastMaHD() {
-        String lastMaHD = null;
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "SELECT maHoaDon FROM HoaDon ORDER BY maHoaDon DESC LIMIT 1";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            
-            if (rs.next()) {
-                lastMaHD = rs.getString("maHoaDon");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return lastMaHD;
-    }
+    
 
     // Sửa thông tin hóa đơn trong cơ sở dữ liệu
     public boolean suaHoaDon(String maHoaDon, HoaDon hoaDon) {
@@ -198,7 +184,83 @@ public class HoaDonDAL {
         } 
         return hoaDon;
     }
-    
+ // Xóa hóa đơn theo mã hóa đơn
+    public boolean xoaHoaDon(String maHoaDon) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "DELETE FROM HoaDon WHERE maHoaDon = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maHoaDon); // Thiết lập mã hóa đơn cần xóa
+            n = stmt.executeUpdate(); // Thực thi câu lệnh SQL
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0; // Trả về true nếu việc xóa thành công
+    }
+
+    public String getLastHoaDonCode() {
+        String lastHoaDonCode = null;
+
+        String query = "SELECT MAX(maHoaDon) FROM HoaDon"; // Truy vấn để lấy mã phòng lớn nhất
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+            	lastHoaDonCode = rs.getString(1); // Lấy mã phòng lớn nhất
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+
+        return lastHoaDonCode;
+    }
+    public boolean xoaHoaDonTheoMa(String maHoaDon) {
+        int n = 0;  // Biến lưu số lượng bản ghi bị ảnh hưởng bởi câu lệnh SQL
+        Connection con = null;  // Biến kết nối cơ sở dữ liệu
+        PreparedStatement stmt = null;  // Biến PreparedStatement để thực thi câu lệnh SQL
+
+        try {
+            // Mở kết nối cơ sở dữ liệu
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+
+            // Câu lệnh SQL cập nhật trạng thái của hóa đơn (thay đổi trạng thái thành 0)
+            String sql = "UPDATE HoaDon SET trangThai = 0 WHERE maHoaDon = ?";
+            stmt = con.prepareStatement(sql);  // Tạo PreparedStatement từ câu lệnh SQL
+
+            // Gán giá trị tham số cho câu lệnh SQL (truyền maHoaDon vào tham số thứ nhất)
+            stmt.setString(1, maHoaDon);
+
+            // Thực hiện câu lệnh cập nhật
+            n = stmt.executeUpdate();  // Số bản ghi bị ảnh hưởng sẽ được lưu vào biến n
+        } catch (SQLException e) {
+            // Xử lý lỗi nếu có khi thực hiện câu lệnh SQL
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi khi xóa hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Đảm bảo đóng kết nối và PreparedStatement để tránh rò rỉ tài nguyên
+            try {
+                if (stmt != null) {
+                    stmt.close();  // Đóng PreparedStatement
+                }
+                if (con != null) {
+                    con.close();  // Đóng kết nối
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // Trả về true nếu có ít nhất 1 bản ghi bị cập nhật (n > 0), ngược lại trả về false
+        return n > 0;
+    }
+
+
    
     public static void main(String[] args) {
         HoaDonDAL hoaDonDAL = new HoaDonDAL();
