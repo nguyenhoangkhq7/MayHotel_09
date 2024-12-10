@@ -243,6 +243,9 @@ public class MenuPanel extends JPanel {
                     case "Phiếu thu chi":
                         cardLayout.show(jpnContain, "Phiếu thu chi");
                         break;
+                    case "Nhân viên":
+                        cardLayout.show(jpnContain, "Nhân viên");
+                        break;
                     default:
                         break;
                 }
