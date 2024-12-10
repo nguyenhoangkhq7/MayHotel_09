@@ -22,6 +22,7 @@ public class ThongKeBaoCaoPanel extends JPanel {
     private JLabel lbNgayThongKe;
     private BangBaoCaoBUS bangBaoCaoBUS;
     private MenuPanel menuPanel;
+    private LocalDateTime now;
     public MenuPanel getMenuPanel() {
         return menuPanel;
     }
@@ -29,27 +30,51 @@ public class ThongKeBaoCaoPanel extends JPanel {
     public ThongKeBaoCaoPanel(MenuPanel menuPanel) {
         this.menuPanel = menuPanel;
         setLayout(new BorderLayout());
-        
+
         JPanel content = new JPanel(new BorderLayout(0, 0));
         add(content, BorderLayout.CENTER);
-        
+
         // Header Panel
         JPanel header = createHeaderPanel();
         content.add(header, BorderLayout.NORTH);
-        
+
         // Content Panel (Body)
         JPanel noidung = new JPanel(new BorderLayout(0, 0));
         content.add(noidung, BorderLayout.CENTER);
-        
+
         // Title Section
         JPanel tieudebang = createTitlePanel();
         noidung.add(tieudebang, BorderLayout.NORTH);
-        
+
         // Table Section
         JPanel bang = createTablePanel();
         noidung.add(bang, BorderLayout.CENTER);
-        
-    }    
+
+        Timer timer = new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cập nhật thời gian trên lblNgayThongKe
+                lbNgayThongKe.setText(layThoiGianThongKeBang());
+
+                // Lấy dữ liệu mới từ BUS
+                LocalDate currentDate = LocalDate.now();
+                LocalDateTime startDate = currentDate.atStartOfDay();
+                LocalDateTime endDate = LocalDateTime.now();
+                Object[][] data = bangBaoCaoBUS.layDuLieuBang(menuPanel.getNhanVienDangTruc(), startDate, endDate);
+
+                // Cập nhật dữ liệu bảng
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.setRowCount(0); // Xóa dữ liệu cũ
+                for (Object[] row : data) {
+                    model.addRow(row); // Thêm dữ liệu mới
+                }
+            }
+        });
+
+        // Bắt đầu timer
+        timer.start();
+    }
+
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel();
         header.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -63,25 +88,25 @@ public class ThongKeBaoCaoPanel extends JPanel {
 
         GroupLayout gl_header = new GroupLayout(header);
         gl_header.setHorizontalGroup(
-            gl_header.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                .addGroup(gl_header.createSequentialGroup()
-                    .addGap(26)
-                    .addComponent(lblNewLabel)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
-                    .addComponent(btnInBaoCao, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-                    .addGap(20))
+                gl_header.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                        .addGroup(gl_header.createSequentialGroup()
+                                .addGap(26)
+                                .addComponent(lblNewLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                                .addComponent(btnInBaoCao, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+                                .addGap(20))
         );
         gl_header.setVerticalGroup(
-            gl_header.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                .addGroup(gl_header.createSequentialGroup()
-                    .addGap(30)
-                    .addGroup(gl_header.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnInBaoCao, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
-                    .addGap(20))
+                gl_header.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                        .addGroup(gl_header.createSequentialGroup()
+                                .addGap(30)
+                                .addGroup(gl_header.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnInBaoCao, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
+                                .addGap(20))
         );
         header.setLayout(gl_header);
-        
+
         return header;
     }
 
@@ -94,7 +119,7 @@ public class ThongKeBaoCaoPanel extends JPanel {
         btnInBaoCao.setToolTipText("Bấm vào để in báo cáo ra file PDF");
         btnInBaoCao.setFont(new Font("Times New Roman", Font.BOLD, 20));
         btnInBaoCao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
+
         btnInBaoCao.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -130,26 +155,26 @@ public class ThongKeBaoCaoPanel extends JPanel {
         lblTenNguoiThongKe = new JLabel("Nhân viên: Thái Bảo");
         String tenNhanVien = menuPanel.getNhanVienDangTruc().getHoten();
         lblTenNguoiThongKe.setText("Nhân viên: " + tenNhanVien);
-        
+
         lblTenNguoiThongKe.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 18));
         lblTenNguoiThongKe.setHorizontalAlignment(SwingConstants.CENTER);
 
         GroupLayout gl_tieudebang = new GroupLayout(tieudebang);
         gl_tieudebang.setHorizontalGroup(
-            gl_tieudebang.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addComponent(lbNgayThongKe, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
-                .addComponent(lblTenNguoiThongKe, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
-                .addComponent(lbTieuDeBang, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
+                gl_tieudebang.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(lbNgayThongKe, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
+                        .addComponent(lblTenNguoiThongKe, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
+                        .addComponent(lbTieuDeBang, GroupLayout.DEFAULT_SIZE, 1996, Short.MAX_VALUE)
         );
         gl_tieudebang.setVerticalGroup(
-            gl_tieudebang.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGroup(gl_tieudebang.createSequentialGroup()
-                    .addComponent(lbTieuDeBang, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-                    .addGap(10)
-                    .addComponent(lbNgayThongKe, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(lblTenNguoiThongKe)
-                    .addContainerGap(30, Short.MAX_VALUE))
+                gl_tieudebang.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(gl_tieudebang.createSequentialGroup()
+                                .addComponent(lbTieuDeBang, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+                                .addGap(10)
+                                .addComponent(lbNgayThongKe, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblTenNguoiThongKe)
+                                .addContainerGap(30, Short.MAX_VALUE))
         );
         tieudebang.setLayout(gl_tieudebang);
 
@@ -163,16 +188,16 @@ public class ThongKeBaoCaoPanel extends JPanel {
         table.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 
         bangBaoCaoBUS = new BangBaoCaoBUS();
-        
+
         // Sample data
         LocalDate currentDate = LocalDate.now();
         LocalDateTime startDate = currentDate.atStartOfDay();;
         LocalDateTime endDate = LocalDateTime.now();
         Object[][] data = bangBaoCaoBUS.layDuLieuBang(menuPanel.getNhanVienDangTruc(),startDate, endDate);
-        
+
         table.setModel(new DefaultTableModel(
-            data,
-            new String[] { "STT", "Các mục", "Tổng" }
+                data,
+                new String[] { "STT", "Các mục", "Tổng" }
         ) {
             Class[] columnTypes = new Class[] { String.class, String.class, Object.class };
             public Class getColumnClass(int columnIndex) {
@@ -184,7 +209,7 @@ public class ThongKeBaoCaoPanel extends JPanel {
                 return columnEditables[column];
             }
         });
-        
+
         customizeTable();
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -251,22 +276,22 @@ public class ThongKeBaoCaoPanel extends JPanel {
             // Biên bản bàn giao ca
             g2d.setFont(new Font("Arial", Font.BOLD, 18));
             g2d.drawString("BIÊN BẢN BÀN GIAO CA", 170, 80);
-            
+
             String tenNhanVien = lblTenNguoiThongKe.getText();
-           
+
             String date = lbNgayThongKe.getText(); // Lấy chuỗi từ JLabel
             String[] parts = date.split("-"); // Tách chuỗi tại dấu gạch ngang
 
             // Kiểm tra xem phần tử thứ hai có tồn tại không và lấy giá trị
             String datePart = (parts.length > 1) ? parts[1].trim() : ""; // Lấy phần sau dấu gạch ngang và loại bỏ khoảng trắng
 
-            
+
             // Thông tin nhân viên và ngày in
             g2d.setFont(new Font("Arial", Font.PLAIN, 12));
             g2d.drawString(tenNhanVien , 50, 120);
             g2d.drawString(datePart, 400, 120);
-            
-            
+
+
             // Sao chép mô hình dữ liệu từ bảng `table`
             DefaultTableModel model = (DefaultTableModel) table.getModel();
             DefaultTableModel printModel = new DefaultTableModel();
@@ -301,11 +326,11 @@ public class ThongKeBaoCaoPanel extends JPanel {
             // Đặt kích thước bảng in
             printTable.setSize((int) pageFormat.getImageableWidth(), printTable.getPreferredSize().height);
 
-            
+
             // Dịch bảng vào vị trí mong muốn
             int yPosition = 80;
             g2d.translate(80, yPosition);
-         // Vẽ tiêu đề các cột
+            // Vẽ tiêu đề các cột
             g2d.setFont(new Font("Arial", Font.BOLD, 12));
             g2d.drawString("STT", 35, yPosition + 20);
             g2d.drawString("Các mục", 170, yPosition + 20);
@@ -328,47 +353,21 @@ public class ThongKeBaoCaoPanel extends JPanel {
             // Vẽ dòng kẻ dưới chữ ký
             g2d.drawLine(40, signaturePositionY + 20, 100, signaturePositionY + 20);   // Dòng kẻ dưới "Người bàn giao"
             g2d.drawLine(340, signaturePositionY + 20,430 , signaturePositionY + 20);  // Dòng kẻ dưới "Người nhận bàn giao"
-            
+
             return PAGE_EXISTS;
         }
     }
 
     // Method to get the formatted report date
     public String layThoiGianThongKeBang() {
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        now = LocalDateTime.now();
         LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
         return startOfDay.format(formatter) + " - " + now.format(formatter);
     }
- 
 
-  
-    
-    public static void main(String[] args) {
-        // Khởi tạo giao diện trong một thread riêng để đảm bảo GUI chạy mượt mà
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    // Tạo đối tượng MenuPanel (giả sử bạn đã tạo nó trong project)
-                    MenuPanel menuPanel = new MenuPanel(new MainGUI(new NhanVienDAL().getNhanVienTheoMa("NV001")));
 
-                    // Tạo đối tượng BangBaoCao và truyền menuPanel vào constructor
-                    ThongKeBaoCaoPanel bangBaoCao = new ThongKeBaoCaoPanel(menuPanel);
 
-                    // Tạo JFrame để chứa BangBaoCao
-                    JFrame frame = new JFrame("Bảng Báo Cáo");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.setSize(800, 600); // Kích thước cửa sổ
-                    frame.setLocationRelativeTo(null); // Đặt cửa sổ vào giữa màn hình
-                    frame.setContentPane(bangBaoCao); // Thêm BangBaoCao vào cửa sổ
-                    frame.setVisible(true); // Hiển thị cửa sổ
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-  
 
 
 }

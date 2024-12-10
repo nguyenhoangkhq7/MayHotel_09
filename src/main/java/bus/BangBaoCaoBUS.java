@@ -83,10 +83,12 @@ public class BangBaoCaoBUS {
 		int soLoaiSuiteFamily = 0;
 		// Xử lý danh sách phiếu thu chi
 		for (PhieuThuChi phieu : phieuThuChis) {
-			if (phieu.getLoaiPhieu().equalsIgnoreCase("Phiếu Thu")) {
-				khoanThu += phieu.getSoTien();
-			} else {
-				khoanChiKhac += phieu.getSoTien();
+			if (phieu.isConHoatDong()) { // Kiểm tra trạng thái
+				if (phieu.getLoaiPhieu().equalsIgnoreCase("Phiếu Thu")) {
+					khoanThu += phieu.getSoTien();
+				} else {
+					khoanChiKhac += phieu.getSoTien();
+				}
 			}
 		}
 
@@ -168,9 +170,12 @@ public class BangBaoCaoBUS {
 		tienNganHang = Math.round(tienNganHang / 100) * 100;
 		tienMat = Math.round(tienMat / 100) * 100;
 		khuyenMai = Math.round(khuyenMai / 100) * 100;
+		doanhThuPhong = Math.round(doanhThuPhong / 100) * 100;
+		doanhThuDichVu = Math.round(doanhThuDichVu / 100) * 100;
+		khoanThuKhac = Math.round(khoanThuKhac / 100) * 100;
+		khoanChiKhac = Math.round(khoanChiKhac / 100) * 100;
 		thucThu = Math.round(thucThu / 100) * 100;
-
-		DecimalFormat df = new DecimalFormat("#,###"); // Định dạng số với dấu phân cách
+		DecimalFormat df = new DecimalFormat("#,###");
 
 		return new Object[][] {
 				{"1", "Số hóa đơn", String.valueOf(soHoaDon)},
