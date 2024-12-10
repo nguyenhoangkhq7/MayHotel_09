@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -56,6 +58,10 @@ public class QuanLyNhanVienPanel extends JPanel {
 	private JPanel panelForm;
 	private JComboBox<String> cboHoatDong;
 	private JButton btnThem;
+	private JButton btnTim;
+	private JButton btnLamMoi;
+
+
 
 	/**
 	 * Launch the application.
@@ -148,37 +154,60 @@ public class QuanLyNhanVienPanel extends JPanel {
 
 		pnlBoLoc.add(panelForm);
 		
-		JPanel panelChucNang = new JPanel();
-		panelChucNang.setBackground(new Color(255, 255, 255));
-		panelChucNang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng",
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(255, 255, 255));
+		panel_3.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE), "Chức năng",
 				TitledBorder.LEADING, TitledBorder.TOP, null, Color.ORANGE));
-		add(panelChucNang);
-		panelChucNang.setLayout(new FlowLayout());
+		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
 
+		JPanel panelTop = new JPanel();
+		
+		panelTop.setLayout(new GridLayout(2, 2, 10, 10)); 
+		
 		btnThem = new JButton("Thêm");
 		btnThem.setBackground(new Color(243, 125, 0));
 		btnThem.setForeground(new Color(255, 255, 255));
+		btnThem.setIcon(new ImageIcon("src/main/java/icon/add.png"));
 		btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelChucNang.add(btnThem);
-
+		
 		btnSua = new JButton("Sửa");
 		btnSua.setBackground(new Color(243, 125, 0));
 		btnSua.setForeground(new Color(255, 255, 255));
+		btnSua.setIcon(new ImageIcon("src/main/java/icon/pen.png"));
 		btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelChucNang.add(btnSua);
 		
-		JButton btnTim = new JButton("Tìm");
+		btnTim = new JButton("Tìm");
 		btnTim.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnTim.setForeground(new Color(255, 255, 255));
 		btnTim.setBackground(new Color(253, 125, 0));
-		panelChucNang.add(btnTim);
+		btnTim.setIcon(new ImageIcon("src/main/java/icon/search.png"));
+		
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnLamMoi.setForeground(new Color(255, 255, 255));
+		btnLamMoi.setBackground(new Color(253, 125, 0));
+		btnLamMoi.setIcon(new ImageIcon("src/main/java/icon/loading-arrow.png"));
 
+
+		panelTop.add(btnThem);
+		panelTop.add(btnSua);
+		panelTop.add(btnTim);
+		panelTop.add(btnLamMoi);
+
+		panel_3.add(panelTop);
+		add(panel_3);
+		
 		JPanel pnlContainer = new JPanel();
-		pnlContainer.setLayout(new GridLayout(1, 2, 10, 0)); 
+		pnlContainer = new JPanel();
+		pnlContainer.setLayout(new BoxLayout(pnlContainer, BoxLayout.X_AXIS)); 
 		pnlContainer.setBackground(new Color(255, 255, 255));
 
 		pnlContainer.add(pnlBoLoc);
-		pnlContainer.add(panelChucNang);
+		pnlContainer.add(Box.createRigidArea(new Dimension(10, 0)));
+		pnlContainer.add(panel_3);
+		pnlBoLoc.setPreferredSize(new Dimension(800, 125)); 
+
+		panel_3.setPreferredSize(new Dimension(100, 125)); 
 
 		add(pnlContainer);
 
@@ -285,6 +314,27 @@ public class QuanLyNhanVienPanel extends JPanel {
 				}
 			}
 		});
+		// Sự kiện cho btnLamMoi		
+		btnLamMoi.addActionListener(e -> {
+			lamMoi();
+		});
+
+			
+	}
+
+	private void lamMoi() {
+	    txtMaNV.setText("");
+	    txtHoTen.setText("");
+	    txtSDT.setText("");
+	    cboVaiTro.setSelectedIndex(0);
+	    cboHoatDong.setSelectedIndex(0);
+
+	    TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) table_2.getRowSorter();
+	    if (sorter != null) {
+	        sorter.setRowFilter(null);
+	    }
+
+	    loadNhanVienToTable();
 	}
 
 	public String getNextMaNhanVien() {
@@ -334,7 +384,7 @@ public class QuanLyNhanVienPanel extends JPanel {
 			Object[] rowData = { nhanVien.getMaNV(), nhanVien.getHoten(), nhanVien.getSoDienThoai(),
 					nhanVien.getSoCanCuoc(), nhanVien.isConHoatDong() ? "Có" : "Không", nhanVien.getEmail(),
 					nhanVien.getDiaChi(), nhanVien.getVaiTro(), nhanVien.getTaiKhoan() };
-			tableModel.addRow(rowData); // Thêm hàng vào mô hình bảng
+			tableModel.addRow(rowData); 
 		}
 	}
 

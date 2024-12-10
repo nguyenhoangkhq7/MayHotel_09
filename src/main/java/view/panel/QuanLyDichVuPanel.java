@@ -35,6 +35,8 @@ public class QuanLyDichVuPanel extends JPanel {
 	private JPanel panelForm;
 	private JComboBox<String> cboHoatDong;
 	private JButton btnThem;
+	private JButton btnTim;
+	private JButton btnLamMoi;
 	private MenuPanel menuPanel;
 	
 	/**
@@ -115,18 +117,19 @@ public class QuanLyDichVuPanel extends JPanel {
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
 
 		JPanel panelTop = new JPanel();
-		panelTop.setLayout(new FlowLayout()); 
-		panelTop.setBackground(new Color(255, 255, 255));
-
+		
+		panelTop.setLayout(new GridLayout(2, 2, 10, 10)); 
+		
 		btnThem = new JButton("Thêm");
 		btnThem.setBackground(new Color(243, 125, 0));
 		btnThem.setForeground(new Color(255, 255, 255));
+		btnThem.setIcon(new ImageIcon("src/main/java/icon/add.png"));
 		btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelTop.add(btnThem);
-
+		
 		btnSua = new JButton("Sửa");
 		btnSua.setBackground(new Color(243, 125, 0));
 		btnSua.setForeground(new Color(255, 255, 255));
+		btnSua.setIcon(new ImageIcon("src/main/java/icon/pen.png"));
 		btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
 		if(menuPanel.getNhanVienDangTruc().getVaiTro().equals("Nhân viên"))
 		{
@@ -134,31 +137,42 @@ public class QuanLyDichVuPanel extends JPanel {
 			btnSua.setEnabled(false);
 			
 		}
-		panelTop.add(btnSua);
 		
-		JButton btnTim = new JButton("Tìm");
+		btnTim = new JButton("Tìm");
 		btnTim.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnTim.setForeground(new Color(255, 255, 255));
 		btnTim.setBackground(new Color(253, 125, 0));
+		btnTim.setIcon(new ImageIcon("src/main/java/icon/search.png"));
+
+		
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnLamMoi.setForeground(new Color(255, 255, 255));
+		btnLamMoi.setBackground(new Color(253, 125, 0));
+		btnLamMoi.setIcon(new ImageIcon("src/main/java/icon/loading-arrow.png"));
+
+		panelTop.add(btnThem);
+		panelTop.add(btnSua);
 		panelTop.add(btnTim);
+		panelTop.add(btnLamMoi);
 
 		panel_3.add(panelTop);
-		
-
 		add(panel_3);
-		
 
-		// Tạo một JPanel chứa cả pnlBoLoc và panel_3
 		JPanel pnlContainer = new JPanel();
-		pnlContainer.setLayout(new GridLayout(1, 2, 10, 0)); 
+		pnlContainer = new JPanel();
+		pnlContainer.setLayout(new BoxLayout(pnlContainer, BoxLayout.X_AXIS)); 
 		pnlContainer.setBackground(new Color(255, 255, 255));
 
 		pnlContainer.add(pnlBoLoc);
+		pnlContainer.add(Box.createRigidArea(new Dimension(10, 0)));
 		pnlContainer.add(panel_3);
+		pnlBoLoc.setPreferredSize(new Dimension(800, 125)); 
+
+		panel_3.setPreferredSize(new Dimension(100, 125)); 
 
 		add(pnlContainer);
 
-	
 
 		JPanel pnlBang1 = new JPanel();
 		pnlBang1.setBackground(new Color(255, 255, 255));
@@ -187,60 +201,32 @@ public class QuanLyDichVuPanel extends JPanel {
 
 		loadDichVuToTable();
 
-//Sự kiện cho click row
-//		table_2.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				int selectedRow = table_2.getSelectedRow(); // Lấy dòng được chọn từ bảng
-//				if (selectedRow != -1) { // Kiểm tra nếu có dòng được chọn
-//					// Chuyển đổi chỉ số dòng từ bảng sang mô hình
-//					int modelRow = table_2.convertRowIndexToModel(selectedRow);
-//
-//					// Lấy dữ liệu từ mô hình dựa trên chỉ số thực
-//					String maDV = Objects.toString(tableModel.getValueAt(modelRow, 0), "");
-//					String donGia = Objects.toString(tableModel.getValueAt(modelRow, 1), "");
-//					String tenDV = Objects.toString(tableModel.getValueAt(modelRow, 2), "");
-//					String soLuong = Objects.toString(tableModel.getValueAt(modelRow, 3), "");
-//					String hoatDong = Objects.toString(tableModel.getValueAt(modelRow, 4), "");
-//					String donVi = Objects.toString(tableModel.getValueAt(modelRow, 5), "");
-//
-//					// Hiển thị dữ liệu trong các JTextField và JComboBox
-//					txtMaDV.setText(maDV);
-//					txtTenDV.setText(tenDV);
-//					txtDonGia.setText(donGia);
-//					txtSoLuong.setText(soLuong);
-//					cboHoatDong.setSelectedItem(hoatDong);
-//					txtDonVi.setText(donVi);
-//				}
-//			}
-//		});
 //Sự kiện cho btnTim
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
 		table_2.setRowSorter(sorter);
 
 		btnTim.addActionListener(e -> {
-		    String maDV = txtMaDV.getText().trim();       // Lấy dữ liệu từ txtMaDV
-		    String tenDV = txtTenDV.getText().trim();     // Lấy dữ liệu từ txtTenDV
-		    String hoatDong = cboHoatDong.getSelectedItem().toString(); // Lấy dữ liệu từ JComboBox
+		    String maDV = txtMaDV.getText().trim();     
+		    String tenDV = txtTenDV.getText().trim();    
+		    String hoatDong = cboHoatDong.getSelectedItem().toString(); 
 
 		    List<RowFilter<Object, Object>> filters = new ArrayList<>();
 		    try {
-		        // Tạo các bộ lọc nếu có dữ liệu nhập
+
 		        if (!maDV.isEmpty()) {
-		            filters.add(RowFilter.regexFilter("(?i)" + maDV, 0)); // Cột 0: Mã DV
+		            filters.add(RowFilter.regexFilter("(?i)" + maDV, 0)); 
 		        }
 		        if (!tenDV.isEmpty()) {
-		            filters.add(RowFilter.regexFilter("(?i)" + tenDV, 2)); // Cột 1: Tên DV
+		            filters.add(RowFilter.regexFilter("(?i)" + tenDV, 2)); 
 		        }
 		        if (!hoatDong.equals("Không chọn")) {
-		            filters.add(RowFilter.regexFilter(hoatDong, 4)); // Cột 2: Hoạt động
+		            filters.add(RowFilter.regexFilter(hoatDong, 4)); 
 		        }
 
-		        // Kết hợp tất cả các bộ lọc
 		        if (filters.isEmpty()) {
-		            sorter.setRowFilter(null); // Không lọc nếu không có điều kiện nào
+		            sorter.setRowFilter(null); 
 		        } else {
-		            sorter.setRowFilter(RowFilter.andFilter(filters)); // Áp dụng lọc
+		            sorter.setRowFilter(RowFilter.andFilter(filters)); 
 		        }
 		    } catch (PatternSyntaxException ex) {
 		        JOptionPane.showMessageDialog(null, "Lỗi trong từ khóa tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -256,11 +242,8 @@ public class QuanLyDichVuPanel extends JPanel {
 
 //Sự kiện sửa
 		btnSua.addActionListener(e -> {
-	
-				// Kiểm tra xem có dòng nào được chọn trong bảng không
 				int selectedRow = table_2.getSelectedRow();
 				if (selectedRow != -1) {
-					// Lấy thông tin từ bảng vào các trường text của SuaDichVuDialog
 					String maDichVu = table_2.getValueAt(selectedRow, 0).toString();
 					double donGia = Double.parseDouble(table_2.getValueAt(selectedRow, 1).toString());
 					String tenDichVu = table_2.getValueAt(selectedRow, 2).toString();
@@ -269,7 +252,6 @@ public class QuanLyDichVuPanel extends JPanel {
 					boolean conHoatDong = "Có".equals(conHoatDongString);
 					String donVi = table_2.getValueAt(selectedRow, 5).toString();
 
-					// Tạo đối tượng DichVu và truyền vào dialog
 					DichVu dichVu = new DichVu(maDichVu, donGia, tenDichVu, soLuongTon, conHoatDong, donVi);
 					SuaDichVuDialog suaDialog = new SuaDichVuDialog(QuanLyDichVuPanel.this, dichVu);
 					suaDialog.setVisible(true);
@@ -278,6 +260,10 @@ public class QuanLyDichVuPanel extends JPanel {
 							JOptionPane.ERROR_MESSAGE);
 				}
 			
+		});
+// Sự kiện cho btnLamMoi		
+		btnLamMoi.addActionListener(e -> {
+			lamMoi();
 		});
 
 	}
@@ -306,17 +292,15 @@ public class QuanLyDichVuPanel extends JPanel {
 	}
 
 	private void loadDichVuToTable() {
-		DichVuDAL dichVuDAL = new DichVuDAL(); // Giả sử đây là lớp chứa hàm getAllDichVu()
-		ArrayList<DichVu> dsDichVu = dichVuDAL.getAllDichVu(); // Lấy danh sách dịch vụ từ cơ sở dữ liệu
+		DichVuDAL dichVuDAL = new DichVuDAL();
+		ArrayList<DichVu> dsDichVu = dichVuDAL.getAllDichVu(); 
 
-		// Xóa dữ liệu cũ trên bảng (nếu có)
 		tableModel.setRowCount(0);
 
-		// Duyệt qua danh sách dịch vụ và thêm vào TableModel
 		for (DichVu dichVu : dsDichVu) {
 			Object[] rowData = { dichVu.getMaDichVu(), dichVu.getDonGia(), dichVu.getTenDichVu(),
 					dichVu.getSoLuongTon(), dichVu.isConHoatDong() ? "Có" : "Không", dichVu.getDonVi() };
-			tableModel.addRow(rowData); // Thêm hàng vào mô hình bảng
+			tableModel.addRow(rowData); 
 		}
 	}
 
@@ -325,7 +309,7 @@ public class QuanLyDichVuPanel extends JPanel {
 
 		// Cập nhật dữ liệu cho bảng
 		DefaultTableModel model = (DefaultTableModel) table_2.getModel();
-		model.setRowCount(0); // Xóa các hàng cũ
+		model.setRowCount(0);
 
 		for (DichVu dv : danhSachDichVu) {
 			model.addRow(new Object[] { dv.getMaDichVu(), dv.getDonGia(), dv.getTenDichVu(), dv.getSoLuongTon(),
@@ -334,16 +318,18 @@ public class QuanLyDichVuPanel extends JPanel {
 
 	}
 
-//	private void quayVeTrangThaiBanDau() {
-//		txtMaDV.setText("");
-//		txtTenDV.setText("");
-//		cboHoatDong.setSelectedIndex(0);
-//		
-//		txtMaDV.setEditable(false);
-//		txtTenDV.setEditable(false);
-//		cboHoatDong.setEnabled(false);
-//
-//	}
+	private void lamMoi() {
+		txtMaDV.setText("");
+		txtTenDV.setText("");
+		cboHoatDong.setSelectedIndex(0);
+		
+	    TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) table_2.getRowSorter();
+	    if (sorter != null) {
+	        sorter.setRowFilter(null);
+	    }
+
+	    loadDichVuToTable();
+	}
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
