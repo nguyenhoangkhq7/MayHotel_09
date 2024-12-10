@@ -15,7 +15,7 @@ public class ConnectDB {
 		String url = "jdbc:sqlserver://localhost:1433;databasename=QuanLyKS;encrypt=false";
 		String user = "sa";
 
-		String password = "sapassword"; // đổi thành pass word của mọi ng vào
+		String password = "123456789HHkk"; // đổi thành pass word của mọi ng vào
 
 
 		con = DriverManager.getConnection(url, user, password);
@@ -35,7 +35,7 @@ public class ConnectDB {
 	public static void main(String[] args) {
 		try {
 			ConnectDB.getInstance().connect();
-			System.out.println("Kết nối thành công");
+			System.out.println(ConnectDB.getConnection());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
