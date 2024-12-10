@@ -10,24 +10,109 @@
 
 package bus;
 
-import com.sun.tools.javac.Main;
-import dal.KhachHangDAL;
-import dal.PhongDAL;
+import dal.*;
 import entity.*;
-import view.App;
-import view.MainGUI;
 
 import javax.swing.*;
 import java.time.Duration;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ThemDonDatPhongBUS {
 
     public ThemDonDatPhongBUS() {
+    }
+    public String formatHoTen(String hoTen) {
+        String[] words = hoTen.trim().toLowerCase().split("\\s+");
+        StringBuilder formattedName = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                formattedName.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1))
+                        .append(" ");
+            }
+        }
+        return formattedName.toString().trim();
+    }
+
+    public boolean validateFields(String sdt, String hoTen, String email, String cccd) {
+        // Kiểm tra số điện thoại
+        String regSDT = "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$";
+        if (!sdt.matches(regSDT)) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Kiểm tra email
+        String regEmail = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+        if (!email.matches(regEmail)) {
+            JOptionPane.showMessageDialog(null, "Email phải thuộc dạng @gmail.com!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Kiểm tra họ tên
+        String regHoTen = "^[\\p{L}]+(\\s[\\p{L}]+)*\\s[\\p{L}]+(\\s[\\p{L}]+)?$";
+        if (!hoTen.matches(regHoTen)) {
+            JOptionPane.showMessageDialog(null, "Họ tên không hợp lệ! Phải viết hoa chữ cái đầu và không chứa số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Kiểm tra CCCD (12 số)
+        String regCCCD = "^\\d{12}$";  // 12 chữ số
+        if (!cccd.matches(regCCCD)) {
+            JOptionPane.showMessageDialog(null, "CCCD phải là 12 số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Tất cả các kiểm tra đều hợp lệ
+        return true;
+    }
+    public ChiTiet_DonDatPhong_Phong_DichVu taoCTDDPPDV(int soLuongDat, LocalDateTime tgSuDung,DichVu dichVu, DonDatPhong donDatPhong, Phong p, String moTa) {
+        return new ChiTiet_DonDatPhong_Phong_DichVu(soLuongDat, tgSuDung, dichVu, donDatPhong, p, moTa);
+    }
+    public ChiTiet_DonDatPhong_Phong taoCTDDPP(DonDatPhong donDatPhong, Phong phong, LocalDateTime ngayNhanPhong, LocalDateTime ngayTraPhong) {
+        return new ChiTiet_DonDatPhong_Phong(donDatPhong, phong, ngayNhanPhong, ngayTraPhong, false, 0.0);
+    }
+    public DonDatPhong taoDonDatPhong (NhanVien nhanVien, String sdt, String hoTen, String email, String soCanCuoc, double tongTien,String moTa, String phuongThucThanhToan, boolean trangThaiDatCoc, LocalDateTime ngayNhanPhong, LocalDateTime ngayTraPhong) {
+        System.out.println(ngayNhanPhong);
+        System.out.println(ngayTraPhong);
+        // check và tạo khách hàng
+        KhachHang khachHang = taoKhachHang(sdt, hoTen, email, soCanCuoc);
+        if(khachHang == null) {
+            return null;
+        }
+
+        if(nhanVien == null) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi không có nhân viên", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        if (ngayNhanPhong == null || ngayTraPhong == null) {
+            JOptionPane.showMessageDialog(null, "Ngày nhận phòng hoặc ngày trả phòng không được để trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        if (ngayNhanPhong.isAfter(ngayTraPhong)) {
+            JOptionPane.showMessageDialog(null, "Ngày nhận phòng phải trước ngày trả phòng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        return new DonDatPhong(new DonDatPhongBUS().generateOrderCode(), LocalDateTime.now(), phuongThucThanhToan, "Đã đặt trước", trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayTraPhong, ngayNhanPhong);
+    }
+    public KhachHang taoKhachHang(String sdt, String hoTen, String email, String soCanCuoc) {
+        if(!validateFields(sdt, hoTen, email, soCanCuoc)) {
+            return null;
+        }
+        KhachHangDAL khachHangDAL = new KhachHangDAL();
+        KhachHang khachHang = khachHangDAL.getKhachHangTheoSoDienThoai(sdt);
+        if(khachHang!=null) {
+            return khachHang;
+        } else {
+            KhachHangBUS khachHangBUS = new KhachHangBUS();
+            return new KhachHang(khachHangBUS.generateCustomerCode(), hoTen, sdt, 0, soCanCuoc, email, LoaiKhachHang.NGUOIMOI);
+        }
     }
     public KhachHang getKhachHangTheoSoDienThoai(String soDienThoai) {
         if (soDienThoai == null || soDienThoai.isEmpty()) {
@@ -38,98 +123,55 @@ public class ThemDonDatPhongBUS {
         return khachHangDAL.getKhachHangTheoSoDienThoai(soDienThoai);
     }
     public LocalDateTime convertDateToLocalDateTime(Date date, int hour, int minute) {
-        return LocalDateTime.of(date.getYear(),date.getMonth(),date.getDay(), hour, minute);
+        // Chuyển đổi Date sang LocalDateTime
+        Instant instant = date.toInstant(); // Lấy thời điểm (instant) từ Date
+        ZoneId zoneId = ZoneId.systemDefault(); // Sử dụng múi giờ hệ thống
+        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+
+        // Tạo LocalDateTime mới với giờ và phút được chỉ định
+        return LocalDateTime.of(
+                localDateTime.getYear(),
+                localDateTime.getMonth(),
+                localDateTime.getDayOfMonth(),
+                hour,
+                minute
+        );
     }
-    public long tongThoiGianO(Date dateCheckin, Date dateCheckout) {
-        ThemDonDatPhongBUS themDonDatPhongBUS = new ThemDonDatPhongBUS();
 
-        LocalDateTime tgCheckin = null,tgCheckout= null;
+    public boolean datPhong(String phuongThucThanhToan, boolean isDatCoc, double tongTien,DonDatPhong donDatPhong, KhachHang khachHang, ArrayList<Phong> dsPhong, ArrayList<ChiTiet_DonDatPhong_Phong> dsCTDDPP, ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dsCTDDPPDV) {
+        if(donDatPhong!=null && khachHang!=null && !dsPhong.isEmpty() && !dsCTDDPP.isEmpty()) {
+            // check
+            if(phuongThucThanhToan.equals("--Chọn phương thức thanh toán--")) {
+                JOptionPane.showMessageDialog(null, "Hãy chọn phương thức thanh toán", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
 
-        if(dateCheckin!=null) {
-            tgCheckin = themDonDatPhongBUS.convertDateToLocalDateTime(dateCheckin, 14, 00);
-        } else {
-            JOptionPane.showMessageDialog(null, "Hãy nhập thời gian checkin", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            // update lại đơn
+            donDatPhong.setPhuongThucThanhToan(phuongThucThanhToan);
+            donDatPhong.setTrangThaiDatCoc(isDatCoc);
+            donDatPhong.setTongTien(tongTien);
+
+            // thêm khách hàng vào cơ sở dữ liệu
+            new DonDatPhongDAL().themDonDatPhong(donDatPhong);
+            KhachHangDAL khachHangDAL = new KhachHangDAL();
+            if(!khachHangDAL.checkKhachHangTonTaiTheoSDT(khachHang.getSoDienThoai())) {
+                khachHangDAL.themKhachHang(khachHang);
+            }
+
+            // thêm chi tiết vào cơ sở dữ liệu
+            ChiTiet_DonDatPhong_PhongDAL chiTietDonDatPhongPhongDAL = new ChiTiet_DonDatPhong_PhongDAL();
+            for(ChiTiet_DonDatPhong_Phong ct : dsCTDDPP) {
+                chiTietDonDatPhongPhongDAL.themChiTiet(ct);
+            }
+
+            // thêm chi tiết vào cơ sở dữ liệu
+            ChiTiet_DonDatPhong_Phong_DichVuDAL chiTietDonDatPhongPhongDichVuDAL = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
+            for(ChiTiet_DonDatPhong_Phong_DichVu ct : dsCTDDPPDV) {
+                chiTietDonDatPhongPhongDichVuDAL.themChiTiet(ct);
+            }
+
+            return true;
         }
-        if(dateCheckout!=null) {
-            tgCheckout = themDonDatPhongBUS.convertDateToLocalDateTime(dateCheckout, 12, 00);
-        } else {
-            JOptionPane.showMessageDialog(null, "Hãy nhập thời gian checkin", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        }
-        long tongThoiGianO = ChronoUnit.DAYS.between(tgCheckin, tgCheckout);
-        return tongThoiGianO;
-    }
-    public boolean themDonDatPhong(NhanVien nhanVienDangTruc, Date dateCheckin, Date dateCheckout, String loaiPhong, String soPhong, String soDienThoai, String hoTen, String cccd, String email, String moTa, String phuongThucThanhToan, boolean trangThaiDatCoc, ArrayList<Phong> danhSacPhong) {
-        DonDatPhongBUS donDatPhongBUS = new DonDatPhongBUS();
-        KhachHangDAL khachHangDAL = new KhachHangDAL();
-        KhachHangBUS khachHangBUS = new KhachHangBUS();
-        LocalDateTime localDateTimeCheckin = null,localDateTimeCheckout = null;
-
-        if(dateCheckin!=null) {
-            localDateTimeCheckin = convertDateToLocalDateTime(dateCheckin, 14, 00);
-            //                tgCheckin = jdcCheckIn.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        } else {
-            JOptionPane.showMessageDialog(null, "Hãy nhập thời gian checkin", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        }
-        if(dateCheckout!=null) {
-            localDateTimeCheckout = convertDateToLocalDateTime(dateCheckout, 12, 00);
-            //                tgCheckout = jdcCheckout.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        } else {
-            JOptionPane.showMessageDialog(null, "Hãy nhập thời gian checkin", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        }
-
-        // 2. Kiểm tra thông tin
-        if ( soDienThoai.isEmpty() || hoTen.isEmpty() || cccd.isEmpty() || email.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
-        // 3. Tạo đối tượng đơn đặt phòng
-        DonDatPhong ddp = new DonDatPhong();
-        ddp.setMaDon(donDatPhongBUS.generateOrderCode());
-        ddp.setNgayTao(LocalDateTime.now());
-        ddp.setTrangThaiDonDatPhong("Đặt trước");
-        ddp.setPhuongThucThanhToan(phuongThucThanhToan);
-        ddp.setTrangThaiDatCoc(trangThaiDatCoc);
-        ddp.setNhanVien(nhanVienDangTruc);
-        ddp.setMoTa(moTa!=null ? moTa : "");
-        ddp.setNgayNhanPhong(localDateTimeCheckin);
-        ddp.setNgayTraPhong(localDateTimeCheckout);
-
-//            kiểm tra nếu khách hàng chưa tồn tại thì tạo khách hàng mới
-        if(khachHangDAL.checkKhachHangTonTaiTheoSDT(soDienThoai)) {
-            ddp.setKhachHang(khachHangDAL.getKhachHangTheoSoDienThoai(soDienThoai));
-        } else {
-            KhachHang khachHang = new KhachHang();
-
-            khachHang.setMaKH(khachHangBUS.generateCustomerCode());
-            khachHang.setHoTen(hoTen);
-            khachHang.setSoDienThoai(soDienThoai);
-            khachHang.setSoCanCuoc(cccd);
-            khachHang.setEmail(email);
-            khachHang.setTienTichLuy(0); // Thiết lập tiền tích lũy ban đầu
-            khachHang.setLoaiKhachHang(LoaiKhachHang.NGUOIMOI); // Hoặc giá trị phù hợp
-            ddp.setKhachHang(khachHang);
-            khachHangDAL.themKhachHang(khachHang);
-        }
-
-//        tính tổng tiền phòng
-        Duration tongThoiGianO = Duration.between(localDateTimeCheckin,localDateTimeCheckout);
-        double tongTien = tinhTongTienPhong(danhSacPhong, tongThoiGianO);
-
-        ddp.setTongTien(tongTien); // Tạm thời gán 0, cần tính toán tổng tiền
         return false;
-    }
-    public double tinhTongTienPhong(ArrayList<Phong> dsPhong, Duration thoiGianO) {
-        PhongDAL phongDAL = new PhongDAL();
-        double tongTien = 0;
-        for(Phong phong : dsPhong) {
-            double donGia = phongDAL.getLoaiPhongTheoMaPhong(phong.getMaPhong()).getDonGia();
-             tongTien += (donGia * thoiGianO.toHours() + donGia * thoiGianO.toMinutes()*1.0/60);
-        }
-        return tongTien;
-    }
-    public Phong getPhongTheoTenPhong(String tenPhong) {
-        PhongDAL phongDAL = new PhongDAL();
-        return phongDAL.getPhongTheoTenPhong(tenPhong);
     }
 }

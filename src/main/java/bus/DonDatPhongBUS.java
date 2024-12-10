@@ -4,6 +4,7 @@ import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.DonDatPhongDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
 import entity.DonDatPhong;
+import entity.Phong;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,6 +23,11 @@ public class DonDatPhongBUS {
 
         // Tạo mã đơn mới theo định dạng "DDPXXXXXX"
         return String.format("DDP%06d", newOrderNumber); // Định dạng thành 6 chữ số
+    }
+
+    public boolean checkPhongDaThem(ArrayList<Phong> dsPhong, Phong phong) {
+        if(dsPhong.contains(phong)) return true;
+        return false;
     }
 
     public boolean checkCoPhongChuyen(DonDatPhong donDatPhong) {

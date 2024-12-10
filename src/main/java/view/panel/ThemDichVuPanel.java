@@ -177,7 +177,7 @@ public class ThemDichVuPanel extends JPanel {
 		JLabel lblNewLabel_2 = new JLabel("Dịch vụ");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_2.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/icondichvu.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_2.setIcon(new ImageIcon("/icon/icondichvu.png")); // Đường dẫn tới icon của bạn
 		lblNewLabel_2.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 
 		 comboBox = new JComboBox();
@@ -188,7 +188,7 @@ public class ThemDichVuPanel extends JPanel {
 		JLabel lblNewLabel_3 = new JLabel("Số lượng tồn");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_3.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/tonkho.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_3.setIcon(new ImageIcon("/icon/tonkho.png")); // Đường dẫn tới icon của bạn
 		lblNewLabel_3.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 		textField = new JTextField();
@@ -208,7 +208,7 @@ public class ThemDichVuPanel extends JPanel {
 		JLabel lblNewLabel_4 = new JLabel("Số lượng đặt");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_4.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/soluongdat.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_4.setIcon(new ImageIcon("/icon/soluongdat.png")); // Đường dẫn tới icon của bạn
 		lblNewLabel_4.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 	 comboBox_1 = new JComboBox();
@@ -219,7 +219,7 @@ public class ThemDichVuPanel extends JPanel {
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblNewLabel_5.setForeground(new Color(0, 0, 0));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/time.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_5.setIcon(new ImageIcon("/icon/time.png")); // Đường dẫn tới icon của bạn
 		lblNewLabel_5.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 		textField_1 = new JTextField();
@@ -236,7 +236,7 @@ public class ThemDichVuPanel extends JPanel {
 		JLabel lblNewLabel_6 = new JLabel("Mô tả");
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_6.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/ghichu.png"))); // Đường dẫn tới icon của bạn
+		lblNewLabel_6.setIcon(new ImageIcon("/icon/ghichu.png")); // Đường dẫn tới icon của bạn
 		lblNewLabel_6.setHorizontalTextPosition(SwingConstants.RIGHT); // Đặt vị trí văn bản sang bên phải biểu tượng
 		
 		 textArea = new JTextArea();
@@ -299,7 +299,7 @@ public class ThemDichVuPanel extends JPanel {
 		);
 		panel_4.setLayout(gl_panel_4);
 		
-		JLabel hinhminhhoa2 = new JLabel(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/hinhminhhoa2.jpg")));
+		JLabel hinhminhhoa2 = new JLabel(new ImageIcon("/icon/hinhminhhoa2.jpg"));
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -313,7 +313,7 @@ public class ThemDichVuPanel extends JPanel {
 		
 		JLabel hinhminhhoa1 = new JLabel("");
 		hinhminhhoa1.setHorizontalAlignment(SwingConstants.CENTER);
-		hinhminhhoa1.setIcon(new ImageIcon(ThemDichVuPanel.class.getResource("/icon/hinhminhhoa1.jpg")));
+		hinhminhhoa1.setIcon(new ImageIcon("/icon/hinhminhhoa1.jpg"));
 		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
@@ -335,8 +335,8 @@ public class ThemDichVuPanel extends JPanel {
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
 		// Giả sử có các icon dondatphong.png và phong.png trong package icon
-		JLabel icondondatphong = new JLabel(new ImageIcon(getClass().getResource("/icon/icondondatphong.png")));
-		JLabel iconphong = new JLabel(new ImageIcon(getClass().getResource("/icon/iconphong.png")));
+		JLabel icondondatphong = new JLabel(new ImageIcon("/icon/icondondatphong.png"));
+		JLabel iconphong = new JLabel(new ImageIcon("/icon/iconphong.png"));
 
 		
 		JButton btnNewButton = new JButton("Thêm");
@@ -407,58 +407,6 @@ public class ThemDichVuPanel extends JPanel {
 		panel_1.setLayout(gl_panel_1);
 		
 	}
-//	private void themChiTiet() {
-//		// Lấy dữ liệu từ các trường nhập liệu
-//		ChiTiet_DonDatPhong_Phong_DichVuDAL dal = new ChiTiet_DonDatPhong_Phong_DichVuDAL();
-//		int soLuongDat = (Integer) comboBox_1.getSelectedItem(); // Lấy số lượng đặt từ comboBox
-//		String maDichVu = (String) comboBox.getSelectedItem(); // Lấy mã dịch vụ từ comboBox
-//		String moTa = textArea.getText(); // Lấy mô tả từ JTextArea
-//
-//		// Lấy đối tượng DichVu từ mã dịch vụ
-//		DichVuDAL dalDV = new DichVuDAL();
-//		DichVu dichVu = dalDV.getDichVuTheoMa(maDichVu);
-//
-//		if (dichVu == null) {
-//			JOptionPane.showMessageDialog(this, "Dịch vụ không tồn tại.");
-//			return;
-//		}
-//
-//		// Lấy chi tiết phòng từ đối tượng đã có
-//		// (Giả sử `chitietphong` là một đối tượng hợp lệ, nếu chưa có cần khởi tạo hoặc lấy từ đâu đó)
-//		ChiTiet_DonDatPhong_Phong chiTietPhong = getChiTietPhong(); // Phương thức lấy chi tiết phòng hiện tại
-//
-//		// Tạo đối tượng ChiTiet_DonDatPhong_Phong_DichVu
-//		ChiTiet_DonDatPhong_Phong_DichVu chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(
-//				soLuongDat, LocalDateTime.now(), dichVu, chiTietPhong, moTa
-//		);
-//
-//		// Gọi phương thức thêm chi tiết vào cơ sở dữ liệu
-//		boolean result = dal.themChiTiet(chiTiet);
-//
-//		// Thông báo kết quả thêm chi tiết dịch vụ
-//		if (result) {
-//			JOptionPane.showMessageDialog(this, "Thêm chi tiết dịch vụ thành công!");
-//		} else {
-//			JOptionPane.showMessageDialog(this, "Thêm chi tiết dịch vụ không thành công.");
-//		}
-//
-//		// Cập nhật số lượng tồn của dịch vụ
-//		boolean result_2 = dalDV.suaDichVu(new DichVu(
-//				dichVu.getMaDichVu(),
-//				dichVu.getDonGia(),
-//				dichVu.getTenDichVu(),
-//				dichVu.getSoLuongTon() - soLuongDat,
-//				dichVu.isConHoatDong(),
-//				dichVu.getDonVi()
-//		));
-//
-//		// Thông báo kết quả cập nhật dịch vụ
-//		if (result_2) {
-//			JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ thành công!");
-//		} else {
-//			JOptionPane.showMessageDialog(this, "Cập nhật số lượng dịch vụ không thành công.");
-//		}
-//	}
 
 
 	private void loadComboBoxDichVu() {
@@ -497,6 +445,7 @@ public class ThemDichVuPanel extends JPanel {
           }
       }
   	}
+
 
 }
 

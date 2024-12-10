@@ -21,6 +21,15 @@ public class TextFieldCustom extends JTextField {
     public boolean isHasPlaceHolder() {
         return hasPlaceHolder;
     }
+    @Override
+    public void setText(String text) {
+        super.setText(text);
+        // Nếu nội dung mới không phải placeholder -> tắt placeholder
+        if (text != null && !text.equals(placeholderText)) {
+            hasPlaceHolder = false;
+        }
+    }
+
 
     public TextFieldCustom(String placeholderText, int charLimit){
         super();

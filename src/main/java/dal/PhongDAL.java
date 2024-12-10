@@ -48,6 +48,42 @@ public class PhongDAL {
         }
         return loaiPhong;
     }
+    public ArrayList<Phong> getPhongTheoLoaiPhongChuaDuocDat(String maLoaiPhong) {
+        ArrayList<Phong> dsPhong = new ArrayList<>();
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+
+            String sql = """
+            SELECT p.*
+            FROM Phong p
+            LEFT JOIN CT_DonDatPhong_Phong ct ON p.maPhong = ct.maPhong
+            LEFT JOIN DonDatPhong ddp ON ct.maDonDatPhong = ddp.maDon
+            WHERE p.loaiPhong = ?
+              AND (ct.maPhong IS NULL OR ddp.trangThaiDonDatPhong = N'Đã hoàn tất')
+        """;
+
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maLoaiPhong);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String maPhong = rs.getString("maPhong");
+                String tenPhong = rs.getString("tenPhong");
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(rs.getString("loaiPhong"));
+                boolean trangThaiPhong = rs.getBoolean("trangThaiPhong");
+                String moTa = rs.getString("moTa");
+                String tang = rs.getString("tang");
+
+                Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
+                dsPhong.add(phong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsPhong;
+    }
+
 
     // Lấy tất cả phòng theo mã loại phòng
     public ArrayList<Phong> getAllPhongByMaLoaiPhong(String maLoaiPhong) {
@@ -200,15 +236,13 @@ public class PhongDAL {
     }
     public static void main(String[] args) {
         PhongDAL dal = new PhongDAL();
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP01").size());
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP02").size());
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP03").size());
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP04").size());
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP05").size());
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP06").size());
 
-
-        // Lấy tất cả loại phòng
-        ArrayList<Phong> phongs = dal.getAllPhong();
-        for (Phong p : phongs) {
-            System.out.println(p);
-        }
-//        Phong phong = dal.getPhongTheoTenPhong("Phòng Delux King 1");
-//        System.out.println(phong);
 
 
     }

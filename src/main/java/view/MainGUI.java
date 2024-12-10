@@ -1,10 +1,12 @@
 package view;
 
+import constant.CommonConstants;
 import entity.NhanVien;
 import view.panel.MenuPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class MainGUI extends JFrame {
@@ -22,18 +24,17 @@ public class MainGUI extends JFrame {
 	public MainGUI(NhanVien nhanVienDangTruc) {
 		this.nhanVienDangTruc = nhanVienDangTruc;
 		setupMainFrame();
+		jpnContainContent = new JPanel(new BorderLayout());
+		this.add(jpnContainContent, BorderLayout.CENTER);
 		this.add(new MenuPanel(this ,this.nhanVienDangTruc), BorderLayout.WEST);
 	}
 
 	private void setupMainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		setBounds(100, 100, 1440, 900);
-
-		jpnContainContent = new JPanel(new BorderLayout());
-		jpnContainContent.setBorder(new EmptyBorder(0, 0, 0, 0));
-		setContentPane(jpnContainContent);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setLocationRelativeTo(null);
+		setSize(1920,1080);
+//		setBounds(100, 100, 1440, 900);
 	}
 
 	public static void main(String[] args) {

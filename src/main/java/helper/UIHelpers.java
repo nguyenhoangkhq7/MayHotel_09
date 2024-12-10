@@ -12,6 +12,7 @@ package helper;
 
 import com.toedter.calendar.JDateChooser;
 import constant.CommonConstants;
+import custom.TextFieldCustom;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -23,44 +24,18 @@ public class UIHelpers {
 
 
 //    Custom button
-    public static void set_Button_Orange_Outline_Style(JButton btn) {
+    public static JButton createButtonStyle(String text, Dimension size, Color foreground, Color background) {
+        JButton btn = new JButton(text);
         btn.setOpaque(true);
-        btn.setPreferredSize(CommonConstants.BUTTON_SIZE);
-        btn.setForeground(CommonConstants.ORANGE);
+        btn.setPreferredSize(size);
+        btn.setMinimumSize(size);
+        btn.setMaximumSize(size);
+        btn.setForeground(foreground);
+        btn.setBackground(background);
+        btn.setFont(new Font("Arial", Font.BOLD, 14));
         btn.setBorder(new LineBorder(CommonConstants.ORANGE, 2));
-        btn.setBackground(Color.WHITE);
         btn.setFocusPainted(false);
-    }
-    public static void set_Button_Blue_Style(JButton btn) {
-        btn.setOpaque(true);
-        btn.setPreferredSize(CommonConstants.BUTTON_SIZE);
-        btn.setMinimumSize(CommonConstants.BUTTON_SIZE);
-        btn.setMaximumSize(CommonConstants.BUTTON_SIZE);
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(CommonConstants.BLUE);
-        btn.setFont(new Font("Arial", Font.BOLD, 14));
-        btn.setFocusPainted(false);
-    }
-
-    public static void set_Orange_Blue_Style(JButton btn) {
-        btn.setOpaque(true);
-        btn.setPreferredSize(CommonConstants.BUTTON_SIZE);
-        btn.setMinimumSize(CommonConstants.BUTTON_SIZE);
-        btn.setMaximumSize(CommonConstants.BUTTON_SIZE);
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(CommonConstants.ORANGE);
-        btn.setFont(new Font("Arial", Font.BOLD, 14));
-        btn.setFocusPainted(false);
-    }
-    public static void set_Small_Button_Style(JButton btn) {
-        btn.setOpaque(true);
-        btn.setPreferredSize(CommonConstants.BUTTON_SIZE);
-        btn.setMinimumSize(CommonConstants.BUTTON_SIZE);
-        btn.setMaximumSize(CommonConstants.BUTTON_SIZE);
-        btn.setForeground(Color.BLACK);
-        btn.setBackground(Color.WHITE);
-        btn.setFont(new Font("Arial", Font.BOLD, 10));
-        btn.setFocusPainted(false);
+        return btn;
     }
 
 //    create component
@@ -83,7 +58,7 @@ private static Box createLabelAndComponent(String labelTitle, JComponent compone
     return box;
 }
 
-    public static Box create_Form_Label_JTextField(String labelTitle, JTextField jtf) {
+    public static Box create_Form_Label_JTextField(String labelTitle, TextFieldCustom jtf) {
         jtf.setPreferredSize(CommonConstants.INPUT_SIZE); // Thiết lập kích thước
         return createLabelAndComponent(labelTitle, jtf); // Trả về Box chứa label và JTextField
     }

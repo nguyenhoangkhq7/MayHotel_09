@@ -1,5 +1,7 @@
 package view.dialog;
 
+import constant.CommonConstants;
+import custom.TextFieldCustom;
 import dal.ChiTiet_DonDatPhong_PhongDAL;
 import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import entity.ChiTiet_DonDatPhong_Phong;
@@ -14,11 +16,7 @@ import java.util.ArrayList;
 
 public class ChiTietDonDatPhong_PhongDialog extends JDialog {
 
-    private JTextField txtTenKhachHang;
-    private JTextField txtSoDienThoai;
-    private JTextField txtSoCCCD;
-    private JTextField txtEmail;
-    private JTextField txtLoaiKH;
+    private TextFieldCustom txtTenKhachHang, txtSoDienThoai, txtSoCCCD, txtEmail, txtLoaiKH;
     private JTable bangDichVu;
     private ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet;
     private ChiTiet_DonDatPhong_PhongDAL chiTietDonDatPhongPhongDAL = new ChiTiet_DonDatPhong_PhongDAL();
@@ -62,11 +60,11 @@ public class ChiTietDonDatPhong_PhongDialog extends JDialog {
         container.add(jpnContainInfoKhachHang, BorderLayout.NORTH);
 
         // Khởi tạo các trường nhập liệu
-        txtTenKhachHang = new JTextField();
-        txtSoDienThoai = new JTextField();
-        txtSoCCCD = new JTextField();
-        txtEmail = new JTextField();
-        txtLoaiKH = new JTextField();
+        txtTenKhachHang = new TextFieldCustom("Nhập tên khách hàng", 50);
+        txtSoDienThoai = new TextFieldCustom("Nhập số điện thoại", 11);
+        txtSoCCCD = new TextFieldCustom("Nhập số căn cước", 12);
+        txtEmail = new TextFieldCustom("Nhập email", 50);
+        txtLoaiKH = new TextFieldCustom("",0);
 
         // Thiết lập thông tin khách hàng
         txtTenKhachHang.setText(ct.getDonDatPhong().getKhachHang().getHoTen());
@@ -102,8 +100,7 @@ public class ChiTietDonDatPhong_PhongDialog extends JDialog {
     private void showHeader() {
         // Nút đóng
         JPanel jpnClose = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton closeButton = new JButton("Đóng");
-        UIHelpers.set_Orange_Blue_Style(closeButton);
+        JButton closeButton = UIHelpers.createButtonStyle("Đặt phòng", CommonConstants.BUTTON_SIZE, Color.WHITE, Color.ORANGE);
         jpnClose.add(closeButton);
         closeButton.addActionListener(e -> dispose());
         add(jpnClose, BorderLayout.NORTH);

@@ -69,9 +69,9 @@ public class DonDatPhongDAL {
             stmt.setString(7, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(8, donDatPhong.getTongTien());
             stmt.setString(9, donDatPhong.getMoTa());
-            stmt.setTimestamp(10, Timestamp.valueOf(donDatPhong.getNgayTraPhong()));
-            stmt.setTimestamp(11, Timestamp.valueOf(donDatPhong.getNgayNhanPhong()));
-            
+            stmt.setTimestamp(10, Timestamp.valueOf(donDatPhong.getNgayNhanPhong()));
+            stmt.setTimestamp(11, Timestamp.valueOf(donDatPhong.getNgayTraPhong()));
+
             n = stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

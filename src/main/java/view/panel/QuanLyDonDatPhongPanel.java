@@ -2,6 +2,8 @@ package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import com.toedter.calendar.JDateChooser;
 import constant.CommonConstants;
@@ -10,7 +12,7 @@ import entity.*;
 import helper.UIHelpers;
 import view.component.DonDatPhongPanel;
 
-public class QuanLyDonDatPhongPanel extends JPanel {
+public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
     // frame
     JButton btnTraCuu;
     public static JButton btnDatPhong;
@@ -18,15 +20,16 @@ public class QuanLyDonDatPhongPanel extends JPanel {
     JComboBox cboTang, cboTrangThai;
     private JPanel jpnHeader, jpnContent, jpnContainSearchTrangThai, jpnDanhSachDDP,jpnSearch,jpnDetail, jpnTrangThai;
     private DonDatPhongDAL donDatPhongDAL;
+    MenuPanel menuPanel;
     public JButton getBtnDatPhong() {
         return btnDatPhong;
     }
-
     public JPanel getJpnDanhSachDDP() {
         return jpnDanhSachDDP;
     }
 
-    public QuanLyDonDatPhongPanel() {
+    public QuanLyDonDatPhongPanel(MenuPanel menuPanel) {
+        this.menuPanel = menuPanel;
         setLayout(new BorderLayout()); // Sử dụng BorderLayout cho JFrame
 
 //      hiển thị header
@@ -42,8 +45,8 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         headerLeft.add(jpn1);
         headerLeft.add(jpn2);
         JPanel headerRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        btnDatPhong = new JButton("Đặt phòng"); btnDatPhong.setFont(new Font("Arial", Font.BOLD, CommonConstants.TEXT_SIZE));
-        headerRight.add(btnDatPhong); UIHelpers.set_Button_Orange_Outline_Style(btnDatPhong);
+        btnDatPhong = UIHelpers.createButtonStyle("Đặt phòng", CommonConstants.BUTTON_SIZE, Color.WHITE, CommonConstants.ORANGE);
+        headerRight.add(btnDatPhong);
         jpnHeader.add(headerLeft);
         jpnHeader.add(headerRight);
         jpn1.setOpaque(false);
@@ -88,8 +91,9 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         cboTrangThai.addItem("Quá hạn checkout");
 
         JPanel jpnTmp = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        jpnTmp.add(btnTraCuu = new JButton("Tra cứu"));
-        UIHelpers.set_Button_Blue_Style(btnTraCuu);
+        btnTraCuu = UIHelpers.createButtonStyle("Tra cứu", CommonConstants.BUTTON_SIZE, Color.WHITE, Color.BLUE);
+        jpnTmp.add(btnTraCuu);
+
 
         jpnSearch.add(jpnTmp);
 
@@ -106,7 +110,6 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         jpnTrangThai.add(jpn6);
         jpnTrangThai.add(jpn7);
         jpnTrangThai.add(jpn8);
-
         JLabel lbl3 = new JLabel();
         lbl3.setPreferredSize(CommonConstants.TRANGTHAI_SIZE);
         lbl3.setBackground(CommonConstants.DAT_TRUOC_COLOR);
@@ -114,7 +117,6 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         lbl3.setText("0");
         lbl3.setHorizontalAlignment(SwingConstants.CENTER);
         lbl3.setVerticalAlignment(SwingConstants.CENTER);
-
         JLabel lbl4 = new JLabel();
         lbl4.setPreferredSize(CommonConstants.TRANGTHAI_SIZE);
         lbl4.setBackground(CommonConstants.DANG_O_COLOR);
@@ -122,7 +124,6 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         lbl4.setText("0");
         lbl4.setHorizontalAlignment(SwingConstants.CENTER);
         lbl4.setVerticalAlignment(SwingConstants.CENTER);
-
         JLabel lbl5 = new JLabel();
         lbl5.setPreferredSize(CommonConstants.TRANGTHAI_SIZE);
         lbl5.setBackground(CommonConstants.CO_PHONG_CHUYEN_COLOR);
@@ -130,7 +131,6 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         lbl5.setText("0");
         lbl5.setHorizontalAlignment(SwingConstants.CENTER);
         lbl5.setVerticalAlignment(SwingConstants.CENTER);
-
         JLabel lbl6 = new JLabel();
         lbl6.setPreferredSize(CommonConstants.TRANGTHAI_SIZE);
         lbl6.setBackground(CommonConstants.SAP_CHECKIN_COLOR);
@@ -138,7 +138,6 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         lbl6.setText("0");
         lbl6.setHorizontalAlignment(SwingConstants.CENTER);
         lbl6.setVerticalAlignment(SwingConstants.CENTER);
-
         JLabel lbl7 = new JLabel();
         lbl7.setPreferredSize(CommonConstants.TRANGTHAI_SIZE);
         lbl7.setBackground(CommonConstants.QUA_HAN_CHECKOUT_COLOR);
@@ -146,7 +145,6 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         lbl7.setText("0");
         lbl7.setHorizontalAlignment(SwingConstants.CENTER);
         lbl7.setVerticalAlignment(SwingConstants.CENTER);
-
         JLabel lbl8 = new JLabel();
         lbl8.setPreferredSize(CommonConstants.TRANGTHAI_SIZE);
         lbl8.setBackground(CommonConstants.QUA_HAN_CHECKOUT_COLOR);
@@ -154,20 +152,29 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         lbl8.setText("0");
         lbl8.setHorizontalAlignment(SwingConstants.CENTER);
         lbl8.setVerticalAlignment(SwingConstants.CENTER);
-
         jpn3.add(lbl3); jpn3.add(new Label("Đặt trước"));
         jpn4.add(lbl4); jpn4.add(new Label("Đang ở"));
         jpn5.add(lbl5); jpn5.add(new Label("Có phòng chuyển"));
         jpn6.add(lbl6); jpn6.add(new Label("Sắp checkin"));
         jpn7.add(lbl7); jpn7.add(new Label("Quá hạn checkin"));
         jpn8.add(lbl8); jpn8.add(new Label("Quá hạn checkout"));
-
-
 // thêm component cho danh sách đơn đặt phòng
         donDatPhongDAL = new DonDatPhongDAL();
         jpnDanhSachDDP.add(showDanhSachDDP(donDatPhongDAL.getAllDonDatPhong()), BorderLayout.CENTER);
-
         setVisible(true);
+        btnDatPhong.addActionListener(this);
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object o = e.getSource();
+        if(o.equals(btnDatPhong)) {
+            xuLySKDatPhong();
+        }
+    }
+    private void xuLySKDatPhong() {
+        JPanel jpnThemDonDatPhong = new ThemDonDatPhongPanel(menuPanel);
+        menuPanel.getJpnContain().add(jpnThemDonDatPhong, "Thêm đơn đặt phòng");
+        menuPanel.getCardLayout().show(menuPanel.getJpnContain(), "Thêm đơn đặt phòng");
     }
 
     public void showDanhSachTimKiem(ArrayList<DonDatPhong> ketQuaTimKiem) {
@@ -200,107 +207,5 @@ public class QuanLyDonDatPhongPanel extends JPanel {
         }
         return scroll;
     }
-
-
-
-
-//    public DDPPanel createJPanelDonDatPhong(DonDatPhong donDatPhong) {
-//
-//        JPanel jpnDDP = new JPanel();
-//        jpnDDP.setLayout(new BoxLayout(jpnDDP, BoxLayout.Y_AXIS));
-//        jpnDDP.setPreferredSize(new Dimension(250, 280));
-//        jpnDDP.setBorder(BorderFactory.createLineBorder(CommonConstants.ORANGE, 2));
-//
-//        JPanel jpn1 = new JPanel();
-//        JPanel jpn2 = new JPanel();
-//        JPanel jpn3 = new JPanel();
-//        JPanel jpn4 = new JPanel();
-//        JPanel jpn5 = new JPanel();
-//        JPanel jpnButton = new JPanel();
-//        JPanel jpnXemChiTiet = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-//
-//        // Đặt màu nền trong suốt cho các panel con
-//        jpn1.setOpaque(false);
-//        jpn2.setOpaque(false);
-//        jpn3.setOpaque(false);
-//        jpn4.setOpaque(false);
-//        jpn5.setOpaque(false);
-//        jpnButton.setOpaque(false);
-//        jpnXemChiTiet.setOpaque(false);
-//
-//        JButton btnCheckin = new JButton("Checkin");
-//        btnCheckin.setFocusPainted(false);
-//
-//        JButton btnCheckout = new JButton("Checkout");
-//        btnCheckout.setFocusPainted(false);
-//
-//        JButton btnThemDichVu = new JButton("Thêm dịch vụ");
-//        btnThemDichVu.setFocusPainted(false);
-//
-//        JButton btnHuy = new JButton("Hủy đơn");
-//        btnHuy.setFocusPainted(false);
-//
-//        JButton btnXemChiTiet = new JButton("Chi tiết");
-//        btnXemChiTiet.setFocusPainted(false);
-//
-//        jpnXemChiTiet.add(btnXemChiTiet);
-//
-//        // Lấy thông tin từ DonDatPhong
-//        String tenKhachHang = donDatPhong.getKhachHang().getHoTen();
-//        String soDienThoai = donDatPhong.getKhachHang().getSoDienThoai();
-//        String trangThaiDatCoc = donDatPhong.isTrangThaiDatCoc() ? "Đã đặt cọc" : "Chưa đặt cọc";
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//        String ngayNhanPhong = donDatPhong.getNgayNhanPhong().format(formatter);
-//        String ngayTraPhong = donDatPhong.getNgayTraPhong().format(formatter);
-//
-//        // Tạo các label thông tin
-//        JLabel lblTenKhachHang = new JLabel("Tên khách hàng: " + tenKhachHang);
-//        JLabel lblSoDienThoai = new JLabel("Số điện thoại: " + soDienThoai);
-//        JLabel lblTrangThaiDatCoc = new JLabel("Trạng thái đặt cọc: " + trangThaiDatCoc);
-//        JLabel lblNgayNhanPhong = new JLabel("Ngày nhận phòng: " + ngayNhanPhong);
-//        JLabel lblNgayTraPhong = new JLabel("Ngày trả phòng: " + ngayTraPhong);
-//
-//        jpn1.add(lblTenKhachHang);
-//        jpn2.add(lblSoDienThoai);
-//        jpn3.add(lblTrangThaiDatCoc);
-//        jpn4.add(lblNgayNhanPhong);
-//        jpn5.add(lblNgayTraPhong);
-//
-//        LocalDateTime ngayHienTai = LocalDateTime.now();
-//
-////        boolean checkDenHan =
-//
-//        // Thiết lập các nút và màu nền dựa trên trạng thái đặt cọc
-//        switch (donDatPhong.getTrangThaiDonDatPhong()) {
-//            case "Đặt trước":
-//                jpnButton.add(btnCheckin);
-//                jpnButton.add(btnHuy);
-//                jpnDDP.setBackground(CommonConstants.DAT_TRUOC_COLOR);
-//                break;
-//            case "Đang ở":
-//                jpnButton.add(btnThemDichVu);
-//                jpnButton.add(btnCheckout);
-//                jpnDDP.setBackground(CommonConstants.DANG_O_COLOR);
-//                break;
-//            case "Đã hoàn thành":
-//
-//            default:
-//                jpnButton.add(btnThemDichVu);
-//                jpnButton.add(btnCheckout);
-//                jpnDDP.setBackground(CommonConstants.ORANGE);
-//                break;
-//        }
-//
-//        jpnDDP.add(jpnXemChiTiet);
-//        jpnDDP.add(jpn1);
-//        jpnDDP.add(jpn2);
-//        jpnDDP.add(jpn3);
-//        jpnDDP.add(jpn4);
-//        jpnDDP.add(jpn5);
-//        jpnDDP.add(jpnButton);
-//
-//        return new DDPPanel(jpnDDP, btnCheckin, btnCheckout, btnThemDichVu, btnHuy, btnXemChiTiet);
-//    }
 
 }

@@ -20,6 +20,48 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
         ConnectDB.getInstance().connect();
         return ConnectDB.getConnection();
     }
+    // Get ChiTiet by maPhong
+    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDanhSachChiTietTheoMaPhong(String maPhong) {
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maPhong = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+
+            // Gán giá trị cho tham số maPhong
+            pstmt.setString(1, maPhong);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int soLuongDat = rs.getInt("soLuongDat");
+                    LocalDateTime ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
+                    String moTa = rs.getString("moTa");
+                    String maDonDatPhong = rs.getString("maDonDatPhong");
+                    String maDichVu = rs.getString("maDichVu");
+
+                    // Lấy các đối tượng liên quan từ DAL
+                    DichVu dichVu = new DichVuDAL().getDichVuTheoMa(maDichVu);
+                    ChiTiet_DonDatPhong_Phong chiTietDonDatPhongPhong = new ChiTiet_DonDatPhong_PhongDAL()
+                            .getChiTietDonDatPhongPhongTheoMa(maDonDatPhong, maPhong);
+
+                    // Tạo đối tượng ChiTiet_DonDatPhong_Phong_DichVu và thêm vào danh sách
+                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(
+                            soLuongDat,
+                            ngayTao,
+                            dichVu,
+                            chiTietDonDatPhongPhong.getDonDatPhong(),
+                            chiTietDonDatPhongPhong.getPhong(),
+                            moTa
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi: " + e.getMessage());
+        }
+
+        return chiTietList;
+    }
+
 
     // Get all ChiTiet records
     public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getAllChiTietDonDatPhongPhongDichVu() {
@@ -123,7 +165,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setInt(1, chiTiet.getSoLuongDat());
-            stmt.setTimestamp(2, Timestamp.valueOf(chiTiet.getNgayTao()));
+            stmt.setTimestamp(2, Timestamp.valueOf(chiTiet.getTgSuDungDV()));
             stmt.setString(3, chiTiet.getDichVu().getMaDichVu());
             stmt.setString(4, chiTiet.getDonDatPhong().getMaDon());
             stmt.setString(5, chiTiet.getPhong().getMaPhong());

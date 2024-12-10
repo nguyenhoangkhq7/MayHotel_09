@@ -34,6 +34,34 @@ public class DichVuDAL {
         }
         return dichVu;
     }
+    // Lấy dịch vụ theo tên
+    // Lấy dịch vụ theo tên (tên không trùng, trả về 1 dịch vụ duy nhất)
+    public DichVu getDichVuTheoTen(String tenDichVu) {
+        DichVu dichVu = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM DichVu WHERE tenDichVu = ?"; // Thêm tiền tố N để hỗ trợ tiếng Việt
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenDichVu); // Đặt giá trị tham số
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) { // Nếu tìm thấy kết quả
+                dichVu = new DichVu(
+                        rs.getString(1),  // maDichVu
+                        rs.getDouble(2),  // donGia
+                        rs.getString(3),  // tenDichVu
+                        rs.getInt(4),     // soLuongTon
+                        rs.getBoolean(5), // conHoatDong
+                        rs.getString(6)   // donVi
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dichVu; // Trả về null nếu không tìm thấy
+    }
+
 
     // Lấy tất cả dịch vụ
     public ArrayList<DichVu> getAllDichVu() {
@@ -104,9 +132,6 @@ public class DichVuDAL {
     }
     public static void main(String[] args) {
 		DichVuDAL dal = new DichVuDAL();
-		ArrayList<DichVu> ds = dal.getAllDichVu();
-		for(DichVu dv : ds) {
-			System.out.println(dv);
-		}
+        System.out.println(dal.getDichVuTheoTen("Dịch vụ spa"));
 	}
 }

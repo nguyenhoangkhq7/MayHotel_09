@@ -10,13 +10,12 @@
 
 package entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ChiTiet_DonDatPhong_Phong_DichVu {
     private int soLuongDat;
-    private LocalDateTime ngayTao;
+    private LocalDateTime tgSuDungDV;
     private DichVu dichVu;
     private DonDatPhong donDatPhong;
     private Phong phong;
@@ -24,9 +23,9 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
 
     // Constructor
 
-    public ChiTiet_DonDatPhong_Phong_DichVu(int soLuongDat, LocalDateTime ngayTao, DichVu dichVu, DonDatPhong donDatPhong, Phong phong, String moTa) {
+    public ChiTiet_DonDatPhong_Phong_DichVu(int soLuongDat, LocalDateTime tgSuDungDV, DichVu dichVu, DonDatPhong donDatPhong, Phong phong, String moTa) {
         this.soLuongDat = soLuongDat;
-        this.ngayTao = ngayTao;
+        this.tgSuDungDV = tgSuDungDV;
         this.dichVu = dichVu;
         this.donDatPhong = donDatPhong;
         this.phong = phong;
@@ -44,12 +43,12 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
         this.soLuongDat = soLuongDat;
     }
 
-    public LocalDateTime getNgayTao() {
-        return ngayTao;
+    public LocalDateTime getTgSuDungDV() {
+        return tgSuDungDV;
     }
 
-    public void setNgayTao(LocalDateTime ngayTao) {
-        this.ngayTao = ngayTao;
+    public void setTgSuDungDV(LocalDateTime tgSuDungDV) {
+        this.tgSuDungDV = tgSuDungDV;
     }
 
     public DichVu getDichVu() {
@@ -100,7 +99,7 @@ public class ChiTiet_DonDatPhong_Phong_DichVu {
     public String toString() {
         return "ChiTiet_DonDatPhong_Phong_DichVu{" +
                 "soLuongDat=" + soLuongDat +
-                ", ngayTao=" + ngayTao +
+                ", ngayTao=" + tgSuDungDV +
                 ", dichVu=" + dichVu +
                 ", donDatPhong=" + donDatPhong +
                 ", phong=" + phong +

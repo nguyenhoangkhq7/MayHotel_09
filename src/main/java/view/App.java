@@ -4,16 +4,9 @@
     author: Nguyễn Hoàng Khang  */
     /*
        *class description:
-            write description right here   
+            write description right here
      */
-
-
 package view;
-
-import dal.NhanVienDAL;
-import entity.NhanVien;
-
-import javax.swing.*;
 import java.awt.*;
 
 // nơi chạy chương trình
