@@ -29,6 +29,10 @@ public class Phong {
         this.trangThaiPhong = trangThaiPhong;
         this.moTa = moTa;
     }
+    public Phong() {
+    }
+
+   
 
     public Phong(String maPhong) {
         this.maPhong = maPhong;

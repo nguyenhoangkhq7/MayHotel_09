@@ -198,6 +198,44 @@ public class PhongDAL {
         }
         return n > 0;
     }
+ // Xóa phòng theo mã phòng
+    public boolean xoaPhong(String maPhong) {
+        int n = 0;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            // Truy vấn SQL để xóa phòng theo mã phòng
+            String sql = "DELETE FROM Phong WHERE maPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maPhong);
+
+            // Thực thi câu lệnh xóa
+            n = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return n > 0; // Nếu xóa thành công, trả về true
+    }
+
+    public String getLastRoomCode() {
+        String lastRoomCode = null;
+
+        String query = "SELECT MAX(maPhong) FROM Phong"; // Truy vấn để lấy mã phòng lớn nhất
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                lastRoomCode = rs.getString(1); // Lấy mã phòng lớn nhất
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
+
+        return lastRoomCode;
+    }
     public static void main(String[] args) {
         PhongDAL dal = new PhongDAL();
 

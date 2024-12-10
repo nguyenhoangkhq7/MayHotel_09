@@ -47,7 +47,7 @@ public class KhachHangBUS {
 
     // Cập nhật khách hàng và cập nhật danh sách trong bộ nhớ
     public boolean capNhatKhachHang(KhachHang khachHang) {
-        boolean success = khachHangDAL.capNhatKhachHang(khachHang);
+        boolean success = khachHangDAL.suaKhachHang(khachHang);
         if (success) {
             // Cập nhật danh sách trong bộ nhớ
             for (KhachHang kh : dsKhachHang) {
