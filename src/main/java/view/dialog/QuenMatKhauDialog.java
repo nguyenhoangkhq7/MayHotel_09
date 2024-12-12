@@ -81,7 +81,7 @@ private void initUI() {
     contentPane.add(txtTaiKhoan);
     txtTaiKhoan.setColumns(10);
 
-    JLabel labelTaiKhoan = new JLabel("TaiKhoan:");
+    JLabel labelTaiKhoan = new JLabel("Tài khoản:");
     labelTaiKhoan.setForeground(new Color(199, 225, 255));
     labelTaiKhoan.setFont(new Font("Segoe UI", Font.PLAIN, 19));
     labelTaiKhoan.setBounds(290, 86, 90, 20);
