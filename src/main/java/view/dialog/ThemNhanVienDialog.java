@@ -65,7 +65,8 @@ public class ThemNhanVienDialog extends JDialog {
 
 		panel.add(new JLabel("Hoạt Động:"));
 		cboHoatDong = new JComboBox<>(new String[] { "","Có", "Không" });
-		cboHoatDong.setSelectedIndex(0);
+		cboHoatDong.setSelectedIndex(1);
+		cboHoatDong.setEnabled(false);
 		panel.add(cboHoatDong);
 
 		panel.add(new JLabel("Email:"));
@@ -138,55 +139,88 @@ public class ThemNhanVienDialog extends JDialog {
 		
 //Sự kiện btnLuu
 		btnLuu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String maNV = txtMaNV.getText().trim();
-				String tenNV = txtHoTen.getText().trim();
-				String soDienThoai = txtSDT.getText().trim();
-				String soCanCuoc = txtSoCanCuoc.getText().trim();
-				String hoatDong = cboHoatDong.getSelectedItem().toString();
-				String email = txtEmail.getText().trim();
-				String diaChi = txtDiaChi.getText().trim();
-				String vaiTro = cboVaiTro.getSelectedItem().toString();
-				String tenTaiKhoan = txtTenTaiKhoan.getText().trim();
-				String matKhau = txtMatKhau.getText().trim();
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (!validateInput()) {
+		            return; // Nếu dữ liệu không hợp lệ, dừng lại
+		        }
 
-				if (maNV.isEmpty() || tenNV.isEmpty() || soDienThoai.isEmpty() || soCanCuoc.isEmpty() || email.isEmpty() || diaChi.isEmpty() || tenTaiKhoan.isEmpty() || matKhau.isEmpty()) {
-					JOptionPane.showMessageDialog(ThemNhanVienDialog.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				}
+		        // Tiếp tục xử lý thêm nhân viên nếu dữ liệu hợp lệ
+		        String maNV = txtMaNV.getText().trim();
+		        String tenNV = txtHoTen.getText().trim();
+		        String soDienThoai = txtSDT.getText().trim();
+		        String soCanCuoc = txtSoCanCuoc.getText().trim();
+		        String hoatDong = cboHoatDong.getSelectedItem().toString();
+		        String email = txtEmail.getText().trim();
+		        String diaChi = txtDiaChi.getText().trim();
+		        String vaiTro = cboVaiTro.getSelectedItem().toString();
+		        String tenTaiKhoan = txtTenTaiKhoan.getText().trim();
+		        String matKhau = new String(txtMatKhau.getPassword()).trim();
 
-				try {
-				
-					boolean isHoatDong = "Có".equals(hoatDong);
-					TaiKhoan taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
-					NhanVien nhanVien = new NhanVien (maNV, tenNV, soDienThoai, soCanCuoc, isHoatDong, email, diaChi, vaiTro, taiKhoan);
+		        try {
+		            boolean isHoatDong = "Có".equals(hoatDong);
+		            TaiKhoan taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
+		            NhanVien nhanVien = new NhanVien(maNV, tenNV, soDienThoai, soCanCuoc, isHoatDong, email, diaChi, vaiTro, taiKhoan);
 
-					TaiKhoanDAL taiKhoanDAL = new TaiKhoanDAL();
-					boolean isSuccess = taiKhoanDAL.themTaiKhoan(taiKhoan);
-					
-					NhanVienDAL nhanVienDAL = new NhanVienDAL(); 
-					boolean isSuccess1 = nhanVienDAL.themNhanVien(nhanVien);
+		            TaiKhoanDAL taiKhoanDAL = new TaiKhoanDAL();
+		            boolean isSuccess = taiKhoanDAL.themTaiKhoan(taiKhoan);
 
-					if (isSuccess && isSuccess1) {
-						JOptionPane.showMessageDialog(ThemNhanVienDialog.this, "Thêm nhân viên thành công!", "Thông báo",
-								JOptionPane.INFORMATION_MESSAGE);
-						dispose(); // Đóng dialog
-						quanLyNhanVienPanel.capNhatTable();
-					} else {
-						JOptionPane.showMessageDialog(ThemNhanVienDialog.this, "Thêm nhân viên thất bại!", "Lỗi",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				} 
-				 catch (Exception ex) {
-					JOptionPane.showMessageDialog(ThemNhanVienDialog.this, "Lỗi khi thêm nhân viên: " + ex.getMessage(),
-							"Lỗi", JOptionPane.ERROR_MESSAGE);
-				}
-			}
+		            NhanVienDAL nhanVienDAL = new NhanVienDAL();
+		            boolean isSuccess1 = nhanVienDAL.themNhanVien(nhanVien);
+
+		            if (isSuccess && isSuccess1) {
+		                JOptionPane.showMessageDialog(ThemNhanVienDialog.this, "Thêm nhân viên thành công!", "Thông báo",
+		                        JOptionPane.INFORMATION_MESSAGE);
+		                dispose(); // Đóng dialog
+		                quanLyNhanVienPanel.capNhatTable();
+		            } else {
+		                JOptionPane.showMessageDialog(ThemNhanVienDialog.this, "Thêm nhân viên thất bại!", "Lỗi",
+		                        JOptionPane.ERROR_MESSAGE);
+		            }
+		        } catch (Exception ex) {
+		            JOptionPane.showMessageDialog(ThemNhanVienDialog.this, "Lỗi khi thêm nhân viên: " + ex.getMessage(),
+		                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+		        }
+		    }
 		});
 
+
 	}
+
+	private boolean validateInput() {
+	    if (txtHoTen.getText().trim().isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Họ tên không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtHoTen.requestFocus();
+	        return false;
+	    }
+	    if (txtSDT.getText().trim().isEmpty() || !txtSDT.getText().matches("\\d{10}")) {
+	        JOptionPane.showMessageDialog(this, "Số điện thoại phải có 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtSDT.requestFocus();
+	        return false;
+	    }
+	    if (txtEmail.getText().trim().isEmpty() || !txtEmail.getText().matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+	        JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtEmail.requestFocus();
+	        return false;
+	    }
+	    if (txtSoCanCuoc.getText().trim().isEmpty() || !txtSoCanCuoc.getText().matches("\\d{12}")) {
+	        JOptionPane.showMessageDialog(this, "Số căn cước phải có 12 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtSoCanCuoc.requestFocus();
+	        return false;
+	    }
+	    if (cboVaiTro.getSelectedIndex() == 0) {
+	        JOptionPane.showMessageDialog(this, "Vui lòng chọn vai trò!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        cboVaiTro.requestFocus();
+	        return false;
+	    }
+	    if (cboHoatDong.getSelectedIndex() == 0) {
+	        JOptionPane.showMessageDialog(this, "Vui lòng chọn trạng thái hoạt động!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        cboHoatDong.requestFocus();
+	        return false;
+	    }
+	    return true;
+	}
+
 
 
 	
