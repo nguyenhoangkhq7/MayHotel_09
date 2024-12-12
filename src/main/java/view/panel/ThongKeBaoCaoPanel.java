@@ -22,7 +22,6 @@ public class ThongKeBaoCaoPanel extends JPanel {
     private JLabel lbNgayThongKe;
     private BangBaoCaoBUS bangBaoCaoBUS;
     private MenuPanel menuPanel;
-    private LocalDateTime now;
     public MenuPanel getMenuPanel() {
         return menuPanel;
     }
@@ -50,31 +49,7 @@ public class ThongKeBaoCaoPanel extends JPanel {
         JPanel bang = createTablePanel();
         noidung.add(bang, BorderLayout.CENTER);
 
-        Timer timer = new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cập nhật thời gian trên lblNgayThongKe
-                lbNgayThongKe.setText(layThoiGianThongKeBang());
-
-                // Lấy dữ liệu mới từ BUS
-                LocalDate currentDate = LocalDate.now();
-                LocalDateTime startDate = currentDate.atStartOfDay();
-                LocalDateTime endDate = LocalDateTime.now();
-                Object[][] data = bangBaoCaoBUS.layDuLieuBang(menuPanel.getNhanVienDangTruc(), startDate, endDate);
-
-                // Cập nhật dữ liệu bảng
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                model.setRowCount(0); // Xóa dữ liệu cũ
-                for (Object[] row : data) {
-                    model.addRow(row); // Thêm dữ liệu mới
-                }
-            }
-        });
-
-        // Bắt đầu timer
-        timer.start();
     }
-
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel();
         header.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -361,10 +336,35 @@ public class ThongKeBaoCaoPanel extends JPanel {
     // Method to get the formatted report date
     public String layThoiGianThongKeBang() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
-        now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
         return startOfDay.format(formatter) + " - " + now.format(formatter);
     }
+    public void updateData() {
+        // Lấy thời gian hiện tại
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
+
+        // Cập nhật nhãn thời gian thống kê
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        String formattedTime = startOfDay.format(formatter) + " - " + now.format(formatter);
+        lbNgayThongKe.setText(formattedTime);
+
+        // Lấy dữ liệu mới từ BangBaoCaoBUS
+        Object[][] newData = bangBaoCaoBUS.layDuLieuBang(menuPanel.getNhanVienDangTruc(), startOfDay, now);
+
+        // Cập nhật mô hình dữ liệu của bảng
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+
+        // Xóa dữ liệu cũ
+        tableModel.setRowCount(0);
+
+        // Thêm dữ liệu mới
+        for (Object[] row : newData) {
+            tableModel.addRow(row);
+        }
+    }
+
 
 
 

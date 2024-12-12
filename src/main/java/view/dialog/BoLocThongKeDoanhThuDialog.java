@@ -16,6 +16,7 @@ import com.toedter.calendar.JDateChooser;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 
 public class BoLocThongKeDoanhThuDialog extends JDialog {
@@ -26,7 +27,7 @@ public class BoLocThongKeDoanhThuDialog extends JDialog {
     private JDateChooser dateChooserStart;
     private JDateChooser dateChooserEnd;
     private ThoiGianListener thoiGianListener;
-    
+
     public static void main(String[] args) {
         try {
             BoLocThongKeDoanhThuDialog dialog = new BoLocThongKeDoanhThuDialog();
@@ -36,7 +37,7 @@ public class BoLocThongKeDoanhThuDialog extends JDialog {
             e.printStackTrace();
         }
     }
-    
+
     public BoLocThongKeDoanhThuDialog() {
         initialize();
     }
@@ -55,10 +56,26 @@ public class BoLocThongKeDoanhThuDialog extends JDialog {
         JLabel lblStartDate = createLabel("Ngày bắt đầu:");
         JLabel lblEndDate = createLabel("Ngày kết thúc:");
 
-        JButton loc3NgayButton = createButton("3 Ngày", e -> setDateRange(-3, 0));
-        JButton loc5NgayButton = createButton("5 Ngày", e -> setDateRange(-5, 0));
-        JButton loc1ThangButton = createButton("1 Tháng", e -> setDateRange(-30, 0));
-        JButton loc7NgayButton = createButton("7 Ngày", e -> setDateRange(-7, 0));
+        dateChooserEnd.addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dateChooserEnd.getDate());
+                calendar.add(Calendar.DAY_OF_MONTH, -30);
+                dateChooserStart.setMaxSelectableDate(dateChooserEnd.getDate());
+                dateChooserStart.setMinSelectableDate(calendar.getTime());
+            }
+        });
+
+        dateChooserStart.addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                dateChooserEnd.setMinSelectableDate(dateChooserStart.getDate());
+            }
+        });
+
+        JButton loc3NgayButton = createButton("3 Ngày", e -> setDateRange(-2, 0));
+        JButton loc5NgayButton = createButton("5 Ngày", e -> setDateRange(-4, 0));
+        JButton loc1ThangButton = createButton("1 Tháng", e -> setDateRange(-29, 0));
+        JButton loc7NgayButton = createButton("7 Ngày", e -> setDateRange(-6, 0));
 
         JSeparator separator = createSeparator();
         JSeparator separator_1 = createSeparator();
@@ -176,17 +193,34 @@ public class BoLocThongKeDoanhThuDialog extends JDialog {
     }
 
     private void applyFilter() {
+        Date startDate = dateChooserStart.getDate();
+        Date endDate = dateChooserEnd.getDate();
+
+        if (startDate == null || endDate == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn đầy đủ ngày bắt đầu và ngày kết thúc!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LocalDate localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        if (localStartDate.isAfter(localEndDate)) {
+            JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(localStartDate, localEndDate);
+        if (daysBetween > 30) {
+            JOptionPane.showMessageDialog(this, "Khoảng cách giữa ngày bắt đầu và ngày kết thúc không được vượt quá 30 ngày!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if (thoiGianListener != null) {
-            LocalDate startDate = dateChooserStart.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-            LocalDate endDate = dateChooserEnd.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-            thoiGianListener.onThoiGianChon(startDate, endDate);
+            thoiGianListener.onThoiGianChon(localStartDate, localEndDate);
         }
         dispose();
     }
+
 
     private void setDateRange(int startDaysOffset, int endDaysOffset) {
         Calendar calendar = Calendar.getInstance();
@@ -205,4 +239,6 @@ public class BoLocThongKeDoanhThuDialog extends JDialog {
     public void setThoiGianListener(ThoiGianListener listener) {
         this.thoiGianListener = listener;
     }
+
+
 }

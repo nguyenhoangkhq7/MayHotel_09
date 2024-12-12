@@ -7,7 +7,6 @@
             write description right here   
      */
 package view.panel;
-import bus.DonDatPhongBUS;
 import bus.ThemDonDatPhongBUS;
 import com.toedter.calendar.JDateChooser;
 import constant.CommonConstants;
@@ -155,6 +154,10 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
         return chkTrangThaiDatCoc;
     }
 
+    public JButton getBtnThemDichVu() {
+        return btnThemDichVu;
+    }
+
     public ThemDonDatPhongPanel(MenuPanel menuPanel) {
         this.setLayout(new BorderLayout());
         this.menuPanel = menuPanel;
@@ -201,8 +204,11 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
         jdcCheckout.addPropertyChangeListener("date", this);
         jdcCheckIn.addPropertyChangeListener("date", this);
         btnThemDichVu.addActionListener(this);
-        // lấy tất cả phòng tuwf loại phòng ban đầu
-        capNhatPhongKhiChonLoaiPhong();
+        cboSoPhong.addActionListener(this);
+        // disable nút thêm dịch vụ
+        btnThemDichVu.setEnabled(false);
+        btnChonPhong.setEnabled(false);
+        btnDatPhong.setEnabled(false);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -228,6 +234,8 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
         }
         else if(o.equals(btnThemDichVu)) {
             xuLySKThemDichVu();
+        } else if (o.equals(cboSoPhong)) {
+            xuLySKKhiChonPhong();
         }
     }
     @Override
@@ -240,13 +248,25 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
             xuLySuKienChonNgayCheckIn();
         }
     }
+    private void xuLySKKhiChonPhong() {
+        Object item = cboSoPhong.getSelectedItem();
+        if(item!=null) {
+            if(cboSoPhong.getSelectedItem().equals("Chọn phòng") || cboSoPhong.getSelectedItem().equals("Đã hết phòng")) return;
+            btnChonPhong.setEnabled(true);
+        }
+    }
     private void xuLySKThemDichVu() {
-        if(!checkThongTinTruocKhiThemDV()) return;
+        if(!checkThongTinTruocKhiThemPhong()) return;
         // Mở Dialog chọn dịch vụ
-        ChonDichVuDialog chonDichVuDialog = new ChonDichVuDialog(menuPanel.getMainGUI(), this);
+        // lấy ra phong muốn thêm dịch vụ
+        Phong phong = new PhongDAL().getPhongTheoTenPhong(cboSoPhong.getSelectedItem().toString());
+        ChonDichVuDialog chonDichVuDialog = new ChonDichVuDialog(menuPanel.getMainGUI(), this.donDatPhong, phong);
         chonDichVuDialog.setVisible(true);
+        if(chonDichVuDialog.getcTDDPP_DichVu()!=null) {
+            dsChiTietDDP_Phong_DV.add(chonDichVuDialog.getcTDDPP_DichVu());
+        }
         if(!chonDichVuDialog.isChonDichVu()) return;
-        updateJPanelDichVuTheoPhong(new PhongDAL().getPhongTheoTenPhong(cboSoPhong.getSelectedItem().toString()));
+            updateJPanelDichVuTheoPhong(phong);
     }
 
     public void updateJPanelDichVuTheoPhong(Phong phong) {
@@ -257,61 +277,54 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
             }
         }
     }
-    public void disableUI() {
-        // Vô hiệu hóa tất cả các thành phần
-        btnDatPhong.setEnabled(false);
-        btnCheckThongTinKhachHang.setEnabled(false);
-        cboLoaiPhong.setEnabled(false);
+
+    // lúc chưa chọn thông tin
+    public void disableThongTinDonDatPhong() {
+        btnThemDichVu.setEnabled(false);
         jdcCheckout.setEnabled(false);
         jdcCheckIn.setEnabled(false);
-        cboSoPhong.setEnabled(false);
         jtfSoDienThoai.setEnabled(false);
         jtfHoTen.setEnabled(false);
         jtfCCCD.setEnabled(false);
         jtfEmail.setEnabled(false);
         jtaMoTa.setEnabled(false);
-        // Giữ nguyên các nút "Thêm Dịch Vụ" và "Chọn Phòng"
-        btnThemDichVu.setEnabled(true);
-        btnChonPhong.setEnabled(true);
+        btnCheckThongTinKhachHang.setEnabled(false);
     }
-    public void enabledUI() {
-        // Vô hiệu hóa tất cả các thành phần
-        btnDatPhong.setEnabled(true);
-        btnCheckThongTinKhachHang.setEnabled(true);
-        cboLoaiPhong.setEnabled(true);
+
+    // reset all field
+    public void enableThongTinDonDatPhong() {
+        btnThemDichVu.setEnabled(true);
         jdcCheckout.setEnabled(true);
         jdcCheckIn.setEnabled(true);
-        cboSoPhong.setEnabled(true);
         jtfSoDienThoai.setEnabled(true);
         jtfHoTen.setEnabled(true);
         jtfCCCD.setEnabled(true);
         jtfEmail.setEnabled(true);
         jtaMoTa.setEnabled(true);
-        // Giữ nguyên các nút "Thêm Dịch Vụ" và "Chọn Phòng"
-        btnThemDichVu.setEnabled(true);
-        btnChonPhong.setEnabled(true);
+        btnCheckThongTinKhachHang.setEnabled(true);
     }
-
-    private boolean checkThongTinTruocKhiThemDV() {
+    private boolean checkThongTinTruocKhiThemPhong() {
+        ThemDonDatPhongBUS themDonDatPhongBUS = new ThemDonDatPhongBUS();
         // Lấy ngày check-in và check-out
         Date checkInDate = jdcCheckIn.getDate();
         Date checkOutDate = jdcCheckout.getDate();
+
+        // check thông tin khách hàng
+        boolean checkThongTinKH = themDonDatPhongBUS.validateFields(jtfSoDienThoai.getText(), jtfHoTen.getText(), jtfEmail.getText(), jtfCCCD.getText());
+        if(!checkThongTinKH) return false;
+
         // Lấy tên phòng
         String tenPhong = (cboSoPhong.getSelectedItem() != null) ? cboSoPhong.getSelectedItem().toString() : "";
+
         // Kiểm tra phòng được chọn
         if (tenPhong.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không có phòng nào được chọn.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+
         // Kiểm tra ngày check-in và check-out
         if (checkInDate == null || checkOutDate == null) {
             JOptionPane.showMessageDialog(this, "Hãy điền đầy đủ ngày check-in và check-out.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        // Lấy thông tin phòng từ database
-        Phong phong = new PhongDAL().getPhongTheoTenPhong(tenPhong);
-        if (phong == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin phòng trong cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -329,25 +342,39 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
             // thêm phòng vào danh sách
             // cập nhật giao diện
             // tạo chi tiết đơn
-            if(donDatPhong == null) {
 
-                // lấy thông tin từ giao diện
-                LocalDateTime checkin = themDonDatPhongBUS.convertDateToLocalDateTime(jdcCheckIn.getDate(), 14, 00);
-                LocalDateTime checkout = themDonDatPhongBUS.convertDateToLocalDateTime(jdcCheckout.getDate(), 12, 00);
-                String sdt = jtfSoDienThoai.getText();
-                String hoTen = themDonDatPhongBUS.formatHoTen(jtfHoTen.getText());
-                String cccd = jtfCCCD.getText();
-                String email = jtfEmail.getText();
-                String moTa = jtaMoTa.getText();
-                String phuongThucTT = cboPhuongThucThanhToan.getSelectedItem().toString();
-                boolean isDatCoc = chkTrangThaiDatCoc.isSelected();
+            // kiểm tra trước khi tạo đơn và thêm phòng
+            if(!checkThongTinTruocKhiThemPhong()) return;
 
-                // tạo đơn
-                this.donDatPhong = themDonDatPhongBUS.taoDonDatPhong(this.menuPanel.getNhanVienDangTruc(), sdt, hoTen, email, cccd, this.tongTien, moTa, phuongThucTT, isDatCoc, checkin, checkout);
+            // nếu phòng hợp lệ thì disable thông tin giao diện đơn đặt
+            disableThongTinDonDatPhong();
 
-                // tạo khách hàng
-                this.khachHang = donDatPhong.getKhachHang();
+            // tạo đơn đặt
+
+            donDatPhong = null;
+            // lấy thông tin từ giao diện
+            LocalDateTime checkin = themDonDatPhongBUS.convertDateToLocalDateTime(jdcCheckIn.getDate(), 14, 00);
+            LocalDateTime checkout = themDonDatPhongBUS.convertDateToLocalDateTime(jdcCheckout.getDate(), 12, 00);
+            String sdt = jtfSoDienThoai.getText();
+            String hoTen = themDonDatPhongBUS.formatHoTen(jtfHoTen.getText());
+            String cccd = jtfCCCD.getText();
+            String email = jtfEmail.getText();
+            String moTa = jtaMoTa.getText();
+            String phuongThucTT = cboPhuongThucThanhToan.getSelectedItem().toString();
+            boolean isDatCoc = chkTrangThaiDatCoc.isSelected();
+
+            // tạo đơn
+            this.donDatPhong = themDonDatPhongBUS.taoDonDatPhong(this.menuPanel.getNhanVienDangTruc(), sdt, hoTen, email, cccd, this.tongTien, moTa, phuongThucTT, isDatCoc, checkin, checkout);
+
+            // check tạo đơn có thành công không
+            if(donDatPhong==null) {
+                JOptionPane.showMessageDialog(null, "Hãy điền đầy đủ thông tin cho đơn đặt phòng", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            // tạo khách hàng
+            this.khachHang = donDatPhong.getKhachHang();
+
             // lấy ra thông tin phòng
             String tenPhong = cboSoPhong.getSelectedItem().toString();
             Phong p = new PhongDAL().getPhongTheoTenPhong(tenPhong);
@@ -368,6 +395,9 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
             cboSoPhong.removeItem(tenPhong);
             updateDanhSachPhong();
             jpnDichVu.removeAll();
+
+            // enable btn DatPhong
+            btnDatPhong.setEnabled(true);
 
         }
         this.setSuaDichVu(false);
@@ -500,12 +530,27 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
         cboLoaiPhong.setSelectedItem(0);
     }
     private void capNhatPhongKhiChonLoaiPhong() {
+        if(jdcCheckIn.getDate()==null || jdcCheckout.getDate()==null) {
+            JOptionPane.showMessageDialog(null, "Hãy chọn ngày checkin và checkout trước", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            cboLoaiPhong.setSelectedIndex(0);
+            return;
+        }
+        btnChonPhong.setEnabled(false);
+        cboSoPhong.removeAllItems();
+        if(cboLoaiPhong.getSelectedItem().toString().equals("Chọn loại phòng")) return;
         LoaiPhongDAL loaiPhongDAL = new LoaiPhongDAL();
         PhongDAL phongDAL = new PhongDAL();
-        cboSoPhong.removeAllItems();
         String tenLoaiPhong = loaiPhongDAL.getMaLoaiPhongTheoTen((String) cboLoaiPhong.getSelectedItem());
+        ThemDonDatPhongBUS themDonDatPhongBUS = new ThemDonDatPhongBUS();
+        LocalDateTime ngayNhanPhong = themDonDatPhongBUS.convertDateToLocalDateTime(jdcCheckIn.getDate(), 14, 00);
+        LocalDateTime ngayTraPhong = themDonDatPhongBUS.convertDateToLocalDateTime(jdcCheckout.getDate(), 12, 00);
         if (tenLoaiPhong != null) {
-            ArrayList<Phong> danhSachPhongCuaLoaiPhong = phongDAL.getPhongTheoLoaiPhongChuaDuocDat(tenLoaiPhong);
+            ArrayList<Phong> danhSachPhongCuaLoaiPhong = phongDAL.getPhongTheoLoaiPhongChuaDuocDat(tenLoaiPhong, ngayNhanPhong, ngayTraPhong);
+            if(danhSachPhongCuaLoaiPhong.isEmpty()) {
+                cboSoPhong.addItem("Đã hết phòng");
+                return;
+            }
+            cboSoPhong.addItem("Chọn phòng");
             for (Phong p : danhSachPhongCuaLoaiPhong) {
                 if(!dsPhong.contains(p))
                     cboSoPhong.addItem(p.getTenPhong());
@@ -601,9 +646,9 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
         boxContain.add(Box.createVerticalStrut(CommonConstants.VERTICAL_STRUT));
         boxContain.add(UIHelpers.create_Title_Panel("Chi tiết phòng"));
         Box boxContain2 = Box.createHorizontalBox();
-        boxContain2.add(UIHelpers.create_Form_Label_JComboBox("Loại phòng", cboLoaiPhong = new JComboBox()));
+        boxContain2.add(UIHelpers.create_Form_Label_JComboBox("Loại phòng", cboLoaiPhong = new JComboBox())); cboLoaiPhong.addItem("Chọn loại phòng");
         boxContain2.add(Box.createHorizontalStrut(20));
-        boxContain2.add(UIHelpers.create_Form_Label_JComboBox("Số phòng", cboSoPhong = new JComboBox()));
+        boxContain2.add(UIHelpers.create_Form_Label_JComboBox("Số phòng", cboSoPhong = new JComboBox())); cboSoPhong.addItem("Chọn phòng");
         boxContain2.add(Box.createHorizontalStrut(20));
         boxContain.add(boxContain2);
         boxContain.add(Box.createVerticalStrut(CommonConstants.VERTICAL_STRUT));
@@ -660,7 +705,9 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
     // Phương thức xử lý sự kiện khi chọn ngày check-in
     private void xuLySuKienChonNgayCheckIn() {
         Date checkInDate = jdcCheckIn.getDate();
-
+        cboSoPhong.removeAll();
+        cboSoPhong.addItem("Chọn phòng");
+        cboLoaiPhong.setSelectedIndex(0);
         if (checkInDate == null) {
             JOptionPane.showMessageDialog(null,
                     "Vui lòng nhập ngày check-in",
@@ -681,7 +728,9 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
     // Phương thức xử lý sự kiện khi chọn ngày check-out
     private void xuLySuKienChonNgayCheckOut() {
         Date checkOutDate = jdcCheckout.getDate();
-
+        cboSoPhong.removeAll();
+        cboSoPhong.addItem("Chọn phòng");
+        cboLoaiPhong.setSelectedIndex(0);
         if (checkOutDate == null) {
             JOptionPane.showMessageDialog(null,
                     "Vui lòng nhập ngày check-out",

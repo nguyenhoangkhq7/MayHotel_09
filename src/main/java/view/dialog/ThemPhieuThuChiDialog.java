@@ -323,7 +323,7 @@ public class ThemPhieuThuChiDialog extends JDialog {
 	private String getMaPhieuTiepTheo(String prefix) {
 	    int newNumber = 1; 
 
-	    try (Connection con = ConnectDB.getConnection(); 
+	    try (Connection con = ConnectDB.getConnection();
 	         PreparedStatement stmt = con.prepareStatement(
 	             "SELECT MAX(CAST(SUBSTRING(maPhieu, 3, LEN(maPhieu) - 2) AS INT)) FROM PhieuThuChi WHERE maPhieu LIKE ?")) {
 
@@ -349,7 +349,7 @@ public class ThemPhieuThuChiDialog extends JDialog {
 	    public static Connection getConnection() throws SQLException {
 	        String url = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyKS;encrypt=false";
 	        String username = "sa";
-	        String password = "Thaibao123";
+	        String password = "123456789HHkk";
 	        Connection conn = DriverManager.getConnection(url, username, password);
 	        return conn;
 	    }

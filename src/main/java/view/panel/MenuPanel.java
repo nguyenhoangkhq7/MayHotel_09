@@ -19,6 +19,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -196,7 +197,7 @@ public class MenuPanel extends JPanel {
         // Trả về ImageIcon mới với kích thước thay đổi
         return new ImageIcon(resizedImage);
     }
-        private void startClock() {
+    private void startClock() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Timer timer = new Timer(1000, e -> lblDateTime.setText(sdf.format(new Date())));
         timer.start();
@@ -236,9 +237,15 @@ public class MenuPanel extends JPanel {
                         break;
                     case "Báo cáo":
                         cardLayout.show(jpnContain, "Báo cáo");
+                        ThongKeBaoCaoPanel thongKeBaoCaoPanel = (ThongKeBaoCaoPanel) jpnContain.getComponent(menuItems.indexOf(label));
+                        thongKeBaoCaoPanel.updateData(); // Cập nhật dữ liệu
                         break;
                     case "Thống kê":
                         cardLayout.show(jpnContain, "Thống kê");
+                        LocalDate endDate = LocalDate.now();
+                        LocalDate startDate = endDate.minusDays(6);
+                        ThongKeDoanhThuPanel thongKeDoanhThuPanel = (ThongKeDoanhThuPanel) jpnContain.getComponent(menuItems.indexOf(label));
+                        thongKeDoanhThuPanel.capNhatDuLieu(startDate, endDate);
                         break;
                     case "Phiếu thu chi":
                         cardLayout.show(jpnContain, "Phiếu thu chi");

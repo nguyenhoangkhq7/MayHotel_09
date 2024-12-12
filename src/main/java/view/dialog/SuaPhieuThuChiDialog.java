@@ -375,7 +375,7 @@ public class SuaPhieuThuChiDialog extends JDialog {
 	    public static Connection getConnection() throws SQLException {
 	        String url = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyKS;encrypt=false";
 	        String username = "sa";
-	        String password = "Thaibao123";
+	        String password = "123456789HHkk";
 	        Connection conn = DriverManager.getConnection(url, username, password);
 	        return conn;
 	    }

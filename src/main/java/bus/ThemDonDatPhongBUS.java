@@ -14,7 +14,6 @@ import dal.*;
 import entity.*;
 
 import javax.swing.*;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -77,8 +76,6 @@ public class ThemDonDatPhongBUS {
         return new ChiTiet_DonDatPhong_Phong(donDatPhong, phong, ngayNhanPhong, ngayTraPhong, false, 0.0);
     }
     public DonDatPhong taoDonDatPhong (NhanVien nhanVien, String sdt, String hoTen, String email, String soCanCuoc, double tongTien,String moTa, String phuongThucThanhToan, boolean trangThaiDatCoc, LocalDateTime ngayNhanPhong, LocalDateTime ngayTraPhong) {
-        System.out.println(ngayNhanPhong);
-        System.out.println(ngayTraPhong);
         // check và tạo khách hàng
         KhachHang khachHang = taoKhachHang(sdt, hoTen, email, soCanCuoc);
         if(khachHang == null) {
@@ -99,7 +96,7 @@ public class ThemDonDatPhongBUS {
             return null;
         }
 
-        return new DonDatPhong(new DonDatPhongBUS().generateOrderCode(), LocalDateTime.now(), phuongThucThanhToan, "Đã đặt trước", trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayTraPhong, ngayNhanPhong);
+        return new DonDatPhong(new QuanLyDonDatPhongBUS().generateOrderCode(), LocalDateTime.now(), phuongThucThanhToan, "Đã đặt trước", trangThaiDatCoc, nhanVien, khachHang, tongTien, moTa, ngayTraPhong, ngayNhanPhong);
     }
     public KhachHang taoKhachHang(String sdt, String hoTen, String email, String soCanCuoc) {
         if(!validateFields(sdt, hoTen, email, soCanCuoc)) {
@@ -123,6 +120,7 @@ public class ThemDonDatPhongBUS {
         return khachHangDAL.getKhachHangTheoSoDienThoai(soDienThoai);
     }
     public LocalDateTime convertDateToLocalDateTime(Date date, int hour, int minute) {
+        if(date==null) return null;
         // Chuyển đổi Date sang LocalDateTime
         Instant instant = date.toInstant(); // Lấy thời điểm (instant) từ Date
         ZoneId zoneId = ZoneId.systemDefault(); // Sử dụng múi giờ hệ thống

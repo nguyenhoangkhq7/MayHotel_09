@@ -175,7 +175,8 @@ public class BangBaoCaoBUS {
 		khoanThuKhac = Math.round(khoanThuKhac / 100) * 100;
 		khoanChiKhac = Math.round(khoanChiKhac / 100) * 100;
 		thucThu = Math.round(thucThu / 100) * 100;
-		DecimalFormat df = new DecimalFormat("#,###");
+
+		DecimalFormat df = new DecimalFormat("#,###"); // Định dạng số với dấu phân cách
 
 		return new Object[][] {
 				{"1", "Số hóa đơn", String.valueOf(soHoaDon)},

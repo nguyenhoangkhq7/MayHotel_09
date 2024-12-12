@@ -230,8 +230,8 @@ public class ThongKeDoanhThuPanel extends JPanel {
 						.addGroup(gl_conPhongYeuThichPanel.createSequentialGroup()
 								.addGap(10)
 								.addGroup(gl_conPhongYeuThichPanel.createParallelGroup(Alignment.LEADING)
-										.addComponent(phongYeuThichLabel, GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
-										.addComponent(chuThichPhongYeuThichLabel, GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE))
+										.addComponent(phongYeuThichLabel, GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+										.addComponent(chuThichPhongYeuThichLabel, GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
 								.addGap(10))
 						.addGroup(gl_conPhongYeuThichPanel.createSequentialGroup()
 								.addContainerGap()
@@ -242,15 +242,20 @@ public class ThongKeDoanhThuPanel extends JPanel {
 										.addComponent(phongHang4Panel, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
 										.addComponent(phongHang5Panel, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
 										.addComponent(phongHang6Panel, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED, 413, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED, 185, Short.MAX_VALUE)
 								.addGroup(gl_conPhongYeuThichPanel.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_conPhongYeuThichPanel.createParallelGroup(Alignment.TRAILING)
+												.addGroup(gl_conPhongYeuThichPanel.createSequentialGroup()
+														.addGroup(gl_conPhongYeuThichPanel.createParallelGroup(Alignment.TRAILING, false)
+																.addComponent(giaTriPhongHang1Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+																.addComponent(giaTriPhongHang2Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+														.addGap(19))
+												.addGroup(Alignment.LEADING, gl_conPhongYeuThichPanel.createParallelGroup(Alignment.TRAILING, false)
+														.addComponent(giaTriPhongHang3Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+														.addComponent(giaTriPhongHang4Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 										.addGroup(gl_conPhongYeuThichPanel.createParallelGroup(Alignment.TRAILING, false)
-												.addComponent(giaTriPhongHang2Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(giaTriPhongHang1Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
-												.addComponent(giaTriPhongHang4Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 												.addComponent(giaTriPhongHang5Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(giaTriPhongHang3Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-										.addComponent(giaTriPhongHang6Panel, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
+												.addComponent(giaTriPhongHang6Panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)))
 								.addGap(38))
 		);
 		gl_conPhongYeuThichPanel.setVerticalGroup(
@@ -287,7 +292,7 @@ public class ThongKeDoanhThuPanel extends JPanel {
 								.addGroup(gl_conPhongYeuThichPanel.createParallelGroup(Alignment.LEADING)
 										.addComponent(phongHang6Panel, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
 										.addComponent(giaTriPhongHang6Panel, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE))
-								.addContainerGap(117, Short.MAX_VALUE))
+								.addContainerGap(46, Short.MAX_VALUE))
 		);
 
 		giaTriPhongHang6Label = new JLabel("0");
@@ -950,7 +955,7 @@ public class ThongKeDoanhThuPanel extends JPanel {
 		}
 		return dataset;
 	}
-	private void capNhatDuLieu(LocalDate startDate, LocalDate endDate) {
+	public void capNhatDuLieu(LocalDate startDate, LocalDate endDate) {
 
 		// Lấy doanh thu từ BUS
 		double giaTriHoaDon = thongKeDoanhThuBUS.layGiaTriCacMuc(1, startDate, endDate);

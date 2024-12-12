@@ -21,22 +21,22 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
         return ConnectDB.getConnection();
     }
     // Get ChiTiet by maPhong
-    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDanhSachChiTietTheoMaPhong(String maPhong) {
+    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDanhSachChiTietTheoMa(String maDonDatPhong , String maPhong) {
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
-        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maPhong = ?";
+        String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maDonDatPhong = ? AND maPhong = ?";
 
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             // Gán giá trị cho tham số maPhong
-            pstmt.setString(1, maPhong);
+            pstmt.setString(1, maDonDatPhong);
+            pstmt.setString(2, maPhong);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int soLuongDat = rs.getInt("soLuongDat");
                     LocalDateTime ngayTao = rs.getTimestamp("ngayTao").toLocalDateTime();
                     String moTa = rs.getString("moTa");
-                    String maDonDatPhong = rs.getString("maDonDatPhong");
                     String maDichVu = rs.getString("maDichVu");
 
                     // Lấy các đối tượng liên quan từ DAL
@@ -95,8 +95,8 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
     }
 
     // Get ChiTiet by maDonDatPhong, maPhong, maDichVu
-    public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMa(String maDonDatPhong, String maPhong, String maDichVu) {
-        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
+    public ChiTiet_DonDatPhong_Phong_DichVu getChiTietDonDatPhongPhongDichVuTheoMa(String maDonDatPhong, String maPhong, String maDichVu) {
+        ChiTiet_DonDatPhong_Phong_DichVu chiTiet = null;
         String sql = "SELECT * FROM CT_DonDatPhong_Phong_DichVu WHERE maDonDatPhong = ? AND maPhong = ? AND maDichVu = ?";
 
         try (Connection con = getConnection();
@@ -117,14 +117,14 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
                     ChiTiet_DonDatPhong_Phong chiTietDonDatPhongPhong = new ChiTiet_DonDatPhong_PhongDAL().getChiTietDonDatPhongPhongTheoMa(maDonDatPhong, maPhong);
 
                     // Thêm chi tiết vào danh sách
-                    chiTietList.add(new ChiTiet_DonDatPhong_Phong_DichVu(soLuongDat, ngayTao, dichVu, chiTietDonDatPhongPhong.getDonDatPhong(), chiTietDonDatPhongPhong.getPhong(), moTa));
+                    chiTiet = new ChiTiet_DonDatPhong_Phong_DichVu(soLuongDat, ngayTao, dichVu, chiTietDonDatPhongPhong.getDonDatPhong(), chiTietDonDatPhongPhong.getPhong(), moTa);
                 }
             }
         } catch (SQLException e) {
             System.err.println("Lỗi: " + e.getMessage());
         }
 
-        return chiTietList;
+        return chiTiet;
     }
     public ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> getDSChiTietDonDatPhongPhongDichVuTheoMaDonDatPhongMaPhong(String maDonDatPhong, String maPhong) {
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> chiTietList = new ArrayList<>();
@@ -155,6 +155,24 @@ public class ChiTiet_DonDatPhong_Phong_DichVuDAL {
         }
 
         return chiTietList;
+    }
+    // Delete ChiTiet by maDonDatPhong, maPhong, maDichVu
+    public boolean xoaChiTiet(String maDonDatPhong, String maPhong, String maDichVu) {
+        String sql = "DELETE FROM CT_DonDatPhong_Phong_DichVu WHERE maDonDatPhong = ? AND maPhong = ? AND maDichVu = ?";
+
+        try (Connection con = getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, maDonDatPhong);
+            stmt.setString(2, maPhong);
+            stmt.setString(3, maDichVu);
+
+            // Execute update and return whether a record was deleted
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Lỗi: " + e.getMessage());
+            return false;
+        }
     }
 
     // Insert new record

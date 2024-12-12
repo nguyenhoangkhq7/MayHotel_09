@@ -8,14 +8,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import bus.ThemDonDatPhongBUS;
+import dal.ChiTiet_DonDatPhong_Phong_DichVuDAL;
 import dal.DichVuDAL;
 import dal.PhongDAL;
 import entity.*;
-import view.panel.ThemDonDatPhongPanel;
 
 public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListener{
 
@@ -25,10 +26,12 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
     private JLabel lblMaPhong, lblTenPhong, lblDonVi;
     private JComboBox<String> cboDichVu, cboSoLuong, cboNgaySuDungDV, cboGioSuDungDV;
     private JTextArea moTaArea;
-    private JButton btnSua, btnHuy;
-    private ChiTiet_DonDatPhong_Phong_DichVu ctDichVu;
+    private JButton btnSuaDichVu;
+    private ArrayList<DichVu> dsDichVu;
+    private ChiTiet_DonDatPhong_Phong_DichVu cTDDPP_DichVu;
     Phong phong;
-    ThemDonDatPhongPanel themDonDatPhongPanel;
+    private boolean isChonDichVu = false;
+    DonDatPhong donDatPhong;
 
     public String getTenDichVu() {
         return tenDichVu;
@@ -46,24 +49,25 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
         return moTaDichVu;
     }
 
-    private Date getNgayDen() {
-        return themDonDatPhongPanel.getJdcCheckIn().getDate();
+    public boolean isChonDichVu() {
+        return isChonDichVu;
     }
-    private Date getNgayDi() {
-        return themDonDatPhongPanel.getJdcCheckout().getDate();
+
+    public ChiTiet_DonDatPhong_Phong_DichVu getcTDDPP_DichVu() {
+        return cTDDPP_DichVu;
     }
-    public SuaDichVuDonDatPhongDialog(JFrame parent, ThemDonDatPhongPanel themDonDatPhongPanel, ChiTiet_DonDatPhong_Phong_DichVu ctDichVu) {
+
+    public SuaDichVuDonDatPhongDialog(JFrame parent, ChiTiet_DonDatPhong_Phong_DichVu chiTiet) {
         super(parent, "Chọn dịch vụ cho phòng", true);
-        this.ctDichVu = ctDichVu;
-        this.themDonDatPhongPanel = themDonDatPhongPanel;
-        phong = ctDichVu.getPhong();
-        initComponents();
+        this.donDatPhong = chiTiet.getDonDatPhong();
+        this.cTDDPP_DichVu = chiTiet;
+        dsDichVu = new DichVuDAL().getAllDichVu();
+        initComponents(chiTiet.getPhong());
         setupLayout();
-        updateChiTietDichVu();
+        updateServiceDetails(chiTiet.getDichVu());
         cboDichVu.addActionListener(this);
         cboNgaySuDungDV.addActionListener(this);
-        btnSua.addActionListener(this);
-        btnHuy.addActionListener(this);
+        btnSuaDichVu.addActionListener(this);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -71,101 +75,102 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
         if(o.equals(cboNgaySuDungDV)) {
             updateAvailableHours();
         }
-        else if(o.equals(btnSua)) {
-            xuLySKSuaDichVu();
-        }
-        else if(o.equals(btnHuy)) {
-            this.dispose();
+        else if(o.equals(btnSuaDichVu)) {
+            xuLySKThemDichVu();
         }
     }
-    private void updateChiTietDichVu() {
-//          Cập nhật lại chi tiết các dịch vụ
-            cboDichVu.setEnabled(false);
-            cboSoLuong.setEnabled(true);
-            cboNgaySuDungDV.setEnabled(true);
-            cboGioSuDungDV.setEnabled(true);
-            updateServiceDetails();
-    }
-    private void xuLySKSuaDichVu() {
+    private void xuLySKThemDichVu() {
         try {
-            // Lấy thông tin từ các trường nhập liệu
+            // Kiểm tra dịch vụ được chọn
+            DichVuDAL dichVuDAL = new DichVuDAL();
+            DichVu dichVuDangChon = dichVuDAL.getDichVuTheoTen(cboDichVu.getSelectedItem().toString());
+            if(!checkDichVuDangDuocChon(dichVuDangChon)) return;
             getThongTinTuFields();
+            if(!themDonDatDichVu()) return; // thêm đơn đặt phòng và khách hàng
+            // Hiển thị thông tin xác nhận
+            JOptionPane.showMessageDialog(this,
+                    "Dịch vụ đã được thêm thành công!" +
+                            "\nTên dịch vụ: " + tenDichVu +
+                            "\nSố lượng: " + soLuongDat +
+                            "\nThời gian sử dụng: " + ngayGioDat +
+                            "\nMô tả: " + moTaDichVu,
+                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            isChonDichVu = true;
+            // Đóng dialog
+            dispose();
 
-            // Hiển thị hộp thoại xác nhận
-            int confirm = JOptionPane.showConfirmDialog(
-                    this,
-                    "Bạn có chắc chắn muốn sửa dịch vụ này?\n" +
-                            "Tên dịch vụ: " + tenDichVu + "\n" +
-                            "Số lượng: " + soLuongDat + "\n" +
-                            "Thời gian sử dụng: " + ngayGioDat + "\n" +
-                            "Mô tả: " + moTaDichVu,
-                    "Xác nhận sửa dịch vụ",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
-
-            // Nếu người dùng chọn "Yes", thực hiện sửa
-            if (confirm == JOptionPane.YES_OPTION) {
-                // Sửa đơn đặt dịch vụ
-                suaDonDatDichVu();
-
-                // Hiển thị thông báo sửa thành công
-                JOptionPane.showMessageDialog(this,
-                        "Dịch vụ đã được sửa thành công!\n" +
-                                "Tên dịch vụ: " + tenDichVu + "\n" +
-                                "Số lượng: " + soLuongDat + "\n" +
-                                "Thời gian sử dụng: " + ngayGioDat + "\n" +
-                                "Mô tả: " + moTaDichVu,
-                        "Thông báo",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-                // Đóng dialog
-                dispose();
-            }
         } catch (Exception e) {
             e.printStackTrace();
             // Xử lý lỗi khi nhập thông tin không hợp lệ
-            JOptionPane.showMessageDialog(this,
-                    "Thông tin không hợp lệ. Vui lòng kiểm tra lại.",
-                    "Lỗi",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Thông tin không hợp lệ. Vui lòng kiểm tra lại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+    private boolean checkDichVuDangDuocChon(DichVu selectedService) {
+        if (selectedService == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn dịch vụ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
+        // Kiểm tra xem dịch vụ có tồn tại trong danh sách dịch vụ
+        if (!dsDichVu.contains(selectedService)) {
+            JOptionPane.showMessageDialog(this, "Dịch vụ không hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
     private void getThongTinTuFields() throws ParseException {
         this.tenDichVu = (String) cboDichVu.getSelectedItem();
         this.soLuongDat = Integer.parseInt((String) cboSoLuong.getSelectedItem());
         String selectedDay = (String) cboNgaySuDungDV.getSelectedItem();
         String selectedHour = (String) cboGioSuDungDV.getSelectedItem();
         this.moTaDichVu = moTaArea.getText();
-        // Kết hợp ngày và giờ để tạo LocalDateThbg time cho `ngayGioDat`
+        // Kết hợp ngày và giờ để tạo LocalDateTime cho `ngayGioDat`
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date dateTime = dateFormat.parse(selectedDay + " " + selectedHour);
         this.ngayGioDat = dateTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
-    private void suaDonDatDichVu() { // bao gồm thêm đơn đặt phòng và khách hàng
-        ctDichVu.setSoLuongDat(soLuongDat);
-        ctDichVu.setTgSuDungDV(ngayGioDat);
-        ctDichVu.setMoTa(moTaDichVu);
+    private boolean themDonDatDichVu() {
+        // lấy ra các dịch vụ từ phòng và đơn đặt phòng
+        ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dsChiTietDDP_P_DichVu = new ChiTiet_DonDatPhong_Phong_DichVuDAL().getDanhSachChiTietTheoMa(donDatPhong.getMaDon(), phong.getMaPhong());
+        System.out.println("Danh sách dịch vụ");
+        // duyệt qua các dịch vụ xem xem dịch vụ đó đã có chưa
+        for (ChiTiet_DonDatPhong_Phong_DichVu ctddp_p_dv : dsChiTietDDP_P_DichVu) {
+            if (ctddp_p_dv.getDichVu().getTenDichVu().equals(tenDichVu)) {
+                int response = JOptionPane.showConfirmDialog(this, "Dịch vụ đã có trong phòng. Bạn có muốn cộng dồn thêm số lượng không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    ctddp_p_dv.setSoLuongDat(ctddp_p_dv.getSoLuongDat() + soLuongDat);
+                    soLuongDat = ctddp_p_dv.getSoLuongDat();
+                    JOptionPane.showMessageDialog(this, "Đã cập nhật số lượng dịch vụ.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    return true;
+                }
+            }
+        }
+        ThemDonDatPhongBUS themDonDatPhongBUS = new ThemDonDatPhongBUS();
+        cTDDPP_DichVu = themDonDatPhongBUS.taoCTDDPPDV(soLuongDat, ngayGioDat, new DichVuDAL().getDichVuTheoTen(tenDichVu), donDatPhong, phong, moTaDichVu);
+        return true;
     }
 
-    private void initComponents() {
+    private void initComponents(Phong phong) {
         lblMaPhong = new JLabel("Mã phòng: " + phong.getMaPhong());
         lblTenPhong = new JLabel("Tên phòng: " + phong.getTenPhong());
+        String[] serviceNames = dsDichVu.stream().map(DichVu::getTenDichVu).toArray(String[]::new);
         cboDichVu = new JComboBox<>();
-        cboDichVu.addItem(ctDichVu.getDichVu().getTenDichVu());
+        cboDichVu.addItem("--Chọn dịch vụ--");
+        for (String serviceName : serviceNames) {
+            cboDichVu.addItem(serviceName);
+        }
         cboSoLuong = new JComboBox<>();
         cboSoLuong.setEnabled(false);
         moTaArea = new JTextArea(5, 30);
         moTaArea.setLineWrap(true);
         moTaArea.setWrapStyleWord(true);
         moTaArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        btnSua= new JButton("Sửa dịch vụ");
-        btnHuy = new JButton("Hủy");
+        btnSuaDichVu = new JButton("Sửa dịch vụ");
+        btnSuaDichVu.setEnabled(true);
         cboNgaySuDungDV = new JComboBox<>();
-        cboNgaySuDungDV.setEnabled(false);
+        cboNgaySuDungDV.setEnabled(true);
         cboGioSuDungDV = new JComboBox<>();
-        cboGioSuDungDV.setEnabled(false);
+        cboGioSuDungDV.setEnabled(true);
         lblDonVi = new JLabel("Đơn vị: ");
     }
 
@@ -229,54 +234,60 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
         gbc.gridx = 1;
         panel.add(moTaArea, gbc);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Thêm padding cho panel
+
+        cboDichVu.setEnabled(false);
+        updateServiceDetails(cTDDPP_DichVu.getDichVu());
         return panel;
     }
 
 
     private JPanel createSouthPanel() {
         JPanel panel = new JPanel();
-        panel.add(btnSua);
-        panel.add(btnHuy);
+        panel.add(btnSuaDichVu);
         panel.setBackground(Color.LIGHT_GRAY);
         return panel;
     }
 
+    private void updateAddServiceButtonState() {
+        btnSuaDichVu.setEnabled(cboDichVu.getSelectedIndex() != -1 &&
+                cboSoLuong.getSelectedIndex() != -1 &&
+                cboNgaySuDungDV.getSelectedIndex() != -1 &&
+                cboGioSuDungDV.getSelectedIndex() != -1);
+    }
     private void resetFields() {
         cboSoLuong.removeAllItems();
         lblDonVi.setText("Đơn vị:");
         cboNgaySuDungDV.removeAllItems();
         cboGioSuDungDV.removeAllItems();
     }
-    private void updateServiceDetails() {
+    private void updateServiceDetails(DichVu selectedService) {
         resetFields();
-
-        // cập nhật số lượng
-        int stockQuantity = ctDichVu.getDichVu().getSoLuongTon();
+//      cập nhật số lượng
+        int stockQuantity = selectedService.getSoLuongTon();
         for (int i = 1; i <= stockQuantity; i++) {
             cboSoLuong.addItem(String.valueOf(i));
         }
-        cboSoLuong.setSelectedItem(String.valueOf(ctDichVu.getSoLuongDat()));
-
-        // Cập nhật đơn vị
-        lblDonVi.setText("Đơn vị: " + ctDichVu.getDichVu().getDonVi().toUpperCase());
-
-        // Cập nhật ngày
+//      Cập nhật đơn vị
+        lblDonVi.setText("Đơn vị: " + selectedService.getDonVi().toUpperCase());
+//      Cập nhật ngày
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(getNgayDen());
-        while (!calendar.getTime().after(getNgayDi())) {
+        Date ngayDen = convertToDate(donDatPhong.getNgayNhanPhong());
+        Date ngayDi = convertToDate(donDatPhong.getNgayTraPhong());
+        calendar.setTime(ngayDen);
+        while (!calendar.getTime().after(ngayDi)) {
             cboNgaySuDungDV.addItem(dateFormat.format(calendar.getTime()));
             calendar.add(Calendar.DATE, 1);
         }
-        Date ngaySD = Date.from(ctDichVu.getTgSuDungDV().atZone(ZoneId.systemDefault()).toInstant());
-        cboNgaySuDungDV.setSelectedItem(dateFormat.format(ngaySD));
-
-        moTaArea.setText(ctDichVu.getMoTa());
-        // Cập nhật giờ
+//      Cập nhật giờ
         updateAvailableHours();
     }
-
+    public Date convertToDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
     private void updateAvailableHours() {
+        Date ngayDen = convertToDate(donDatPhong.getNgayNhanPhong());
+        Date ngayDi = convertToDate(donDatPhong.getNgayTraPhong());
         // Xóa các giờ cũ
         cboGioSuDungDV.removeAllItems();
         // Lấy ngày được chọn
@@ -287,11 +298,11 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         try {
             Date selected = dateFormat.parse(selectedDate);
-            if (isSameDay(selected, getNgayDen())) {
+            if (isSameDay(selected, ngayDen)) {
                 for (int i = 14; i < 24; i++) {
                     cboGioSuDungDV.addItem(String.format("%02d:00", i));
                 }
-            } else if (isSameDay(selected, getNgayDi())) {
+            } else if (isSameDay(selected, ngayDi)) {
                 for (int i = 0; i < 12; i++) {
                     cboGioSuDungDV.addItem(String.format("%02d:00", i));
                 }
@@ -303,11 +314,6 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        LocalDateTime tgSuDungDV = ctDichVu.getTgSuDungDV();
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        String gioSuDung = tgSuDungDV.format(timeFormatter);
-        cboGioSuDungDV.setSelectedItem(gioSuDung);
     }
 
     private boolean isSameDay(Date date1, Date date2) {

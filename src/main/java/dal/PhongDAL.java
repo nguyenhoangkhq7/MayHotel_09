@@ -10,11 +10,8 @@
 
 package dal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import database.ConnectDB;
@@ -48,7 +45,7 @@ public class PhongDAL {
         }
         return loaiPhong;
     }
-    public ArrayList<Phong> getPhongTheoLoaiPhongChuaDuocDat(String maLoaiPhong) {
+    public ArrayList<Phong> getPhongTheoLoaiPhongChuaDuocDat(String maLoaiPhong, LocalDateTime ngayNhanPhong, LocalDateTime ngayTraPhong) {
         ArrayList<Phong> dsPhong = new ArrayList<>();
         try {
             ConnectDB.getInstance().connect();
@@ -60,11 +57,19 @@ public class PhongDAL {
             LEFT JOIN CT_DonDatPhong_Phong ct ON p.maPhong = ct.maPhong
             LEFT JOIN DonDatPhong ddp ON ct.maDonDatPhong = ddp.maDon
             WHERE p.loaiPhong = ?
-              AND (ct.maPhong IS NULL OR ddp.trangThaiDonDatPhong = N'Đã hoàn tất')
+              AND (ct.maPhong IS NULL OR (
+                    ddp.trangThaiDonDatPhong = N'Đã hoàn tất'
+                    OR (
+                        ddp.ngayTraPhong <= ?
+                        OR ddp.ngayNhanPhong >= ?
+                    )
+              ))
         """;
 
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, maLoaiPhong);
+            stmt.setTimestamp(2, Timestamp.valueOf(ngayNhanPhong));
+            stmt.setTimestamp(3, Timestamp.valueOf(ngayTraPhong));
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -83,6 +88,7 @@ public class PhongDAL {
         }
         return dsPhong;
     }
+
 
 
     // Lấy tất cả phòng theo mã loại phòng
@@ -274,11 +280,6 @@ public class PhongDAL {
     }
     public static void main(String[] args) {
         PhongDAL dal = new PhongDAL();
-        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP01").size());
-        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP02").size());
-        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP03").size());
-        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP04").size());
-        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP05").size());
-        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP06").size());
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP01", LocalDateTime.of(2024,12,5,14,00), LocalDateTime.of(2024,12,10,12,00)));
     }
 }

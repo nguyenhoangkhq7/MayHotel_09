@@ -333,14 +333,14 @@ public class QuanLyPhieuThuChiPanel extends JPanel {
 		phuongThucComboBox.addItem("Tiền mặt");
 		phuongThucComboBox.addItem("Chuyển khoản");
 
-		JLabel maPhieuThuChiLabel = new JLabel("Mã phiếu chi:");
+		JLabel maPhieuThuChiLabel = new JLabel("Mã phiếu thu chi:");
 		maPhieuThuChiLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
-		maPhieuThuChiTextField = new JTextField("nhập vào mã phiếu chi");
+		maPhieuThuChiTextField = new JTextField("nhập vào mã phiếu thu chi");
 		maPhieuThuChiTextField.setColumns(10);
 		maPhieuThuChiTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (maPhieuThuChiTextField.getText().equals("nhập vào mã phiếu chi")) {
+				if (maPhieuThuChiTextField.getText().equals("nhập vào mã phiếu thu chi")) {
 					maPhieuThuChiTextField.setText("");
 				}
 			}
@@ -348,7 +348,7 @@ public class QuanLyPhieuThuChiPanel extends JPanel {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (maPhieuThuChiTextField.getText().isEmpty()) {
-					maPhieuThuChiTextField.setText("nhập vào mã phiếu chi");
+					maPhieuThuChiTextField.setText("nhập vào mã phiếu thu chi");
 				}
 			}
 		});
@@ -501,7 +501,7 @@ public class QuanLyPhieuThuChiPanel extends JPanel {
 
 			// Lấy giá trị mã phiếu chi từ TextField
 			String maPhieu = maPhieuThuChiTextField.getText();
-			if ("nhập vào mã phiếu chi".equals(maPhieu)) {
+			if ("nhập vào mã phiếu thu chi".equals(maPhieu)) {
 				maPhieu = "";
 			}
 

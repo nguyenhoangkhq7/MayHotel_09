@@ -76,7 +76,7 @@ public class DichVuPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();
         if(o.equals(btnSua)) {
-            SuaDichVuDonDatPhongDialog dialog = new SuaDichVuDonDatPhongDialog(themDonDatPhongPanel.getMenuPanel().getMainGUI(), themDonDatPhongPanel, chiTiet);
+            SuaDichVuDonDatPhongDialog dialog = new SuaDichVuDonDatPhongDialog(themDonDatPhongPanel.getMenuPanel().getMainGUI(), chiTiet);
             dialog.setVisible(true);
             this.repaint();
             this.revalidate();

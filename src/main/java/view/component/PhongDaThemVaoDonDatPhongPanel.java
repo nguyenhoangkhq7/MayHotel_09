@@ -39,7 +39,7 @@ public class PhongDaThemVaoDonDatPhongPanel extends JPanel implements ActionList
         this.themDonDatPhongPanel = themDonDatPhongPanel;
         this.setLayout(new FlowLayout(FlowLayout.LEFT));
         JPanel container = new JPanel(new BorderLayout());
-        container.setPreferredSize(new Dimension(300,80));
+        container.setPreferredSize(new Dimension(400,80));
         this.phong = phong;
         container.setBorder(new LineBorder(Color.GRAY, 2));
 //        tạo các thành phần
@@ -55,7 +55,7 @@ public class PhongDaThemVaoDonDatPhongPanel extends JPanel implements ActionList
         lblTenPhong.setHorizontalAlignment(SwingConstants.CENTER);
         lblTenPhong.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));
         btnXoa = customButton("Xóa");
-        btnSua = customButton("Sửa dịch vụ");
+        btnSua = customButton("Cập nhật dịch vụ");
 
         boxContain.add(Box.createHorizontalStrut(10));
         boxContain.add(lblLoaiPhong);
@@ -81,10 +81,11 @@ public class PhongDaThemVaoDonDatPhongPanel extends JPanel implements ActionList
             // hiển thị loại phòng và tên phòng trong combobox
             // cập nhật lại danh sách chi tiết dịch vụ
             // xóa jpnDichVu loaiPhong, tên phòng trong combobox
-            themDonDatPhongPanel.disableUI();
+            themDonDatPhongPanel.getBtnThemDichVu().setEnabled(true);
             // add các dịch vụ vào jpnDichVu
             ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dsChiTiet = themDonDatPhongPanel.getDsChiTietDDP_Phong_DV();
             JPanel jpnDV = themDonDatPhongPanel.getJpnDichVu();
+            jpnDV.setEnabled(true);
             jpnDV.removeAll();
             for(ChiTiet_DonDatPhong_Phong_DichVu ct : dsChiTiet) {
                 if(ct.getPhong().equals(this.phong)) {
@@ -102,6 +103,9 @@ public class PhongDaThemVaoDonDatPhongPanel extends JPanel implements ActionList
             themDonDatPhongPanel.getCboLoaiPhong().setSelectedItem(loaiPhong);
             themDonDatPhongPanel.getCboSoPhong().addItem(tenPhong);
             themDonDatPhongPanel.getCboSoPhong().setSelectedItem(tenPhong);
+            themDonDatPhongPanel.getCboLoaiPhong().setEnabled(false);
+            themDonDatPhongPanel.getCboSoPhong().setEnabled(false);
+            btnXoa.setEnabled(false);
 
             // Thêm logic để xử lý khi "Lưu thay đổi" được nhấn
             themDonDatPhongPanel.getBtnChonPhong().addActionListener(new ActionListener() {
@@ -131,12 +135,15 @@ public class PhongDaThemVaoDonDatPhongPanel extends JPanel implements ActionList
                         // Đặt lại trạng thái nút thành "Chọn phòng"
                         themDonDatPhongPanel.getBtnChonPhong().setText("Chọn phòng");
                         themDonDatPhongPanel.getCboSoPhong().removeItem(tenPhong);
+                        themDonDatPhongPanel.getCboLoaiPhong().setEnabled(true);
+                        themDonDatPhongPanel.getCboSoPhong().setEnabled(true);
+                        themDonDatPhongPanel.getBtnThemDichVu().setEnabled(false);
+                        btnXoa.setEnabled(true);
                         themDonDatPhongPanel.setSuaDichVu(true);
                         // Xóa các thành phần cũ trong jpnDichVu
                         jpnDV.removeAll();
                         jpnDV.repaint();
                         jpnDV.revalidate();
-                        themDonDatPhongPanel.enabledUI();
                     }
                 }
             });

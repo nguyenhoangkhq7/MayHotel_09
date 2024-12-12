@@ -14,75 +14,86 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ChiTietDonDatPhong_PhongDialog extends JDialog {
+public class ChiTietDonDatPhongDialog extends JDialog {
 
     private TextFieldCustom txtTenKhachHang, txtSoDienThoai, txtSoCCCD, txtEmail, txtLoaiKH;
     private JTable bangDichVu;
     private ArrayList<ChiTiet_DonDatPhong_Phong> danhSachChiTiet;
     private ChiTiet_DonDatPhong_PhongDAL chiTietDonDatPhongPhongDAL = new ChiTiet_DonDatPhong_PhongDAL();
-    public ChiTietDonDatPhong_PhongDialog(DonDatPhong donDatPhong) {
+
+    public ChiTietDonDatPhongDialog(DonDatPhong donDatPhong) {
         this.danhSachChiTiet = chiTietDonDatPhongPhongDAL.getChiTietDonDatPhongPhongTheoMaDDP(donDatPhong.getMaDon());
-        setLayout(new BorderLayout());
+
+        setTitle("Chi Tiết Đơn Đặt Phòng");
+        setLayout(new BorderLayout(10, 10));
+        setBackground(Color.WHITE);
+
+        // Header
         showHeader();
-        // Sử dụng BoxLayout cho mainPanel để sắp xếp các phần theo chiều dọc
+
+        // Main Panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(mainPanel, BorderLayout.CENTER);
 
-        // Panel chứa thông tin khách hàng ở phần đầu
+        // Thông tin khách hàng
         JPanel customerInfoPanel = new JPanel(new BorderLayout());
+        customerInfoPanel.setBorder(BorderFactory.createTitledBorder("Thông Tin Khách Hàng"));
         if (!danhSachChiTiet.isEmpty()) {
             showKhachHangInfo(customerInfoPanel, danhSachChiTiet.get(0));
         }
-        mainPanel.add(customerInfoPanel);
+        mainPanel.add(customerInfoPanel, BorderLayout.NORTH);
 
-        // Danh sách phòng ở giữa
+        // container của dsPhong và DichVu
+        Box boxContain = Box.createVerticalBox();
+        // Danh sách phòng
+        JPanel roomListPanel = new JPanel(new BorderLayout());
+        roomListPanel.setBorder(BorderFactory.createTitledBorder("Danh Sách Phòng"));
         JList<String> roomList = new JList<>(danhSachChiTiet.stream()
                 .map(ct -> ct.getPhong().getMaPhong())
                 .toArray(String[]::new));
+        roomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         roomList.addListSelectionListener(e -> showRoomDetails(danhSachChiTiet.get(roomList.getSelectedIndex())));
-        JScrollPane roomListScrollPane = new JScrollPane(roomList);
-        roomListScrollPane.setBorder(BorderFactory.createTitledBorder("Danh Sách Phòng"));
-        mainPanel.add(roomListScrollPane);
-
-        // Bảng dịch vụ ở cuối
+        roomListPanel.add(new JScrollPane(roomList), BorderLayout.CENTER);
+        boxContain.add(roomListPanel);
+        // Bảng dịch vụ
+        JPanel serviceTablePanel = new JPanel(new BorderLayout());
+        serviceTablePanel.setBorder(BorderFactory.createTitledBorder("Dịch Vụ"));
         bangDichVu = new JTable();
-        JScrollPane serviceTableScrollPane = new JScrollPane(bangDichVu);
-        serviceTableScrollPane.setBorder(BorderFactory.createTitledBorder("Dịch Vụ"));
-        mainPanel.add(serviceTableScrollPane);
+        serviceTablePanel.add(new JScrollPane(bangDichVu), BorderLayout.CENTER);
+        boxContain.add(serviceTablePanel);
+        mainPanel.add(boxContain, BorderLayout.CENTER);
 
-        setSize(800, 1000);
+        // Thiết lập kích thước và vị trí
+        setSize(600, 1000);
         setLocationRelativeTo(null);
     }
 
     private void showKhachHangInfo(JPanel container, ChiTiet_DonDatPhong_Phong ct) {
-        JPanel jpnContainInfoKhachHang = new JPanel(new GridLayout(0, 2));
-        container.add(jpnContainInfoKhachHang, BorderLayout.NORTH);
+        JPanel infoPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        container.add(infoPanel, BorderLayout.NORTH);
 
-        // Khởi tạo các trường nhập liệu
-        txtTenKhachHang = new TextFieldCustom("Nhập tên khách hàng", 50);
-        txtSoDienThoai = new TextFieldCustom("Nhập số điện thoại", 11);
-        txtSoCCCD = new TextFieldCustom("Nhập số căn cước", 12);
-        txtEmail = new TextFieldCustom("Nhập email", 50);
-        txtLoaiKH = new TextFieldCustom("",0);
+        txtTenKhachHang = new TextFieldCustom("Nhập tên khách hàng", 50); txtTenKhachHang.setEnabled(false);
+        txtSoDienThoai = new TextFieldCustom("Nhập số điện thoại", 11); txtSoDienThoai.setEnabled(false);
+        txtSoCCCD = new TextFieldCustom("Nhập số căn cước", 12); txtSoCCCD.setEnabled(false);
+        txtEmail = new TextFieldCustom("Nhập email", 50); txtEmail.setEnabled(false);
+        txtLoaiKH = new TextFieldCustom("", 30); txtLoaiKH.setEnabled(false);
 
-        // Thiết lập thông tin khách hàng
         txtTenKhachHang.setText(ct.getDonDatPhong().getKhachHang().getHoTen());
         txtSoDienThoai.setText(ct.getDonDatPhong().getKhachHang().getSoDienThoai());
         txtSoCCCD.setText(ct.getDonDatPhong().getKhachHang().getSoCanCuoc());
         txtEmail.setText(ct.getDonDatPhong().getKhachHang().getEmail());
         txtLoaiKH.setText(ct.getDonDatPhong().getKhachHang().getLoaiKhachHang().toString());
 
-        // Thêm nhãn và trường vào panel
-        jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("Tên khách hàng", txtTenKhachHang));
-        jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("Số điện thoại", txtSoDienThoai));
-        jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("CMND", txtSoCCCD));
-        jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("Email", txtEmail));
-        jpnContainInfoKhachHang.add(UIHelpers.create_Form_Label_JTextField("Loại khách hàng", txtLoaiKH));
+        infoPanel.add(UIHelpers.create_Form_Label_JTextField("Tên khách hàng", txtTenKhachHang));
+        infoPanel.add(UIHelpers.create_Form_Label_JTextField("Số điện thoại", txtSoDienThoai));
+        infoPanel.add(UIHelpers.create_Form_Label_JTextField("CMND", txtSoCCCD));
+        infoPanel.add(UIHelpers.create_Form_Label_JTextField("Email", txtEmail));
+        infoPanel.add(UIHelpers.create_Form_Label_JTextField("Loại khách hàng", txtLoaiKH));
     }
 
     private void showRoomDetails(ChiTiet_DonDatPhong_Phong ct) {
-        // Lấy thông tin dịch vụ từ danh sách dịch vụ của đối tượng ChiTiet_DonDatPhong_Phong
         ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dichVuList = new ChiTiet_DonDatPhong_Phong_DichVuDAL().getDSChiTietDonDatPhongPhongDichVuTheoMaDonDatPhongMaPhong(ct.getDonDatPhong().getMaDon(), ct.getPhong().getMaPhong());
         String[][] services = new String[dichVuList.size()][4];
         for (int i = 0; i < dichVuList.size(); i++) {
@@ -98,12 +109,11 @@ public class ChiTietDonDatPhong_PhongDialog extends JDialog {
     }
 
     private void showHeader() {
-        // Nút đóng
-        JPanel jpnClose = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton closeButton = UIHelpers.createButtonStyle("Đặt phòng", CommonConstants.BUTTON_SIZE, Color.WHITE, Color.ORANGE);
-        jpnClose.add(closeButton);
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton closeButton = UIHelpers.createButtonStyle("Đóng", CommonConstants.BUTTON_SIZE, Color.WHITE, Color.ORANGE);
+        headerPanel.add(closeButton);
         closeButton.addActionListener(e -> dispose());
-        add(jpnClose, BorderLayout.NORTH);
+        add(headerPanel, BorderLayout.NORTH);
     }
 
     public static void main(String[] args) {
@@ -114,6 +124,5 @@ public class ChiTietDonDatPhong_PhongDialog extends JDialog {
         frame.setLocationRelativeTo(null);
 
         // Tạo dữ liệu mẫu để kiểm tra
-
     }
 }

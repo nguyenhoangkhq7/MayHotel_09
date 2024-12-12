@@ -5,9 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import database.ConnectDB;
-import entity.DonDatPhong;
-import entity.KhachHang;
-import entity.NhanVien;
+import entity.*;
 
 public class DonDatPhongDAL {
     private ArrayList<DonDatPhong> dsDonDatPhong;
@@ -51,6 +49,49 @@ public class DonDatPhongDAL {
         }
         return dsDonDatPhong;
     }
+    // Hàm lấy phòng theo mã đơn đặt phòng
+    // Hàm lấy phòng theo mã đơn đặt phòng
+    public ArrayList<Phong> getDanhSachPhongTheoMaDonDatPhong(String maDon) {
+        ArrayList<Phong> danhSachPhong = new ArrayList<>();
+        try {
+            // Kết nối cơ sở dữ liệu
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+
+            // Truy vấn lấy phòng từ mã đơn đặt phòng
+            String sql = "SELECT p.maPhong, p.tenPhong, p.loaiPhong, p.trangThaiPhong, p.moTa, p.tang " +
+                    "FROM Phong p " +
+                    "JOIN CT_DonDatPhong_Phong ctdp ON p.maPhong = ctdp.maPhong " +
+                    "WHERE ctdp.maDonDatPhong = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, maDon); // Gán mã đơn đặt phòng
+
+            ResultSet rs = stmt.executeQuery();
+
+            // Duyệt qua kết quả và tạo đối tượng Phong
+            while (rs.next()) {
+                String maPhong = rs.getString("maPhong");
+                String tenPhong = rs.getString("tenPhong");
+                String loaiPhongString = rs.getString("loaiPhong"); // Lấy loại phòng dưới dạng String
+                boolean trangThaiPhong = rs.getBoolean("trangThaiPhong");
+                String moTa = rs.getString("moTa");
+                String tang = rs.getString("tang");
+
+                // Chuyển đổi loaiPhong từ String thành đối tượng LoaiPhong
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(loaiPhongString); // Giả sử có constructor LoaiPhong(String)
+
+                // Tạo đối tượng Phong
+                Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, moTa, tang);
+
+                // Thêm phòng vào danh sách
+                danhSachPhong.add(phong);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return danhSachPhong; // Trả về danh sách các phòng liên kết với mã đơn
+    }
+
 
     // Thêm đơn đặt phòng mới
     public boolean themDonDatPhong(DonDatPhong donDatPhong) {
@@ -69,8 +110,8 @@ public class DonDatPhongDAL {
             stmt.setString(7, donDatPhong.getKhachHang().getMaKH());
             stmt.setDouble(8, donDatPhong.getTongTien());
             stmt.setString(9, donDatPhong.getMoTa());
-            stmt.setTimestamp(10, Timestamp.valueOf(donDatPhong.getNgayNhanPhong()));
-            stmt.setTimestamp(11, Timestamp.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setTimestamp(10, Timestamp.valueOf(donDatPhong.getNgayTraPhong()));
+            stmt.setTimestamp(11, Timestamp.valueOf(donDatPhong.getNgayNhanPhong()));
 
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -194,6 +235,16 @@ public class DonDatPhongDAL {
             e.printStackTrace();
         } 
         return donDatPhong;
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Phong> dsPhong = new PhongDAL().getAllPhong();
+//        System.out.println(dsPhong);
+        for (Phong p : dsPhong) {
+            if(p.getTang().equals("1")) {
+                System.out.println(p.getTenPhong());
+            }
+        }
     }
 
 }
