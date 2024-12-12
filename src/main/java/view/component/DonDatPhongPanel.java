@@ -30,7 +30,11 @@ public class DonDatPhongPanel extends JPanel implements ActionListener {
     private DonDatPhong donDatPhong;
     private QuanLyDonDatPhongPanel quanLyDonDatPhongPanel;
 
-    public DonDatPhongPanel(QuanLyDonDatPhongPanel quanLyDonDatPhongPanel ,DonDatPhong ddp) {
+    public DonDatPhong getDonDatPhong() {
+        return donDatPhong;
+    }
+
+    public DonDatPhongPanel(QuanLyDonDatPhongPanel quanLyDonDatPhongPanel , DonDatPhong ddp) {
         QuanLyDonDatPhongBUS quanLyDonDatPhongBUS = new QuanLyDonDatPhongBUS();
         this.quanLyDonDatPhongPanel = quanLyDonDatPhongPanel;
         this.donDatPhong = ddp;
@@ -187,7 +191,7 @@ public class DonDatPhongPanel extends JPanel implements ActionListener {
         if (confirm == JOptionPane.YES_OPTION) {
             new DonDatPhongDAL().huyDonDatPhong(this.donDatPhong.getMaDon());
             jpnDanhSachDDP.removeAll();
-            jpnDanhSachDDP.add(quanLyDonDatPhongPanel.showDanhSachDDArrayList(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
+            jpnDanhSachDDP.add(quanLyDonDatPhongPanel.showDanhSachDDP(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
         } else if (confirm == JOptionPane.NO_OPTION) {
 
         }
@@ -212,7 +216,8 @@ public class DonDatPhongPanel extends JPanel implements ActionListener {
 
             // Cập nhật lại danh sách đơn đặt phòng trên giao diện
             jpnDanhSachDDP.removeAll();
-            jpnDanhSachDDP.add(quanLyDonDatPhongPanel.showDanhSachDDArrayList(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
+            jpnDanhSachDDP.add(quanLyDonDatPhongPanel.showDanhSachDDP(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
+            quanLyDonDatPhongPanel.updateTrangThaiDon();
             jpnDanhSachDDP.revalidate();
             jpnDanhSachDDP.repaint();
         }
@@ -230,9 +235,9 @@ public class DonDatPhongPanel extends JPanel implements ActionListener {
             this.donDatPhong.setTrangThaiDonDatPhong("Đang ở");
             new DonDatPhongDAL().suaDonDatPhong(this.donDatPhong);
             jpnDanhSachDDP.removeAll();
-            jpnDanhSachDDP.add(quanLyDonDatPhongPanel.showDanhSachDDArrayList(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
-        } else if (confirm == JOptionPane.NO_OPTION) {
-
+            quanLyDonDatPhongPanel.updateTrangThaiDon();
+            jpnDanhSachDDP.add(quanLyDonDatPhongPanel.showDanhSachDDP(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);
+            quanLyDonDatPhongPanel.updateTrangThaiDon();
         }
     }
     private void xuLySKXemChiTiet() {

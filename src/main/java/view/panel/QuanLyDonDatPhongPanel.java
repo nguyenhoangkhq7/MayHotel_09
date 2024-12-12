@@ -6,11 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import bus.QuanLyDonDatPhongBUS;
 import bus.ThemDonDatPhongBUS;
-import com.sun.tools.javac.Main;
 import com.toedter.calendar.JDateChooser;
 import constant.CommonConstants;
 import dal.DonDatPhongDAL;
@@ -31,6 +32,7 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
     MenuPanel menuPanel;
     JLabel lblDatTruoc, lblDangO, lblCoPhongChuyen, lblSapCheckIn, lblQuaHanCheckin, lblQuaHanCheckout;
     private Map<String, ArrayList<DonDatPhong>> mapTrangThai; // Biến toàn cục
+    private ArrayList<DonDatPhongPanel> dsDonDatPhongPanel = new ArrayList<>();
     public JButton getBtnDatPhong() {
         return btnDatPhong;
     }
@@ -123,16 +125,23 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
         jpnTrangThai.add(createStatusPanel(lblQuaHanCheckin, "Quá hạn checkin (<1h)"));
         jpnTrangThai.add(createStatusPanel(lblQuaHanCheckout, "Quá hạn checkout (> 15 phút)"));
 
-        // khởi tạo map trạng thái
-        khoiTaoMapTrangThai(new DonDatPhongDAL().getAllDonDatPhong());
-        updateTrangThaiDon();
-        refreshDanhSachDDP();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
-        // thêm component cho danh sách đơn đặt phòng
-        donDatPhongDAL = new DonDatPhongDAL();
-        jpnDanhSachDDP.add(showDanhSachDDPMap(), BorderLayout.CENTER);
+        // Hoặc chạy định kỳ mỗi 15 phút
+        executorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                // khởi tạo map trạng thái
+                khoiTaoMapTrangThai(new DonDatPhongDAL().getAllDonDatPhong());
+                updateTrangThaiDon();
+                initDanhSachDonDatPhongPanel();
+                // thêm component cho danh sách đơn đặt phòng
+                jpnDanhSachDDP.add(showDanhSachDDPAll(), BorderLayout.CENTER);
+            }
+        }, 0, 15, TimeUnit.MINUTES);
+
         setVisible(true);
-
+        donDatPhongDAL = new DonDatPhongDAL();
 
         // thêm sự kiện cho các nút
         btnDatPhong.addActionListener(this);
@@ -304,10 +313,10 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
         if (ketQua.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy đơn đặt phòng nào phù hợp!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            khoiTaoMapTrangThai(ketQua);
-            refreshDanhSachDDP();
-            // update lại mapTrangThai
-            khoiTaoMapTrangThai(new DonDatPhongDAL().getAllDonDatPhong());
+            jpnDanhSachDDP.removeAll();
+            jpnDanhSachDDP.add(ketQua.size() == dsDonDatPhongPanel.size() ? showDanhSachDDPAll() : showDanhSachDDP(ketQua));
+            jpnDanhSachDDP.repaint();
+            jpnDanhSachDDP.revalidate();
         }
     }
 
@@ -318,7 +327,7 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
     }
 
     // đã tối ưu
-    private void updateTrangThaiDon() {
+    public void updateTrangThaiDon() {
         // Khởi tạo Map để đếm số lượng trạng thái
         Map<String, Integer> statusCounts = new HashMap<>(Map.of(
                 "Đã đặt trước", 0,
@@ -346,17 +355,17 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
     }
 
     // Hàm làm mới danh sách hiển thị
-    private void refreshDanhSachDDP() {
-        jpnDanhSachDDP.removeAll(); // Xóa danh sách cũ
-        jpnDanhSachDDP.add(showDanhSachDDPMap(), BorderLayout.CENTER); // Thêm danh sách mới từ mapTrangThai
-        jpnDanhSachDDP.revalidate(); // Làm mới giao diện
-        jpnDanhSachDDP.repaint();
+
+
+    private void initDanhSachDonDatPhongPanel() {
+
+        ArrayList<DonDatPhong> dsDonDatPhong = new DonDatPhongDAL().getAllDonDatPhong();
+        for(DonDatPhong don : dsDonDatPhong) {
+            dsDonDatPhongPanel.add(new DonDatPhongPanel(this, don));
+        }
     }
 
-
-
-    // đã tối ưu
-    private JScrollPane showDanhSachDDPMap() {
+    public JScrollPane showDanhSachDDPAll() {
         JPanel jpnShowDanhSachDDP = new JPanel();
         jpnShowDanhSachDDP.setLayout(new MigLayout(
                 "wrap 4, insets 10 10 10 10", // Bố cục 4 cột, thêm khoảng cách biên ngoài
@@ -367,7 +376,7 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
         JScrollPane scroll = new JScrollPane(jpnShowDanhSachDDP);
 
         // Kiểm tra xem mapTrangThai có rỗng không
-        if (mapTrangThai.isEmpty() || mapTrangThai.values().stream().allMatch(ArrayList::isEmpty)) {
+        if (dsDonDatPhongPanel.isEmpty()) {
             JLabel lbl = new JLabel("Không có đơn đặt phòng nào để hiển thị", SwingConstants.CENTER);
             lbl.setFont(new Font("Arial", Font.ITALIC, CommonConstants.TEXT_SIZE));
             lbl.setForeground(CommonConstants.GRAY);
@@ -377,29 +386,39 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
             return scroll;
         }
 
-        // Danh sách đã xử lý để tránh hiển thị trùng
-        Set<DonDatPhong> processedDonDatPhong = new HashSet<>();
 
-        // Danh sách ưu tiên trạng thái
-        String[][] priorities = {
-                {"Quá hạn checkin", "Sắp checkin", "Đã đặt trước"},
-                {"Quá hạn checkout", "Có phòng chuyển", "Đang ở"}
-        };
+        for(DonDatPhongPanel ddpPanel : dsDonDatPhongPanel) {
+            jpnShowDanhSachDDP.add(ddpPanel);
+        }
 
-        // Xử lý danh sách theo thứ tự ưu tiên
-        for (String[] priorityGroup : priorities) {
-            for (String priority : priorityGroup) {
-                // Lấy danh sách đơn đặt phòng theo trạng thái
-                List<DonDatPhong> dsDonDatPhong = mapTrangThai.get(priority);
-                if (dsDonDatPhong != null && !dsDonDatPhong.isEmpty()) {
-                    // Lọc và thêm các đơn chưa xử lý
-                    dsDonDatPhong.stream()
-                            .filter(ddp -> !processedDonDatPhong.contains(ddp))
-                            .forEach(ddp -> {
-                                DonDatPhongPanel donDatPhongPanel = new DonDatPhongPanel(this, ddp);
-                                jpnShowDanhSachDDP.add(donDatPhongPanel);
-                                processedDonDatPhong.add(ddp); // Đánh dấu đơn đã xử lý
-                            });
+        return scroll;
+    }
+
+    public JScrollPane showDanhSachDDP(ArrayList<DonDatPhong> dsDonDatPhong) {
+        JPanel jpnShowDanhSachDDP = new JPanel();
+        jpnShowDanhSachDDP.setLayout(new MigLayout(
+                "wrap 4, insets 10 10 10 10", // Bố cục 4 cột, thêm khoảng cách biên ngoài
+                "[grow, fill][grow, fill][grow, fill][grow, fill]", // 4 cột đều nhau, kéo giãn
+                "[]20[]" // Hàng có khoảng cách 20px giữa các hàng
+        ));
+
+        JScrollPane scroll = new JScrollPane(jpnShowDanhSachDDP);
+
+        // Kiểm tra xem mapTrangThai có rỗng không
+        if (dsDonDatPhong.isEmpty()) {
+            JLabel lbl = new JLabel("Không có đơn đặt phòng nào để hiển thị", SwingConstants.CENTER);
+            lbl.setFont(new Font("Arial", Font.ITALIC, CommonConstants.TEXT_SIZE));
+            lbl.setForeground(CommonConstants.GRAY);
+            JPanel emptyPanel = new JPanel(new BorderLayout());
+            emptyPanel.add(lbl, BorderLayout.CENTER);
+            jpnShowDanhSachDDP.add(emptyPanel); // Hiển thị thông báo nếu không có đơn đặt phòng nào
+            return scroll;
+        }
+
+        for(DonDatPhongPanel dDPPanel : dsDonDatPhongPanel) {
+            for(DonDatPhong donDatPhong : dsDonDatPhong) {
+                if(donDatPhong.getMaDon().equals(dDPPanel.getDonDatPhong().getMaDon())) {
+                    jpnShowDanhSachDDP.add(dDPPanel);
                 }
             }
         }
@@ -407,30 +426,6 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
         return scroll;
     }
 
-
-    public JScrollPane showDanhSachDDArrayList(ArrayList<DonDatPhong> dsDDP) {
-        JPanel jpnShowDanhSachDDP = new JPanel();
-        jpnShowDanhSachDDP.setLayout(new GridLayout(0, 4, 30, 30));
-
-        JScrollPane scroll = new JScrollPane(jpnShowDanhSachDDP);
-
-        if (dsDDP.isEmpty()) {
-            JLabel lbl = new JLabel("Không có đơn đặt phòng nào để hiển thị", SwingConstants.CENTER);
-            lbl.setFont(new Font("Arial", Font.ITALIC, CommonConstants.TEXT_SIZE));
-            lbl.setForeground(CommonConstants.GRAY);
-            JPanel emptyPanel = new JPanel(new BorderLayout());
-            emptyPanel.add(lbl, BorderLayout.CENTER);
-            return new JScrollPane(emptyPanel);
-        }
-
-        for (DonDatPhong ddp : dsDDP) {
-            if(ddp.getTrangThaiDonDatPhong().equals("Đã hủy") || ddp.getTrangThaiDonDatPhong().equals("Đã hoàn thành")) continue;
-            // lấy 1 chi tiết đơn đặt phòng phòng để có thông tin đơn đặt phòng và phòng
-            DonDatPhongPanel donDatPhongPanel = new DonDatPhongPanel(this, ddp);
-            jpnShowDanhSachDDP.add(donDatPhongPanel);
-        }
-        return scroll;
-    }
 
     private JLabel createStatusLabel(String text, Color backgroundColor) {
         JLabel label = new JLabel("0");

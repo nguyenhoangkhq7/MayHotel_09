@@ -16,6 +16,7 @@ import dal.PhongDAL;
 import entity.*;
 import helper.UIHelpers;
 import view.component.DichVuPanel;
+import view.component.DonDatPhongPanel;
 import view.component.PhongDaThemVaoDonDatPhongPanel;
 import view.dialog.ChonDichVuDialog;
 import javax.swing.*;
@@ -51,6 +52,7 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
     ArrayList<Phong> dsPhong = new ArrayList<>();
     ArrayList<ChiTiet_DonDatPhong_Phong> dsChiTietDDP_P = new ArrayList<>();
     ArrayList<ChiTiet_DonDatPhong_Phong_DichVu> dsChiTietDDP_Phong_DV = new ArrayList<>();
+    ArrayList<DonDatPhongPanel> dsDonDatPhongPanel;
     private boolean isSuaDichVu;
 
 //  Biên container
@@ -708,13 +710,6 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
         cboSoPhong.removeAll();
         cboSoPhong.addItem("Chọn phòng");
         cboLoaiPhong.setSelectedIndex(0);
-        if (checkInDate == null) {
-            JOptionPane.showMessageDialog(null,
-                    "Vui lòng nhập ngày check-in",
-                    "Thông báo",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         // Đặt minSelectableDate cho ngày check-out
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(checkInDate);
@@ -731,14 +726,6 @@ public class ThemDonDatPhongPanel extends JPanel implements ActionListener, Prop
         cboSoPhong.removeAll();
         cboSoPhong.addItem("Chọn phòng");
         cboLoaiPhong.setSelectedIndex(0);
-        if (checkOutDate == null) {
-            JOptionPane.showMessageDialog(null,
-                    "Vui lòng nhập ngày check-out",
-                    "Thông báo",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         // Đặt maxSelectableDate cho ngày check-in
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(checkOutDate);
