@@ -280,6 +280,6 @@ public class PhongDAL {
     }
     public static void main(String[] args) {
         PhongDAL dal = new PhongDAL();
-        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP01", LocalDateTime.of(2024,12,5,14,00), LocalDateTime.of(2024,12,10,12,00)));
+        System.out.println(dal.getPhongTheoLoaiPhongChuaDuocDat("LP01", LocalDateTime.of(2024,12,5,14,00), LocalDateTime.of(2024,12,10,12,00)).size());
     }
 }

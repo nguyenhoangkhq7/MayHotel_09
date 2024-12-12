@@ -73,7 +73,7 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
         this.add(jpnContent, BorderLayout.CENTER);
         jpnContainSearchTrangThai = new JPanel(new BorderLayout());
         jpnSearch = new JPanel(new BorderLayout());
-        jpnTrangThai = new JPanel(new GridLayout(1,5));
+        jpnTrangThai = new JPanel(new GridLayout(1,6));
         jpnContainSearchTrangThai.add(jpnSearch, BorderLayout.NORTH);
         jpnContainSearchTrangThai.add(jpnTrangThai, BorderLayout.SOUTH);
         jpnDanhSachDDP = new JPanel(new BorderLayout());
@@ -119,9 +119,9 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
         jpnTrangThai.add(createStatusPanel(lblDatTruoc, "Đã đặt trước"));
         jpnTrangThai.add(createStatusPanel(lblDangO, "Đang ở"));
         jpnTrangThai.add(createStatusPanel(lblCoPhongChuyen, "Có phòng chuyển"));
-        jpnTrangThai.add(createStatusPanel(lblSapCheckIn, "Sắp checkin"));
-        jpnTrangThai.add(createStatusPanel(lblQuaHanCheckin, "Quá hạn checkin"));
-        jpnTrangThai.add(createStatusPanel(lblQuaHanCheckout, "Quá hạn checkout"));
+        jpnTrangThai.add(createStatusPanel(lblSapCheckIn, "Sắp checkin (<2h)"));
+        jpnTrangThai.add(createStatusPanel(lblQuaHanCheckin, "Quá hạn checkin (<1h)"));
+        jpnTrangThai.add(createStatusPanel(lblQuaHanCheckout, "Quá hạn checkout (> 15 phút)"));
 
         // khởi tạo map trạng thái
         khoiTaoMapTrangThai(new DonDatPhongDAL().getAllDonDatPhong());
@@ -215,19 +215,16 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
 
         // Trường hợp không có bất kỳ tiêu chí nào
         if (trangThai.equals("Chọn trạng thái") && tang.equals("Chọn tầng") && ngayDen == null && ngayDi == null) {
-            System.out.println("đi dô dòng 221");
             ketQua.addAll(new DonDatPhongDAL().getAllDonDatPhong());
         }
 
         // Trường hợp chỉ chọn trạng thái
         else if (!trangThai.equals("Chọn trạng thái") && tang.equals("Chọn tầng") && ngayDen == null && ngayDi == null) {
-            System.out.println("đi dô dòng 228");
             ketQua.addAll(mapTrangThai.getOrDefault(trangThai, new ArrayList<>()));
         }
 
         // Trường hợp chỉ chọn tầng
         else if (trangThai.equals("Chọn trạng thái") && !tang.equals("Chọn tầng") && ngayDen == null && ngayDi == null) {
-            System.out.println("đi dô dòng 233");
             ArrayList<DonDatPhong> dsDon = new DonDatPhongDAL().getAllDonDatPhong();
             ArrayList<Phong> dsPhong = null;
             for(DonDatPhong ddp : dsDon) {
@@ -243,7 +240,6 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
 
         // Trường hợp chỉ chọn ngày (ngày đến và ngày đi)
         else if (ngayDen != null && ngayDi != null && trangThai.equals("Chọn trạng thái") && tang.equals("Chọn tầng")) {
-            System.out.println("đi dô dòng 247");
             ArrayList<DonDatPhong> dsDon = new DonDatPhongDAL().getAllDonDatPhong();
                 for (DonDatPhong don : dsDon) {
                     if (!don.getNgayNhanPhong().isBefore(ngayDen) && !don.getNgayTraPhong().isAfter(ngayDi)) {
@@ -254,7 +250,6 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
 
         // Trường hợp chọn trạng thái và tầng
         else if (!trangThai.equals("Chọn trạng thái") && !tang.equals("Chọn tầng") && ngayDen == null && ngayDi == null) {
-            System.out.println("đi dô dòng 258");
             ArrayList<DonDatPhong> dsDDP = mapTrangThai.getOrDefault(trangThai, new ArrayList<>());
             for (DonDatPhong don : dsDDP) {
                 ArrayList<Phong> dsPhong = new DonDatPhongDAL().getDanhSachPhongTheoMaDonDatPhong(don.getMaDon());
@@ -269,7 +264,6 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
 
         // Trường hợp chọn trạng thái và ngày (ngày đến và ngày đi)
         else if (!trangThai.equals("Chọn trạng thái") && tang.equals("Chọn tầng") && ngayDen != null && ngayDi != null) {
-            System.out.println("đi dô dòng 271");
             ArrayList<DonDatPhong> dsDDP = mapTrangThai.getOrDefault(trangThai, new ArrayList<>());
             for (DonDatPhong don : dsDDP) {
                 if (!don.getNgayNhanPhong().isBefore(ngayDen) && !don.getNgayTraPhong().isAfter(ngayDi)) {
@@ -280,7 +274,6 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
 
         // Trường hợp chọn tầng và ngày (ngày đến và ngày đi)
         else if (trangThai.equals("Chọn trạng thái") && !tang.equals("Chọn tầng") && ngayDen != null && ngayDi != null) {
-            System.out.println("đi dô dòng 281");
             ArrayList<DonDatPhong> dsDon = new DonDatPhongDAL().getAllDonDatPhong();
             for (DonDatPhong don : dsDon) {
                 ArrayList<Phong> dsPhong = new DonDatPhongDAL().getDanhSachPhongTheoMaDonDatPhong(don.getMaDon());
@@ -295,7 +288,6 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
 
         // Trường hợp chọn tất cả các tiêu chí
         else if (!trangThai.equals("Chọn trạng thái") && !tang.equals("Chọn tầng") && ngayDen != null && ngayDi != null) {
-            System.out.println("đi dô dòng 295");
             ArrayList<DonDatPhong> dsDDP = mapTrangThai.getOrDefault(trangThai, new ArrayList<>());
             for (DonDatPhong don : dsDDP) {
                 ArrayList<Phong> dsPhong = new DonDatPhongDAL().getDanhSachPhongTheoMaDonDatPhong(don.getMaDon());

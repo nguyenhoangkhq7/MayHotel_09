@@ -45,30 +45,47 @@ public class QuanLyDonDatPhongBUS {
         if (thoiGianCheckin == null) return false;
         Duration duration = Duration.between(hienTai, thoiGianCheckin);
         long hoursDifference = duration.toHours();
-        return hoursDifference < 3 && hoursDifference >= 0;
+        return hoursDifference < 2 && hoursDifference >= 0;
     }
 
     public boolean checkQuaHanCheckin(DonDatPhong donDatPhong) {
+        // Kiểm tra trạng thái đơn đặt phòng
         if(donDatPhong.getTrangThaiDonDatPhong().equals("Đang ở")) return false;
+
         LocalDateTime hienTai = LocalDateTime.now();
         LocalDateTime thoiGianCheckin = donDatPhong.getNgayNhanPhong();
-        if (thoiGianCheckin == null) return false; // Kiểm tra null
+
+        // Kiểm tra null cho thời gian checkin
+        if (thoiGianCheckin == null) return false;
+
+        // Tính toán sự khác biệt giữa thời gian hiện tại và thời gian checkin
         Duration duration = Duration.between(hienTai, thoiGianCheckin);
-        long hoursDifference = duration.toHours();
-        // Kiểm tra nếu đã quá hạn checkin
-        return hoursDifference < 0;
+        long minutesDifference = duration.toMinutes(); // Lấy sự khác biệt tính theo phút
+
+        // Kiểm tra nếu sự khác biệt nhỏ hơn 0 và dưới 60 phút (1 giờ)
+        return minutesDifference < 0 && Math.abs(minutesDifference) < 60;
     }
+
 
     public boolean checkQuaHanCheckout(DonDatPhong donDatPhong) {
         LocalDateTime hienTai = LocalDateTime.now();
         LocalDateTime thoiGianCheckout = donDatPhong.getNgayTraPhong();
-        if (thoiGianCheckout == null) return false; // Kiểm tra null
+
+        // Kiểm tra nếu thời gian checkout là null
+        if (thoiGianCheckout == null) return false;
+
+        // Kiểm tra trạng thái "Đang ở" để xem khách hàng vẫn chưa checkout
         if (donDatPhong.getTrangThaiDonDatPhong().equals("Đang ở")) {
-            long hoursDifference = Duration.between(hienTai, thoiGianCheckout).toHours();
-            return hoursDifference < 0;
+            // Tính sự khác biệt giữa thời gian hiện tại và thời gian checkout theo phút
+            long minutesDifference = Duration.between(hienTai, thoiGianCheckout).toMinutes();
+
+            // Kiểm tra nếu thời gian checkout quá hạn hơn 15 phút
+            return minutesDifference < -15; // Nếu khác biệt âm và lớn hơn 15 phút
         }
+
         return false;
     }
+
 
     public static void main(String[] args) {
 //        System.out.println(new DonDatPhongBUS().checkSapDenHanCheckin(new DonDatPhongDAL().getDonDatPhongTheoMa("DDP000001")));

@@ -16,6 +16,7 @@ import dal.DonDatPhongDAL;
 import entity.DonDatPhong;
 import view.dialog.ChiTietDonDatPhongDialog;
 import view.dialog.CapNhatDichVuDialog;
+import view.dialog.ChuyenPhongDialog;
 import view.panel.QuanLyDonDatPhongPanel;
 
 import javax.swing.*;
@@ -164,8 +165,12 @@ public class DonDatPhongPanel extends JPanel implements ActionListener {
         } else if(o.equals(btnThemDichVu)) {
             xuLySKThemDichVu();
         } else if(o.equals(btnChuyenPhong)) {
-
+            xuLySKChuyenPhong();
         }
+    }
+    private void xuLySKChuyenPhong(){
+        ChuyenPhongDialog chuyenPhongDialog = new ChuyenPhongDialog(quanLyDonDatPhongPanel.getParentFrame(), this.donDatPhong);
+        chuyenPhongDialog.setVisible(true);
     }
     private void xuLySKThemDichVu() {
         CapNhatDichVuDialog dialog = new CapNhatDichVuDialog(this.quanLyDonDatPhongPanel.getParentFrame(),donDatPhong);
