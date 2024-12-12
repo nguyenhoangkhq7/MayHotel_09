@@ -108,51 +108,48 @@ public class SuaNhanVienDialog extends JDialog {
 		getContentPane().add(panel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		
-		  btnLuu.addActionListener(new ActionListener() {
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	            	String tenNV = txtHoTen.getText().trim();
-					String soDienThoai = txtSDT.getText().trim();
-					String soCanCuoc = txtSoCanCuoc.getText().trim();
-					String hoatDong = cboHoatDong.getSelectedItem().toString();
-					String email = txtEmail.getText().trim();
-					String diaChi = txtDiaChi.getText().trim();
-					String vaiTro = cboVaiTro.getSelectedItem().toString();
-					String tenTaiKhoan = txtTenTaiKhoan.getText().trim();
-					String matKhau = txtMatKhau.getText().trim();
+		btnLuu.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (!validateInput()) {
+		            return; // Nếu dữ liệu không hợp lệ, dừng lại
+		        }
 
+		        String tenNV = txtHoTen.getText().trim();
+		        String soDienThoai = txtSDT.getText().trim();
+		        String soCanCuoc = txtSoCanCuoc.getText().trim();
+		        String hoatDong = cboHoatDong.getSelectedItem().toString();
+		        String email = txtEmail.getText().trim();
+		        String diaChi = txtDiaChi.getText().trim();
+		        String vaiTro = cboVaiTro.getSelectedItem().toString();
+		        String tenTaiKhoan = txtTenTaiKhoan.getText().trim();
+		        String matKhau = new String(txtMatKhau.getPassword()).trim();
 
-	                if (tenNV.isEmpty() || soDienThoai.isEmpty() || soCanCuoc.isEmpty() || email.isEmpty() || diaChi.isEmpty() || tenTaiKhoan.isEmpty() || matKhau.isEmpty()) {
-	                    JOptionPane.showMessageDialog(SuaNhanVienDialog.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	                    return;
-	                }
+		        try {
+		            boolean isHoatDong = "Có".equals(hoatDong);
+		            TaiKhoan taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
+		            NhanVien updateNhanVien = new NhanVien(
+		                nhanVien.getMaNV(), tenNV, soDienThoai, soCanCuoc, isHoatDong, email, diaChi, vaiTro, taiKhoan
+		            );
 
-	                try {
+		            NhanVienDAL nhanVienDAL = new NhanVienDAL();
+		            boolean isSuccess = nhanVienDAL.suaNhanVien(updateNhanVien);
 
-	                    boolean isHoatDong = "Có".equals(hoatDong);
-	            		TaiKhoan taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau);
-						NhanVien updateNhanVien = new NhanVien (nhanVien.getMaNV(), tenNV, soDienThoai, soCanCuoc, isHoatDong, email, diaChi, vaiTro, taiKhoan);
-						
+		            if (isSuccess) {
+		                JOptionPane.showMessageDialog(SuaNhanVienDialog.this, "Sửa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		                dispose(); // Đóng dialog
+		                if (quanLyNhanVienPanel != null) {
+		                    quanLyNhanVienPanel.capNhatTable();
+		                }
+		            } else {
+		                JOptionPane.showMessageDialog(SuaNhanVienDialog.this, "Sửa nhân viên thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            }
+		        } catch (Exception ex) {
+		            JOptionPane.showMessageDialog(SuaNhanVienDialog.this, "Lỗi khi sửa nhân viên: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+		        }
+		    }
+		});
 
-						NhanVienDAL nhanVienDAL = new NhanVienDAL(); 
-	                    boolean isSuccess = nhanVienDAL.suaNhanVien(updateNhanVien);
-
-	                    if (isSuccess) {
-	                        JOptionPane.showMessageDialog(SuaNhanVienDialog.this, "Sửa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-	                        dispose(); // Đóng dialog
-	                        // Cập nhật lại bảng trong DichVuPanel
-	                        if ( quanLyNhanVienPanel != null) {
-	                            quanLyNhanVienPanel.capNhatTable();
-	                        }
-	                    } else {
-	                        JOptionPane.showMessageDialog(SuaNhanVienDialog.this, "Sửa nhân viên thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	                    }
-	                }  catch (Exception ex) {
-						JOptionPane.showMessageDialog(SuaNhanVienDialog.this, "Lỗi khi sửa nhân viên: " + ex.getMessage(),
-								"Lỗi", JOptionPane.ERROR_MESSAGE);
-					}
-	            }
-	        });
 
 	        btnHuyBo.addActionListener(new ActionListener() {
 	            @Override
@@ -161,7 +158,34 @@ public class SuaNhanVienDialog extends JDialog {
 	            }
 	        });
 	        
-
-	
 }
+	private boolean validateInput() {
+	    if (txtHoTen.getText().trim().isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Họ tên không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtHoTen.requestFocus();
+	        return false;
+	    }
+	    if (txtSDT.getText().trim().isEmpty() || !txtSDT.getText().matches("\\d{10}")) {
+	        JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtSDT.requestFocus();
+	        return false;
+	    }
+	    if (txtSoCanCuoc.getText().trim().isEmpty() || !txtSoCanCuoc.getText().matches("\\d{12}")) {
+	        JOptionPane.showMessageDialog(this, "Số căn cước phải là 12 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtSoCanCuoc.requestFocus();
+	        return false;
+	    }
+	    if (txtEmail.getText().trim().isEmpty() || !txtEmail.getText().matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+	        JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtEmail.requestFocus();
+	        return false;
+	    }
+	    if (txtDiaChi.getText().trim().isEmpty()) {
+	        JOptionPane.showMessageDialog(this, "Địa chỉ không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+	        txtDiaChi.requestFocus();
+	        return false;
+	    }
+	    return true;
+	}
+
 }

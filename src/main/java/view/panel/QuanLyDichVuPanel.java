@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
@@ -12,6 +13,7 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -189,6 +191,8 @@ public class QuanLyDichVuPanel extends JPanel {
 				new String[] { "Mã Dịch Vụ", "Đơn Giá", "Tên Dịch Vụ", "Số Lượng Tồn", "Còn Hoạt Động", "Đơn Vị" }, 0);
 		table_2 = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table_2);
+		table_2.getColumnModel().getColumn(1).setCellRenderer(new NumberRenderer());
+
 
 		table_2.setForeground(new Color(0, 0, 0));
 		table_2.setFont(new Font("Times New Roman", Font.PLAIN, 12));
@@ -330,6 +334,19 @@ public class QuanLyDichVuPanel extends JPanel {
 
 	    loadDichVuToTable();
 	}
+	public class NumberRenderer extends DefaultTableCellRenderer {
+	    private static final DecimalFormat formatter = new DecimalFormat("#,###");
+
+	    @Override
+	    protected void setValue(Object value) {
+	        if (value instanceof Number) {
+	            setText(formatter.format(value));
+	        } else {
+	            super.setValue(value);
+	        }
+	    }
+	}
+
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
@@ -345,4 +362,6 @@ public class QuanLyDichVuPanel extends JPanel {
 			}
 		});
 	}
+	
 }
+
