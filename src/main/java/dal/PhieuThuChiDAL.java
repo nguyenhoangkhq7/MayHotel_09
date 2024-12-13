@@ -18,30 +18,30 @@ public class PhieuThuChiDAL {
     }
 
     // Lấy mã phiếu tiếp theo
-    public String layMaPhieuTiepTheo() {
-        String maPhieuCuoi = "";
+    public String getMaPhieuTiepTheo(String prefix) {
+        int newNumber = 1;
 
-        try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
-            String sql = "SELECT TOP 1 maPhieu FROM PhieuThuChi ORDER BY maPhieu DESC";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+        try (Connection con = ConnectDB.getConnection();
+             PreparedStatement stmt = con.prepareStatement(
+                     "SELECT MAX(CAST(SUBSTRING(maPhieu, 3, LEN(maPhieu) - 2) AS INT)) FROM PhieuThuChi WHERE maPhieu LIKE ?")) {
 
-            if (rs.next()) {
-                maPhieuCuoi = rs.getString("maPhieu");
+            stmt.setString(1, prefix + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Integer maxNumber = rs.getInt(1);
+                    if (rs.wasNull()) {
+                        newNumber = 1;
+                    } else {
+                        newNumber = maxNumber + 1;
+                    }
+                }
             }
-
-            if (maPhieuCuoi != null && !maPhieuCuoi.isEmpty()) {
-                int soHienTai = Integer.parseInt(maPhieuCuoi.replaceAll("[^0-9]", ""));
-                soHienTai++;
-                return String.format("PTC%04d", soHienTai);
-            }
-        } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException("Lỗi kết nối hoặc truy vấn cơ sở dữ liệu", ex);
         }
 
-        return "PTC0001"; // Nếu không tìm thấy, bắt đầu từ PTC0001
+        return prefix + String.format("%06d", newNumber);
     }
 
     // Lấy danh sách phiếu thu chi theo khoảng thời gian

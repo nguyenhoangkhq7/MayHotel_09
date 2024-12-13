@@ -24,13 +24,13 @@ public class BangBaoCaoBUS {
 	public double tinhTienPhong(ChiTiet_DonDatPhong_Phong ctddpp) {
 		double donGia = ctddpp.getPhong().getLoaiPhong().getDonGia(); // Giá phòng theo loại phòng
 		double chietKhau = ctddpp.getChietKhau(); // Chiết khấu
-		LocalDateTime ngayNhanPhongDuKien = ctddpp.getNgayNhanPhong(); // Ngày nhận phòng dự kiến
-		LocalDateTime ngayTraPhongDuKien = ctddpp.getNgayTraPhong(); // Ngày trả phòng dự kiến
-		LocalDateTime ngayNhanPhongThucTe = ctddpp.getDonDatPhong().getNgayNhanPhong(); // Ngày nhận phòng thực tế
-		LocalDateTime ngayTraPhongThucTe = ctddpp.getDonDatPhong().getNgayTraPhong(); // Ngày trả phòng thực tế
+		LocalDateTime ngayNhanPhongDuKien = ctddpp.getDonDatPhong().getNgayNhanPhong(); // Ngày nhận phòng dự kiến
+		LocalDateTime ngayTraPhongDuKien = ctddpp.getDonDatPhong().getNgayTraPhong(); // Ngày trả phòng dự kiến
+		LocalDateTime ngayNhanPhongThucTe =  ctddpp.getNgayNhanPhong();// Ngày nhận phòng thực tế
+		LocalDateTime ngayTraPhongThucTe =  ctddpp.getNgayTraPhong();// Ngày trả phòng thực tế
 
 		// Tính số ngày ở (tối thiểu 1 ngày)
-		long soNgayO = Math.max(ChronoUnit.DAYS.between(ngayNhanPhongDuKien, ngayTraPhongDuKien), 1);
+		long soNgayO = Math.max(ChronoUnit.DAYS.between(ngayNhanPhongThucTe, ngayTraPhongThucTe), 1);
 		double tienPhong = donGia * soNgayO * (1 - chietKhau); // Tiền phòng cơ bản
 
 		// Xử lý nhận phòng sớm
@@ -166,15 +166,15 @@ public class BangBaoCaoBUS {
 		tongDoanhThu = tongDoanhThuRong + khuyenMai;
 
 		// Làm tròn đến hàng chục
-		tongDoanhThu = Math.round(tongDoanhThu / 100) * 100;
-		tienNganHang = Math.round(tienNganHang / 100) * 100;
-		tienMat = Math.round(tienMat / 100) * 100;
-		khuyenMai = Math.round(khuyenMai / 100) * 100;
-		doanhThuPhong = Math.round(doanhThuPhong / 100) * 100;
-		doanhThuDichVu = Math.round(doanhThuDichVu / 100) * 100;
-		khoanThuKhac = Math.round(khoanThuKhac / 100) * 100;
-		khoanChiKhac = Math.round(khoanChiKhac / 100) * 100;
-		thucThu = Math.round(thucThu / 100) * 100;
+//		tongDoanhThu = Math.round(tongDoanhThu / 100) * 100;
+//		tienNganHang = Math.round(tienNganHang / 100) * 100;
+//		tienMat = Math.round(tienMat / 100) * 100;
+//		khuyenMai = Math.round(khuyenMai / 100) * 100;
+//		doanhThuPhong = Math.round(doanhThuPhong / 100) * 100;
+//		doanhThuDichVu = Math.round(doanhThuDichVu / 100) * 100;
+//		khoanThuKhac = Math.round(khoanThuKhac / 100) * 100;
+//		khoanChiKhac = Math.round(khoanChiKhac / 100) * 100;
+//		thucThu = Math.round(thucThu / 100) * 100;
 
 		DecimalFormat df = new DecimalFormat("#,###"); // Định dạng số với dấu phân cách
 

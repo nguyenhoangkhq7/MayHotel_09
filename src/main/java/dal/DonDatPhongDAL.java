@@ -238,13 +238,7 @@ public class DonDatPhongDAL {
     }
 
     public static void main(String[] args) {
-        ArrayList<Phong> dsPhong = new PhongDAL().getAllPhong();
-//        System.out.println(dsPhong);
-        for (Phong p : dsPhong) {
-            if(p.getTang().equals("1")) {
-                System.out.println(p.getTenPhong());
-            }
-        }
+        System.out.println(new DonDatPhongDAL().getDonDatPhongTheoMa("DDP000001"));
     }
 
 }

@@ -10,67 +10,37 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.FontFactory;
-
-
-import java.io.FileOutputStream;
 
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import java.io.FileOutputStream;
 
-
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 
 import constant.CommonConstants;
-import dal.DichVuDAL;
-import dal.DonDatPhongDAL;
 import dal.HoaDonDAL;
-import dal.KhuyenMaiDAL;
-import dal.NhanVienDAL;
-import dal.PhongDAL;
 import database.ConnectDB;
-import entity.DichVu;
-import entity.DonDatPhong;
 import entity.HoaDon;
-import entity.KhuyenMai;
-import entity.NhanVien;
-import entity.Phong;
 import view.dialog.HoaDonExporter;
 import view.dialog.ThemHoaDonDiaLog;
-import view.dialog.ThemKhachHangDiaLog;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.PatternSyntaxException;
 
 public class QuanLyHoaDonPanel extends JPanel {
 

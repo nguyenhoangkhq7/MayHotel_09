@@ -1,7 +1,6 @@
 package view.panel;
 
 import javax.swing.*;
-import javax.swing.RowFilter.Entry;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,41 +9,25 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.regex.PatternSyntaxException;
 
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 
-import dal.HoaDonDAL;
 import dal.KhuyenMaiDAL;
 import entity.*;
-import view.dialog.SuaDichVuDialog;
 import view.dialog.SuaKhuyenMaiDiaLog;
-import view.dialog.ThemHoaDonDiaLog;
 import view.dialog.ThemKhuyenMaiDiaLog;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import constant.CommonConstants;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.JTextComponent;
 
 public class QuanLyKhuyenMaiPanel extends JPanel {
 

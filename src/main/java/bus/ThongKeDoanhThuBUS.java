@@ -21,9 +21,9 @@ import dal.PhieuThuChiDAL;
 
 
 public class ThongKeDoanhThuBUS {
-	
-	   // Hàm lấy doanh thu theo ngày
-	  // Hàm lấy doanh thu theo ngày
+
+    // Hàm lấy doanh thu theo ngày
+    // Hàm lấy doanh thu theo ngày
     public double layDoanhThuTheoNgay(LocalDate localDate) {
         // Tạo đối tượng LocalDateTime cho ngày bắt đầu và kết thúc trong ngày
         LocalDateTime startDate = localDate.atStartOfDay();  // Bắt đầu ngày (00:00:00)
@@ -35,12 +35,15 @@ public class ThongKeDoanhThuBUS {
         // Tính tổng doanh thu
         double doanhThu = 0.0;
         for (HoaDon hoaDon : dsHoaDon) {
-            doanhThu += hoaDon.getThanhTien();  // Cộng doanh thu của từng hóa đơn
+            if(hoaDon.getTrangThai()) {
+                doanhThu += hoaDon.getThanhTien();  // Cộng doanh thu của từng hóa đơn
+            }
+
         }
 
         return doanhThu;  // Trả về tổng doanh thu trong ngày
     }
-    
+
     public double layGiaTriCacMuc(int loaiMuc, LocalDate startDate, LocalDate endDate) {
         double ketQua = 0.0;
 
@@ -79,9 +82,10 @@ public class ThongKeDoanhThuBUS {
 
             case 4: // Tổng số tiền đã khuyến mãi
                 for (HoaDon hoaDon : dsHoaDon) {
-                    if (hoaDon.getTrangThai() && hoaDon.getKhuyenMai() != null) {  // Hóa đơn còn hoạt động và có khuyến mãi
-                    	KhuyenMai khuyenMai = hoaDon.getKhuyenMai();
-                        ketQua += hoaDon.getThanhTien() / (1 - khuyenMai.getGiaTri()) ;  // Cộng dồn giá trị thanh toán đã khuyến mãi
+                    if (hoaDon.getTrangThai() && hoaDon.getKhuyenMai() != null) {  //
+                        KhuyenMai khuyenMai = hoaDon.getKhuyenMai();
+                        double tienTruocKhuyenMai =  hoaDon.getThanhTien() / (1-  khuyenMai.getGiaTri());
+                        ketQua += tienTruocKhuyenMai - hoaDon.getThanhTien() ;  // Cộng dồn giá trị thanh toán đã khuyến mãi
                     }
                 }
                 break;
@@ -133,11 +137,11 @@ public class ThongKeDoanhThuBUS {
     public List<Map.Entry<String, Integer>> layTopPhongTheoSoLuong(LocalDate startDate, LocalDate endDate) {
         // Bản đồ lưu số lượng đơn đặt phòng cho mỗi mã phòng
         Map<String, Integer> phongCountMap = new HashMap<>();
-        
+
         // Chuyển ngày bắt đầu và kết thúc thành LocalDateTime để so sánh với thời gian của hóa đơn
         LocalDateTime startDateTime = startDate.atStartOfDay();  // 00:00:00 của ngày bắt đầu
         LocalDateTime endDateTime = endDate.atStartOfDay().plusDays(1).minusNanos(1);  // 23:59:59.999 của ngày kết thúc
-        
+
         // Lấy danh sách các hóa đơn trong khoảng thời gian
         ArrayList<HoaDon> dsHoaDon = new HoaDonDAL().getHoaDonByDateRange(startDateTime, endDateTime);
 
@@ -170,7 +174,7 @@ public class ThongKeDoanhThuBUS {
                 .collect(Collectors.toList());  // Chuyển đổi thành danh sách các mã phòng và số lượt đặt
     }
 
- // Hàm lấy số lượng phòng theo hạng
+    // Hàm lấy số lượng phòng theo hạng
     public List<String> layGiaTriPhongTheoHang(int hang, LocalDate startDate, LocalDate endDate) {
         List<Map.Entry<String, Integer>> sortedPhongList = layTopPhongTheoSoLuong(startDate, endDate);
 
@@ -192,20 +196,20 @@ public class ThongKeDoanhThuBUS {
         return result;
     }
 
-    
+
     public static void main(String[] args) {
         ThongKeDoanhThuBUS thongKeDoanhThuBUS = new ThongKeDoanhThuBUS();
-        
-       
-            LocalDate startDate = LocalDate.of(2024, 11, 1);
-            LocalDate endDate = LocalDate.of(2024, 11, 30);
 
-            // Lấy mã phòng và số lượt đặt phòng của phòng có số lượt cao nhất (hạng 1)
-            List<String> topPhongHang1 = thongKeDoanhThuBUS.layGiaTriPhongTheoHang(1, startDate, endDate);
-            System.out.println("Phòng hạng 1: " + topPhongHang1);
-            
-            // Lấy mã phòng và số lượt đặt phòng của phòng có số lượt thứ 2 (hạng 2)
-            List<String> topPhongHang2 = thongKeDoanhThuBUS.layGiaTriPhongTheoHang(2, startDate, endDate);
-            System.out.println("Phòng hạng 2: " + topPhongHang2);
-        }
+
+        LocalDate startDate = LocalDate.of(2024, 12, 13);
+        LocalDate endDate = LocalDate.of(2024, 12, 13);
+
+        // Lấy mã phòng và số lượt đặt phòng của phòng có số lượt cao nhất (hạng 1)
+        List<String> topPhongHang1 = thongKeDoanhThuBUS.layGiaTriPhongTheoHang(1, startDate, endDate);
+        System.out.println("Phòng hạng 1: " + topPhongHang1);
+
+        // Lấy mã phòng và số lượt đặt phòng của phòng có số lượt thứ 2 (hạng 2)
+        List<String> topPhongHang2 = thongKeDoanhThuBUS.layGiaTriPhongTheoHang(2, startDate, endDate);
+        System.out.println("Phòng hạng 2: " + topPhongHang2);
+    }
 }

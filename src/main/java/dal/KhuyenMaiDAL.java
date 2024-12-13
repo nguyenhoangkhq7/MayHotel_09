@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class KhuyenMaiDAL {
-	 public ArrayList<KhuyenMai> dsKhuyenMai;
-	    Connection con;
+    public ArrayList<KhuyenMai> dsKhuyenMai;
+    Connection con;
 
-	    public KhuyenMaiDAL() {
-	        dsKhuyenMai = new ArrayList<>();
-	    }
+    public KhuyenMaiDAL() {
+        dsKhuyenMai = new ArrayList<>();
+    }
 
     // Lấy tất cả khuyến mãi từ cơ sở dữ liệu
     public ArrayList<KhuyenMai> getAllKhuyenMai() {
@@ -75,12 +75,56 @@ public class KhuyenMaiDAL {
         }
         return khuyenMai;
     }
+    public boolean giamSoLuongKhuyenMai(String maKhuyenMai) {
+        String query = "UPDATE KhuyenMai SET soLuong = soLuong - 1 WHERE maKhuyenMai = ? AND soLuong > 0";
 
+        try {
+            ConnectDB.getInstance().connect();
+            Connection con = ConnectDB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            stmt.setString(1, maKhuyenMai);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Lấy khuyến mãi theo mã khuyến mãi
+    public KhuyenMai getKhuyenMaiTheoTen(String tenKhuyenMai) {
+        KhuyenMai khuyenMai = null;
+        try {
+            ConnectDB.getInstance().connect();
+            con = ConnectDB.getConnection();
+            String sql = "SELECT * FROM KhuyenMai WHERE tenKhuyenMai = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, tenKhuyenMai);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String maKhuyenMai = rs.getString("maKhuyenMai");
+                double giaTri = rs.getDouble("giaTri");
+                LocalDateTime ngayBatDau = rs.getTimestamp("ngayBatDau").toLocalDateTime();
+                boolean conHoatDong = rs.getBoolean("conHoatDong");
+                int soLuong = rs.getInt("soLuong");
+                LocalDateTime ngayKetThuc = rs.getTimestamp("ngayKetThuc").toLocalDateTime();
+                String loaiKhachHangApDung = rs.getString("loaiKhachHangApDung");
+
+                khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, giaTri, ngayBatDau,
+                        conHoatDong, soLuong, ngayKetThuc, loaiKhachHangApDung);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return khuyenMai;
+    }
     // Thêm khuyến mãi mới vào cơ sở dữ liệu
     public boolean themKhuyenMai(KhuyenMai khuyenMai) {
         int n = 0;
         String sql = "INSERT INTO KhuyenMai (maKhuyenMai, tenKhuyenMai, giaTri, ngayBatDau, conHoatDong, soLuong, ngayKetThuc, loaiKhachHangApDung) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Mở kết nối và thực thi câu lệnh SQL
         try (Connection con = ConnectDB.getConnection();
@@ -97,7 +141,7 @@ public class KhuyenMaiDAL {
             stmt.setString(8, khuyenMai.getLoaiKhachHangApDung());
 
             // In ra câu lệnh SQL và các tham số để debug
-            
+
 
             // Thực thi câu lệnh
             n = stmt.executeUpdate();
@@ -149,11 +193,11 @@ public class KhuyenMaiDAL {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-            	lastKhuyenMaiCode = rs.getString(1); // Lấy mã phòng lớn nhất
+                lastKhuyenMaiCode = rs.getString(1); // Lấy mã phòng lớn nhất
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } 
+        }
 
         return lastKhuyenMaiCode;
     }
@@ -168,14 +212,14 @@ public class KhuyenMaiDAL {
             // Mở kết nối cơ sở dữ liệu
             ConnectDB.getInstance().connect();
             con = ConnectDB.getConnection();
-            
+
             // Câu lệnh SQL cập nhật khuyến mãi
             String sql = "UPDATE KhuyenMai SET conHoatDong = 0 WHERE maKhuyenMai = ?";
             stmt = con.prepareStatement(sql);
-            
+
             // Gán giá trị tham số cho câu lệnh SQL
             stmt.setString(1, maKhuyenMai);
-            
+
             // Thực hiện câu lệnh cập nhật
             n = stmt.executeUpdate();
         } catch (SQLException e) {
@@ -195,7 +239,7 @@ public class KhuyenMaiDAL {
                 ex.printStackTrace();
             }
         }
-        
+
         // Trả về true nếu cập nhật thành công, false nếu không thành công
         return n > 0;
     }

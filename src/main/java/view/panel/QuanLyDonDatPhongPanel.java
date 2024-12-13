@@ -42,6 +42,11 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
     public MainGUI getParentFrame() {
         return menuPanel.getMainGUI();
     }
+
+    public MenuPanel getMenuPanel() {
+        return menuPanel;
+    }
+
     public QuanLyDonDatPhongPanel(MenuPanel menuPanel) {
         this.menuPanel = menuPanel;
         setLayout(new BorderLayout()); // Sử dụng BorderLayout cho JFrame
@@ -124,6 +129,13 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
         jpnTrangThai.add(createStatusPanel(lblSapCheckIn, "Sắp checkin (<2h)"));
         jpnTrangThai.add(createStatusPanel(lblQuaHanCheckin, "Quá hạn checkin (<1h)"));
         jpnTrangThai.add(createStatusPanel(lblQuaHanCheckout, "Quá hạn checkout (> 15 phút)"));
+
+        // khởi tạo các giá trị
+        khoiTaoMapTrangThai(new DonDatPhongDAL().getAllDonDatPhong());
+        updateTrangThaiDon();
+        initDanhSachDonDatPhongPanel();
+        // thêm component cho danh sách đơn đặt phòng
+        jpnDanhSachDDP.add(showDanhSachDDPAll(), BorderLayout.CENTER);
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 

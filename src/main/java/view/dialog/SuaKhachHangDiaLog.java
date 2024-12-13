@@ -1,14 +1,10 @@
 package view.dialog;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 
 import dal.KhachHangDAL;
-import dal.LoaiPhongDAL;
-import dal.PhongDAL;
 import entity.KhachHang;
 import entity.LoaiKhachHang;
-import entity.LoaiPhong;
 import entity.Phong;
 import view.panel.QuanLyKhachHangPanel;
 import view.panel.QuanLyPhongPanel;

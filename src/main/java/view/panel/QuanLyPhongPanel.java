@@ -8,10 +8,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,16 +17,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import constant.CommonConstants;
-import dal.DichVuDAL;
 import dal.LoaiPhongDAL;
 import dal.PhongDAL;
-import database.ConnectDB;
-import entity.DichVu;
 import entity.LoaiPhong;
 import entity.Phong;
-import view.dialog.SuaDichVuDialog;
 import view.dialog.SuaPhongDialong;
-import view.dialog.ThemDichVuDialog;
 import view.dialog.ThemPhongDiaLog;
 
 import javax.swing.table.DefaultTableModel;

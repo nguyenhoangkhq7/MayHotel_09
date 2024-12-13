@@ -2,34 +2,20 @@ package view.panel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import constant.CommonConstants;
-import dal.DichVuDAL;
 import dal.KhachHangDAL;
-import dal.PhongDAL;
-import database.ConnectDB;
-import entity.DichVu;
 import entity.KhachHang;
 import entity.LoaiKhachHang;
-import entity.Phong;
-import view.dialog.SuaDichVuDialog;
 import view.dialog.SuaKhachHangDiaLog;
-import view.dialog.SuaPhongDialong;
 import view.dialog.ThemKhachHangDiaLog;
-import view.dialog.ThemPhongDiaLog;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;

@@ -1,7 +1,6 @@
 package view.dialog;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -11,7 +10,6 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
@@ -20,7 +18,6 @@ import bus.PhieuThuChiBUS;
 import dal.NhanVienDAL;
 import entity.NhanVien;
 import entity.PhieuThuChi;
-import view.panel.QuanLyDichVuPanel;
 import view.panel.QuanLyPhieuThuChiPanel;
 
 import javax.swing.JComboBox;
@@ -29,7 +26,6 @@ import javax.swing.JTextArea;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.util.Date;
-import javax.swing.JTextField;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

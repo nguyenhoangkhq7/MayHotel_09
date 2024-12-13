@@ -4,7 +4,7 @@ import dal.NhanVienDAL;
 import database.ConnectDB;
 import entity.NhanVien;
 import view.dialog.QuenMatKhauDialog;
-import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;

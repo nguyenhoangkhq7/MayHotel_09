@@ -17,6 +17,7 @@ import entity.DonDatPhong;
 import view.dialog.ChiTietDonDatPhongDialog;
 import view.dialog.CapNhatDichVuDialog;
 import view.dialog.ChuyenPhongDialog;
+import view.dialog.TraPhongDialog;
 import view.panel.QuanLyDonDatPhongPanel;
 
 import javax.swing.*;
@@ -208,12 +209,11 @@ public class DonDatPhongPanel extends JPanel implements ActionListener {
         // Nếu người dùng chọn "YES"
         if (confirm == JOptionPane.YES_OPTION) {
             // Ghi lại thay đổi vào database hoặc nguồn dữ liệu
-            if(new DonDatPhongDAL().suaTrangThaiDonDatPhong(this.donDatPhong.getMaDon(), "Đã hoàn thành")) {
-                JOptionPane.showMessageDialog(null, "Checkout thành công");
-            } else {
-                JOptionPane.showMessageDialog(null, "Checkout thất bại. Gặp lỗi!");
-            }
 
+                // mơ dialog để checkout
+                TraPhongDialog traPhongDialog = new TraPhongDialog(this.donDatPhong ,quanLyDonDatPhongPanel.getMenuPanel());
+                traPhongDialog.setVisible(true);
+                
             // Cập nhật lại danh sách đơn đặt phòng trên giao diện
             jpnDanhSachDDP.removeAll();
             jpnDanhSachDDP.add(quanLyDonDatPhongPanel.showDanhSachDDP(new DonDatPhongDAL().getAllDonDatPhong()), BorderLayout.CENTER);

@@ -5,15 +5,10 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
-import javax.swing.text.*;           // Cung cấp AbstractDocument và DocumentFilter để ràng buộc nhập liệu
 
 import java.awt.event.ActionEvent; // Để sử dụng ActionEvent
 import java.awt.event.ActionListener; // Để sử dụng ActionListener
@@ -27,7 +22,6 @@ import javax.swing.event.ListSelectionListener;
 
 import com.toedter.calendar.JDateChooser;
 
-import java.awt.event.*; // Thư viện cho các sự kiện như MouseListener, ActionListener
 import java.util.Date; // Thư viện cho kiểu dữ liệu Date
 
 
@@ -37,20 +31,15 @@ import java.util.Calendar;
 
 import constant.CommonConstants;
 import dal.NhanVienDAL;
-import dal.PhieuThuChiDAL;
 import entity.NhanVien;
 import entity.PhieuThuChi;
-import view.MainGUI;
 import view.dialog.SuaPhieuThuChiDialog;
-import view.dialog.ThemDichVuDialog;
 import view.dialog.ThemPhieuThuChiDialog;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.DocumentFilter;
 
 public class QuanLyPhieuThuChiPanel extends JPanel {
 
