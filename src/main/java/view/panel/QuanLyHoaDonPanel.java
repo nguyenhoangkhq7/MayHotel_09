@@ -142,7 +142,7 @@ public class QuanLyHoaDonPanel extends JPanel {
         
         pnlTieuDe.setLayout(new FlowLayout());
 
-        JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ KHÁCH HÀNG");
+        JLabel lblTieuDeTrang = new JLabel("QUẢN LÝ HÓA ĐƠN");
         lblTieuDeTrang.setHorizontalAlignment(SwingConstants.CENTER);
         lblTieuDeTrang.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 20));
         pnlTieuDe.add(lblTieuDeTrang);
@@ -150,13 +150,13 @@ public class QuanLyHoaDonPanel extends JPanel {
         JPanel pnlThongTin = new JPanel();
         pnlThongTin.setBackground(Color.WHITE);
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin khách hàng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
+                "TÌM KIẾM HÓA ĐƠN", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
 
         add(pnlThongTin);
         pnlThongTin.setLayout(new BorderLayout());
 
         panelForm = new JPanel();
-        panelForm.setLayout(new GridLayout(3, 1, 10, 10));
+        panelForm.setLayout(new GridLayout(3, 2, 10, 10));
 
         JLabel lbMaHD = new JLabel("Mã hóa đơn:");
         lbMaHD.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -166,6 +166,33 @@ public class QuanLyHoaDonPanel extends JPanel {
         txtMaHD.setFont(new Font("Tahoma", Font.PLAIN, 13));
         
         panelForm.add(txtMaHD);
+        
+        JLabel lbMaNV= new JLabel("Mã nhân viên:");
+        lbMaNV.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panelForm.add(lbMaNV);
+
+        txtmaNV = new JTextField("");
+        txtmaNV.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        
+        panelForm.add(txtmaNV);
+        
+        JLabel lbTenKH= new JLabel("Tên khách hàng:");
+        lbTenKH.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panelForm.add(lbTenKH);
+
+        txtTenKH = new JTextField("");
+        txtTenKH.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        
+        panelForm.add(txtTenKH);
+        
+        JLabel lbMaDDP= new JLabel("Mã đơn đặt phòng:");
+        lbMaDDP.setFont(new Font("Tahoma", Font.BOLD, 13));
+        panelForm.add(lbMaDDP);
+
+        txtmaDon = new JTextField("");
+        txtmaDon.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        
+        panelForm.add(txtmaDon);
         
         JLabel lbConHoatDong = new JLabel("Trạng Thái Hóa Đơn:");
         lbConHoatDong.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -197,18 +224,9 @@ public class QuanLyHoaDonPanel extends JPanel {
         panel_2.setBackground(Color.WHITE);
         panel_2.setBorder(new TitledBorder(null, "Chức năng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         add(panel_2);
-        panel_2.setLayout(new GridLayout(2, 2, 10, 10));
+        panel_2.setLayout(new GridLayout(2, 1, 10, 10));
 
-        btnThem = new JButton("Thêm");
-        btnThem.setBackground(Color.CYAN);
-        btnThem.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panel_2.add(btnThem);
-
-        btnXoa = new JButton("Hủy Hóa Đơn");
-        btnXoa.setBackground(Color.RED);
-        btnXoa.setFont(new Font("Tahoma", Font.BOLD, 13));
-
-        panel_2.add(btnXoa);
+       
 
         btnLamMoi = new JButton("Làm mới");
         btnLamMoi.setBackground(Color.LIGHT_GRAY);
@@ -227,7 +245,7 @@ public class QuanLyHoaDonPanel extends JPanel {
         JPanel pnlBang = new JPanel();
         pnlBang.setBackground(Color.WHITE);
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Danh sách khách hàng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
+                "DANH SÁCH HÓA ĐƠN", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
 
@@ -259,7 +277,7 @@ public class QuanLyHoaDonPanel extends JPanel {
         pnlBang.add(hBox, BorderLayout.NORTH);
 
         tableModel = new DefaultTableModel(
-				new String[] { "Mã hóa đơn", "Trạng Thái","Thành Tiên", "Mã nhân viên", "Mã khuyến mãi", "Mã đơn đặt phòng","Ngày Tạo"}, 0);
+				new String[] { "Mã hóa đơn", "Trạng Thái","Thành Tiên", "Mã Nhân Viên", "Mã Khuyến Mãi", "Mã Đơn Đặt Phòng","Tên Khách Hàng","Ngày Tạo","Ngày Nhận Phòng","Ngày Trả Phòng"}, 0);
 		table_1 = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table_1);
 
@@ -300,7 +318,10 @@ public class QuanLyHoaDonPanel extends JPanel {
                     String maNV = Objects.toString(tableModel.getValueAt(modelRow, 3), "");
                     String maKM = Objects.toString(tableModel.getValueAt(modelRow, 4), "");
                     String maDonDat = Objects.toString(tableModel.getValueAt(modelRow, 5), "");
-                    String ngayTao = Objects.toString(tableModel.getValueAt(modelRow, 6), "");
+                    String tenKhachHang = table_1.getValueAt(selectedRow, 6).toString(); // Tên khách hàng (cột 6)
+                    String ngayTao = table_1.getValueAt(selectedRow, 7).toString();
+                    String ngayNhanPhong = table_1.getValueAt(selectedRow, 8).toString();
+                    String ngayTraPhong = table_1.getValueAt(selectedRow, 9).toString();// Ngày tạo (cột 7)
 
                     
             }
@@ -309,12 +330,9 @@ public class QuanLyHoaDonPanel extends JPanel {
 
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
   		table_1.setRowSorter(sorter);
+  		table_1.setVisible(false);
   		
-  		btnThem.addActionListener(e -> {
-		    String nextMaHD = generateHoaDonCode();
-		    ThemHoaDonDiaLog themHoaDonDiaLog = new ThemHoaDonDiaLog(generateHoaDonCode(), QuanLyHoaDonPanel.this);
-		    themHoaDonDiaLog.setVisible(true);
-		});
+
   		btnXuat.addActionListener(e -> {
   			HoaDonExporter.exportHoaDon(table_1, btnXuat);
 
@@ -330,7 +348,8 @@ public class QuanLyHoaDonPanel extends JPanel {
   		        // Xóa trắng các JTextField
   		        txtMaHD.setText("");   // Xóa văn bản trong JTextField txtMaHD
   		        txtNgayTao.setDate(null);  // Nếu txtNgayTao là JDateChooser, đặt lại ngày
-  		        cboTrangThai.setSelectedIndex(0);  // Đặt lại giá trị mặc định cho ComboBox
+  		        cboTrangThai.setSelectedIndex(0);
+  		      table_1.setVisible(true);// Đặt lại giá trị mặc định cho ComboBox
   		    }
   		});
   		//Mã hóa đơn// Thêm KeyListener vào txtMaHD
@@ -345,6 +364,72 @@ public class QuanLyHoaDonPanel extends JPanel {
   		        // Lọc theo mã hóa đơn (tìm bất kỳ ký tự nào có trong cột maHD)
   		        if (!maHDKeyword.isEmpty()) {
   		            filters.add(RowFilter.regexFilter("(?i)" + maHDKeyword, 0)); // Lọc theo mã hóa đơn (cột 0)
+  		        }
+
+  		        // Áp dụng bộ lọc kết hợp
+  		        if (filters.isEmpty()) {
+  		            sorter.setRowFilter(null); // Nếu không có bộ lọc, hiển thị tất cả
+  		        } else {
+  		            RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+  		            sorter.setRowFilter(combinedFilter); // Áp dụng bộ lọc
+  		        }
+  		    }
+  		});
+  		txtTenKH.addKeyListener(new KeyAdapter() {
+  		    @Override
+  		    public void keyReleased(KeyEvent e) {
+  		        String TenKHKeyword = txtTenKH.getText().trim(); // Lấy nội dung mã hóa đơn từ txtMaHD
+
+  		        // Tạo danh sách các bộ lọc
+  		        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+  		        // Lọc theo mã hóa đơn (tìm bất kỳ ký tự nào có trong cột maHD)
+  		        if (!TenKHKeyword.isEmpty()) {
+  		            filters.add(RowFilter.regexFilter("(?i)" + TenKHKeyword, 6)); // Lọc theo mã hóa đơn (cột 0)
+  		        }
+
+  		        // Áp dụng bộ lọc kết hợp
+  		        if (filters.isEmpty()) {
+  		            sorter.setRowFilter(null); // Nếu không có bộ lọc, hiển thị tất cả
+  		        } else {
+  		            RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+  		            sorter.setRowFilter(combinedFilter); // Áp dụng bộ lọc
+  		        }
+  		    }
+  		});
+  		txtmaNV.addKeyListener(new KeyAdapter() {
+  		    @Override
+  		    public void keyReleased(KeyEvent e) {
+  		        String maNVKeyword = txtmaNV.getText().trim(); // Lấy nội dung mã hóa đơn từ txtMaHD
+
+  		        // Tạo danh sách các bộ lọc
+  		        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+  		        // Lọc theo mã hóa đơn (tìm bất kỳ ký tự nào có trong cột maHD)
+  		        if (!maNVKeyword.isEmpty()) {
+  		            filters.add(RowFilter.regexFilter("(?i)" + maNVKeyword, 3)); // Lọc theo mã hóa đơn (cột 0)
+  		        }
+
+  		        // Áp dụng bộ lọc kết hợp
+  		        if (filters.isEmpty()) {
+  		            sorter.setRowFilter(null); // Nếu không có bộ lọc, hiển thị tất cả
+  		        } else {
+  		            RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+  		            sorter.setRowFilter(combinedFilter); // Áp dụng bộ lọc
+  		        }
+  		    }
+  		});
+  		txtmaDon.addKeyListener(new KeyAdapter() {
+  		    @Override
+  		    public void keyReleased(KeyEvent e) {
+  		        String maDONKeyword = txtmaDon.getText().trim(); // Lấy nội dung mã hóa đơn từ txtMaHD
+
+  		        // Tạo danh sách các bộ lọc
+  		        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+  		        // Lọc theo mã hóa đơn (tìm bất kỳ ký tự nào có trong cột maHD)
+  		        if (!maDONKeyword.isEmpty()) {
+  		            filters.add(RowFilter.regexFilter("(?i)" + maDONKeyword, 5)); // Lọc theo mã hóa đơn (cột 0)
   		        }
 
   		        // Áp dụng bộ lọc kết hợp
@@ -414,7 +499,7 @@ public class QuanLyHoaDonPanel extends JPanel {
   		                @Override
   		                public boolean include(Entry<? extends Object, ? extends Object> entry) {
   		                    // Lấy giá trị ngày từ cột 6 trong bảng
-  		                    Object rowValue = entry.getValue(6); // Lấy giá trị từ cột 6
+  		                    Object rowValue = entry.getValue(7); // Lấy giá trị từ cột 6
 
   		                    // Kiểm tra nếu giá trị là LocalDateTime
   		                    if (rowValue instanceof LocalDateTime) {
@@ -468,41 +553,7 @@ public class QuanLyHoaDonPanel extends JPanel {
   		        txtTim.setText(""); // Xóa nội dung trong trường tìm kiếm
   		    }
   		});
-  		btnXoa.addActionListener(e -> {
-  		    // Kiểm tra xem có dòng nào được chọn trong bảng không
-  		    int selectedRow = table_1.getSelectedRow();
-  		    if (selectedRow != -1) {
-  		        // Lấy thông tin từ bảng
-  		        String maHoaDon = table_1.getValueAt(selectedRow, 0).toString();
-  		        
-  		        // Hiển thị hộp thoại xác nhận xóa
-  		        int confirm = JOptionPane.showConfirmDialog(QuanLyHoaDonPanel.this, 
-  		            "Bạn chắc chắn muốn hủy hóa đơn " + maHoaDon + "?", "Xác nhận xóa", 
-  		            JOptionPane.YES_NO_OPTION);
-
-  		        if (confirm == JOptionPane.YES_OPTION) {
-  		            // Nếu người dùng đồng ý, gọi phương thức xóa khuyến mãi
-  		            HoaDonDAL hoaDonDAL = new HoaDonDAL();
-  		            boolean isSuccess = hoaDonDAL.xoaHoaDonTheoMa(maHoaDon);
-
-  		            if (isSuccess) {
-  		                // Nếu xóa thành công, hiển thị thông báo thành công
-  		                JOptionPane.showMessageDialog(QuanLyHoaDonPanel.this, 
-  		                    "Hủy hóa đơn thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-  		                // Cập nhật lại bảng sau khi xóa
-  		                capNhatTable();
-  		            } else {
-  		                // Nếu xóa thất bại, hiển thị thông báo lỗi
-  		                JOptionPane.showMessageDialog(QuanLyHoaDonPanel.this, 
-  		                    "Hủy hóa đơn thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-  		            }
-  		        }
-  		    } else {
-  		        // Nếu không có dòng nào được chọn trong bảng, hiển thị thông báo lỗi
-  		        JOptionPane.showMessageDialog(QuanLyHoaDonPanel.this, 
-  		            "Vui lòng chọn hóa đơn cần hủy!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-  		    }
-  		});
+  		
 
 
 
@@ -520,6 +571,17 @@ public class QuanLyHoaDonPanel extends JPanel {
             String maNhanVien = (hoaDon.getNhanVien() != null) ? hoaDon.getNhanVien().getMaNV() : "N/A";
             String maKM = (hoaDon.getKhuyenMai() != null) ? hoaDon.getKhuyenMai().getMaKhuyenMai() : "N/A";
             String maDonDat = (hoaDon.getDonDatPhong() != null) ? hoaDon.getDonDatPhong().getMaDon() : "N/A";
+            String tenKhachHang = (hoaDon.getDonDatPhong() != null && hoaDon.getDonDatPhong().getKhachHang() != null) 
+                    ? hoaDon.getDonDatPhong().getKhachHang().getHoTen() 
+                    : "N/A";
+            String ngayNhanPhong = (hoaDon.getDonDatPhong() != null && hoaDon.getDonDatPhong().getNgayNhanPhong() != null) 
+                    ? hoaDon.getDonDatPhong().getNgayNhanPhong().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    : "N/A";
+            String ngayTraPhong = (hoaDon.getDonDatPhong() != null && hoaDon.getDonDatPhong().getNgayTraPhong() != null) 
+                    ? hoaDon.getDonDatPhong().getNgayTraPhong().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    : "N/A";
+
+
 
             // Thêm dữ liệu vào bảng
             Object[] rowData = { 
@@ -528,8 +590,11 @@ public class QuanLyHoaDonPanel extends JPanel {
                     hoaDon.getThanhTien(),  // Thành tiền
                     maNhanVien,             // Mã nhân viên (hoặc "N/A" nếu null)
                     maKM,                   // Mã khuyến mãi (hoặc "N/A" nếu null)
-                    maDonDat,               // Mã đơn đặt phòng (hoặc "N/A" nếu null)
-                    hoaDon.getNgayTao()     // Ngày tạo
+                    maDonDat,
+                    tenKhachHang,// Mã đơn đặt phòng (hoặc "N/A" nếu null)
+                    hoaDon.getNgayTao(),     // Ngày tạo
+                    ngayNhanPhong,
+                    ngayTraPhong
             };
 
             // Thêm hàng vào mô hình bảng
@@ -569,6 +634,10 @@ public class QuanLyHoaDonPanel extends JPanel {
             String maNhanVien = (hd.getNhanVien() != null) ? hd.getNhanVien().getMaNV() : "N/A";
             String maKM = (hd.getKhuyenMai() != null) ? hd.getKhuyenMai().getMaKhuyenMai() : "N/A";
             String maDonDat = (hd.getDonDatPhong() != null) ? hd.getDonDatPhong().getMaDon() : "N/A";
+            String tenKhachHang = (hd.getDonDatPhong() != null && hd.getDonDatPhong().getKhachHang() != null) 
+                    ? hd.getDonDatPhong().getKhachHang().getHoTen() 
+                    : "N/A";
+
 
             // Thêm hàng vào bảng
             model.addRow(new Object[] { 

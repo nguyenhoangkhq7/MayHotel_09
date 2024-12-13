@@ -266,6 +266,7 @@ public class QuanLyPhongPanel extends JPanel {
 		table_1.setFillsViewportHeight(true);
 
 		scrDSKH.setViewportView(scrollPane);
+		table_1.setVisible(false);
 
 
         table_1.setForeground(new Color(0, 0, 0));
@@ -310,6 +311,7 @@ public class QuanLyPhongPanel extends JPanel {
                 txtTenPhong.setText("");
                 cboTrangThaiPhong.setSelectedIndex(0); // Reset trạng thái về giá trị mặc định (ví dụ: "Tất cả")
                 cboTang.setSelectedIndex(0); // Reset tầng về giá trị mặc định (ví dụ: "Tất cả")
+                table_1.setVisible(true);
             }
         });
         txtTenPhong.addKeyListener(new KeyAdapter() {

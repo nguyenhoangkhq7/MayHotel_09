@@ -97,7 +97,7 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
         JPanel pnlThongTin = new JPanel();
         pnlThongTin.setBackground(new Color(255, 255, 255));
         pnlThongTin.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin khuyến mãi", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
+                "TÌM KIẾM KHUYẾN MÃI", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
        
         add(pnlThongTin);
         pnlThongTin.setLayout(new BorderLayout());
@@ -163,7 +163,7 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
         btnSua.setFont(new Font("Tahoma", Font.BOLD, 13));
         panel_2.add(btnSua);
         
-        btnXoa = new JButton("Xóa");
+        btnXoa = new JButton("Hủy");
         btnXoa.setBackground(new Color(0, 255, 255));
         btnXoa.setFont(new Font("Tahoma", Font.BOLD, 13));
         btnLamMoi = new JButton("Làm mới");
@@ -184,7 +184,7 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
         JPanel pnlBang = new JPanel();
         pnlBang.setBackground(new Color(255, 255, 255));
         pnlBang.setBorder(new TitledBorder(BorderFactory.createLineBorder(Color.ORANGE),
-                "Thiết lập thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
+                "DANH SÁCH KHUYẾN MÃI", TitledBorder.LEADING, TitledBorder.TOP, null, CommonConstants.ORANGE));
         add(pnlBang);
         pnlBang.setLayout(new BorderLayout());
         
@@ -279,7 +279,7 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
   		        
   		        // Hiển thị hộp thoại xác nhận xóa
   		        int confirm = JOptionPane.showConfirmDialog(QuanLyKhuyenMaiPanel.this, 
-  		            "Bạn chắc chắn muốn xóa khuyến mãi " + maKM + "?", "Xác nhận xóa", 
+  		            "Bạn chắc chắn muốn hủy khuyến mãi " + maKM + "?", "Xác nhận hủy", 
   		            JOptionPane.YES_NO_OPTION);
 
   		        if (confirm == JOptionPane.YES_OPTION) {
@@ -290,7 +290,7 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
   		            if (isSuccess) {
   		                // Nếu xóa thành công, hiển thị thông báo thành công
   		                JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, 
-  		                    "Xóa khuyến mãi thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+  		                    "Hủy khuyến mãi thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
   		                
   		                // Cập nhật lại bảng sau khi xóa
   		                capNhatTableKhuyenMai();
@@ -302,7 +302,7 @@ public class QuanLyKhuyenMaiPanel extends JPanel {
   		            } else {
   		                // Nếu xóa thất bại, hiển thị thông báo lỗi
   		                JOptionPane.showMessageDialog(QuanLyKhuyenMaiPanel.this, 
-  		                    "Xóa khuyến mãi thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+  		                    "Hủy khuyến mãi thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
   		            }
   		        }
   		    } else {

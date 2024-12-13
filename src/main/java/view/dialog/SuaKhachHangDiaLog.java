@@ -109,51 +109,108 @@ public class SuaKhachHangDiaLog extends JDialog {
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         btnLuu.addActionListener(new ActionListener() {
-            
-
-			@Override
+            @Override
             public void actionPerformed(ActionEvent e) {
-            	
-				String tenKH = txtTenKH.getText().trim();
-				String sdt = txtSDT.getText().trim();
-				String tienTichLuy = txtTienTichLuy.getText().trim();
-				String soCanCuoc = txtCCCD.getText().trim();
-				String email = txtEmail.getText().trim();
-				String selectedLoaiKH = cboLoaiKH.getSelectedItem().toString();
+                String tenKH = txtTenKH.getText().trim();
+                String sdt = txtSDT.getText().trim();
+                String tienTichLuy = txtTienTichLuy.getText().trim();
+                String soCanCuoc = txtCCCD.getText().trim();
+                String email = txtEmail.getText().trim();
+                String selectedLoaiKH = cboLoaiKH.getSelectedItem().toString();
 
-				// Ép kiểu thành enum LoaiKhachHang
-				LoaiKhachHang loaiKH = LoaiKhachHang.valueOf(selectedLoaiKH);
-				
-				
-
-				if ( tenKH.isEmpty() || loaiKH == null || soCanCuoc.isEmpty()) {
-					JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi",
-							JOptionPane.ERROR_MESSAGE);
-					
-					return;
-				}
-
+                // Kiểm tra loại khách hàng
+                LoaiKhachHang loaiKH;
                 try {
-                	double tienTich = Double.parseDouble(tienTichLuy);
-                    
-                    
+                    loaiKH = LoaiKhachHang.valueOf(selectedLoaiKH);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Loại khách hàng không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                    KhachHang updatedKhachHang = new KhachHang(khachHang.getMaKH(), tenKH, sdt, tienTich, soCanCuoc, email, loaiKH);
+                // Kiểm tra các trường thông tin
+                if (tenKH.isEmpty() || sdt.isEmpty() || tienTichLuy.isEmpty() || soCanCuoc.isEmpty() || email.isEmpty()) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                    KhachHangDAL khachHangDAL = new KhachHangDAL();
-                    boolean isSuccess = khachHangDAL.suaKhachHang(updatedKhachHang);
+                // Kiểm tra tên khách hàng (Không chứa ký tự đặc biệt và số)
+                if (!tenKH.matches("^[a-zA-Z\\sÀ-ỹ]+$")) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Tên khách hàng không hợp lệ! Chỉ được chứa chữ cái và khoảng trắng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                    if (isSuccess) {
-                        JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Sửa thông tin khách hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                        dispose(); 
-                        if (quanLyKhachHangPanel != null) {
-                            quanLyKhachHangPanel.capNhatTable();
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Sửa thông tin thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                // Kiểm tra số điện thoại (10-11 chữ số, không chứa ký tự đặc biệt, không phải số giả định, có thể kiểm tra mã vùng)
+                if (!sdt.matches("^(03|08|07|05|09)\\d{8}$") || sdt.contains(" ") || sdt.matches("1234567890")) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Số điện thoại không hợp lệ! Vui lòng nhập số bắt đầu bằng 03, 08, 07, 05 hoặc 09, có 10 chữ số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra mã vùng nếu cần thiết (Ví dụ: chỉ cho phép số điện thoại bắt đầu bằng "09" hoặc "08")
+                if (!sdt.startsWith("09") && !sdt.startsWith("08")) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Số điện thoại không thuộc khu vực hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra số căn cước công dân (12 chữ số, không có ký tự khác ngoài số)
+                if (!soCanCuoc.matches("\\d{12}")) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Số căn cước công dân không hợp lệ! Vui lòng nhập 12 chữ số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra trùng lặp số căn cước công dân trong cơ sở dữ liệu
+                KhachHangDAL khachHangDAL = new KhachHangDAL();
+
+                // Kiểm tra tiền tích lũy (Phải là số thực hợp lệ và không âm)
+                try {
+                    double tienTich = Double.parseDouble(tienTichLuy);
+                    if (tienTich < 0) {
+                        JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Tiền tích lũy không hợp lệ! Vui lòng nhập số không âm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
                     }
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "không số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Tiền tích lũy không hợp lệ! Vui lòng nhập số.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra email (Đúng định dạng và không sử dụng tên miền tạm thời)
+                if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Email không hợp lệ! Vui lòng nhập đúng định dạng email.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra nếu email sử dụng tên miền tạm thời
+                String[] tempMailDomains = {"tempmail.com", "mailinator.com", "10minutemail.com"};
+                for (String domain : tempMailDomains) {
+                    if (email.contains(domain)) {
+                        JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Email không hợp lệ! Không chấp nhận tên miền tạm thời.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+
+                // Kiểm tra nếu số điện thoại hoặc email đã tồn tại trong hệ thống
+                if (khachHangDAL.kiemTraSoDienThoaiTonTai(sdt)) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Số điện thoại đã tồn tại trong hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (khachHangDAL.kiemTraSoDienThoaiTonTai(email)) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Email đã tồn tại trong hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Cập nhật thông tin khách hàng nếu tất cả các ràng buộc đều hợp lệ
+                KhachHang updatedKhachHang = new KhachHang(khachHang.getMaKH(), tenKH, sdt, Double.parseDouble(tienTichLuy), soCanCuoc, email, loaiKH);
+                
+                boolean isSuccess = khachHangDAL.suaKhachHang(updatedKhachHang);
+
+                if (isSuccess) {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Sửa thông tin khách hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    if (quanLyKhachHangPanel != null) {
+                        quanLyKhachHangPanel.capNhatTable();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(SuaKhachHangDiaLog.this, "Sửa thông tin thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

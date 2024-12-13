@@ -113,58 +113,78 @@ public class ThemKhuyenMaiDiaLog extends JDialog {
 		
 
 		btnLuu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String nextMaKM = generateKhuyenMaiCode();
-			    txtMaKhuyenMai.setText(nextMaKM);
-			    String tenKM = txtTenKhuyenMai.getText();
-				String giaTri = txtGiaTri.getText();
-				String hoatDong = cboConHoatDong.getSelectedItem().toString();
-				Date ngayBatDau = txtNgayBatDau.getDate(); // Ngày kết thúc khuyến mãi
-				LocalDateTime localNgayBatDau = convertToLocalDateTime(ngayBatDau);
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Sinh mã khuyến mãi tiếp theo
+		        String nextMaKM = generateKhuyenMaiCode();
+		        txtMaKhuyenMai.setText(nextMaKM);
 
-				String soLuong = txtSoLuong.getText();
-				Date ngayKetThuc = txtNgayKetThuc.getDate(); // Ngày kết thúc khuyến mãi
-				LocalDateTime localNgayKetThuc = convertToLocalDateTime(ngayKetThuc);
-				String loaiKH = txtLoaiKhachHang.getText();
-				
-				
-				
+		        // Lấy giá trị từ các trường nhập liệu
+		        String tenKM = txtTenKhuyenMai.getText().trim();
+		        String giaTri = txtGiaTri.getText().trim();
+		        String hoatDong = cboConHoatDong.getSelectedItem().toString();
+		        Date ngayBatDau = txtNgayBatDau.getDate();
+		        LocalDateTime localNgayBatDau = convertToLocalDateTime(ngayBatDau);
+		        String soLuong = txtSoLuong.getText().trim();
+		        Date ngayKetThuc = txtNgayKetThuc.getDate();
+		        LocalDateTime localNgayKetThuc = convertToLocalDateTime(ngayKetThuc);
+		        String loaiKH = txtLoaiKhachHang.getText().trim();
 
-				// Sử dụng loaiHD
-				
+		        // Kiểm tra các trường bắt buộc
+		        if (nextMaKM.isEmpty() || tenKM.isEmpty() || ngayBatDau == null || ngayKetThuc == null || giaTri.isEmpty() || soLuong.isEmpty() || loaiKH.isEmpty()) {
+		            JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi",
+		                    JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
 
+		        // Kiểm tra ngày bắt đầu không trước ngày hiện tại
+		        if (localNgayBatDau.isBefore(LocalDateTime.now())) {
+		            JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Ngày bắt đầu phải là ngày hiện tại hoặc ngày trong tương lai!", "Lỗi",
+		                    JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
 
+		        // Kiểm tra ngày kết thúc phải sau ngày bắt đầu
+		        if (!localNgayKetThuc.isAfter(localNgayBatDau)) {
+		            JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Ngày kết thúc phải sau ngày bắt đầu!", "Lỗi",
+		                    JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
 
-				
+		        try {
+		            // Kiểm tra giá trị khuyến mãi là số không âm
+		            double gT = Double.parseDouble(giaTri);
+		            if (gT < 0) {
+		                JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Giá trị khuyến mãi phải là số không âm!", "Lỗi",
+		                        JOptionPane.ERROR_MESSAGE);
+		                return;
+		            }
 
-				if (nextMaKM.isEmpty() || tenKM.isEmpty() || ngayBatDau == null) {
-					JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi",
-							JOptionPane.ERROR_MESSAGE);
-					
-					return;
-				}
+		            // Kiểm tra số lượng phải là số nguyên dương
+		            int sl = Integer.parseInt(soLuong);
+		            if (sl <= 0) {
+		                JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Số lượng phải là số nguyên dương!", "Lỗi",
+		                        JOptionPane.ERROR_MESSAGE);
+		                return;
+		            }
 
-				try {
-					double gT = Double.parseDouble(giaTri);
-					int sl = Integer.parseInt(soLuong);
-					boolean isHoatDong = "Có".equals(hoatDong);
+		            // Chuyển trạng thái hoạt động
+		            boolean isHoatDong = "Có".equals(hoatDong);
 
-		        
-					KhuyenMai khuyenMai = new KhuyenMai(nextMaKM, tenKM, gT, localNgayBatDau,isHoatDong, sl, localNgayKetThuc,loaiKH);
-
+		            // Tạo đối tượng khuyến mãi mới
+		            KhuyenMai khuyenMai = new KhuyenMai(nextMaKM, tenKM, gT, localNgayBatDau, isHoatDong, sl, localNgayKetThuc, loaiKH);
 
 		            // Gọi service để lưu vào cơ sở dữ liệu
-		            KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL(); // Giả định có lớp service để lưu phòng
+		            KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL();
 		            boolean isSuccess = khuyenMaiDAL.themKhuyenMai(khuyenMai);
 
 		            if (isSuccess) {
 		                JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Thêm khuyến mãi thành công!", "Thông báo",
 		                        JOptionPane.INFORMATION_MESSAGE);
 		                dispose(); // Đóng dialog
-		                quanLyKhuyenMaiPanel.capNhatTableKhuyenMai(); // Cập nhật bảng phòng
+		                quanLyKhuyenMaiPanel.capNhatTableKhuyenMai(); // Cập nhật bảng khuyến mãi
 		            } else {
-		                JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Thêm Khuyến Mãi thất bại!", "Lỗi",
+		                JOptionPane.showMessageDialog(ThemKhuyenMaiDiaLog.this, "Thêm khuyến mãi thất bại!", "Lỗi",
 		                        JOptionPane.ERROR_MESSAGE);
 		            }
 		        } catch (NumberFormatException ex) {
@@ -176,6 +196,7 @@ public class ThemKhuyenMaiDiaLog extends JDialog {
 		        }
 		    }
 		});
+
 
 		btnHuyBo.addActionListener(new ActionListener() {
 			@Override

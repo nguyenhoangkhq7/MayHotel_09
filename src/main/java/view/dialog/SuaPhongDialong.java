@@ -85,40 +85,62 @@ public class SuaPhongDialong extends JDialog {
         btnLuu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	
-				String tenPhong = txtTenPhong.getText().trim();
-				LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(txtLoaiPhong.getText());
-				String trangThaiPhong = cboTrangThaiPhong.getSelectedItem().toString();
-				String moTa = txtMoTa.getText().trim();
-				String tang = txtTang.getText().trim();
 
-				if ( tenPhong.isEmpty() || loaiPhong == null ||  moTa.isEmpty() ||tang.isEmpty()) {
-					JOptionPane.showMessageDialog(SuaPhongDialong.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi",
-							JOptionPane.ERROR_MESSAGE);
-					
-					return;
-				}
+                // Lấy giá trị từ các trường nhập liệu
+                String tenPhong = txtTenPhong.getText().trim();
+                LoaiPhong loaiPhong = new LoaiPhongDAL().getLoaiPhongTheoMa(txtLoaiPhong.getText());
+                String trangThaiPhong = cboTrangThaiPhong.getSelectedItem().toString();
+                String moTa = txtMoTa.getText().trim();
+                String tang = txtTang.getText().trim();
+
+                // Kiểm tra các trường nhập liệu để đảm bảo không bỏ trống
+                if (tenPhong.isEmpty() || loaiPhong == null || moTa.isEmpty() || tang.isEmpty()) {
+                    JOptionPane.showMessageDialog(SuaPhongDialong.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                    return; // Dừng lại nếu có trường thiếu
+                }
+
+                // Kiểm tra định dạng tên phòng, phải bắt đầu với "Phòng"
+                if (!tenPhong.matches("^Phòng .*$")) {
+                    JOptionPane.showMessageDialog(SuaPhongDialong.this, "Tên phòng phải bắt đầu bằng 'Phòng'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return; // Dừng lại nếu định dạng không hợp lệ
+                }
+
+                // Kiểm tra định dạng tầng, phải bắt đầu với "Tầng" và có một dấu cách, tiếp theo là số từ 1 đến 5
+                if (!tang.matches("^Tầng [1-5]$")) {
+                    JOptionPane.showMessageDialog(SuaPhongDialong.this, "Tầng phải nằm trong phạm vi từ Tầng 1 đến Tầng 5!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return; // Dừng lại nếu định dạng không hợp lệ
+                }
+
+                // Kiểm tra trạng thái phòng, chỉ chấp nhận "Trống" hoặc "Đã đặt"
+                if (!trangThaiPhong.equals("Trống") && !trangThaiPhong.equals("Đã đặt")) {
+                    JOptionPane.showMessageDialog(SuaPhongDialong.this, "Trạng thái phòng phải là 'Trống' hoặc 'Đã đặt'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return; // Dừng lại nếu trạng thái không hợp lệ
+                }
 
                 try {
-                    
+                    // Chuyển trạng thái phòng thành giá trị boolean
                     boolean isTrangThaiPhong = "Trống".equals(trangThaiPhong);
 
-                    Phong updatedphong = new Phong(phong.getMaPhong(), tenPhong, loaiPhong, isTrangThaiPhong, moTa,tang);
+                    // Tạo đối tượng Phong với thông tin đã nhập
+                    Phong updatedphong = new Phong(phong.getMaPhong(), tenPhong, loaiPhong, isTrangThaiPhong, moTa, tang);
 
+                    // Gọi dịch vụ để cập nhật thông tin phòng
                     PhongDAL phongDAL = new PhongDAL();
                     boolean isSuccess = phongDAL.suaPhong(updatedphong);
 
+                    // Thông báo kết quả
                     if (isSuccess) {
                         JOptionPane.showMessageDialog(SuaPhongDialong.this, "Sửa phòng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                        dispose(); 
+                        dispose(); // Đóng dialog
                         if (quanLyPhongPanel != null) {
-                            quanLyPhongPanel.capNhatTable();
+                            quanLyPhongPanel.capNhatTable(); // Cập nhật bảng phòng
                         }
                     } else {
                         JOptionPane.showMessageDialog(SuaPhongDialong.this, "Sửa thông tin thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(SuaPhongDialong.this, "không số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(SuaPhongDialong.this, "Số không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
