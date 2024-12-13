@@ -367,10 +367,13 @@ public class QuanLyDonDatPhongPanel extends JPanel implements ActionListener {
     }
 
     // Hàm làm mới danh sách hiển thị
-
+//    private void updateDanhSachDDPPanel(ArrayList<DonDatPhong> dsDDPChinhSua) {
+//        for(DonDatPhongPanel ddpPanel : dsDonDatPhongPanel) {
+//            if(ddpPanel)
+//        }
+//    }
 
     private void initDanhSachDonDatPhongPanel() {
-
         ArrayList<DonDatPhong> dsDonDatPhong = new DonDatPhongDAL().getAllDonDatPhong();
         for(DonDatPhong don : dsDonDatPhong) {
             dsDonDatPhongPanel.add(new DonDatPhongPanel(this, don));

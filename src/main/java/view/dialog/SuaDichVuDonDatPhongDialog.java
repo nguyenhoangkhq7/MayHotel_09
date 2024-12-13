@@ -160,7 +160,7 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
             cboDichVu.addItem(serviceName);
         }
         cboSoLuong = new JComboBox<>();
-        cboSoLuong.setEnabled(false);
+        cboSoLuong.setEnabled(true);
         moTaArea = new JTextArea(5, 30);
         moTaArea.setLineWrap(true);
         moTaArea.setWrapStyleWord(true);
@@ -262,6 +262,9 @@ public class SuaDichVuDonDatPhongDialog extends JDialog implements ActionListene
     }
     private void updateServiceDetails(DichVu selectedService) {
         resetFields();
+        if(cboDichVu.getSelectedItem().toString().equals("Chọn dịch vụ:")) {
+            cboDichVu.addItem(selectedService.getTenDichVu());
+        }
 //      cập nhật số lượng
         int stockQuantity = selectedService.getSoLuongTon();
         for (int i = 1; i <= stockQuantity; i++) {

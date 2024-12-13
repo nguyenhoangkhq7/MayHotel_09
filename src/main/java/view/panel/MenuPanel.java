@@ -14,10 +14,15 @@ import constant.CommonConstants;
 import entity.NhanVien;
 import view.LoginGUI;
 import view.MainGUI;
+import view.dialog.AboutUsDialog;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -179,10 +184,70 @@ public class MenuPanel extends JPanel {
         this.add(boxContainMenuItem, BorderLayout.CENTER);
 
         // thêm phần south
+        JPanel jpnSouth = new JPanel(); jpnSouth.setOpaque(false);
+        JLabel lblHelp = new JLabel("<html><u>Help ?</u></html>");
+        lblHelp.setFont(new Font("Arial", Font.ITALIC, 18));
+        lblHelp.setForeground(Color.WHITE);
+        lblHelp.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    // Đường dẫn tới file PDF
+                    File file = new File("document/HuongDanSuDUng.pdf");
+
+                    // Mở file PDF bằng ứng dụng mặc định
+                    if (file.exists()) {
+                        Desktop.getDesktop().open(file);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "File không tồn tại!");
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Không thể mở file PDF!");
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        JLabel lblAbout = new JLabel("<html><u>About...</u></html>");
+        lblAbout.setFont(new Font("Arial", Font.ITALIC, 18));
+        lblAbout.setForeground(Color.WHITE);
+        lblAbout.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                AboutUsDialog aboutUsDialog = new AboutUsDialog(getMainGUI());
+                aboutUsDialog.setVisible(true);
+            }
+        });
+
         lblDateTime = new JLabel("Loading time...", SwingConstants.CENTER);
         lblDateTime.setFont(new Font("Arial", Font.BOLD, 20));
         lblDateTime.setForeground(Color.WHITE);
-        this.add(lblDateTime, BorderLayout.SOUTH);
+
+        jpnSouth.add(lblHelp);
+        jpnSouth.add(lblAbout);
+        jpnSouth.add(lblDateTime);
+        this.add(jpnSouth, BorderLayout.SOUTH);
         startClock();
     }
     private void addPanelToCardLayout(String name, JPanel panel) {
