@@ -59,7 +59,8 @@ public class ThemPhongDiaLog extends JDialog {
 
 		// Đơn Vị
 		panel.add(new JLabel("Trạng Thái Phòng:"));
-		cboTrangThai = new JComboBox<>(new String[] { "Trống", "Đã đặt" });
+		cboTrangThai = new JComboBox<>(new String[] { "Trống","Đã đặt" });
+		cboTrangThai.setEnabled(false);
 		
 		panel.add(cboTrangThai);
 		panel.add(new JLabel("Mô tả:"));
@@ -117,19 +118,19 @@ public class ThemPhongDiaLog extends JDialog {
 
 		        // Kiểm tra định dạng tên phòng, phải bắt đầu với "Phòng" và có thể chứa tất cả ký tự
 		        if (!tenPhong.matches("^Phòng .*$")) {
-		            JOptionPane.showMessageDialog(ThemPhongDiaLog.this, "Tên phòng phải bắt đầu bằng 'Phòng' !", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            JOptionPane.showMessageDialog(ThemPhongDiaLog.this, "Tên phòng không đúng định dạng", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return; // Dừng lại nếu định dạng không hợp lệ
 		        }
 
 		        // Kiểm tra định dạng loại phòng, phải bắt đầu bằng "LP" và có một dấu cách, tiếp theo là số từ 01 đến 06
 		        if (!loaiPhongText.matches("^LP(0[1-6])$")) {
-		            JOptionPane.showMessageDialog(ThemPhongDiaLog.this, "Loại phòng phải có định dạng 'LP01', 'LP02', ..., 'LP06'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            JOptionPane.showMessageDialog(ThemPhongDiaLog.this, "Loại phòng không tồn tại!(CHỉ nhập loại phòng từ 1 đến 6)", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return; // Dừng lại nếu định dạng không hợp lệ
 		        }
 
 		        // Kiểm tra định dạng tầng, phải bắt đầu bằng "Tầng" và có một dấu cách, tiếp theo là số từ 1 đến 5
 		        if (!tang.matches("^Tầng [1-5]$")) {
-		            JOptionPane.showMessageDialog(ThemPhongDiaLog.this, "Tầng phải có định dạng 'Tầng 1', 'Tầng 2', ..., 'Tầng 5'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            JOptionPane.showMessageDialog(ThemPhongDiaLog.this, "Tầng phải nằm trong phạm vi từ Tầng 1 đến Tầng 5!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return; // Dừng lại nếu định dạng không hợp lệ
 		        }
 

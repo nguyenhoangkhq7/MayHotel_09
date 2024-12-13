@@ -125,21 +125,39 @@ public class SuaKhuyenMaiDiaLog extends JDialog {
                     return;
                 }
 
+                // Kiểm tra ngày bắt đầu không được trước ngày hiện tại
+
+                // Kiểm tra ngày kết thúc phải sau ngày bắt đầu
+                if (!ngayKetThuc.isAfter(ngayBatDau)) {
+                    JOptionPane.showMessageDialog(SuaKhuyenMaiDiaLog.this, "Ngày kết thúc phải sau ngày bắt đầu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 try {
                     double giaTriDouble = Double.parseDouble(giaTri);
                     int soLuongInt = Integer.parseInt(soLuong);
                     boolean isHoatDong = "Có".equals(hoatDong);
+                    if (giaTriDouble < 0) {
+		                JOptionPane.showMessageDialog(SuaKhuyenMaiDiaLog.this, "Giá trị khuyến mãi phải là số không âm!", "Lỗi",
+		                        JOptionPane.ERROR_MESSAGE);
+		                return;
+		            }
+                    if (soLuongInt <= 0) {
+		                JOptionPane.showMessageDialog(SuaKhuyenMaiDiaLog.this, "Số lượng phải là số nguyên dương!", "Lỗi",
+		                        JOptionPane.ERROR_MESSAGE);
+		                return;
+		            }
 
                     // Tạo đối tượng Khuyến Mãi mới theo thứ tự yêu cầu
                     KhuyenMai updatedKhuyenMai = new KhuyenMai(
-                            maKhuyenMai,  // Mã khuyến mãi
-                            tenKhuyenMai, // Tên khuyến mãi
-                            giaTriDouble, // Giá trị khuyến mãi
-                            ngayBatDau,   // Ngày bắt đầu
-                            isHoatDong,   // Trạng thái hoạt động
-                            soLuongInt,    // Số lượng
-                            ngayKetThuc,  // Ngày kết thúc
-                            loaiKhachHang // Loại khách hàng áp dụng
+                        maKhuyenMai,  // Mã khuyến mãi
+                        tenKhuyenMai, // Tên khuyến mãi
+                        giaTriDouble, // Giá trị khuyến mãi
+                        ngayBatDau,   // Ngày bắt đầu
+                        isHoatDong,   // Trạng thái hoạt động
+                        soLuongInt,   // Số lượng
+                        ngayKetThuc,  // Ngày kết thúc
+                        loaiKhachHang // Loại khách hàng áp dụng
                     );
 
                     KhuyenMaiDAL khuyenMaiDAL = new KhuyenMaiDAL();
@@ -160,6 +178,7 @@ public class SuaKhuyenMaiDiaLog extends JDialog {
                 }
             }
         });
+
 
 
         btnHuyBo.addActionListener(new ActionListener() {

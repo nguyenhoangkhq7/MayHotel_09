@@ -42,7 +42,7 @@ public class ThemKhachHangDiaLog extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(8, 2, 10, 10));
+		panel.setLayout(new GridLayout(7, 2, 10, 10));
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 		// Mã Dịch Vụ
@@ -66,20 +66,13 @@ public class ThemKhachHangDiaLog extends JDialog {
 		txtTienTichLuy = new JTextField();
 		panel.add(txtTienTichLuy);
 		
-		panel.add(new JLabel("Mô tả:"));
 
 		// Tạo JTextArea và thiết lập tính năng tự động xuống dòng
-		txtMoTa = new JTextArea(5, 20); // 5 dòng, 20 cột
-		txtMoTa.setLineWrap(true); // Kích hoạt xuống dòng
-		txtMoTa.setWrapStyleWord(true); // Xuống dòng theo từ, không cắt giữa chừng
+		
 
 		// Bọc JTextArea trong JScrollPane
-		JScrollPane scrollPane = new JScrollPane(txtMoTa);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
 		// Thêm JScrollPane chứa JTextArea vào panel
-		panel.add(scrollPane);
+		
 
 		// Số Lượng
 		panel.add(new JLabel("Số CCCD/CMND:"));
@@ -153,6 +146,24 @@ public class ThemKhachHangDiaLog extends JDialog {
 		                    "Lỗi", JOptionPane.ERROR_MESSAGE);
 		            return;
 		        }
+		        
+
+		        // **Kiểm tra số điện thoại đã tồn tại**
+		        KhachHangDAL KhachHangDAL = new KhachHangDAL();
+		        if (KhachHangDAL.checkKhachHangTonTaiTheoSDT(sdt)) {
+		            JOptionPane.showMessageDialog(ThemKhachHangDiaLog.this, "Số điện thoại đã tồn tại! Vui lòng nhập số khác.", 
+		                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+
+                if (KhachHangDAL.kiemTraCCCDTonTai(soCanCuoc)) {
+                    JOptionPane.showMessageDialog(ThemKhachHangDiaLog.this, "Số căn cước công dân đã tồn tại trong hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (KhachHangDAL.kiemTraEmailTonTai(email)) {
+                    JOptionPane.showMessageDialog(ThemKhachHangDiaLog.this, "Email đã tồn tại trong hệ thống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
 		        // Kiểm tra CCCD
 		        if (!soCanCuoc.matches("^(00[1-9]|0[1-9]\\d|09[0-6])\\d{9}$")) {
@@ -173,7 +184,6 @@ public class ThemKhachHangDiaLog extends JDialog {
 
 		            KhachHang khachHang = new KhachHang(nextMaKhachHang, tenKhachHang, sdt, tienTich, soCanCuoc, email, loaiKH);
 
-		            KhachHangDAL KhachHangDAL = new KhachHangDAL();
 		            boolean isSuccess = KhachHangDAL.themKhachHang(khachHang);
 
 		            if (isSuccess) {

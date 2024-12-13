@@ -63,6 +63,111 @@ public class KhachHangDAL {
         }
         return dsKhachHang;
     }
+    public boolean kiemTraSoDienThoaiTonTai(String sdt) {
+        // Giả sử bạn có một kết nối cơ sở dữ liệu tên `connection`
+        String query = "SELECT COUNT(*) FROM KhachHang WHERE soDienThoai = ?";
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, sdt);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Số điện thoại đã tồn tại nếu số lượng > 0
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false; // Mặc định trả về false nếu xảy ra lỗi
+    }
+    public boolean kiemTraCCCDTonTai(String CCCD) {
+        int n = 0;  // Biến lưu số lượng bản ghi tìm được
+        try {
+            // Kiểm tra kết nối
+            if (con == null || con.isClosed()) {
+                ConnectDB.getInstance().connect();  // Kết nối lại nếu chưa có kết nối
+                con = ConnectDB.getConnection();    // Lấy kết nối từ đối tượng ConnectDB
+                System.out.println("Kết nối cơ sở dữ liệu thành công!");
+            }
+
+            // Câu lệnh SQL kiểm tra sự tồn tại của CCCD trong bảng KhachHang
+            String sql = "SELECT COUNT(*) FROM KhachHang WHERE soCanCuoc = ?";
+            
+            // Tạo PreparedStatement và thiết lập tham số
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, CCCD);  // Gán giá trị cho tham số CCCD
+
+            // Thực thi câu lệnh SQL và lấy kết quả
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Lấy số lượng bản ghi trả về, nếu lớn hơn 0 tức là CCCD đã tồn tại
+                n = rs.getInt(1);
+                System.out.println("Số lượng bản ghi tìm thấy: " + n);
+            }
+        } catch (SQLException ex) {
+            // In ra thông báo lỗi nếu có lỗi xảy ra
+            System.err.println("Lỗi khi kiểm tra CCCD: " + ex.getMessage());
+            System.err.println("SQLState: " + ex.getSQLState());
+            System.err.println("ErrorCode: " + ex.getErrorCode());
+            ex.printStackTrace();
+        } finally {
+            try {
+                // Đảm bảo đóng kết nối sau khi thực hiện xong
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Lỗi khi đóng kết nối: " + e.getMessage());
+            }
+        }
+        
+        // Trả về true nếu CCCD tồn tại, ngược lại trả về false
+        return n > 0;
+    }
+    public boolean kiemTraEmailTonTai(String email) {
+        int n = 0;  // Biến lưu số lượng bản ghi tìm được
+        try {
+            // Kiểm tra kết nối
+            if (con == null || con.isClosed()) {
+                ConnectDB.getInstance().connect();  // Kết nối lại nếu chưa có kết nối
+                con = ConnectDB.getConnection();    // Lấy kết nối từ đối tượng ConnectDB
+                System.out.println("Kết nối cơ sở dữ liệu thành công!");
+            }
+
+            // Câu lệnh SQL kiểm tra sự tồn tại của email trong bảng KhachHang
+            String sql = "SELECT COUNT(*) FROM KhachHang WHERE email = ?";
+            
+            // Tạo PreparedStatement và thiết lập tham số
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1, email);  // Gán giá trị cho tham số email
+
+            // Thực thi câu lệnh SQL và lấy kết quả
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Lấy số lượng bản ghi trả về, nếu lớn hơn 0 tức là email đã tồn tại
+                n = rs.getInt(1);
+                System.out.println("Số lượng bản ghi tìm thấy: " + n);
+            }
+        } catch (SQLException ex) {
+            // In ra thông báo lỗi nếu có lỗi xảy ra
+            System.err.println("Lỗi khi kiểm tra email: " + ex.getMessage());
+            System.err.println("SQLState: " + ex.getSQLState());
+            System.err.println("ErrorCode: " + ex.getErrorCode());
+            ex.printStackTrace();
+        } finally {
+            try {
+                // Đảm bảo đóng kết nối sau khi thực hiện xong
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Lỗi khi đóng kết nối: " + e.getMessage());
+            }
+        }
+        
+        // Trả về true nếu email tồn tại, ngược lại trả về false
+        return n > 0;
+    }
+
+
+
  // Lấy khách hàng theo mã khách hàng
     public KhachHang getKhachHangTheoMa(String maKH) {
         KhachHang khachHang = null;
@@ -96,8 +201,13 @@ public class KhachHangDAL {
     public boolean themKhachHang(KhachHang khachHang) {
         int n = 0;
         try {
-            ConnectDB.getInstance().connect();
-            con = ConnectDB.getConnection();
+            // Kiểm tra kết nối
+            if (con == null || con.isClosed()) {
+                ConnectDB.getInstance().connect();
+                con = ConnectDB.getConnection();
+                System.out.println("Kết nối cơ sở dữ liệu thành công!");
+            }
+
             String sql = "INSERT INTO KhachHang (maKH, hoTen, soDienThoai, tienTichLuy, soCanCuoc, email, loaiKhachHang) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(1, khachHang.getMaKH());
@@ -109,11 +219,25 @@ public class KhachHangDAL {
             stmt.setString(7, khachHang.getLoaiKhachHang().name());
 
             n = stmt.executeUpdate();
+            System.out.println("Thêm khách hàng thành công: " + n + " bản ghi đã được thêm.");
+
         } catch (SQLException e) {
+            System.err.println("Lỗi khi thêm khách hàng: " + e.getMessage());
+            System.err.println("SQLState: " + e.getSQLState());
+            System.err.println("ErrorCode: " + e.getErrorCode());
             e.printStackTrace();
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("Lỗi khi đóng kết nối: " + e.getMessage());
+            }
         }
         return n > 0;
     }
+
     // Kiểm tra khách hàng có tồn tại theo số điện thoại
     public boolean checkKhachHangTonTaiTheoSDT(String sdt) {
         boolean tonTai = false;

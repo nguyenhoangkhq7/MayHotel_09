@@ -273,6 +273,7 @@ public class QuanLyKhachHangPanel extends JPanel {
       //Sự kiện cho btnTim
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
         table_1.setRowSorter(sorter);
+        table_1.setVisible(false);
 
         btnTim.addActionListener(e -> {
             String keyword = txtTim.getText().trim();
@@ -306,6 +307,7 @@ public class QuanLyKhachHangPanel extends JPanel {
 
             // Bỏ tất cả bộ lọc khỏi bảng
             sorter.setRowFilter(null);
+            table_1.setVisible(true);
         });
 
         
